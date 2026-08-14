@@ -1,0 +1,60 @@
+---
+title: Deployment registry and verification
+description: Canonical addresses, chain-ID guards, generated ABIs and bytecode verification.
+docId: contracts-registry
+version: v0
+status: foundation
+ownerIssue: 142
+sourceOfTruth: contracts/deployments/localnet.json
+sourceStatus: existing
+---
+
+Every Torium contract address and ABI flows from generated artifacts. Nothing
+in the SDK or documentation is hand-copied, and CI drift gates reject stale
+copies.
+
+## Canonical sources
+
+- `contracts/generated/abi/*.json` — normalized ABIs plus creation and runtime
+  bytecode with keccak-256 identities, generated from the pinned Foundry
+  workspace.
+- `contracts/deployments/localnet.json` — the environment deployment registry
+  (registry version `0.1.0`). The native precompile is `active`; the CREATE2
+  factory, reward distributor and attestation registry remain `planned` with
+  `address: null` because no broadcast deployment exists.
+- `@torium-network/sdk/contracts` re-exports the same data as
+  `toriumContractAbis` and `toriumLocalnetContractRegistry`.
+
+## Fail-closed resolution
+
+`resolveToriumContractDeployment(name)` throws
+`TORIUM_CONTRACT_NOT_DEPLOYED` for registry entries without a broadcast
+address instead of inventing one. Local testing passes an explicit override:
+
+```ts
+import {
+  resolveToriumContractDeployment,
+  verifyToriumContractDeployment,
+} from "@torium-network/sdk/contracts";
+
+const deployment = resolveToriumContractDeployment(
+  "toriumRewardDistributor",
+  { deployment: { address: locallyDeployedAddress } }
+);
+await verifyToriumContractDeployment(publicClient, deployment);
+```
+
+`verifyToriumContractDeployment` reads the runtime bytecode with
+`eth_getCode`, hashes it, and fails closed with
+`TORIUM_CONTRACT_CODE_MISSING` or `TORIUM_CONTRACT_CODE_MISMATCH` when the
+address is empty or does not match the registry-pinned hash. The SDK localnet
+conformance suite exercises exactly this path against freshly deployed
+contracts.
+
+## Chain identity guards
+
+The registry records the dual chain identity (`torium-localnet-1`, EVM
+`1414484556`) and the genesis SHA-256. SDK clients validate endpoint chain
+IDs before use, and `expectedImplementationVersion` turns version drift into
+`TORIUM_CONTRACT_VERSION_MISMATCH`. Devnet, testnet and mainnet identifiers
+are reservations only; no public deployment or registry publication exists.

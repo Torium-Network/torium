@@ -1,0 +1,467 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/explorer-selection-v1.schema.json",
+  "title": "Torium local explorer selection v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "selectionVersion",
+    "status",
+    "ownerIssue",
+    "constraints",
+    "selected",
+    "runtime",
+    "rpcDependency",
+    "features",
+    "sourceOfTruth",
+    "operations",
+    "legalGate",
+    "evidence",
+    "alternatives",
+    "releaseGates"
+  ],
+  "properties": {
+    "$schema": { "const": "./selection-v1.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "selectionVersion": {
+      "type": "string",
+      "pattern": "^1\\.0\\.0-local\\.[1-9][0-9]*$"
+    },
+    "status": { "const": "conditional-local-candidate" },
+    "ownerIssue": { "const": 112 },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "standaloneL1Only",
+        "liveDeploymentAllowed",
+        "publicOperationAllowed",
+        "distributionAllowed",
+        "backendIntegrationInScope",
+        "bridgeOrL2InScope"
+      ],
+      "properties": {
+        "environment": { "const": "local-development-only" },
+        "standaloneL1Only": { "const": true },
+        "liveDeploymentAllowed": { "const": false },
+        "publicOperationAllowed": { "const": false },
+        "distributionAllowed": { "const": false },
+        "backendIntegrationInScope": { "const": false },
+        "bridgeOrL2InScope": { "const": false }
+      }
+    },
+    "selected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "componentType",
+        "repository",
+        "release",
+        "commit",
+        "distribution",
+        "prebuiltImageAccepted",
+        "localImageTag",
+        "localImageTagIsSecurityIdentity",
+        "license"
+      ],
+      "properties": {
+        "name": { "const": "Blockscout" },
+        "componentType": { "const": "evm-indexer-and-explorer-api" },
+        "repository": { "const": "https://github.com/blockscout/blockscout" },
+        "release": { "const": "v11.2.2" },
+        "commit": { "const": "731015d88d7e73623f2a3c097e241bc82b04ea7a" },
+        "distribution": { "const": "exact-commit-source-build" },
+        "prebuiltImageAccepted": { "const": false },
+        "localImageTag": { "const": "torium/blockscout-poc:v11.2.2" },
+        "localImageTagIsSecurityIdentity": { "const": false },
+        "license": { "const": "LicenseRef-Blockscout-1.0" }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["database", "cache", "fullUpstreamStack", "network"],
+      "properties": {
+        "database": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["engine", "image", "role", "hostBinding"],
+          "properties": {
+            "engine": { "const": "PostgreSQL" },
+            "image": {
+              "const": "postgres:17-alpine@sha256:dc17045ccfd343b49600570ea734b9c4991cf1c3f3302e67df51e3b402dd55c4"
+            },
+            "role": { "const": "derived-rebuildable-index" },
+            "hostBinding": { "const": "none-internal-compose-network-only" }
+          }
+        },
+        "cache": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "proofMinimalBackendRedisEnabled",
+            "proofScope",
+            "fullUpstreamStackRedisRequired",
+            "approvedRedisImage",
+            "approvedRuntimeRedisEnabled",
+            "reason"
+          ],
+          "properties": {
+            "proofMinimalBackendRedisEnabled": { "const": false },
+            "proofScope": { "type": "string", "minLength": 40 },
+            "fullUpstreamStackRedisRequired": { "const": true },
+            "approvedRedisImage": { "type": "null" },
+            "approvedRuntimeRedisEnabled": { "const": false },
+            "reason": { "type": "string", "minLength": 40 }
+          }
+        },
+        "fullUpstreamStack": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "componentBoundary",
+            "resourceEnvelope",
+            "releaseCadence",
+            "upgradePath"
+          ],
+          "properties": {
+            "status": { "const": "not-approved-runtime" },
+            "componentBoundary": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "approvedLocalProof",
+                "requiredByFullUpstreamButUnapproved",
+                "notSelected"
+              ],
+              "properties": {
+                "approvedLocalProof": {
+                  "const": ["backend-indexer-api", "postgresql"]
+                },
+                "requiredByFullUpstreamButUnapproved": { "const": ["redis"] },
+                "notSelected": {
+                  "const": [
+                    "frontend",
+                    "stats",
+                    "smart-contract-verifier",
+                    "visualizer",
+                    "signature-provider",
+                    "user-operations-indexer"
+                  ]
+                }
+              }
+            },
+            "resourceEnvelope": {
+              "const": "upstream-guidance-only-not-torium-measured"
+            },
+            "releaseCadence": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "releaseLine",
+                "observedReleases",
+                "windowStart",
+                "windowEnd"
+              ],
+              "properties": {
+                "status": { "const": "upstream-reviewed" },
+                "releaseLine": { "const": "v11" },
+                "observedReleases": { "const": 10 },
+                "windowStart": { "const": "2026-05-01" },
+                "windowEnd": { "const": "2026-07-03" }
+              }
+            },
+            "upgradePath": { "const": "not-exercised" }
+          }
+        },
+        "network": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "apiHostBinding",
+            "databasePublishedToHost",
+            "publicEndpointsAllowed",
+            "proofComposeIsApprovedRuntimeConfig",
+            "proofComposeKnownBinding",
+            "requiredRuntimeBindingChange"
+          ],
+          "properties": {
+            "apiHostBinding": { "const": "127.0.0.1:44000" },
+            "databasePublishedToHost": { "const": false },
+            "publicEndpointsAllowed": { "const": false },
+            "proofComposeIsApprovedRuntimeConfig": { "const": false },
+            "proofComposeKnownBinding": { "const": "0.0.0.0:44000" },
+            "requiredRuntimeBindingChange": {
+              "type": "string",
+              "minLength": 40
+            }
+          }
+        }
+      }
+    },
+    "rpcDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ownerIssue",
+        "targetProfileManifest",
+        "targetProfileId",
+        "targetProfileActivated",
+        "requiredProfile",
+        "status",
+        "currentLocalProfile",
+        "currentLocalProfileSatisfiesRequirement",
+        "validatorOrPublicProfileWideningAllowed",
+        "privateAllowlistedTransportRequired",
+        "archiveHistoricalStateRequired",
+        "fullGenesisHistoryRequiredForRebuild",
+        "standardMethodContractStatus",
+        "requiredStandardMethods",
+        "candidateStandardMethods",
+        "traceRequirementStatus",
+        "requiredTraceMethods",
+        "provenButNotEnabledTraceMethods"
+      ],
+      "properties": {
+        "ownerIssue": { "const": 114 },
+        "targetProfileManifest": {
+          "const": "chain/profiles/node-roles-v0.json"
+        },
+        "targetProfileId": { "const": "private-archive-indexer" },
+        "targetProfileActivated": { "const": false },
+        "requiredProfile": {
+          "const": "private-non-validator-archive-indexer-rpc"
+        },
+        "status": { "const": "target-defined-runtime-conformance-blocking" },
+        "currentLocalProfile": { "const": "chain/config/rpc-profile-v1.json" },
+        "currentLocalProfileSatisfiesRequirement": { "const": false },
+        "validatorOrPublicProfileWideningAllowed": { "const": false },
+        "privateAllowlistedTransportRequired": { "const": true },
+        "archiveHistoricalStateRequired": { "const": true },
+        "fullGenesisHistoryRequiredForRebuild": { "const": true },
+        "standardMethodContractStatus": {
+          "const": "candidate-not-reconciled"
+        },
+        "requiredStandardMethods": { "const": [] },
+        "candidateStandardMethods": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^(?:eth|net|web3)_" }
+        },
+        "traceRequirementStatus": {
+          "const": "none-in-v0-internal-transactions-disabled"
+        },
+        "requiredTraceMethods": {
+          "type": "array",
+          "maxItems": 0
+        },
+        "provenButNotEnabledTraceMethods": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "debug_traceTransaction",
+              "debug_traceCall",
+              "debug_traceBlockByNumber",
+              "debug_traceBlockByHash"
+            ]
+          }
+        }
+      }
+    },
+    "features": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseBlocksAndTransactions",
+        "receiptsLogsAndBalances",
+        "contractAndTokenPresentation",
+        "contractVerification",
+        "internalTransactions"
+      ],
+      "properties": {
+        "baseBlocksAndTransactions": {
+          "const": "supported-by-reused-local-proof"
+        },
+        "receiptsLogsAndBalances": { "enum": ["not-reconciled", "reconciled-against-canonical-rpc"] },
+        "contractAndTokenPresentation": {
+          "const": "explorer-native-not-torium-source-of-truth"
+        },
+        "contractVerification": { "const": "not-proven" },
+        "internalTransactions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "environmentVariable",
+            "requiredValue",
+            "cosmosEvmTraceEntryKeys",
+            "blockscoutRequiredTraceEntryKeys",
+            "adapterOrForkSelected",
+            "userFacingSupportClaimAllowed"
+          ],
+          "properties": {
+            "status": { "const": "disabled-known-incompatibility" },
+            "environmentVariable": {
+              "const": "INDEXER_DISABLE_INTERNAL_TRANSACTIONS_FETCHER"
+            },
+            "requiredValue": { "const": "true" },
+            "cosmosEvmTraceEntryKeys": { "const": ["result"] },
+            "blockscoutRequiredTraceEntryKeys": {
+              "const": ["result", "txHash"]
+            },
+            "adapterOrForkSelected": { "const": false },
+            "userFacingSupportClaimAllowed": { "const": false }
+          }
+        }
+      }
+    },
+    "sourceOfTruth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chainRpc",
+        "explorerPostgres",
+        "toriumBackend",
+        "toriumBackendTablesAllowed",
+        "reconciliationRequiredBeforeReady"
+      ],
+      "properties": {
+        "chainRpc": { "const": "authoritative" },
+        "explorerPostgres": { "const": "derived-rebuildable-index" },
+        "toriumBackend": { "const": "prohibited-as-chain-source-of-truth" },
+        "toriumBackendTablesAllowed": { "const": false },
+        "reconciliationRequiredBeforeReady": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 8 }
+        }
+      }
+    },
+    "operations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "freshGenesisAutoFollow",
+        "emptyDatabaseCatchupToExistingHeight",
+        "restartPersistence",
+        "controlledSingleBlockRefetch",
+        "fullDestructiveReindex",
+        "rollbackAndReorgRecovery",
+        "assumptions"
+      ],
+      "properties": {
+        "freshGenesisAutoFollow": { "const": "not-proven" },
+        "emptyDatabaseCatchupToExistingHeight": {
+          "const": "reused-local-proof"
+        },
+        "restartPersistence": { "const": "reused-local-proof" },
+        "controlledSingleBlockRefetch": { "const": "reused-local-proof" },
+        "fullDestructiveReindex": { "const": "not-proven" },
+        "rollbackAndReorgRecovery": { "const": "not-proven" },
+        "assumptions": {
+          "type": "array",
+          "minItems": 4,
+          "items": { "$ref": "#/$defs/assumption" }
+        }
+      }
+    },
+    "legalGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "status",
+        "reviewAuthority",
+        "requiredBefore",
+        "approvalReference",
+        "publicOperationAllowed",
+        "distributionAllowed"
+      ],
+      "properties": {
+        "required": { "const": true },
+        "status": { "const": "pending" },
+        "reviewAuthority": { "const": "qualified-legal-counsel" },
+        "requiredBefore": {
+          "const": ["public-operation", "distribution", "production-use"]
+        },
+        "approvalReference": { "type": "null" },
+        "publicOperationAllowed": { "const": false },
+        "distributionAllowed": { "const": false }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": { "$ref": "#/$defs/evidence" }
+    },
+    "alternatives": {
+      "type": "array",
+      "minItems": 6,
+      "items": { "$ref": "#/$defs/decision" }
+    },
+    "releaseGates": {
+      "type": "array",
+      "minItems": 6,
+      "items": { "$ref": "#/$defs/gate" }
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "assumption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "state", "requirement"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "state": { "type": "string", "minLength": 8 },
+        "requirement": { "type": "string", "minLength": 40 }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "path", "sha256", "reuse"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "path": { "type": "string", "pattern": "^chain/" },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "reuse": { "$ref": "#/$defs/identifier" }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "decision", "reason"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "decision": { "type": "string", "minLength": 8 },
+        "reason": { "type": "string", "minLength": 40 }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "state", "requirement"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "state": { "enum": ["blocked", "accepted-local-limitation"] },
+        "requirement": { "type": "string", "minLength": 40 }
+      }
+    }
+  }
+}

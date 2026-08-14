@@ -1,0 +1,178 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "initCodeHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "computeAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes",
+          "name": "initCode",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "expectedRuntimeCodeHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "deploy",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "deployment",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "deployment",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "salt",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "initCodeHash",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "runtimeCodeHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "ContractDeployed",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "expectedDeployment",
+          "type": "address"
+        }
+      ],
+      "name": "DeploymentFailed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "EmptyInitCode",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "deployment",
+          "type": "address"
+        }
+      ],
+      "name": "EmptyRuntimeCode",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "deployment",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "expectedRuntimeCodeHash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "actualRuntimeCodeHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "ExistingRuntimeCodeMismatch",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "deployment",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "UnexpectedValueForExistingDeployment",
+      "type": "error"
+    }
+  ],
+  "bytecode": {
+    "creation": "0x6080604052348015600e575f5ffd5b506103678061001c5f395ff3fe608060405260043610610028575f3560e01c80630add66701461002c578063481286e61461005b575b5f5ffd5b61003f61003a3660046102ba565b61007a565b6040516001600160a01b03909116815260200160405180910390f35b348015610066575f5ffd5b5061003f610075366004610338565b6101f7565b5f82810361009b5760405163f1e85bf960e01b815260040160405180910390fd5b5f84846040516100ac929190610358565b604051809103902090506100c086826101f7565b91506001600160a01b0382163b156101175734156101075760405163bad31eaf60e01b81526001600160a01b03831660048201523460248201526044015b60405180910390fd5b610111828461020a565b506101ef565b5f85858080601f0160208091040260200160405190810160405280939291908181526020018383808284375f9201919091525050825192935034928a925090506020840183f593506001600160a01b03841661019c5761017788846101f7565b604051639deffc1b60e01b81526001600160a01b0390911660048201526024016100fe565b6101a6848661020a565b8288856001600160a01b03167f1935f5ec548a448bd21653e6f4b8a21b43fe4683138eb69c50ea3a953d46809d886040516101e391815260200190565b60405180910390a45050505b949350505050565b5f610203838330610288565b9392505050565b816001600160a01b03163b5f0361023f576040516331cfaaa560e21b81526001600160a01b03831660048201526024016100fe565b6001600160a01b0382163f81811461028357604051632cf8183f60e01b81526001600160a01b038416600482015260248101839052604481018290526064016100fe565b505050565b5f604051836040820152846020820152828152600b8101905060ff8153605590206001600160a01b0316949350505050565b5f5f5f5f606085870312156102cd575f5ffd5b84359350602085013567ffffffffffffffff8111156102ea575f5ffd5b8501601f810187136102fa575f5ffd5b803567ffffffffffffffff811115610310575f5ffd5b876020828401011115610321575f5ffd5b949760209190910196509394604001359392505050565b5f5f60408385031215610349575f5ffd5b50508035926020909101359150565b818382375f910190815291905056",
+    "creationCodeKeccak256": "0xee161de04cad95593df8b92ae29766ea677b84e9a6533a4f523b45e7ede8104d",
+    "runtime": "0x608060405260043610610028575f3560e01c80630add66701461002c578063481286e61461005b575b5f5ffd5b61003f61003a3660046102ba565b61007a565b6040516001600160a01b03909116815260200160405180910390f35b348015610066575f5ffd5b5061003f610075366004610338565b6101f7565b5f82810361009b5760405163f1e85bf960e01b815260040160405180910390fd5b5f84846040516100ac929190610358565b604051809103902090506100c086826101f7565b91506001600160a01b0382163b156101175734156101075760405163bad31eaf60e01b81526001600160a01b03831660048201523460248201526044015b60405180910390fd5b610111828461020a565b506101ef565b5f85858080601f0160208091040260200160405190810160405280939291908181526020018383808284375f9201919091525050825192935034928a925090506020840183f593506001600160a01b03841661019c5761017788846101f7565b604051639deffc1b60e01b81526001600160a01b0390911660048201526024016100fe565b6101a6848661020a565b8288856001600160a01b03167f1935f5ec548a448bd21653e6f4b8a21b43fe4683138eb69c50ea3a953d46809d886040516101e391815260200190565b60405180910390a45050505b949350505050565b5f610203838330610288565b9392505050565b816001600160a01b03163b5f0361023f576040516331cfaaa560e21b81526001600160a01b03831660048201526024016100fe565b6001600160a01b0382163f81811461028357604051632cf8183f60e01b81526001600160a01b038416600482015260248101839052604481018290526064016100fe565b505050565b5f604051836040820152846020820152828152600b8101905060ff8153605590206001600160a01b0316949350505050565b5f5f5f5f606085870312156102cd575f5ffd5b84359350602085013567ffffffffffffffff8111156102ea575f5ffd5b8501601f810187136102fa575f5ffd5b803567ffffffffffffffff811115610310575f5ffd5b876020828401011115610321575f5ffd5b949760209190910196509394604001359392505050565b5f5f60408385031215610349575f5ffd5b50508035926020909101359150565b818382375f910190815291905056",
+    "runtimeCodeKeccak256": "0x1c8443d4510a3e5ab30fadbca17e932276bf09c93a6c6cbce40081cbf0273e55"
+  },
+  "compiler": {
+    "bytecodeHash": "none",
+    "cborMetadata": false,
+    "evmVersion": "prague",
+    "image": "ethereum/solc:0.8.30@sha256:b116bf835554d40c501feab0b2c943a8c5eec003b804bcc5b326b85c93da00c2",
+    "longVersion": "0.8.30+commit.73712a01",
+    "name": "solc",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "version": "0.8.30",
+    "viaIr": false
+  },
+  "contractName": "ToriumCreate2Factory",
+  "generatedBy": "contracts/scripts/generate-artifacts.mjs",
+  "notice": "DO NOT EDIT: generated from canonical Solidity source and pinned Foundry output.",
+  "schemaVersion": 1,
+  "sourceName": "contracts/src/deployment/ToriumCreate2Factory.sol",
+  "sourceSha256": "c5d68a92a56c9ed917d81c28417403458a53e17112acb929be0d8d3630929de5"
+}

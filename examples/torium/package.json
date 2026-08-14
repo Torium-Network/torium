@@ -1,0 +1,35 @@
+{
+  "name": "@torium-network/examples",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.23.1 <23 || >=24 <25"
+  },
+  "scripts": {
+    "build": "pnpm run check-types && pnpm run build:browser && pnpm run build:contracts",
+    "build:browser": "vite build --config browser/vite.config.ts",
+    "build:contracts": "hardhat compile --config solidity/hardhat/hardhat.config.ts",
+    "check-types": "tsc --noEmit",
+    "clean": "node scripts/clean.mjs",
+    "node": "tsx node/cli.ts",
+    "test": "tsx --test test/*.test.ts",
+    "validate": "node scripts/validate-examples.mjs",
+    "verify:browser-runtime": "pnpm run build:browser && node scripts/validate-browser-runtime.mjs",
+    "verify:hermes-runtime": "node scripts/verify-hermes-runtime.mjs"
+  },
+  "dependencies": {
+    "@torium-network/sdk": "workspace:0.1.0",
+    "viem": "2.55.2"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.9",
+    "expo": "54.0.33",
+    "hardhat": "3.9.1",
+    "react": "19.1.0",
+    "react-native": "0.81.5",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3",
+    "vite": "7.3.1"
+  }
+}

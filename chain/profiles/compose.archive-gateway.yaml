@@ -1,0 +1,128 @@
+# Local-only archive lane for issue #114. This is an OVERLAY on
+# chain/localnet/compose.yaml, never a replacement: the four-validator localnet
+# stays byte-for-byte the same whether or not the archive lane runs, so every
+# committed performance, resilience, and recovery artifact keeps its meaning.
+#
+#   docker compose \
+#     --file chain/localnet/compose.yaml \
+#     --file chain/profiles/compose.archive-gateway.yaml \
+#     up --detach private-archive-indexer archive-rpc-gateway
+#
+# Topology, from chain/profiles/node-roles-v0.json:
+#
+#   consumers ──> archive-indexer-consumer ──> archive-rpc-gateway
+#                                                    │
+#                                             archive-raw-rpc
+#                                                    │
+#                                          private-archive-indexer (raw RPC)
+#
+# The gateway is the only service on both networks. A consumer cannot resolve
+# or reach private-archive-indexer, and the raw RPC is published nowhere.
+name: torium-localnet
+
+services:
+  # The 5th, non-validator toriumd instance: pruning "nothing" from genesis,
+  # kv transaction index, no CometBFT RPC, no Cosmos REST/gRPC, and an EVM
+  # JSON-RPC surface that only the gateway can reach.
+  private-archive-indexer:
+    image: ${TORIUM_IMAGE:-toriumd:local}
+    hostname: private-archive-indexer
+    user: "${TORIUM_UID:-10001}:${TORIUM_GID:-10001}"
+    restart: "no"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    volumes:
+      - ../localnet/.state/container/private-archive-indexer:/var/lib/torium
+    command:
+      - start
+      - --home
+      - /var/lib/torium
+      - --log_format
+      - json
+      - --log_no_color
+      - --metrics
+    # The default image healthcheck probes CometBFT RPC, which this role
+    # disables; readiness is the EVM JSON-RPC surface instead.
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          wget -q -O /dev/null --header='content-type: application/json'
+          --post-data='{"jsonrpc":"2.0","id":1,"method":"eth_chainId","params":[]}'
+          http://127.0.0.1:8545/
+      interval: 5s
+      timeout: 3s
+      start_period: 30s
+      retries: 24
+    # consensus carries p2p to the validators (the localnet instantiates no
+    # sentry or full role); archive-raw-rpc carries the raw RPC to the gateway
+    # and to nothing else.
+    networks:
+      - consensus
+      - archive-raw-rpc
+
+  archive-rpc-gateway:
+    image: ${TORIUM_IMAGE:-toriumd:local}
+    hostname: archive-rpc-gateway
+    user: "${TORIUM_UID:-10001}:${TORIUM_GID:-10001}"
+    restart: "no"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+      - /var/lib/torium:rw,noexec,nosuid,size=1m
+    entrypoint:
+      - torium-archive-gateway
+    command:
+      - --http-listen-address
+      - 0.0.0.0:8545
+      - --websocket-listen-address
+      - 0.0.0.0:8546
+      - --http-upstream
+      - http://private-archive-indexer:8545
+      - --websocket-upstream
+      - ws://private-archive-indexer:8546
+      - --allow-container-bind
+    depends_on:
+      private-archive-indexer:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8545/healthz"]
+      interval: 5s
+      timeout: 3s
+      start_period: 10s
+      retries: 12
+    # The reserved loopback bindings from the gateway listener contract. This
+    # is the ONLY host exposure in the archive lane, and it is the enforced
+    # surface, never the raw one.
+    ports:
+      - "127.0.0.1:38545:8545"
+      - "127.0.0.1:38546:8546"
+    networks:
+      - archive-raw-rpc
+      - archive-indexer-consumer
+
+networks:
+  archive-raw-rpc:
+    driver: bridge
+    internal: true
+  archive-indexer-consumer:
+    driver: bridge

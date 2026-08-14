@@ -1,0 +1,674 @@
+{
+  "generated_by": "go run ./cmd/torium-genesis",
+  "source": "chain/app/localnet/fixture.json plus toriumd module defaults",
+  "do_not_edit": true,
+  "app_name": "toriumd",
+  "app_version": "protocol-v1",
+  "genesis_time": "2026-07-14T00:00:00Z",
+  "chain_id": "torium-localnet-1",
+  "initial_height": 1,
+  "app_hash": null,
+  "app_state": {
+    "auth": {
+      "params": {
+        "max_memo_characters": "256",
+        "tx_sig_limit": "7",
+        "tx_size_cost_per_byte": "10",
+        "sig_verify_cost_ed25519": "590",
+        "sig_verify_cost_secp256k1": "1000"
+      },
+      "accounts": [
+        {
+          "@type": "/cosmos.auth.v1beta1.BaseAccount",
+          "address": "torium1thhgqjh0q9lgm296v08mw5ac2gu4fv7vgwhsxh",
+          "pub_key": {
+            "@type": "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey",
+            "key": "A76nserILzlEiwr1rTQWO07GkfP9Y1AdvAUteULMsylB"
+          },
+          "account_number": "0",
+          "sequence": "0"
+        },
+        {
+          "@type": "/cosmos.auth.v1beta1.BaseAccount",
+          "address": "torium1glfgjg6ncn0gjh64cye4vzasf7ctd7rqwkntj0",
+          "pub_key": {
+            "@type": "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey",
+            "key": "A6Z2+Es9obKo6AwRa2YeO84N4YI23KTUm6ftFMRz2Jjk"
+          },
+          "account_number": "1",
+          "sequence": "0"
+        },
+        {
+          "@type": "/cosmos.auth.v1beta1.BaseAccount",
+          "address": "torium1uhx42a5kq7h87lyn34h740z9eaj260u6aesh8e",
+          "pub_key": {
+            "@type": "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey",
+            "key": "AhjlN7RytCyuhMs752N4gwFenoU8SSII8+bJc09jE9xg"
+          },
+          "account_number": "2",
+          "sequence": "0"
+        },
+        {
+          "@type": "/cosmos.auth.v1beta1.BaseAccount",
+          "address": "torium1m923tmhz5mp2eeg6dyxwypwua4t262hqxj28ew",
+          "pub_key": {
+            "@type": "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey",
+            "key": "A1ErKiETQ3zt4O4sMHtfQ26UDfih52hQYE0XrY9XO1wl"
+          },
+          "account_number": "3",
+          "sequence": "0"
+        },
+        {
+          "@type": "/cosmos.auth.v1beta1.BaseAccount",
+          "address": "torium1qkh83x24lgvqgv6wwrr53ymrjkfvf7606dy2nn",
+          "pub_key": {
+            "@type": "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey",
+            "key": "AkON+d89ISovIBQvc+7zNxgjgt/g2w8PcgA4XtOU+/2z"
+          },
+          "account_number": "4",
+          "sequence": "0"
+        },
+        {
+          "@type": "/cosmos.auth.v1beta1.BaseAccount",
+          "address": "torium1jxn3gn9f907ujz56srhvcvyrjk0djzlnu6e00n",
+          "pub_key": {
+            "@type": "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey",
+            "key": "AwN0V29coeQIJAbxnqb2hXLG084bu6kb8BEeQNdyiCdx"
+          },
+          "account_number": "5",
+          "sequence": "0"
+        },
+        {
+          "@type": "/cosmos.auth.v1beta1.BaseAccount",
+          "address": "torium1mvdzupdt07lgm8xjuxt2d8ct4f8x3xut9uxywe",
+          "pub_key": {
+            "@type": "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey",
+            "key": "AlrwIEuPEvRP013eUrMwkeKi2QNi4ZnJMWHUDa4XCnT4"
+          },
+          "account_number": "6",
+          "sequence": "0"
+        },
+        {
+          "@type": "/cosmos.auth.v1beta1.BaseAccount",
+          "address": "torium1v65qc5kc3yzkwfaq54duc2hp4fzwux25ta4tsz",
+          "pub_key": {
+            "@type": "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey",
+            "key": "Ak4JoJbFygH/tk+fklqjP2YesEQjhbGaCTIN9rVEshOH"
+          },
+          "account_number": "7",
+          "sequence": "0"
+        }
+      ]
+    },
+    "bank": {
+      "params": {
+        "send_enabled": [],
+        "default_send_enabled": true
+      },
+      "balances": [
+        {
+          "address": "torium1thhgqjh0q9lgm296v08mw5ac2gu4fv7vgwhsxh",
+          "coins": [
+            {
+              "denom": "atorium",
+              "amount": "1000000000000000000000"
+            }
+          ]
+        },
+        {
+          "address": "torium1glfgjg6ncn0gjh64cye4vzasf7ctd7rqwkntj0",
+          "coins": [
+            {
+              "denom": "atorium",
+              "amount": "1000000000000000000000"
+            }
+          ]
+        },
+        {
+          "address": "torium1uhx42a5kq7h87lyn34h740z9eaj260u6aesh8e",
+          "coins": [
+            {
+              "denom": "atorium",
+              "amount": "1000000000000000000000"
+            }
+          ]
+        },
+        {
+          "address": "torium1m923tmhz5mp2eeg6dyxwypwua4t262hqxj28ew",
+          "coins": [
+            {
+              "denom": "atorium",
+              "amount": "1000000000000000000000"
+            }
+          ]
+        },
+        {
+          "address": "torium1qkh83x24lgvqgv6wwrr53ymrjkfvf7606dy2nn",
+          "coins": [
+            {
+              "denom": "atorium",
+              "amount": "900000000000000000000000000"
+            }
+          ]
+        },
+        {
+          "address": "torium1jxn3gn9f907ujz56srhvcvyrjk0djzlnu6e00n",
+          "coins": [
+            {
+              "denom": "atorium",
+              "amount": "50000000000000000000000000"
+            }
+          ]
+        },
+        {
+          "address": "torium1mvdzupdt07lgm8xjuxt2d8ct4f8x3xut9uxywe",
+          "coins": [
+            {
+              "denom": "atorium",
+              "amount": "25000000000000000000000000"
+            }
+          ]
+        },
+        {
+          "address": "torium1v65qc5kc3yzkwfaq54duc2hp4fzwux25ta4tsz",
+          "coins": [
+            {
+              "denom": "atorium",
+              "amount": "24996000000000000000000000"
+            }
+          ]
+        }
+      ],
+      "supply": [
+        {
+          "denom": "atorium",
+          "amount": "1000000000000000000000000000"
+        }
+      ],
+      "denom_metadata": [
+        {
+          "description": "Valueless Torium local development native asset",
+          "denom_units": [
+            {
+              "denom": "atorium",
+              "exponent": 0,
+              "aliases": []
+            },
+            {
+              "denom": "tTOR",
+              "exponent": 18,
+              "aliases": []
+            }
+          ],
+          "base": "atorium",
+          "display": "tTOR",
+          "name": "Torium Local Token",
+          "symbol": "tTOR",
+          "uri": "",
+          "uri_hash": ""
+        }
+      ],
+      "send_enabled": []
+    },
+    "distribution": {
+      "params": {
+        "community_tax": "0.020000000000000000",
+        "base_proposer_reward": "0.000000000000000000",
+        "bonus_proposer_reward": "0.000000000000000000",
+        "withdraw_addr_enabled": true
+      },
+      "fee_pool": {
+        "community_pool": []
+      },
+      "delegator_withdraw_infos": [],
+      "previous_proposer": "",
+      "outstanding_rewards": [],
+      "validator_accumulated_commissions": [],
+      "validator_historical_rewards": [],
+      "validator_current_rewards": [],
+      "delegator_starting_infos": [],
+      "validator_slash_events": []
+    },
+    "erc20": {
+      "params": {
+        "enable_erc20": true,
+        "permissionless_registration": false
+      },
+      "token_pairs": [
+        {
+          "erc20_address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+          "denom": "atorium",
+          "enabled": true,
+          "contract_owner": "OWNER_MODULE"
+        }
+      ],
+      "allowances": [],
+      "native_precompiles": [
+        "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
+      ],
+      "dynamic_precompiles": []
+    },
+    "evidence": {
+      "evidence": []
+    },
+    "evm": {
+      "accounts": [],
+      "params": {
+        "evm_denom": "atorium",
+        "extra_eips": [],
+        "evm_channels": [],
+        "access_control": {
+          "create": {
+            "access_type": "ACCESS_TYPE_PERMISSIONLESS",
+            "access_control_list": []
+          },
+          "call": {
+            "access_type": "ACCESS_TYPE_PERMISSIONLESS",
+            "access_control_list": []
+          }
+        },
+        "active_static_precompiles": [
+          "0x0000000000000000000000000000000000000100",
+          "0x0000000000000000000000000000000000000400",
+          "0x0000000000000000000000000000000000000800",
+          "0x0000000000000000000000000000000000000801",
+          "0x0000000000000000000000000000000000000804",
+          "0x0000000000000000000000000000000000000805",
+          "0x0000000000000000000000000000000000000806"
+        ],
+        "history_serve_window": "8192",
+        "extended_denom_options": {
+          "extended_denom": "atorium"
+        }
+      },
+      "preinstalls": []
+    },
+    "feemarket": {
+      "params": {
+        "no_base_fee": false,
+        "base_fee_change_denominator": 8,
+        "elasticity_multiplier": 2,
+        "enable_height": "1",
+        "base_fee": "1000000000.000000000000000000",
+        "min_gas_price": "1000000000.000000000000000000",
+        "min_gas_multiplier": "0.500000000000000000"
+      },
+      "block_gas": "0"
+    },
+    "genutil": {
+      "gen_txs": [
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "validator-0",
+                  "identity": "",
+                  "website": "",
+                  "security_contact": "",
+                  "details": "Valueless Torium local development validator"
+                },
+                "commission": {
+                  "rate": "0.050000000000000000",
+                  "max_rate": "0.200000000000000000",
+                  "max_change_rate": "0.010000000000000000"
+                },
+                "min_self_delegation": "1000000000000000000",
+                "delegator_address": "",
+                "validator_address": "toriumvaloper1thhgqjh0q9lgm296v08mw5ac2gu4fv7vmz7dem",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "cCZxfry/Ng7C2MKDqC8hTgdTWje9RLKtbrChrxWSt0k="
+                },
+                "value": {
+                  "denom": "atorium",
+                  "amount": "25000000000000000000"
+                }
+              }
+            ],
+            "memo": "valueless-localnet/validator-0",
+            "timeout_height": "0",
+            "unordered": false,
+            "timeout_timestamp": null,
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey",
+                  "key": "A76nserILzlEiwr1rTQWO07GkfP9Y1AdvAUteULMsylB"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_DIRECT"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [
+                {
+                  "denom": "atorium",
+                  "amount": "250000000000000"
+                }
+              ],
+              "gas_limit": "250000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "g3AJoRnGftoH32CIO5yMHebGti94HucmiE/kgTauS98rf0Gxm/01atf6rdMHKlqlWxwugC4icZZwDozjI13AwAA="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "validator-1",
+                  "identity": "",
+                  "website": "",
+                  "security_contact": "",
+                  "details": "Valueless Torium local development validator"
+                },
+                "commission": {
+                  "rate": "0.050000000000000000",
+                  "max_rate": "0.200000000000000000",
+                  "max_change_rate": "0.010000000000000000"
+                },
+                "min_self_delegation": "1000000000000000000",
+                "delegator_address": "",
+                "validator_address": "toriumvaloper1glfgjg6ncn0gjh64cye4vzasf7ctd7rqa66kdr",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "jEXQ3QHNlkiE1ejCOt2I53uhqCYMchlBytXb/5Ay2IE="
+                },
+                "value": {
+                  "denom": "atorium",
+                  "amount": "25000000000000000000"
+                }
+              }
+            ],
+            "memo": "valueless-localnet/validator-1",
+            "timeout_height": "0",
+            "unordered": false,
+            "timeout_timestamp": null,
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey",
+                  "key": "A6Z2+Es9obKo6AwRa2YeO84N4YI23KTUm6ftFMRz2Jjk"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_DIRECT"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [
+                {
+                  "denom": "atorium",
+                  "amount": "250000000000000"
+                }
+              ],
+              "gas_limit": "250000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "Z2uDkyE513i/UjDLGBTprEcG3vgKSZRE1LtSidFN1MQtZmuwLw4sVGOSBaR+7FV8TJtZ9wxWN6Jod0lFrQfV2AA="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "validator-2",
+                  "identity": "",
+                  "website": "",
+                  "security_contact": "",
+                  "details": "Valueless Torium local development validator"
+                },
+                "commission": {
+                  "rate": "0.050000000000000000",
+                  "max_rate": "0.200000000000000000",
+                  "max_change_rate": "0.010000000000000000"
+                },
+                "min_self_delegation": "1000000000000000000",
+                "delegator_address": "",
+                "validator_address": "toriumvaloper1uhx42a5kq7h87lyn34h740z9eaj260u6w4e2c4",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "UpA90O7Jfz6mJxZgU8TVLqgJxavMQOBJ4LcHoIh8L/I="
+                },
+                "value": {
+                  "denom": "atorium",
+                  "amount": "25000000000000000000"
+                }
+              }
+            ],
+            "memo": "valueless-localnet/validator-2",
+            "timeout_height": "0",
+            "unordered": false,
+            "timeout_timestamp": null,
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey",
+                  "key": "AhjlN7RytCyuhMs752N4gwFenoU8SSII8+bJc09jE9xg"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_DIRECT"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [
+                {
+                  "denom": "atorium",
+                  "amount": "250000000000000"
+                }
+              ],
+              "gas_limit": "250000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "AZXqGu8bBZ8AxGtvycbSOZzTt+9xUAsVxnOENjE75Y1IvcR8X8EB5WEj/X6Nned85P5goki8xe8cJIQFXdBhfgE="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "validator-3",
+                  "identity": "",
+                  "website": "",
+                  "security_contact": "",
+                  "details": "Valueless Torium local development validator"
+                },
+                "commission": {
+                  "rate": "0.050000000000000000",
+                  "max_rate": "0.200000000000000000",
+                  "max_change_rate": "0.010000000000000000"
+                },
+                "min_self_delegation": "1000000000000000000",
+                "delegator_address": "",
+                "validator_address": "toriumvaloper1m923tmhz5mp2eeg6dyxwypwua4t262hq47r6xz",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "Z84gzS0CVmmAy5XcPph1cY8VRgcdzTEWPSU1ZW2Uz2s="
+                },
+                "value": {
+                  "denom": "atorium",
+                  "amount": "25000000000000000000"
+                }
+              }
+            ],
+            "memo": "valueless-localnet/validator-3",
+            "timeout_height": "0",
+            "unordered": false,
+            "timeout_timestamp": null,
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey",
+                  "key": "A1ErKiETQ3zt4O4sMHtfQ26UDfih52hQYE0XrY9XO1wl"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_DIRECT"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [
+                {
+                  "denom": "atorium",
+                  "amount": "250000000000000"
+                }
+              ],
+              "gas_limit": "250000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "AwqRP7Q+UtnnQqSYScEg9gZAuQgkMYBcMmnrzWhCnigji+h7pIuklugsicz8sdkzBl6+o4dHjE/4xxY2lwhbtwA="
+          ]
+        }
+      ]
+    },
+    "gov": {
+      "starting_proposal_id": "1",
+      "deposits": [],
+      "votes": [],
+      "proposals": [],
+      "deposit_params": null,
+      "voting_params": null,
+      "tally_params": null,
+      "params": {
+        "min_deposit": [
+          {
+            "denom": "atorium",
+            "amount": "10000000000000000000"
+          }
+        ],
+        "max_deposit_period": "30s",
+        "voting_period": "20s",
+        "quorum": "0.667000000000000000",
+        "threshold": "0.500000000000000000",
+        "veto_threshold": "0.334000000000000000",
+        "min_initial_deposit_ratio": "1.000000000000000000",
+        "proposal_cancel_ratio": "0.500000000000000000",
+        "proposal_cancel_dest": "",
+        "expedited_voting_period": "10s",
+        "expedited_threshold": "0.667000000000000000",
+        "expedited_min_deposit": [
+          {
+            "denom": "atorium",
+            "amount": "50000000000000000000"
+          }
+        ],
+        "burn_vote_quorum": true,
+        "burn_proposal_deposit_prevote": true,
+        "burn_vote_veto": true,
+        "min_deposit_ratio": "1.000000000000000000"
+      },
+      "constitution": ""
+    },
+    "slashing": {
+      "params": {
+        "signed_blocks_window": "100",
+        "min_signed_per_window": "0.500000000000000000",
+        "downtime_jail_duration": "600s",
+        "slash_fraction_double_sign": "0.050000000000000000",
+        "slash_fraction_downtime": "0.010000000000000000"
+      },
+      "signing_infos": [],
+      "missed_blocks": []
+    },
+    "staking": {
+      "params": {
+        "unbonding_time": "1814400s",
+        "max_validators": 100,
+        "max_entries": 7,
+        "historical_entries": 10000,
+        "bond_denom": "atorium",
+        "min_commission_rate": "0.050000000000000000"
+      },
+      "last_total_power": "0",
+      "last_validator_powers": [],
+      "validators": [],
+      "delegations": [],
+      "unbonding_delegations": [],
+      "redelegations": [],
+      "exported": false
+    },
+    "upgrade": {}
+  },
+  "consensus": {
+    "validators": [],
+    "params": {
+      "block": {
+        "max_bytes": "5242880",
+        "max_gas": "30000000"
+      },
+      "evidence": {
+        "max_age_num_blocks": "100000",
+        "max_age_duration": "172800000000000",
+        "max_bytes": "1048576"
+      },
+      "validator": {
+        "pub_key_types": [
+          "ed25519"
+        ]
+      },
+      "version": {
+        "app": "0"
+      },
+      "abci": {
+        "vote_extensions_enable_height": "0"
+      },
+      "authority": {
+        "authority": "torium10d07y265gmmuvt4z0w9aw880jnsr700jjk4usp"
+      }
+    }
+  }
+}

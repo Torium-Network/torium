@@ -1,0 +1,44 @@
+{
+  "caseId": "rpc-recent-read-mix-run-1",
+  "workloadId": "rpc-recent-read-mix",
+  "startedAtMilliseconds": 1785363514342,
+  "endedAtMilliseconds": 1785363514471,
+  "requests": [
+    {
+      "kind": "single",
+      "method": "eth_getBlockByNumber",
+      "elapsedMilliseconds": 6.028582999999344,
+      "bytes": 1804
+    },
+    {
+      "kind": "single",
+      "method": "eth_getBalance",
+      "elapsedMilliseconds": 2.609542000000147,
+      "bytes": 54
+    },
+    {
+      "kind": "single",
+      "method": "eth_getTransactionReceipt",
+      "elapsedMilliseconds": 2.7095839999992677,
+      "bytes": 1024
+    },
+    {
+      "kind": "single",
+      "method": "eth_getLogs",
+      "elapsedMilliseconds": 5.194959000000381,
+      "bytes": 37
+    },
+    {
+      "kind": "single",
+      "method": "eth_feeHistory",
+      "elapsedMilliseconds": 9.066291999999521,
+      "bytes": 301
+    },
+    {
+      "kind": "batch",
+      "calls": 100,
+      "elapsedMilliseconds": 102.5721250000006,
+      "bytes": 63800
+    }
+  ]
+}

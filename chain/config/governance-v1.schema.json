@@ -1,0 +1,268 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/governance-v1.schema.json",
+  "title": "Torium local governance and upgrade contract v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema", "schemaVersion", "contractVersion", "status", "updatedAt",
+    "protocol", "scope", "governance", "authorities", "contractAuthorities", "authorizationRules",
+    "bootstrapAndTransition", "upgrade", "failureAndRecovery", "evidence"
+  ],
+  "properties": {
+    "$schema": { "const": "./governance-v1.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "contractVersion": { "type": "string", "pattern": "^1\\.0\\.0-local\\.[1-9][0-9]*$" },
+    "status": { "const": "ratified-local-only" },
+    "updatedAt": { "type": "string", "format": "date" },
+    "protocol": { "$ref": "#/$defs/protocol" },
+    "scope": { "$ref": "#/$defs/scope" },
+    "governance": { "$ref": "#/$defs/governance" },
+    "authorities": {
+      "type": "array", "minItems": 10, "maxItems": 10,
+      "items": { "$ref": "#/$defs/authority" }
+    },
+    "contractAuthorities": { "$ref": "#/$defs/contractAuthorities" },
+    "authorizationRules": { "$ref": "#/$defs/authorizationRules" },
+    "bootstrapAndTransition": { "$ref": "#/$defs/bootstrapAndTransition" },
+    "upgrade": { "$ref": "#/$defs/upgrade" },
+    "failureAndRecovery": { "$ref": "#/$defs/failureAndRecovery" },
+    "evidence": { "$ref": "#/$defs/evidence" }
+  },
+  "$defs": {
+    "protocol": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "version"],
+      "properties": {
+        "path": { "const": "./protocol-v1.json" },
+        "version": { "type": "string" }
+      }
+    },
+    "scope": {
+      "type": "object", "additionalProperties": false,
+      "required": ["environment", "valueStatus", "publicActivationAllowed", "publicActivationGateIssue", "toriumProductBackendIntegrated"],
+      "properties": {
+        "environment": { "const": "localnet" },
+        "valueStatus": { "const": "valueless" },
+        "publicActivationAllowed": { "const": false },
+        "publicActivationGateIssue": { "const": 127 },
+        "toriumProductBackendIntegrated": { "const": false }
+      }
+    },
+    "coin": {
+      "type": "object", "additionalProperties": false,
+      "required": ["denom", "amountBaseUnits"],
+      "properties": {
+        "denom": { "const": "atorium" },
+        "amountBaseUnits": { "type": "string", "pattern": "^[1-9][0-9]*$" }
+      }
+    },
+    "governance": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "authority", "proposalSubmission", "proposalExecution", "consensusAuthority", "maxDepositPeriodSeconds",
+        "votingPeriodSeconds", "expeditedVotingPeriodSeconds", "minDeposit", "expeditedMinDeposit",
+        "quorum", "threshold", "expeditedThreshold", "vetoThreshold", "minInitialDepositRatio",
+        "minimumDepositRatio", "proposalCancelRatio", "proposalCancelDestination",
+        "burnDepositOnPrevoteFailure", "burnDepositOnQuorumFailure", "burnDepositOnVeto", "fourEqualValidators"
+      ],
+      "properties": {
+        "authority": { "const": "cosmos-gov-module-account" },
+        "proposalSubmission": { "const": "permissionless-funded-transaction" },
+        "proposalExecution": { "const": "passed-proposal-routed-as-governance-module-account" },
+        "consensusAuthority": {
+          "type": "object", "additionalProperties": false,
+          "required": ["genesisValue", "mutable", "transferRejectedByApplication"],
+          "properties": {
+            "genesisValue": { "const": "cosmos-gov-module-account" },
+            "mutable": { "const": false },
+            "transferRejectedByApplication": { "const": true }
+          }
+        },
+        "maxDepositPeriodSeconds": { "type": "integer", "minimum": 1 },
+        "votingPeriodSeconds": { "type": "integer", "minimum": 1 },
+        "expeditedVotingPeriodSeconds": { "type": "integer", "minimum": 1 },
+        "minDeposit": { "$ref": "#/$defs/coin" },
+        "expeditedMinDeposit": { "$ref": "#/$defs/coin" },
+        "quorum": { "type": "string" },
+        "threshold": { "type": "string" },
+        "expeditedThreshold": { "type": "string" },
+        "vetoThreshold": { "type": "string" },
+        "minInitialDepositRatio": { "type": "string" },
+        "minimumDepositRatio": { "type": "string" },
+        "proposalCancelRatio": { "type": "string" },
+        "proposalCancelDestination": { "const": "burn" },
+        "burnDepositOnPrevoteFailure": { "const": true },
+        "burnDepositOnQuorumFailure": { "const": true },
+        "burnDepositOnVeto": { "const": true },
+        "fourEqualValidators": {
+          "type": "object", "additionalProperties": false,
+          "required": ["totalVotingPower", "votesRequiredForQuorum", "twoValidatorVoteReachesQuorum", "threeValidatorYesVotePasses"],
+          "properties": {
+            "totalVotingPower": { "const": 100 },
+            "votesRequiredForQuorum": { "const": 3 },
+            "twoValidatorVoteReachesQuorum": { "const": false },
+            "threeValidatorYesVotePasses": { "const": true }
+          }
+        }
+      }
+    },
+    "authority": {
+      "type": "object", "additionalProperties": false,
+      "required": ["module", "surface", "authority"],
+      "properties": {
+        "module": { "type": "string", "minLength": 1 },
+        "surface": { "type": "string", "minLength": 1 },
+        "authority": { "const": "cosmos-gov-module-account" }
+      }
+    },
+    "contractAuthorities": {
+      "type": "object", "additionalProperties": false,
+      "required": ["mutableSystemContractsDeployed", "nativeFacade", "governancePrecompile", "futureSystemContractRegistry"],
+      "properties": {
+        "mutableSystemContractsDeployed": { "const": false },
+        "nativeFacade": {
+          "type": "object", "additionalProperties": false,
+          "required": ["address", "kind", "adminAuthority", "upgradeAuthority"],
+          "properties": {
+            "address": { "const": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE" },
+            "kind": { "const": "bank-backed-native-precompile" },
+            "adminAuthority": { "const": "none" },
+            "upgradeAuthority": { "const": "none-static-runtime-composition" }
+          }
+        },
+        "governancePrecompile": {
+          "type": "object", "additionalProperties": false,
+          "required": ["address", "stateMutationAuthority", "privilegedBypassAllowed"],
+          "properties": {
+            "address": { "const": "0x0000000000000000000000000000000000000805" },
+            "stateMutationAuthority": { "const": "underlying-module-message-authorization" },
+            "privilegedBypassAllowed": { "const": false }
+          }
+        },
+        "futureSystemContractRegistry": {
+          "type": "object", "additionalProperties": false,
+          "required": ["status", "ownerIssue"],
+          "properties": {
+            "status": { "const": "not-implemented" },
+            "ownerIssue": { "const": 108 }
+          }
+        }
+      }
+    },
+    "authorizationRules": {
+      "type": "object", "additionalProperties": false,
+      "required": ["directPrivilegedTransactionAllowed", "undocumentedAdminKeyAllowed", "offChainProposalExecutionAllowed", "normalUpgradeRequiresPassedPlan", "normalOperatorProcedureRequiresChecksumPreflight", "onChainExecutableChecksumEnforced", "failedUncommittedMigrationFixForwardMayUseNewReviewedChecksum", "governancePrecompileMayBypassModuleAuthority", "parameterChangesRequirePassedProposal", "upgradeSchedulingAndCancellationRequirePassedProposal"],
+      "properties": {
+        "directPrivilegedTransactionAllowed": { "const": false },
+        "undocumentedAdminKeyAllowed": { "const": false },
+        "offChainProposalExecutionAllowed": { "const": false },
+        "normalUpgradeRequiresPassedPlan": { "const": true },
+        "normalOperatorProcedureRequiresChecksumPreflight": { "const": true },
+        "onChainExecutableChecksumEnforced": { "const": false },
+        "failedUncommittedMigrationFixForwardMayUseNewReviewedChecksum": { "const": true },
+        "governancePrecompileMayBypassModuleAuthority": { "const": false },
+        "parameterChangesRequirePassedProposal": { "const": true },
+        "upgradeSchedulingAndCancellationRequirePassedProposal": { "const": true }
+      }
+    },
+    "bootstrapAndTransition": {
+      "type": "object", "additionalProperties": false,
+      "required": ["localControl", "decentralizationClaimAllowed", "futurePublicAuthority", "requiredBeforePublicActivation"],
+      "properties": {
+        "localControl": { "type": "string", "minLength": 1 },
+        "decentralizationClaimAllowed": { "const": false },
+        "futurePublicAuthority": { "const": "not-selected" },
+        "requiredBeforePublicActivation": { "type": "array", "minItems": 5, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "upgrade": {
+      "type": "object", "additionalProperties": false,
+      "required": ["planName", "preUpgradeVersion", "postUpgradeVersion", "minimumSchedulingLeadBlocks", "minimumSchedulingLeadEnforcedAtProposalExecution", "planInfoFormat", "planInfoRequires", "binaryProfiles", "migration", "artifactVerification", "storeLoader"],
+      "properties": {
+        "planName": { "const": "torium-local-v1" },
+        "preUpgradeVersion": { "type": "string" },
+        "postUpgradeVersion": { "type": "string" },
+        "minimumSchedulingLeadBlocks": { "type": "integer", "minimum": 10 },
+        "minimumSchedulingLeadEnforcedAtProposalExecution": { "const": true },
+        "planInfoFormat": { "const": "torium-upgrade-info-v1-json" },
+        "planInfoRequires": { "type": "array", "minItems": 6, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "binaryProfiles": { "$ref": "#/$defs/binaryProfiles" },
+        "migration": { "$ref": "#/$defs/migration" },
+        "artifactVerification": { "$ref": "#/$defs/artifactVerification" },
+        "storeLoader": { "$ref": "#/$defs/storeLoader" }
+      }
+    },
+    "binaryProfiles": {
+      "type": "object", "additionalProperties": false,
+      "required": ["pre", "post", "failedRehearsal"],
+      "properties": {
+        "pre": { "const": "no-handler-halts-and-writes-upgrade-info-at-plan-height" },
+        "post": { "const": "named-handler-rejects-start-before-plan-height-and-applies-at-plan-height" },
+        "failedRehearsal": { "const": "named-handler-returns-deterministic-error-without-committing-migration-state" }
+      }
+    },
+    "migration": {
+      "type": "object", "additionalProperties": false,
+      "required": ["runModuleMigrations", "markerStoreAddedAtUpgrade", "writeDeterministicMarker", "markerStore", "markerSchemaVersion", "preserveNativeSupply", "preserveAccountsBalancesContractsAndStaking"],
+      "properties": {
+        "runModuleMigrations": { "const": true },
+        "markerStoreAddedAtUpgrade": { "const": true },
+        "writeDeterministicMarker": { "const": true },
+        "markerStore": { "const": "toriumupgrade" },
+        "markerSchemaVersion": { "const": 1 },
+        "preserveNativeSupply": { "const": true },
+        "preserveAccountsBalancesContractsAndStaking": { "const": true }
+      }
+    },
+    "artifactVerification": {
+      "type": "object", "additionalProperties": false,
+      "required": ["checksumAlgorithm", "checksumVerifiedByHandler", "checksumVerifiedByOperatorPreflight", "checksumEnforcementScope", "versionVerifiedByHandler", "protocolVersionVerifiedByHandler", "migrationChecksumVerifiedByHandler"],
+      "properties": {
+        "checksumAlgorithm": { "const": "sha256" },
+        "checksumVerifiedByHandler": { "const": false },
+        "checksumVerifiedByOperatorPreflight": { "const": true },
+        "checksumEnforcementScope": { "const": "operator-procedure-not-consensus" },
+        "versionVerifiedByHandler": { "const": true },
+        "protocolVersionVerifiedByHandler": { "const": true },
+        "migrationChecksumVerifiedByHandler": { "const": true }
+      }
+    },
+    "storeLoader": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source", "onlyAtNextHeight", "unknownPlanRejected", "addedStoreKeys"],
+      "properties": {
+        "source": { "const": "data/upgrade-info.json-written-by-pre-upgrade-binary" },
+        "onlyAtNextHeight": { "const": true },
+        "unknownPlanRejected": { "const": true },
+        "addedStoreKeys": {
+          "type": "array", "minItems": 1, "maxItems": 1,
+          "prefixItems": [{ "const": "toriumupgrade" }],
+          "items": false
+        }
+      }
+    },
+    "failureAndRecovery": {
+      "type": "object", "additionalProperties": false,
+      "required": ["rehearsedScenarios", "preHeightCancellation", "skipUpgradeHeightAllowedInStandardProfile", "rollbackAfterCommittedUpgradeAllowed", "failedMigrationRemediation", "localFixtureFallback", "publicRollbackPolicy"],
+      "properties": {
+        "rehearsedScenarios": { "type": "array", "minItems": 10, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "preHeightCancellation": { "const": "new-passed-governance-proposal-only" },
+        "skipUpgradeHeightAllowedInStandardProfile": { "const": false },
+        "rollbackAfterCommittedUpgradeAllowed": { "const": false },
+        "failedMigrationRemediation": { "const": "fix-forward-new-checksummed-binary-at-same-uncommitted-height" },
+        "localFixtureFallback": { "const": "restore-all-nodes-from-verified-pre-upgrade-recovery-or-reset-valueless-localnet" },
+        "publicRollbackPolicy": { "const": "not-defined-public-launch-blocked" }
+      }
+    },
+    "evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["suite", "postUpgradeRecoveryFixture", "requiredBeforeAndAfter"],
+      "properties": {
+        "suite": { "const": "chain/tests/governance-upgrade" },
+        "postUpgradeRecoveryFixture": { "const": "post-upgrade" },
+        "requiredBeforeAndAfter": { "type": "array", "minItems": 7, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+      }
+    }
+  }
+}

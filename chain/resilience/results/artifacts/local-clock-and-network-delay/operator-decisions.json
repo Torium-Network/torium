@@ -1,0 +1,12 @@
+[
+  {
+    "at": "2026-07-29T19:31:56.709Z",
+    "decision": "applied netem delay 900ms±300ms with 12% packet loss to validator-2 and validator-3 from a privileged helper sharing their network namespace (the validators keep cap_drop: ALL)",
+    "reason": "scenario plan step for this canonical fault drill"
+  },
+  {
+    "at": "2026-07-29T19:32:42.193Z",
+    "decision": "removed the netem qdisc; the network is timely again",
+    "reason": "scenario plan step for this canonical fault drill"
+  }
+]

@@ -1,0 +1,530 @@
+{
+  "$schema": "./key-custody-v0.schema.json",
+  "schemaVersion": 1,
+  "custodyVersion": "0.1.0-local.1",
+  "status": "defined-local-v0-not-activated-publicly",
+  "ownerIssue": 117,
+  "publicLaunchAllowed": false,
+  "scope": {
+    "environment": "local-development-only",
+    "liveDeployment": false,
+    "toriumBackendIntegration": false,
+    "toriumBackendKeyAuthority": false,
+    "productionSecretMaterialPresent": false,
+    "bridge": false,
+    "layer2": false
+  },
+  "sources": {
+    "identifiers": {
+      "path": "chain/config/identifiers.json",
+      "manifestVersion": "0.2.0"
+    },
+    "trustModel": {
+      "path": "chain/config/trust-model-v1.json",
+      "modelVersion": "1.0.0-local.5"
+    },
+    "threatModel": {
+      "path": "chain/security/threat-model-v1.json",
+      "modelVersion": "1.0.0-local.5",
+      "riskIds": ["T001", "T006", "T007", "T012", "T019", "T024"],
+      "invariantIds": ["INV005", "INV006", "INV011", "INV018", "INV019"],
+      "releaseGateIds": ["G02", "G06", "G07"]
+    },
+    "nodeRoles": {
+      "path": "chain/profiles/node-roles-v0.json",
+      "profileVersion": "0.1.0-local.2",
+      "ownerIssue": 114
+    },
+    "governance": {
+      "path": "chain/config/governance-v1.json",
+      "contractVersion": "1.0.0-local.2",
+      "ownerIssue": 106
+    },
+    "secretPolicy": {
+      "path": "chain/security/secret-policy.json",
+      "policyVersion": "1.0.0",
+      "ownerIssue": 90
+    },
+    "recoveryPolicy": {
+      "path": "chain/recovery/recovery-v0.json",
+      "recoveryVersion": "0.1.0-local.1",
+      "ownerIssue": 116
+    },
+    "filePvFormat": {
+      "goModPath": "chain/app/go.mod",
+      "module": "github.com/cometbft/cometbft",
+      "version": "v0.39.3",
+      "replacementAllowed": false,
+      "signatureEncoding": "canonical-base64-ed25519-64-bytes",
+      "signBytesEncoding": "canonical-uppercase-hex",
+      "heightType": "non-negative-int64",
+      "roundType": "non-negative-int32",
+      "stepValues": [0, 1, 2, 3]
+    },
+    "localRecoveryGuide": "chain/localnet/RECOVERY.md",
+    "localRuntimeSource": "chain/app/localnet/runtime.go",
+    "localAccountsGuide": "chain/localnet/ACCOUNTS.md",
+    "validatorLifecycleGuide": "chain/operator/VALIDATOR_LIFECYCLE.md",
+    "signerStateGuard": "chain/operator/signer-state-guard.mjs",
+    "signerStateGuardTest": "chain/operator/signer-state-guard.test.mjs",
+    "compromiseRunbook": "docs/operations/torium-validator-signer-lifecycle.md"
+  },
+  "securityInvariants": {
+    "contractContainsPrivateMaterial": false,
+    "contractContainsMnemonic": false,
+    "contractContainsRecoveryShare": false,
+    "publicIdentifiersOnly": true,
+    "singleActiveConsensusSignerRequired": true,
+    "clonedConsensusSignerAllowed": false,
+    "availabilityMayOverrideDoubleSignSafety": false,
+    "operatorNodeBackupMayContainConsensusKeyOrSignerState": false,
+    "secretMayEnterRepository": false,
+    "secretMayEnterContainerLayer": false,
+    "secretMayEnterProcessArguments": false,
+    "secretMayEnterLogs": false,
+    "secretMayEnterSupportBundle": false,
+    "publicDeterministicFixtureIsProductionSecret": false,
+    "publicDeterministicFixtureProductionReuseAllowed": false
+  },
+  "localDeveloperRecoveryArchive": {
+    "ownerIssue": 98,
+    "scope": "disposable-local-debugging-only",
+    "containsPublicDeterministicConsensusSignerFixture": true,
+    "containsSignerState": true,
+    "authenticatedPublisher": false,
+    "encrypted": false,
+    "productionPromotionAllowed": false
+  },
+  "keyInventory": [
+    {
+      "id": "validator-consensus-signing",
+      "kind": "consensus-signing",
+      "algorithm": "Ed25519",
+      "publicIdentifier": "consensus address and public key",
+      "allowedIdentities": ["matching-validator"],
+      "authorities": ["CometBFT proposal and vote signing"],
+      "localMode": "public-deterministic-valueless-FilePV-fixture",
+      "publicMode": "hold-custody-and-signer-not-selected",
+      "runtimeDelivery": "FilePV local fixture only",
+      "backup": "separate controlled key and monotonic signer-state envelopes",
+      "rotation": "no in-place key edit; replace with a new consensus identity through a reviewed validator transition",
+      "ownerIssues": [100, 117, 119, 126]
+    },
+    {
+      "id": "p2p-node-identity",
+      "kind": "p2p-identity",
+      "algorithm": "CometBFT Ed25519 node identity",
+      "publicIdentifier": "node ID",
+      "allowedIdentities": [
+        "validator",
+        "sentry",
+        "full",
+        "public-rpc",
+        "private-archive-indexer"
+      ],
+      "authorities": ["authenticated P2P node identity"],
+      "localMode": "unique-public-deterministic-valueless-fixture-per-node",
+      "publicMode": "hold-generation-storage-and-peer-update-drill",
+      "runtimeDelivery": "node home with process-user-only access",
+      "backup": "encrypted identity backup outside generic diagnostics",
+      "rotation": "generate new identity while stopped and update reviewed peer records",
+      "ownerIssues": [114, 117, 119]
+    },
+    {
+      "id": "validator-operator-account",
+      "kind": "operator-account",
+      "algorithm": "secp256k1",
+      "publicIdentifier": "validator operator account address",
+      "allowedIdentities": ["validator-operator"],
+      "authorities": ["staking, commission, rewards, and unjail transactions"],
+      "localMode": "separate disposable local keyring",
+      "publicMode": "hold-offline-or-hardware-custody-not-selected",
+      "runtimeDelivery": "never delivered to validator consensus process",
+      "backup": "encrypted account backup under separate custodians",
+      "rotation": "operator address has no assumed in-place rotation; use reviewed validator replacement or protocol-supported transition",
+      "ownerIssues": [100, 117, 126]
+    },
+    {
+      "id": "governance-multisig",
+      "kind": "governance-account",
+      "algorithm": null,
+      "publicIdentifier": "future multisig or governance authority address",
+      "allowedIdentities": ["future-governance-approvers"],
+      "authorities": [
+        "governance proposal, deposit, vote, or approved administrative transaction"
+      ],
+      "localMode": "disposable test accounts only; no production multisig configured",
+      "publicMode": "hold-threshold-holders-and-ceremony-unselected",
+      "runtimeDelivery": "offline signing target; no node delivery",
+      "backup": "share design and custodians are null",
+      "rotation": "replace approver set through the ratified governance mechanism",
+      "ownerIssues": [106, 117, 126]
+    },
+    {
+      "id": "system-contract-deployer",
+      "kind": "deployment-account",
+      "algorithm": "secp256k1",
+      "publicIdentifier": "deployment registry deployer address",
+      "allowedIdentities": ["reviewed-deployment-operator"],
+      "authorities": ["contract deployment and explicit role handoff only"],
+      "localMode": "public-deterministic-valueless-deployer-fixture",
+      "publicMode": "hold-offline-or-multisig-custody-not-selected",
+      "runtimeDelivery": "one-shot reviewed deployment workflow only",
+      "backup": "encrypted backup if retained authority remains",
+      "rotation": "handoff or revoke all contract roles before retirement; no implicit permanent admin",
+      "ownerIssues": [111, 117, 126]
+    },
+    {
+      "id": "public-faucet-hot-signer",
+      "kind": "service-transaction-signer",
+      "algorithm": "secp256k1",
+      "publicIdentifier": "faucet funding address",
+      "allowedIdentities": ["isolated-faucet-service"],
+      "authorities": ["bounded valueless native transfer only"],
+      "localMode": "public-deterministic-valueless-key-derived-in-memory",
+      "publicMode": "hold-isolated-signer-and-abuse-controls-unimplemented",
+      "runtimeDelivery": "no key file, volume, mnemonic, or private-key environment variable in local Compose",
+      "backup": "public faucet design deferred; no local fixture backup",
+      "rotation": "pause service, reconcile nonce, fund replacement, update policy, then revoke old signer",
+      "ownerIssues": [117, 120, 125, 172]
+    },
+    {
+      "id": "ci-workload-identity",
+      "kind": "automation-identity",
+      "algorithm": null,
+      "publicIdentifier": "CI workload or repository identity",
+      "allowedIdentities": ["reviewed-CI-workflow"],
+      "authorities": ["least-privilege build and publication actions"],
+      "localMode": "not-present-in-chain-localnet",
+      "publicMode": "hold-external-settings-and-short-lived-identity-unproven",
+      "runtimeDelivery": "short-lived workload identity target; no raw long-lived key in source",
+      "backup": "no backup for short-lived identity; provider recovery policy required",
+      "rotation": "revoke provider grant and reissue workload binding",
+      "ownerIssues": [121, 122, 126]
+    },
+    {
+      "id": "operator-snapshot-publisher-signing",
+      "kind": "artifact-signing",
+      "algorithm": null,
+      "publicIdentifier": "snapshot publisher key ID",
+      "allowedIdentities": ["future-snapshot-publisher"],
+      "authorities": ["detached operator snapshot manifest signature only"],
+      "localMode": "not-configured",
+      "publicMode": "hold-algorithm-key-and-publisher-unselected",
+      "runtimeDelivery": "separate from snapshot payload and trust-anchor providers",
+      "backup": "custody design and recovery shares are null",
+      "rotation": "publish new key metadata, overlap validation, then revoke old publisher key",
+      "ownerIssues": [116, 117, 123, 126]
+    },
+    {
+      "id": "release-artifact-signing",
+      "kind": "artifact-signing",
+      "algorithm": null,
+      "publicIdentifier": "release provenance key or workload identity",
+      "allowedIdentities": ["reviewed-release-workflow"],
+      "authorities": ["binary, container, SBOM, and provenance signature"],
+      "localMode": "not-configured",
+      "publicMode": "hold-reproducible-release-signing-unimplemented",
+      "runtimeDelivery": "CI release job only; never chain node runtime",
+      "backup": "provider-specific recovery design is null",
+      "rotation": "revoke identity, rebuild from clean source, and re-sign reviewed artifacts",
+      "ownerIssues": [117, 121, 122, 126]
+    },
+    {
+      "id": "backup-encryption-key",
+      "kind": "envelope-encryption",
+      "algorithm": null,
+      "publicIdentifier": "future backup encryption key ID",
+      "allowedIdentities": ["future-backup-custodians"],
+      "authorities": [
+        "encrypt and decrypt approved #116 operator backup envelopes"
+      ],
+      "localMode": "not-configured",
+      "publicMode": "hold-provider-algorithm-key-and-shares-unselected",
+      "runtimeDelivery": "never stored with node, signer, snapshot, or backup payload",
+      "backup": "independent recovery-share design is null",
+      "rotation": "rewrap retained backups and revoke old decrypt authority after verification",
+      "ownerIssues": [116, 117, 126]
+    }
+  ],
+  "lifecyclePolicies": {
+    "generation": {
+      "status": "hold-no-production-generation-ceremony",
+      "selectedMechanism": null,
+      "requirements": [
+        "offline independent generation",
+        "recorded public identifiers",
+        "no secret output or repository material"
+      ]
+    },
+    "storage": {
+      "status": "hold-no-production-custody-selected",
+      "selectedMechanism": null,
+      "requirements": [
+        "encrypted at rest",
+        "role separation",
+        "process-user-only runtime access",
+        "non-exportable keys where supported"
+      ]
+    },
+    "backup": {
+      "status": "hold-no-share-design-or-drill",
+      "selectedMechanism": null,
+      "shareThreshold": null,
+      "totalShares": null,
+      "custodians": [],
+      "requirements": [
+        "separate key and signer-state envelopes",
+        "no generic node snapshot inclusion",
+        "independent restore verification"
+      ]
+    },
+    "rotation": {
+      "status": "hold-no-production-rotation-drill",
+      "selectedMechanism": null,
+      "scheduledIntervalDays": null,
+      "requirements": [
+        "personnel or provider change",
+        "suspected compromise",
+        "reviewed authority transition",
+        "old identity revocation"
+      ]
+    },
+    "revocation": {
+      "status": "hold-no-production-revocation-mechanisms",
+      "selectedMechanism": null,
+      "requirements": [
+        "immediate containment",
+        "authority-specific revoke or disable",
+        "unauthorized action review",
+        "evidence preservation"
+      ]
+    },
+    "destruction": {
+      "status": "hold-no-destruction-ceremony",
+      "selectedMechanism": null,
+      "witnessCount": null,
+      "requirements": [
+        "verified authority removal",
+        "cryptographic or media destruction",
+        "audit evidence",
+        "incident evidence retention"
+      ]
+    }
+  },
+  "signerRestoreGuard": {
+    "implementation": "chain/operator/signer-state-guard.mjs",
+    "status": "implemented-offline-local-guard-runtime-admission-not-wired",
+    "validatorStoppedEvidenceRequired": true,
+    "validatorStoppedEvidenceAutomated": false,
+    "keyPath": "config/priv_validator_key.json",
+    "statePath": "data/priv_validator_state.json",
+    "requiredFileMode": "0600",
+    "sameConsensusIdentityRequired": true,
+    "privateKeySeedMustDerivePublicKey": true,
+    "signatureOverSignBytesRequired": true,
+    "signBytesChainIdAndHrsVerified": false,
+    "trustedMaximumHeightRequired": true,
+    "trustedMaximumHeightEvidenceAutomated": false,
+    "positionOrder": ["height", "round", "step"],
+    "candidateMayBeBehind": false,
+    "samePositionSignBytesMustMatch": true,
+    "secretMaterialReturned": false,
+    "liveRestoreDrillPassed": false
+  },
+  "remoteSignerAndHsm": {
+    "status": "hold-evaluation-not-completed",
+    "requiredForLocalDevelopment": false,
+    "publicValidatorDecision": null,
+    "candidates": [],
+    "selectedProvider": null,
+    "selectedProtocol": null,
+    "keyExportable": null,
+    "highAvailabilityMode": null,
+    "failoverMode": null,
+    "latencyBudgetMilliseconds": null,
+    "availabilityTarget": null,
+    "compatibilityTested": false,
+    "criteria": [
+      "CometBFT Ed25519 compatibility",
+      "non-exportable key option",
+      "monotonic last-sign guard",
+      "no concurrent failover signer",
+      "authenticated channel",
+      "audit and attestation",
+      "backup, rotation, revocation, and provider-failure recovery"
+    ]
+  },
+  "consensusRotationConstraint": {
+    "inPlacePrivateKeyEditAllowed": false,
+    "inPlaceOperatorAddressRotationAssumed": false,
+    "replacementMode": "new consensus identity through a reviewed validator-set transition",
+    "localReplacementDrillPassed": false,
+    "publicReplacementDrillPassed": false,
+    "status": "explicitly-constrained-not-yet-tested"
+  },
+  "twoPersonControls": {
+    "status": "identified-not-configured",
+    "minimumApprovals": null,
+    "approvers": [],
+    "actions": [
+      "restore consensus signer",
+      "change governance approvers",
+      "rotate snapshot or release signer",
+      "recover backup encryption authority",
+      "destroy retained operational key"
+    ]
+  },
+  "compromiseRunbooks": [
+    {
+      "id": "consensus-signer-compromise",
+      "keyClass": "validator-consensus-signing",
+      "anchor": "consensus-signer",
+      "lastDrillAt": null,
+      "status": "authored-not-drilled"
+    },
+    {
+      "id": "p2p-identity-compromise",
+      "keyClass": "p2p-node-identity",
+      "anchor": "p2p-identity",
+      "lastDrillAt": null,
+      "status": "authored-not-drilled"
+    },
+    {
+      "id": "operator-account-compromise",
+      "keyClass": "validator-operator-account",
+      "anchor": "operator-account",
+      "lastDrillAt": null,
+      "status": "authored-not-drilled"
+    },
+    {
+      "id": "governance-key-compromise",
+      "keyClass": "governance-multisig",
+      "anchor": "governance",
+      "lastDrillAt": null,
+      "status": "authored-not-drilled"
+    },
+    {
+      "id": "deployer-key-compromise",
+      "keyClass": "system-contract-deployer",
+      "anchor": "deployer",
+      "lastDrillAt": null,
+      "status": "authored-not-drilled"
+    },
+    {
+      "id": "faucet-signer-compromise",
+      "keyClass": "public-faucet-hot-signer",
+      "anchor": "faucet",
+      "lastDrillAt": null,
+      "status": "authored-not-drilled"
+    },
+    {
+      "id": "ci-identity-compromise",
+      "keyClass": "ci-workload-identity",
+      "anchor": "ci-identity",
+      "lastDrillAt": null,
+      "status": "authored-not-drilled"
+    },
+    {
+      "id": "snapshot-publisher-compromise",
+      "keyClass": "operator-snapshot-publisher-signing",
+      "anchor": "snapshot-publisher",
+      "lastDrillAt": null,
+      "status": "authored-not-drilled"
+    },
+    {
+      "id": "release-signing-compromise",
+      "keyClass": "release-artifact-signing",
+      "anchor": "release-signing",
+      "lastDrillAt": null,
+      "status": "authored-not-drilled"
+    },
+    {
+      "id": "backup-encryption-compromise",
+      "keyClass": "backup-encryption-key",
+      "anchor": "backup-encryption",
+      "lastDrillAt": null,
+      "status": "authored-not-drilled"
+    }
+  ],
+  "holds": [
+    {
+      "id": "public-operator-roster-unselected",
+      "ownerIssue": 117,
+      "evidenceIssues": [124],
+      "requirement": "Select public operators, custodians, approvers, separation of duties, and accountable identity records."
+    },
+    {
+      "id": "generation-and-storage-ceremonies-unproven",
+      "ownerIssue": 117,
+      "evidenceIssues": [119, 126],
+      "requirement": "Exercise production-shaped generation, encrypted storage, permissions, access review, and recovery ceremonies."
+    },
+    {
+      "id": "backup-share-design-unselected",
+      "ownerIssue": 117,
+      "evidenceIssues": [116, 126],
+      "requirement": "Select share threshold, total shares, independent custodians, destinations, and periodic restore verification."
+    },
+    {
+      "id": "signer-runtime-admission-unwired",
+      "ownerIssue": 117,
+      "evidenceIssues": [116, 119],
+      "requirement": "Wire stopped-node, no-active-clone, identity, trusted-height, canonical signbytes chain/HRS, and monotonic signer-state checks into the operator restore path."
+    },
+    {
+      "id": "remote-signer-and-hsm-unselected",
+      "ownerIssue": 117,
+      "evidenceIssues": [118, 119, 126],
+      "requirement": "Complete remote signer and HSM compatibility, latency, availability, failover, audit, and custody evaluation."
+    },
+    {
+      "id": "consensus-replacement-drill-unproven",
+      "ownerIssue": 117,
+      "evidenceIssues": [100, 119, 126],
+      "requirement": "Exercise the explicitly constrained new-identity validator replacement path without double signing or state edits."
+    },
+    {
+      "id": "governance-multisig-unconfigured",
+      "ownerIssue": 106,
+      "evidenceIssues": [117, 126],
+      "requirement": "Select governance threshold, holders, transaction policy, replacement path, and two-person review controls."
+    },
+    {
+      "id": "public-faucet-signer-unimplemented",
+      "ownerIssue": 172,
+      "evidenceIssues": [117, 120, 125],
+      "requirement": "Implement isolated public faucet signing, persistent quotas, rotation, revocation, monitoring, and incident response."
+    },
+    {
+      "id": "snapshot-and-backup-custody-unselected",
+      "ownerIssue": 117,
+      "evidenceIssues": [116, 123, 126],
+      "requirement": "Select independent snapshot signing and backup encryption identities, custody, rotation, revocation, and recovery."
+    },
+    {
+      "id": "ci-workload-identity-unimplemented",
+      "ownerIssue": 121,
+      "evidenceIssues": [117, 122, 126],
+      "requirement": "Implement short-lived least-privilege CI workload identity, provider revocation, audit evidence, and clean rebuild procedures."
+    },
+    {
+      "id": "release-signing-unimplemented",
+      "ownerIssue": 122,
+      "evidenceIssues": [117, 121, 126],
+      "requirement": "Implement reproducible artifact signing, provenance, public verification, signer revocation, and replacement procedures."
+    },
+    {
+      "id": "compromise-drills-unproven",
+      "ownerIssue": 117,
+      "evidenceIssues": [119, 120, 126],
+      "requirement": "Exercise every authored lost, stolen, corrupt, and suspected-compromise procedure and record recovery evidence."
+    },
+    {
+      "id": "public-activation-deferred",
+      "ownerIssue": 127,
+      "evidenceIssues": [117, 126],
+      "requirement": "Keep production keys, HSM or KMS purchases, public credentials, and live validator activation outside local v0."
+    }
+  ]
+}

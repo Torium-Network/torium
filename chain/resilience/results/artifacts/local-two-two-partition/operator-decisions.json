@@ -1,0 +1,12 @@
+[
+  {
+    "at": "2026-07-29T16:10:37.709Z",
+    "decision": "partitioned validators 2+3 from validators 0+1 (50/50 split)",
+    "reason": "scenario plan step for this canonical fault drill"
+  },
+  {
+    "at": "2026-07-29T16:11:01.979Z",
+    "decision": "healed the partition; commits require strict quorum again",
+    "reason": "scenario plan step for this canonical fault drill"
+  }
+]

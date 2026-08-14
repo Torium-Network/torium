@@ -1,0 +1,13 @@
+{
+  "workloadId": "rpc-recent-read-mix",
+  "seed": 20260729,
+  "methods": [
+    "eth_getBlockByNumber",
+    "eth_getBalance",
+    "eth_getTransactionReceipt",
+    "eth_getLogs",
+    "eth_feeHistory"
+  ],
+  "recentTransactionHash": "0xef520725eac35bf49ed9646f971c0eaf32b676e462ed21cf49f371a03dc48e02",
+  "logsFromBlock": "0x5f2"
+}

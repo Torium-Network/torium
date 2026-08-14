@@ -1,0 +1,94 @@
+# Local-only Blockscout explorer stack for issue #113. Every image is pinned
+# by digest; publishing is loopback-only; the stack indexes the canonical
+# localnet and never touches a public network. Secrets here are non-secret
+# local placeholders (the scanner allowlists `blockscout-poc-only`).
+name: torium-explorer
+
+services:
+  database:
+    image: postgres:17-alpine@sha256:dc17045ccfd343b49600570ea734b9c4991cf1c3f3302e67df51e3b402dd55c4
+    restart: "no"
+    environment:
+      POSTGRES_DB: blockscout
+      POSTGRES_USER: blockscout
+      POSTGRES_PASSWORD: blockscout-poc-only
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U blockscout -d blockscout"]
+      interval: 2s
+      timeout: 5s
+      retries: 40
+    volumes:
+      - explorer-database:/var/lib/postgresql/data
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  redis:
+    image: redis:7.4-alpine@sha256:e7723ff73d963f5cc6d9c4643ea3d989527a402a319239054e9472a7fb9219a2
+    restart: "no"
+    read_only: true
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    tmpfs:
+      - /data:rw,noexec,nosuid,size=64m
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  backend:
+    image: torium/blockscout-poc@sha256:af87ff261ac380bb91d65be4cad7bdebc6db0a748a20529776cd1f8fa64772c8
+    restart: "no"
+    depends_on:
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command:
+      - sh
+      - -c
+      - >-
+        bin/blockscout eval "Elixir.Explorer.ReleaseTasks.create_and_migrate()" &&
+        bin/blockscout start
+    environment:
+      BLOCKSCOUT_VERSION: v11.2.2
+      ACCOUNT_POOL_SIZE: "4"
+      CHAIN_ID: "1414484556"
+      COIN_NAME: tTOR
+      COIN: tTOR
+      DATABASE_URL: ecto://blockscout:blockscout-poc-only@database:5432/blockscout
+      ACCOUNT_REDIS_URL: redis://redis:6379
+      DISABLE_FILE_LOGGING: "true"
+      DISABLE_MARKET: "true"
+      DISABLE_WEBAPP: "true"
+      ECTO_SSL_MODE: disable
+      ETHEREUM_JSONRPC_GETH_ALLOW_EMPTY_TRACES: "true"
+      ETHEREUM_JSONRPC_GETH_TRACE_BY_BLOCK: "true"
+      ETHEREUM_JSONRPC_HTTP_URL: http://host.docker.internal:8545
+      ETHEREUM_JSONRPC_TRACE_URL: http://host.docker.internal:8545
+      ETHEREUM_JSONRPC_VARIANT: geth
+      ETHEREUM_JSONRPC_WS_URL: ws://host.docker.internal:8546/websocket
+      INDEXER_DISABLE_INTERNAL_TRANSACTIONS_FETCHER: "true"
+      DATABASE_EVENT_POOL_SIZE: "2"
+      POOL_SIZE: "12"
+      POOL_SIZE_API: "6"
+      SECRET_KEY_BASE: torium-poc-only-not-for-production-0123456789abcdefghijklmnopqrstuvwxyz
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - "127.0.0.1:44000:4000"
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+volumes:
+  explorer-database:

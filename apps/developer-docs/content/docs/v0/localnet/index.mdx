@@ -1,0 +1,27 @@
+---
+title: Localnet
+description: Start, inspect, reset and stop the four-validator Torium local network.
+docId: localnet
+version: v0
+status: foundation
+ownerIssue: 140
+sourceOfTruth: chain/localnet/README.md
+sourceStatus: existing
+---
+
+Torium Localnet runs the real `toriumd` state machine as four isolated CometBFT validators. It is
+local development infrastructure: every listener binds to loopback, tTOR is valueless, fixture keys
+are disposable and no Torium backend or public chain endpoint is involved.
+
+- [Start from a clean checkout](/v0/localnet/quickstart)
+- [Fund and inspect real transactions](/v0/localnet/transactions)
+- [Use canonical IDs, ports and RPC limits](/v0/localnet/reference)
+- [Diagnose local failures](/v0/troubleshooting)
+
+The four validators form one developer-controlled authority domain. A single-node canonical profile
+does not exist today; the supported local topology is the four-validator profile. The historical
+upstream one-node PoC uses non-canonical IDs and must not be used as Torium network metadata.
+
+`stop` preserves blocks, databases and signer state. `reset` is destructive and creates a replacement
+local history in the same disposable replay domain; it requires explicit confirmation. Never reuse a
+local fixture key, mnemonic, database, snapshot or signed transaction on a public or valuable network.

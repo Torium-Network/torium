@@ -1,0 +1,440 @@
+{
+  "schemaVersion": 1,
+  "resultVersion": "0.1.0",
+  "status": "pass",
+  "ownerIssue": 119,
+  "planVersion": "0.1.0-local.1",
+  "scenarioId": "local-one-validator-offline",
+  "testId": "chaos.consensus.local.one-validator-offline",
+  "executed": true,
+  "provenance": {
+    "gitCommit": "c5976d38e67e889eea3d3753bbffd8d784be9edd",
+    "dirtyWorktree": true,
+    "patchSha256": "e3d37a81cc3d56af97675f00b8ba0fe9ff08f56d802dfc43478ccc50e709e98d",
+    "toolchainSha256": "7429c9d76ac7ea3a9ebec540a53690872e929e8fdd9359631b8b37c2f6879cc8",
+    "binaryIdentity": "toriumd (toriumd:local)",
+    "binarySha256": "cf3a0da5f899ac5dbf819252d8b8c87758d94ce040f2182701bc1207c7636343",
+    "genesisSha256": "86d77e6e1907e10e92217e1484cbf89e224b03bacdbf67f441b3307502a96808",
+    "effectiveConfigSha256": "47f3f0968767c76d094efa1524a86fa07cb59846aa95b1d518d8cb785dc66499",
+    "hostIdentity": "Darwin 25.3.0 arm64 (15 cores)",
+    "runnerIdentity": "chain/resilience/run-scenario-v0.mjs@0.1.0",
+    "seed": 20260729
+  },
+  "run": {
+    "startedAt": "2026-07-29T16:09:08.513Z",
+    "endedAt": "2026-07-29T16:09:27.856Z",
+    "cosmosChainId": "torium-localnet-1",
+    "evmChainId": 1414484556,
+    "startHeight": 194,
+    "endHeight": 202,
+    "baselineBlockHash": "D4CE4C730B50A2B33727863E5D6426F9101F635CA3CC03B167C481468FBC1277",
+    "baselineAppHash": "6C35298A4A93B772F2E4BBC40E08BEC534D03C13E5E93309D9936199ABCB833E"
+  },
+  "timeline": [
+    {
+      "at": "2026-07-29T16:09:08.520Z",
+      "kind": "baseline",
+      "height": 194,
+      "note": "all four validators reachable at the baseline committed height"
+    },
+    {
+      "at": "2026-07-29T16:09:09.143Z",
+      "kind": "change-applied",
+      "height": 194,
+      "note": "fault injected per the scenario module"
+    },
+    {
+      "at": "2026-07-29T16:09:20.459Z",
+      "kind": "expected-behavior-observed",
+      "height": 199,
+      "note": "expected liveness/finality behavior observed under the fault"
+    },
+    {
+      "at": "2026-07-29T16:09:20.459Z",
+      "kind": "recovery-started",
+      "height": 199,
+      "note": "operator recovery action started"
+    },
+    {
+      "at": "2026-07-29T16:09:27.789Z",
+      "kind": "recovery-complete",
+      "height": 202,
+      "note": "every validator reached the canonical recovery height"
+    }
+  ],
+  "observations": {
+    "nodes": [
+      {
+        "nodeId": "validator-0",
+        "reachable": true,
+        "height": 202,
+        "blockHash": "21D53D811B6D589A855A2DBE9CC0FA24E2BA22DD749E169ED07B3EF95ECE36D8",
+        "appHash": "EC9032A6870EA7B4A7D2E6F3A5196D9AF9E4FDCE4D5D1FCF66605CC737FC1E5C",
+        "validatorsHash": "75A3253D1BEABEA5BA6A328B4C01AB20461B96430C94CBDFD0B87570B17777A3"
+      },
+      {
+        "nodeId": "validator-1",
+        "reachable": true,
+        "height": 202,
+        "blockHash": "21D53D811B6D589A855A2DBE9CC0FA24E2BA22DD749E169ED07B3EF95ECE36D8",
+        "appHash": "EC9032A6870EA7B4A7D2E6F3A5196D9AF9E4FDCE4D5D1FCF66605CC737FC1E5C",
+        "validatorsHash": "75A3253D1BEABEA5BA6A328B4C01AB20461B96430C94CBDFD0B87570B17777A3"
+      },
+      {
+        "nodeId": "validator-2",
+        "reachable": true,
+        "height": 202,
+        "blockHash": "21D53D811B6D589A855A2DBE9CC0FA24E2BA22DD749E169ED07B3EF95ECE36D8",
+        "appHash": "EC9032A6870EA7B4A7D2E6F3A5196D9AF9E4FDCE4D5D1FCF66605CC737FC1E5C",
+        "validatorsHash": "75A3253D1BEABEA5BA6A328B4C01AB20461B96430C94CBDFD0B87570B17777A3"
+      },
+      {
+        "nodeId": "validator-3",
+        "reachable": true,
+        "height": 202,
+        "blockHash": "21D53D811B6D589A855A2DBE9CC0FA24E2BA22DD749E169ED07B3EF95ECE36D8",
+        "appHash": "EC9032A6870EA7B4A7D2E6F3A5196D9AF9E4FDCE4D5D1FCF66605CC737FC1E5C",
+        "validatorsHash": "75A3253D1BEABEA5BA6A328B4C01AB20461B96430C94CBDFD0B87570B17777A3"
+      }
+    ],
+    "committedStates": [
+      {
+        "nodeId": "validator-0",
+        "height": 194,
+        "blockHash": "D4CE4C730B50A2B33727863E5D6426F9101F635CA3CC03B167C481468FBC1277",
+        "appHash": "6C35298A4A93B772F2E4BBC40E08BEC534D03C13E5E93309D9936199ABCB833E",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 194,
+        "blockHash": "D4CE4C730B50A2B33727863E5D6426F9101F635CA3CC03B167C481468FBC1277",
+        "appHash": "6C35298A4A93B772F2E4BBC40E08BEC534D03C13E5E93309D9936199ABCB833E",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 194,
+        "blockHash": "D4CE4C730B50A2B33727863E5D6426F9101F635CA3CC03B167C481468FBC1277",
+        "appHash": "6C35298A4A93B772F2E4BBC40E08BEC534D03C13E5E93309D9936199ABCB833E",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 194,
+        "blockHash": "D4CE4C730B50A2B33727863E5D6426F9101F635CA3CC03B167C481468FBC1277",
+        "appHash": "6C35298A4A93B772F2E4BBC40E08BEC534D03C13E5E93309D9936199ABCB833E",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 195,
+        "blockHash": "DC34F9F0FFD125651EC84CB074F2988CBDEED4B182B3041862C4B23CFD131894",
+        "appHash": "84AD1A591637E6C2FB1479F9CA8F4EAC810D540403E1356BFE6277A3CD8FE4F0",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 195,
+        "blockHash": "DC34F9F0FFD125651EC84CB074F2988CBDEED4B182B3041862C4B23CFD131894",
+        "appHash": "84AD1A591637E6C2FB1479F9CA8F4EAC810D540403E1356BFE6277A3CD8FE4F0",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 195,
+        "blockHash": "DC34F9F0FFD125651EC84CB074F2988CBDEED4B182B3041862C4B23CFD131894",
+        "appHash": "84AD1A591637E6C2FB1479F9CA8F4EAC810D540403E1356BFE6277A3CD8FE4F0",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 195,
+        "blockHash": "DC34F9F0FFD125651EC84CB074F2988CBDEED4B182B3041862C4B23CFD131894",
+        "appHash": "84AD1A591637E6C2FB1479F9CA8F4EAC810D540403E1356BFE6277A3CD8FE4F0",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 196,
+        "blockHash": "FC81AA60EF24799C925A6755A3DE4BF1097DA9668E76DD23DEFB824A2371B80D",
+        "appHash": "096E22A3AEE2EE57E3ED9452A646FFFE3099C7F7734EF2C6016764B75ABECC53",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 196,
+        "blockHash": "FC81AA60EF24799C925A6755A3DE4BF1097DA9668E76DD23DEFB824A2371B80D",
+        "appHash": "096E22A3AEE2EE57E3ED9452A646FFFE3099C7F7734EF2C6016764B75ABECC53",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 196,
+        "blockHash": "FC81AA60EF24799C925A6755A3DE4BF1097DA9668E76DD23DEFB824A2371B80D",
+        "appHash": "096E22A3AEE2EE57E3ED9452A646FFFE3099C7F7734EF2C6016764B75ABECC53",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 196,
+        "blockHash": "FC81AA60EF24799C925A6755A3DE4BF1097DA9668E76DD23DEFB824A2371B80D",
+        "appHash": "096E22A3AEE2EE57E3ED9452A646FFFE3099C7F7734EF2C6016764B75ABECC53",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 197,
+        "blockHash": "3B48381E9B38BD87E8698736E4ADD3C4751D0F282C1C67CBC2723CF2296F07FB",
+        "appHash": "1BE1DD89881CC014AF8B7C23CC7E75CFA2EC39BCBAB7A0127293428AAE034BC7",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 197,
+        "blockHash": "3B48381E9B38BD87E8698736E4ADD3C4751D0F282C1C67CBC2723CF2296F07FB",
+        "appHash": "1BE1DD89881CC014AF8B7C23CC7E75CFA2EC39BCBAB7A0127293428AAE034BC7",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 197,
+        "blockHash": "3B48381E9B38BD87E8698736E4ADD3C4751D0F282C1C67CBC2723CF2296F07FB",
+        "appHash": "1BE1DD89881CC014AF8B7C23CC7E75CFA2EC39BCBAB7A0127293428AAE034BC7",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 197,
+        "blockHash": "3B48381E9B38BD87E8698736E4ADD3C4751D0F282C1C67CBC2723CF2296F07FB",
+        "appHash": "1BE1DD89881CC014AF8B7C23CC7E75CFA2EC39BCBAB7A0127293428AAE034BC7",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 198,
+        "blockHash": "1CC14A6693CBBBE8D4661AC2F636FB57713069E4DD75255F3DF26C9765AC29B8",
+        "appHash": "0B3F98E40469B9A28367703062E40C89FF6A4960659B1450257FFCCA59A753F6",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 198,
+        "blockHash": "1CC14A6693CBBBE8D4661AC2F636FB57713069E4DD75255F3DF26C9765AC29B8",
+        "appHash": "0B3F98E40469B9A28367703062E40C89FF6A4960659B1450257FFCCA59A753F6",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 198,
+        "blockHash": "1CC14A6693CBBBE8D4661AC2F636FB57713069E4DD75255F3DF26C9765AC29B8",
+        "appHash": "0B3F98E40469B9A28367703062E40C89FF6A4960659B1450257FFCCA59A753F6",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 198,
+        "blockHash": "1CC14A6693CBBBE8D4661AC2F636FB57713069E4DD75255F3DF26C9765AC29B8",
+        "appHash": "0B3F98E40469B9A28367703062E40C89FF6A4960659B1450257FFCCA59A753F6",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 199,
+        "blockHash": "598EAC325A82C82AD7D77B59758966C0DE5A897346FC13E8442AD979BA3CEBF1",
+        "appHash": "6C69E0A9C81E68D5ABA2A353830D754AAC6EF5788B32413B3F2E5F45F3A75B6F",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 199,
+        "blockHash": "598EAC325A82C82AD7D77B59758966C0DE5A897346FC13E8442AD979BA3CEBF1",
+        "appHash": "6C69E0A9C81E68D5ABA2A353830D754AAC6EF5788B32413B3F2E5F45F3A75B6F",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 199,
+        "blockHash": "598EAC325A82C82AD7D77B59758966C0DE5A897346FC13E8442AD979BA3CEBF1",
+        "appHash": "6C69E0A9C81E68D5ABA2A353830D754AAC6EF5788B32413B3F2E5F45F3A75B6F",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 199,
+        "blockHash": "598EAC325A82C82AD7D77B59758966C0DE5A897346FC13E8442AD979BA3CEBF1",
+        "appHash": "6C69E0A9C81E68D5ABA2A353830D754AAC6EF5788B32413B3F2E5F45F3A75B6F",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 200,
+        "blockHash": "5FBDA8BC8AADD5EC6624392BDB9D2230031492A24AB347B7CAB020193DAE0282",
+        "appHash": "9549C4A1611F63376D571334E3640C14891F4871C52779357F1FDA711E1EC090",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 200,
+        "blockHash": "5FBDA8BC8AADD5EC6624392BDB9D2230031492A24AB347B7CAB020193DAE0282",
+        "appHash": "9549C4A1611F63376D571334E3640C14891F4871C52779357F1FDA711E1EC090",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 200,
+        "blockHash": "5FBDA8BC8AADD5EC6624392BDB9D2230031492A24AB347B7CAB020193DAE0282",
+        "appHash": "9549C4A1611F63376D571334E3640C14891F4871C52779357F1FDA711E1EC090",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 200,
+        "blockHash": "5FBDA8BC8AADD5EC6624392BDB9D2230031492A24AB347B7CAB020193DAE0282",
+        "appHash": "9549C4A1611F63376D571334E3640C14891F4871C52779357F1FDA711E1EC090",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 201,
+        "blockHash": "A212A259E80580960AC5A8B60A1145CA7C51CAA59C7A27E51002FAF90E60B37A",
+        "appHash": "7987551C23E1CFF6563644EBFBBB7D63EE9E9AF01DB74BFC0459AF8B6D56B030",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 201,
+        "blockHash": "A212A259E80580960AC5A8B60A1145CA7C51CAA59C7A27E51002FAF90E60B37A",
+        "appHash": "7987551C23E1CFF6563644EBFBBB7D63EE9E9AF01DB74BFC0459AF8B6D56B030",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 201,
+        "blockHash": "A212A259E80580960AC5A8B60A1145CA7C51CAA59C7A27E51002FAF90E60B37A",
+        "appHash": "7987551C23E1CFF6563644EBFBBB7D63EE9E9AF01DB74BFC0459AF8B6D56B030",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 201,
+        "blockHash": "A212A259E80580960AC5A8B60A1145CA7C51CAA59C7A27E51002FAF90E60B37A",
+        "appHash": "7987551C23E1CFF6563644EBFBBB7D63EE9E9AF01DB74BFC0459AF8B6D56B030",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 202,
+        "blockHash": "21D53D811B6D589A855A2DBE9CC0FA24E2BA22DD749E169ED07B3EF95ECE36D8",
+        "appHash": "EC9032A6870EA7B4A7D2E6F3A5196D9AF9E4FDCE4D5D1FCF66605CC737FC1E5C",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 202,
+        "blockHash": "21D53D811B6D589A855A2DBE9CC0FA24E2BA22DD749E169ED07B3EF95ECE36D8",
+        "appHash": "EC9032A6870EA7B4A7D2E6F3A5196D9AF9E4FDCE4D5D1FCF66605CC737FC1E5C",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 202,
+        "blockHash": "21D53D811B6D589A855A2DBE9CC0FA24E2BA22DD749E169ED07B3EF95ECE36D8",
+        "appHash": "EC9032A6870EA7B4A7D2E6F3A5196D9AF9E4FDCE4D5D1FCF66605CC737FC1E5C",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 202,
+        "blockHash": "21D53D811B6D589A855A2DBE9CC0FA24E2BA22DD749E169ED07B3EF95ECE36D8",
+        "appHash": "EC9032A6870EA7B4A7D2E6F3A5196D9AF9E4FDCE4D5D1FCF66605CC737FC1E5C",
+        "commitVotingPower": 75
+      }
+    ]
+  },
+  "assertions": {
+    "liveness": {
+      "expected": "continues-after-round-delay-if-the-offline-node-was-proposer",
+      "observed": "commits continued on the 75% quorum after at most a proposer-round delay",
+      "passed": true
+    },
+    "safety": {
+      "expected": "no-conflicting-committed-block",
+      "observed": "no conflicting committed block was observed at any audited height",
+      "passed": true
+    },
+    "finality": {
+      "expected": "committed-heights-remain-single-canonical-history",
+      "observed": "committed heights kept one canonical history",
+      "passed": true
+    },
+    "recovery": {
+      "expected": "restarted-validator-catches-up-from-canonical-peers-without-state-edit",
+      "observed": "restarted validator caught up from canonical peers without state edits",
+      "passed": true
+    }
+  },
+  "recovery": {
+    "manualStateEdits": false,
+    "startedAt": "2026-07-29T16:09:20.459Z",
+    "completedAt": "2026-07-29T16:09:27.789Z",
+    "durationMilliseconds": 7330,
+    "canonicalHeight": 202,
+    "canonicalAppHash": "EC9032A6870EA7B4A7D2E6F3A5196D9AF9E4FDCE4D5D1FCF66605CC737FC1E5C"
+  },
+  "contradictoryCommitAudit": {
+    "overlappingHeightsChecked": 9,
+    "contradictionObserved": false,
+    "contradictoryHeights": [],
+    "evidenceComplete": true
+  },
+  "operatorDecisions": [
+    {
+      "at": "2026-07-29T16:09:09.143Z",
+      "decision": "stopped validator-1 (25% power offline; quorum retained)",
+      "reason": "scenario plan step for this canonical fault drill"
+    },
+    {
+      "at": "2026-07-29T16:09:20.901Z",
+      "decision": "restarted validator-1; no state was edited",
+      "reason": "scenario plan step for this canonical fault drill"
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "timeline",
+      "relativePath": "chain/resilience/results/artifacts/local-one-validator-offline/timeline.json",
+      "sha256": "bae4ddaccbac7090cd3f0d6795759b23c211803927f70d9cc67a00b3e62392d3",
+      "containsSecrets": false
+    },
+    {
+      "kind": "node-observations",
+      "relativePath": "chain/resilience/results/artifacts/local-one-validator-offline/node-observations.json",
+      "sha256": "0ac5a4a711c19fd116257cd7d61fb946f2b390d195b6531d08b3168fccfd16ea",
+      "containsSecrets": false
+    },
+    {
+      "kind": "commit-audit",
+      "relativePath": "chain/resilience/results/artifacts/local-one-validator-offline/commit-audit.json",
+      "sha256": "5af530e0d34a9b50936a22db42588878ed81ec0cd93408096f9c3fd97a61b751",
+      "containsSecrets": false
+    },
+    {
+      "kind": "operator-decisions",
+      "relativePath": "chain/resilience/results/artifacts/local-one-validator-offline/operator-decisions.json",
+      "sha256": "b6b4b5aa97c1d41df25da08c9f8ec10fbf7ebaaa3ecac1b3a419183c6fbcb715",
+      "containsSecrets": false
+    },
+    {
+      "kind": "worktree-patch",
+      "relativePath": "chain/resilience/results/artifacts/local-one-validator-offline/worktree.patch",
+      "sha256": "e3d37a81cc3d56af97675f00b8ba0fe9ff08f56d802dfc43478ccc50e709e98d",
+      "containsSecrets": false
+    }
+  ],
+  "releaseBlocked": false,
+  "limitations": [
+    "local four-validator Compose topology; container stop/start and Docker network partitions are the fault surface",
+    "commit audit reads each validator's post-recovery view of every audited height over CometBFT RPC"
+  ]
+}

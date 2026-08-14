@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "bundleId": "torium-system-contracts-audit-v1",
+  "hashAlgorithm": "sha256",
+  "coverageSummary": "contracts/.artifacts/coverage-summary.txt",
+  "testConfigurationOverrides": [
+    {
+      "contract": "ToriumAttestationRegistryInvariantTest",
+      "source": "contracts/test/assurance/ToriumAttestationRegistryAssurance.t.sol",
+      "invariantRuns": 128,
+      "invariantDepth": 64,
+      "reason": "Bounded 32-record lifecycle model keeps the canonical CI gate below one minute while the reward accounting invariants retain the global deep profile."
+    }
+  ],
+  "sourceFiles": [
+    ".github/workflows/torium-sdk.yml",
+    "chain/toolchain.json",
+    "contracts/.solhint.json",
+    "contracts/Makefile",
+    "contracts/README.md",
+    "contracts/deployments/SHA256SUMS",
+    "contracts/deployments/deployment-registry-v1.schema.json",
+    "contracts/foundry.toml",
+    "contracts/package-lock.json",
+    "contracts/package.json",
+    "contracts/remappings.txt",
+    "docs/architecture/README.md",
+    "docs/architecture/system-contract-audit-readiness-v0.md",
+    "docs/architecture/torium-attestation-canonical-hashing-v1.md",
+    "docs/changes/2026-07-16-system-contract-audit-readiness-v0.md",
+    "docs/security/torium-chain-threat-model-v1.md"
+  ],
+  "sourceTrees": [
+    {
+      "path": "chain/security",
+      "extensions": [".json", ".md", ".mjs"]
+    },
+    {
+      "path": "contracts/config",
+      "extensions": [".json"]
+    },
+    {
+      "path": "contracts/fixtures",
+      "extensions": [".csv", ".json"]
+    },
+    {
+      "path": "contracts/gas-snapshots",
+      "extensions": [".snapshot"]
+    },
+    {
+      "path": "contracts/generated/abi",
+      "extensions": [".json"]
+    },
+    {
+      "path": "contracts/deployments",
+      "extensions": [".json"]
+    },
+    {
+      "path": "contracts/scripts",
+      "extensions": [".json", ".mjs", ".sh"]
+    },
+    {
+      "path": "contracts/src",
+      "extensions": [".sol"]
+    },
+    {
+      "path": "contracts/test",
+      "extensions": [".sol"]
+    }
+  ],
+  "directDependencies": [
+    "@openzeppelin/contracts",
+    "ajv",
+    "prettier",
+    "solhint",
+    "viem"
+  ],
+  "exclusions": [
+    {
+      "path": "contracts/.artifacts/audit/**",
+      "reason": "Generated audit manifest and checksum index cannot checksum themselves."
+    },
+    {
+      "path": "contracts/.artifacts/npm-cache/**",
+      "reason": "Ephemeral package-manager cache; dependencies are represented by package-lock.json integrity pins."
+    },
+    {
+      "path": "contracts/.artifacts/toolchain/**",
+      "reason": "Extracted compiler binary is represented by the digest-pinned compiler image."
+    },
+    {
+      "path": "contracts/.work/**",
+      "reason": "Ephemeral writable workspace and caches."
+    },
+    {
+      "path": "contracts/cache/**",
+      "reason": "Foundry cache is machine-local derived state."
+    },
+    {
+      "path": "contracts/node_modules/**",
+      "reason": "Installed dependency tree is represented by package-lock.json integrity pins."
+    },
+    {
+      "path": "contracts/out/**",
+      "reason": "Compiler output is derived and may be reproduced from pinned inputs."
+    },
+    {
+      "path": "contracts/script/**",
+      "reason": "No Foundry broadcast script is currently part of the audited deployable source."
+    }
+  ]
+}

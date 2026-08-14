@@ -1,0 +1,99 @@
+{
+  "workloadId": "archive-historical-read-mix",
+  "seed": 20260729,
+  "endpoint": "archive-rpc-gateway",
+  "endpointUrl": "http://127.0.0.1:38545",
+  "methods": [
+    "eth_getBlockByNumber",
+    "eth_getBalance",
+    "eth_getTransactionCount",
+    "eth_getStorageAt",
+    "eth_getLogs"
+  ],
+  "chainTip": 1496,
+  "depths": [
+    {
+      "fraction": 0,
+      "height": 1
+    },
+    {
+      "fraction": 0.25,
+      "height": 375
+    },
+    {
+      "fraction": 0.5,
+      "height": 749
+    },
+    {
+      "fraction": 0.75,
+      "height": 1122
+    },
+    {
+      "fraction": 1,
+      "height": 1496
+    }
+  ],
+  "latencyByDepthMilliseconds": [
+    {
+      "depthFraction": 0,
+      "height": 1,
+      "latencyMilliseconds": {
+        "sampleCount": 25,
+        "minimum": 0.389287,
+        "p50": 0.389287,
+        "p95": 1.67775,
+        "maximum": 8.860334,
+        "mean": 0.887531
+      }
+    },
+    {
+      "depthFraction": 0.25,
+      "height": 375,
+      "latencyMilliseconds": {
+        "sampleCount": 20,
+        "minimum": 0.389287,
+        "p50": 0.389287,
+        "p95": 0.389287,
+        "maximum": 0.389287,
+        "mean": 0.389287
+      }
+    },
+    {
+      "depthFraction": 0.5,
+      "height": 749,
+      "latencyMilliseconds": {
+        "sampleCount": 20,
+        "minimum": 0.389287,
+        "p50": 0.389287,
+        "p95": 0.389287,
+        "maximum": 0.389287,
+        "mean": 0.389287
+      }
+    },
+    {
+      "depthFraction": 0.75,
+      "height": 1122,
+      "latencyMilliseconds": {
+        "sampleCount": 20,
+        "minimum": 0.389287,
+        "p50": 0.389287,
+        "p95": 0.389287,
+        "maximum": 0.389287,
+        "mean": 0.389287
+      }
+    },
+    {
+      "depthFraction": 1,
+      "height": 1496,
+      "latencyMilliseconds": {
+        "sampleCount": 20,
+        "minimum": 0.389287,
+        "p50": 0.389287,
+        "p95": 0.389287,
+        "maximum": 0.389287,
+        "mean": 0.389287
+      }
+    }
+  ],
+  "oldestQueryableHeightProven": 1
+}

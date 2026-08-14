@@ -1,0 +1,62 @@
+{
+  "caseId": "archive-historical-read-mix-run-1",
+  "workloadId": "archive-historical-read-mix",
+  "startedAtMilliseconds": 1785363463239,
+  "endedAtMilliseconds": 1785363463293,
+  "requests": [
+    {
+      "kind": "single",
+      "method": "eth_getBlockByNumber",
+      "height": 1,
+      "depthFraction": 0,
+      "elapsedMilliseconds": 8.860334000004514,
+      "bytes": 1734
+    },
+    {
+      "kind": "single",
+      "method": "eth_getBalance",
+      "height": 1,
+      "depthFraction": 0,
+      "elapsedMilliseconds": 1.6777500000025611,
+      "bytes": 43
+    },
+    {
+      "kind": "single",
+      "method": "eth_getTransactionCount",
+      "height": 1,
+      "depthFraction": 0,
+      "elapsedMilliseconds": 1.3726669999959995,
+      "bytes": 43
+    },
+    {
+      "kind": "single",
+      "method": "eth_getStorageAt",
+      "height": 1,
+      "depthFraction": 0,
+      "elapsedMilliseconds": 1.0892920000042068,
+      "bytes": 106
+    },
+    {
+      "kind": "single",
+      "method": "eth_getLogs",
+      "height": 1,
+      "depthFraction": 0,
+      "elapsedMilliseconds": 1.4025000000037835,
+      "bytes": 40
+    },
+    {
+      "kind": "batch",
+      "calls": 100,
+      "depthFractions": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        1
+      ],
+      "elapsedMilliseconds": 38.92870799999946,
+      "perCallMeanMilliseconds": 0.389287,
+      "bytes": 39322
+    }
+  ]
+}

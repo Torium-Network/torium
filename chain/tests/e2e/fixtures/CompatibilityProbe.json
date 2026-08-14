@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "notice": "DO NOT EDIT: test-only artifact generated from contracts/CompatibilityProbe.sol; production artifact ownership remains with issue #108.",
+  "contractName": "CompatibilityProbe",
+  "source": "contracts/CompatibilityProbe.sol",
+  "sourceSha256": "d45e7e443e2c01a955bb82e7e2a66a90c9c50987cc4e88cf41f328ed5669793d",
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.30",
+    "evmVersion": "prague",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    }
+  },
+  "generator": {
+    "name": "Hardhat",
+    "version": "3.9.1",
+    "sourceIssue": 89,
+    "productionOwnerIssue": 108
+  },
+  "testTool": {
+    "name": "Foundry cast",
+    "version": "1.7.1",
+    "image": "ghcr.io/foundry-rs/foundry@sha256:8347b728d5d393dac1c018691b36f506d23b9dcd78341d40ea0fcb11c3a19cdd"
+  },
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "previousValue",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "newValue",
+          "type": "uint256"
+        }
+      ],
+      "name": "ValueChanged",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newValue",
+          "type": "uint256"
+        }
+      ],
+      "name": "setValue",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "value",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "selectors": {
+    "value()": "0x3fa4f245",
+    "setValue(uint256)": "0x55241077",
+    "ValueChanged(uint256,uint256)": "0x2db947ef788961acc438340dbcb4e242f80d026b621b7c98ee30619950390382"
+  },
+  "creationBytecode": "0x6080604052348015600e575f5ffd5b5060e080601a5f395ff3fe6080604052348015600e575f5ffd5b50600436106030575f3560e01c80633fa4f2451460345780635524107714604d575b5f5ffd5b603b5f5481565b60405190815260200160405180910390f35b605c60583660046094565b605e565b005b5f80548282556040519091839183917f2db947ef788961acc438340dbcb4e242f80d026b621b7c98ee3061995039038291a35050565b5f6020828403121560a3575f5ffd5b503591905056fea2646970667358221220870aae74359eeeb52bceb20c181c09f39c3e1caaf61d25dd8d8c8b8bee865adb64736f6c634300081e0033",
+  "deployedBytecode": "0x6080604052348015600e575f5ffd5b50600436106030575f3560e01c80633fa4f2451460345780635524107714604d575b5f5ffd5b603b5f5481565b60405190815260200160405180910390f35b605c60583660046094565b605e565b005b5f80548282556040519091839183917f2db947ef788961acc438340dbcb4e242f80d026b621b7c98ee3061995039038291a35050565b5f6020828403121560a3575f5ffd5b503591905056fea2646970667358221220870aae74359eeeb52bceb20c181c09f39c3e1caaf61d25dd8d8c8b8bee865adb64736f6c634300081e0033"
+}

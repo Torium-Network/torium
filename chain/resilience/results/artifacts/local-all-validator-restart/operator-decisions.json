@@ -1,0 +1,12 @@
+[
+  {
+    "at": "2026-07-29T16:11:15.743Z",
+    "decision": "stopped the whole validator set (coordinated full restart)",
+    "reason": "scenario plan step for this canonical fault drill"
+  },
+  {
+    "at": "2026-07-29T16:11:16.541Z",
+    "decision": "restarted the full validator set from persisted state; no edits",
+    "reason": "scenario plan step for this canonical fault drill"
+  }
+]

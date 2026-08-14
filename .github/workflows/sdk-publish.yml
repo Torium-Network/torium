@@ -1,0 +1,96 @@
+# Publishes @torium-network/sdk to npm with provenance.
+#
+# Auth model (see packages/torium-sdk/release/release-policy-v0.json):
+# - Steady state: npm trusted publishing (GitHub Actions OIDC). No token.
+# - Bootstrap only: npm cannot attach a trusted publisher to a package that
+#   does not exist yet, so the very first publish uses a short-lived granular
+#   token in the NPM_TOKEN repository secret. Revoke the token and delete the
+#   secret immediately after, then configure the trusted publisher for this
+#   workflow before any subsequent release.
+name: SDK Publish
+
+on:
+  push:
+    tags: ["sdk-v*"]
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  NODE_VERSION: "22.23.1"
+  PNPM_VERSION: "10.27.0"
+
+jobs:
+  publish:
+    name: Verify and publish with provenance
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Update npm for OIDC trusted publishing
+        run: npm install -g npm@11
+
+      - name: Assert tag matches the package version
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#sdk-v}"
+          PKG_VERSION="$(node -p "require('./packages/torium-sdk/package.json').version")"
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match package version $PKG_VERSION" >&2
+            exit 1
+          fi
+
+      - name: Install workspace dependencies
+        run: pnpm install --frozen-lockfile --filter . --filter @torium-network/examples...
+
+      - name: Run the full SDK verification (includes release readiness)
+        run: pnpm --filter @torium-network/sdk verify
+
+      - name: Configure bootstrap npm token if present
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -n "$NPM_TOKEN" ]; then
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > "$HOME/.npmrc"
+            echo "Using bootstrap token auth (first publish only)."
+          else
+            echo "No NPM_TOKEN secret: relying on OIDC trusted publishing."
+          fi
+
+      - name: Publish to npm with provenance
+        working-directory: packages/torium-sdk
+        run: |
+          VERSION="${GITHUB_REF_NAME#sdk-v}"
+          if npm view "@torium-network/sdk@$VERSION" version >/dev/null 2>&1; then
+            echo "@torium-network/sdk@$VERSION is already on the registry; skipping publish."
+            exit 0
+          fi
+          npm publish --provenance --access public
+
+      - name: Verify the published package
+        run: |
+          VERSION="${GITHUB_REF_NAME#sdk-v}"
+          for attempt in 1 2 3 4 5 6; do
+            if npm view "@torium-network/sdk@$VERSION" dist.integrity dist.tarball; then
+              exit 0
+            fi
+            echo "registry not consistent yet (attempt $attempt), retrying in 20s"
+            sleep 20
+          done
+          echo "published version $VERSION not visible after retries" >&2
+          exit 1

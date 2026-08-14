@@ -1,0 +1,73 @@
+name: Torium Resilience Contract
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/chain-resilience-contract.yml"
+      - "chain/resilience/**"
+      - "chain/config/governance-v1.json"
+      - "chain/config/identifiers.json"
+      - "chain/config/protocol-v1.json"
+      - "chain/config/trust-model-v1.json"
+      - "chain/explorer/stack-v0.json"
+      - "chain/observability/observability-v0.json"
+      - "chain/recovery/recovery-v0.json"
+      - "chain/security/key-custody-v0.json"
+      - "package.json"
+      - "pnpm-lock.yaml"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/chain-resilience-contract.yml"
+      - "chain/resilience/**"
+      - "chain/config/governance-v1.json"
+      - "chain/config/identifiers.json"
+      - "chain/config/protocol-v1.json"
+      - "chain/config/trust-model-v1.json"
+      - "chain/explorer/stack-v0.json"
+      - "chain/observability/observability-v0.json"
+      - "chain/recovery/recovery-v0.json"
+      - "chain/security/key-custody-v0.json"
+      - "package.json"
+      - "pnpm-lock.yaml"
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "22.23.1"
+  PNPM_VERSION: "10.27.0"
+
+concurrency:
+  group: torium-resilience-contract-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Validate local resilience contracts
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install root validation dependency
+        run: pnpm install --frozen-lockfile --ignore-scripts --filter .
+
+      - name: Validate contracts without starting the chain
+        run: |
+          node chain/resilience/validate-resilience-plan-v0.mjs --committed-results
+          node --test chain/resilience/validate-resilience-result-v0.test.mjs

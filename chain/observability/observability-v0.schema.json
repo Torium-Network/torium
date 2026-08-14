@@ -1,0 +1,681 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/observability-v0.schema.json",
+  "title": "Torium inactive local observability contract v0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "observabilityVersion",
+    "status",
+    "ownerIssue",
+    "sources",
+    "constraints",
+    "healthContract",
+    "telemetryNetwork",
+    "labelPolicy",
+    "metricTargets",
+    "logging",
+    "alerts",
+    "dashboards",
+    "tracing",
+    "holds"
+  ],
+  "properties": {
+    "$schema": { "const": "./observability-v0.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "observabilityVersion": {
+      "type": "string",
+      "pattern": "^0\\.1\\.0-local\\.[1-9][0-9]*$"
+    },
+    "status": {
+      "enum": ["inactive-local-only-hold", "partially-activated-local-only"]
+    },
+    "ownerIssue": { "const": 115 },
+    "sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identifiers",
+        "protocol",
+        "rpcProfile",
+        "nodeRoles",
+        "explorerStack"
+      ],
+      "properties": {
+        "identifiers": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "manifestVersion"],
+          "properties": {
+            "path": { "const": "chain/config/identifiers.json" },
+            "manifestVersion": { "type": "string" }
+          }
+        },
+        "protocol": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "protocolVersion"],
+          "properties": {
+            "path": { "const": "chain/config/protocol-v1.json" },
+            "protocolVersion": { "type": "string" }
+          }
+        },
+        "rpcProfile": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "profileVersion", "healthSchemaVersion"],
+          "properties": {
+            "path": { "const": "chain/config/rpc-profile-v1.json" },
+            "profileVersion": { "type": "string" },
+            "healthSchemaVersion": { "const": 2 }
+          }
+        },
+        "nodeRoles": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "profileVersion", "ownerIssue"],
+          "properties": {
+            "path": { "const": "chain/profiles/node-roles-v0.json" },
+            "profileVersion": { "type": "string" },
+            "ownerIssue": { "const": 114 }
+          }
+        },
+        "explorerStack": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "stackVersion", "ownerIssue"],
+          "properties": {
+            "path": { "const": "chain/explorer/stack-v0.json" },
+            "stackVersion": { "type": "string" },
+            "ownerIssue": { "const": 113 }
+          }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "activated",
+        "collectorOrDashboardRuntimeConfigIncluded",
+        "healthExporterArtifactIncluded",
+        "localContainerLogRotationConfigured",
+        "liveDeploymentAllowed",
+        "publicOperationAllowed",
+        "publicTelemetryAllowed",
+        "telemetryIsReadinessAuthority",
+        "chainRpcAuthority",
+        "explorerDatabaseAuthority",
+        "toriumBackendIntegrationInScope",
+        "toriumBackendAuthorityAllowed",
+        "numericCapacityOrSloClaimAllowed"
+      ],
+      "properties": {
+        "environment": { "const": "local-development-only" },
+        "activated": { "type": "boolean" },
+        "collectorOrDashboardRuntimeConfigIncluded": { "const": false },
+        "healthExporterArtifactIncluded": { "const": true },
+        "localContainerLogRotationConfigured": { "const": true },
+        "liveDeploymentAllowed": { "const": false },
+        "publicOperationAllowed": { "const": false },
+        "publicTelemetryAllowed": { "const": false },
+        "telemetryIsReadinessAuthority": { "const": false },
+        "chainRpcAuthority": { "const": "authoritative" },
+        "explorerDatabaseAuthority": { "const": "derived-rebuildable-index" },
+        "toriumBackendIntegrationInScope": { "const": false },
+        "toriumBackendAuthorityAllowed": { "const": false },
+        "numericCapacityOrSloClaimAllowed": { "const": false }
+      }
+    },
+    "healthContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "states",
+        "readyRequires",
+        "reports",
+        "currentImplementation",
+        "currentEvidence",
+        "roleSeparatedEvidence",
+        "exporterActivated",
+        "readyFromOpenPortAllowed"
+      ],
+      "properties": {
+        "schemaVersion": { "const": 2 },
+        "states": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "readyRequires": {
+          "type": "array",
+          "minItems": 7,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "reports": {
+          "type": "array",
+          "minItems": 8,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "currentImplementation": {
+          "const": "chain/localnet/scripts/health.mjs"
+        },
+        "currentEvidence": {
+          "const": "poll-based-active-four-validator-localnet"
+        },
+        "roleSeparatedEvidence": { "const": false },
+        "exporterActivated": { "const": false },
+        "readyFromOpenPortAllowed": { "const": false }
+      }
+    },
+    "telemetryNetwork": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "status",
+        "collectorIdentity",
+        "collectorActivated",
+        "members",
+        "scrapeInitiator",
+        "targetsMayInitiateConnections",
+        "hostPublish",
+        "publicIngressConfigured",
+        "credentialsDefined",
+        "networkIsolationProven"
+      ],
+      "properties": {
+        "id": { "const": "torium-observability" },
+        "status": { "const": "defined-inactive-target" },
+        "collectorIdentity": { "const": "local-prometheus" },
+        "collectorActivated": { "const": false },
+        "members": {
+          "type": "array",
+          "minItems": 11,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "scrapeInitiator": { "const": "collector-only" },
+        "targetsMayInitiateConnections": { "const": false },
+        "hostPublish": { "type": "null" },
+        "publicIngressConfigured": { "const": false },
+        "credentialsDefined": { "const": false },
+        "networkIsolationProven": { "const": false }
+      }
+    },
+    "labelPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowedLabels",
+        "boundedValueSources",
+        "forbiddenLabels",
+        "unboundedUserControlledLabelAllowed",
+        "rawRpcMethodLabelAllowed",
+        "seriesBudget",
+        "seriesBudgetStatus"
+      ],
+      "properties": {
+        "allowedLabels": {
+          "type": "array",
+          "minItems": 13,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "boundedValueSources": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "environment",
+            "chain_id",
+            "role",
+            "instance",
+            "profile_version",
+            "profile",
+            "node",
+            "state",
+            "kind",
+            "component",
+            "surface",
+            "method_group",
+            "result_class"
+          ],
+          "properties": {
+            "environment": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            },
+            "chain_id": {
+              "type": "array",
+              "minItems": 2,
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            },
+            "role": {
+              "type": "array",
+              "minItems": 5,
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            },
+            "instance": {
+              "type": "array",
+              "minItems": 13,
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            },
+            "profile_version": {
+              "type": "array",
+              "minItems": 4,
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            },
+            "profile": {
+              "type": "array",
+              "minItems": 2,
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            },
+            "node": {
+              "type": "array",
+              "minItems": 4,
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            },
+            "state": {
+              "type": "array",
+              "minItems": 5,
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            },
+            "kind": {
+              "type": "array",
+              "minItems": 3,
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            },
+            "component": {
+              "type": "array",
+              "minItems": 6,
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            },
+            "surface": {
+              "type": "array",
+              "minItems": 9,
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            },
+            "method_group": {
+              "type": "array",
+              "minItems": 6,
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            },
+            "result_class": {
+              "type": "array",
+              "minItems": 5,
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "forbiddenLabels": {
+          "type": "array",
+          "minItems": 12,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "unboundedUserControlledLabelAllowed": { "const": false },
+        "rawRpcMethodLabelAllowed": { "const": false },
+        "seriesBudget": { "type": "null" },
+        "seriesBudgetStatus": { "const": "HOLD-not-measured" }
+      }
+    },
+    "metricTargets": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": { "$ref": "#/$defs/metricTarget" }
+    },
+    "logging": { "$ref": "#/$defs/logging" },
+    "alerts": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": { "$ref": "#/$defs/alert" }
+    },
+    "dashboards": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": { "$ref": "#/$defs/dashboard" }
+    },
+    "tracing": { "$ref": "#/$defs/tracing" },
+    "holds": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": { "$ref": "#/$defs/hold" }
+    }
+  },
+  "$defs": {
+    "metricTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "owner",
+        "targetKinds",
+        "source",
+        "protocol",
+        "port",
+        "path",
+        "currentStatus",
+        "activated",
+        "runtimeEvidenceComplete",
+        "requiredSignals"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 5 },
+        "owner": { "type": "string", "minLength": 3 },
+        "targetKinds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "source": { "type": "string", "minLength": 5 },
+        "protocol": { "enum": ["json-report", "prometheus"] },
+        "port": { "type": ["integer", "null"], "minimum": 1, "maximum": 65535 },
+        "path": { "type": ["string", "null"] },
+        "currentStatus": { "type": "string", "minLength": 10 },
+        "activated": { "type": "boolean" },
+        "runtimeEvidenceComplete": { "type": "boolean" },
+        "requiredSignals": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "logging": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "currentSurfaces",
+        "requiredFields",
+        "eventClasses",
+        "redaction",
+        "rotation",
+        "centralCollector",
+        "publicLogAccessAllowed",
+        "toriumBackendLogSinkAllowed"
+      ],
+      "properties": {
+        "format": { "const": "json-lines" },
+        "currentSurfaces": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "destination", "status"],
+            "properties": {
+              "id": { "type": "string" },
+              "destination": { "type": "string" },
+              "status": { "type": "string" }
+            }
+          }
+        },
+        "requiredFields": {
+          "type": "array",
+          "minItems": 10,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "eventClasses": {
+          "type": "array",
+          "minItems": 10,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "redaction": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "defaultAction",
+            "prohibitedFields",
+            "hashingSensitiveValuesAllowed",
+            "rawPayloadLoggingAllowed",
+            "secretScannerRequired",
+            "runtimeRedactionEvidenceComplete"
+          ],
+          "properties": {
+            "defaultAction": { "const": "drop-or-fixed-token" },
+            "prohibitedFields": {
+              "type": "array",
+              "minItems": 12,
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            },
+            "hashingSensitiveValuesAllowed": { "const": false },
+            "rawPayloadLoggingAllowed": { "const": false },
+            "secretScannerRequired": { "const": true },
+            "runtimeRedactionEvidenceComplete": { "const": false }
+          }
+        },
+        "rotation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["container", "raw"],
+          "properties": {
+            "container": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["driver", "maxSize", "maxFiles", "status"],
+              "properties": {
+                "driver": { "const": "json-file" },
+                "maxSize": { "const": "10m" },
+                "maxFiles": { "const": 3 },
+                "status": { "const": "configured-not-runtime-proven" }
+              }
+            },
+            "raw": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "maxFileBytes",
+                "maxFiles",
+                "maxAgeHours",
+                "compression",
+                "status"
+              ],
+              "properties": {
+                "maxFileBytes": { "type": "null" },
+                "maxFiles": { "type": "null" },
+                "maxAgeHours": { "type": "null" },
+                "compression": { "type": "null" },
+                "status": { "const": "HOLD-not-defined-or-proven" }
+              }
+            }
+          }
+        },
+        "centralCollector": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["selected", "artifactPin", "activated", "status"],
+          "properties": {
+            "selected": { "const": false },
+            "artifactPin": { "type": "null" },
+            "activated": { "type": "boolean" },
+            "status": { "const": "HOLD-not-selected" }
+          }
+        },
+        "publicLogAccessAllowed": { "const": false },
+        "toriumBackendLogSinkAllowed": { "const": false }
+      }
+    },
+    "alert": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "severity",
+        "owner",
+        "signals",
+        "condition",
+        "threshold",
+        "thresholdStatus",
+        "activated",
+        "runtimeEvidenceComplete",
+        "runbook"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 5 },
+        "severity": { "enum": ["warning", "critical"] },
+        "owner": { "type": "string", "minLength": 3 },
+        "signals": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "condition": { "type": "string", "minLength": 20 },
+        "threshold": { "type": "null" },
+        "thresholdStatus": { "type": "string", "minLength": 10 },
+        "activated": { "type": "boolean" },
+        "runtimeEvidenceComplete": { "type": "boolean" },
+        "runbook": {
+          "type": "string",
+          "pattern": "^docs/operations/[a-z0-9-]+\\.md#[a-z0-9-]+$"
+        }
+      }
+    },
+    "dashboard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "owner",
+        "status",
+        "artifactPath",
+        "activated",
+        "datasource",
+        "panels"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 5 },
+        "owner": { "type": "string", "minLength": 3 },
+        "status": {
+          "enum": [
+            "defined-not-implemented",
+            "artifact-defined-not-provisioned"
+          ]
+        },
+        "artifactPath": { "type": ["string", "null"] },
+        "activated": { "type": "boolean" },
+        "datasource": { "const": "local-prometheus-target" },
+        "panels": {
+          "type": "array",
+          "minItems": 4,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "tracing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["distributedTracing", "evmDebugTracing", "profiling"],
+      "properties": {
+        "distributedTracing": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled",
+            "provider",
+            "collectorEndpoint",
+            "contextPropagationEnabled",
+            "samplingPolicy",
+            "status"
+          ],
+          "properties": {
+            "enabled": { "const": false },
+            "provider": { "type": "null" },
+            "collectorEndpoint": { "type": "null" },
+            "contextPropagationEnabled": { "const": false },
+            "samplingPolicy": { "type": "null" },
+            "status": { "const": "explicitly-disabled-v0-no-runtime-claim" }
+          }
+        },
+        "evmDebugTracing": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabledOnAnyRole",
+            "requiredMethods",
+            "provenButDisabledMethods",
+            "status"
+          ],
+          "properties": {
+            "enabledOnAnyRole": { "const": false },
+            "requiredMethods": { "const": [] },
+            "provenButDisabledMethods": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "uniqueItems": true,
+              "items": { "type": "string", "pattern": "^debug_trace" }
+            },
+            "status": { "const": "proven-upstream-poc-but-not-enabled-v0" }
+          }
+        },
+        "profiling": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "pprofEnabledOnAnyRole",
+            "evmProfilingEnabled",
+            "readinessDependency",
+            "status"
+          ],
+          "properties": {
+            "pprofEnabledOnAnyRole": { "const": false },
+            "evmProfilingEnabled": { "const": false },
+            "readinessDependency": { "const": false },
+            "status": { "const": "disabled" }
+          }
+        }
+      }
+    },
+    "hold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "scope", "state", "ownerIssue", "evidenceIssues", "requirement"],
+      "properties": {
+        "id": { "type": "string", "minLength": 5 },
+        "scope": { "type": "string", "minLength": 5 },
+        "state": { "enum": ["HOLD", "HOLD-if-enabled", "PARTIAL"] },
+        "ownerIssue": { "type": "integer", "minimum": 1 },
+        "evidenceIssues": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "integer", "minimum": 1 }
+        },
+        "requirement": { "type": "string", "minLength": 40 }
+      }
+    }
+  }
+}

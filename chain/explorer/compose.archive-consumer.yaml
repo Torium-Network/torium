@@ -1,0 +1,37 @@
+# Archive-consumer overlay for issue #113's archive-target reconciliation,
+# unblocked by #114. It is an OVERLAY on chain/explorer/compose.explorer.yaml:
+# the default explorer stack still reads validator-0's public RPC directly, and
+# only this overlay routes the indexer through the private archive gateway.
+#
+#   docker compose \
+#     --file chain/explorer/compose.explorer.yaml \
+#     --file chain/explorer/compose.archive-consumer.yaml \
+#     up --detach backend
+#
+# Two things change and nothing else:
+#
+#   1. The backend joins `archive-indexer-consumer`, the network the node-role
+#      contract lists it on. It is NOT on `archive-raw-rpc`, so it cannot
+#      resolve or reach the archive node — every call must cross the gateway.
+#   2. Its RPC URLs address the gateway by service name, so the loopback
+#      publication is not involved at all.
+#
+# The network is created by chain/profiles/compose.archive-gateway.yaml in the
+# torium-localnet project, so the archive lane must be up first
+# (`make -C chain/localnet archive-up`).
+name: torium-explorer
+
+services:
+  backend:
+    environment:
+      ETHEREUM_JSONRPC_HTTP_URL: http://archive-rpc-gateway:8545
+      ETHEREUM_JSONRPC_TRACE_URL: http://archive-rpc-gateway:8545
+      ETHEREUM_JSONRPC_WS_URL: ws://archive-rpc-gateway:8546/websocket
+    networks:
+      - default
+      - archive-indexer-consumer
+
+networks:
+  archive-indexer-consumer:
+    external: true
+    name: torium-localnet_archive-indexer-consumer

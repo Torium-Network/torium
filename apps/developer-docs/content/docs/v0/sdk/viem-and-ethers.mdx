@@ -1,0 +1,48 @@
+---
+title: Direct viem and ethers usage
+description: Use standard EVM libraries directly and keep Torium integration portable.
+docId: sdk-viem-ethers
+version: v0
+status: foundation
+ownerIssue: 141
+sourceOfTruth: chain/config/identifiers.json
+sourceStatus: existing
+---
+
+The SDK is optional. Torium exposes standard EVM JSON-RPC, so applications can use viem, ethers or
+another EVM client directly. Keep the canonical chain ID and native currency metadata aligned with
+the versioned manifest.
+
+## Direct viem
+
+```ts
+import { toriumLocalnet } from "@torium-network/sdk/chains";
+import { createPublicClient, http } from "viem";
+
+const client = createPublicClient({ chain: toriumLocalnet, transport: http() });
+const height = await client.getBlockNumber();
+```
+
+This preserves viem's standard action surface but omits Torium endpoint validation and capability
+metadata. You may also define the chain locally from `chain/config/identifiers.json` if you do not
+want any SDK dependency.
+
+## Direct ethers
+
+```ts
+import { JsonRpcProvider } from "ethers";
+
+const provider = new JsonRpcProvider(
+  "http://127.0.0.1:8545",
+  { chainId: 1414484556, name: "torium-localnet" },
+  { staticNetwork: true }
+);
+```
+
+The endpoint is local-only. Confirm `eth_chainId` before signing and preserve values as `bigint`.
+This example is an alternative integration path, not a claim that ethers is shipped or tested by the
+SDK package.
+
+Torium-specific behavior should remain behind a small application adapter. That keeps reads,
+accounts and transaction requests portable while allowing the adapter to enforce identity,
+readiness and capability rules.

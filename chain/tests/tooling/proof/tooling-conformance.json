@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "result": "passed",
+  "generatedAt": "2026-07-15T14:01:23.784Z",
+  "network": {
+    "cosmosChainId": "torium-localnet-1",
+    "evmChainId": 1414484556,
+    "rpcURL": "http://127.0.0.1:8545"
+  },
+  "clients": {
+    "viem": "2.55.2",
+    "ethers": "6.17.0",
+    "hardhat": "3.9.1",
+    "foundry": "1.7.1",
+    "openZeppelinContracts": "5.4.0",
+    "solc": "0.8.30+commit.73712a01.Emscripten.clang"
+  },
+  "checks": {
+    "viemChainId": 1414484556,
+    "ethersChainId": "1414484556",
+    "hardhatChainId": "0x544f524c",
+    "foundryChainId": "1414484556",
+    "erc20": {
+      "address": "0xb6fcc3ce2f13543eb801efd20a63bd1b4c4efc1d",
+      "deploymentHash": "0xa8441a0666995d7a5a41913e192223d51516c83b0ac073753ab822da3dcbf802",
+      "transferHash": "0x5e1c33dc2b1962e740f82ac5d587890999edeb3923f11ef31b79c43544f6f794",
+      "transferLogs": 1,
+      "estimatedTransferGas": "22430",
+      "exactEstimateStatus": "reverted",
+      "explicitGasHeadroomApplied": true,
+      "submittedTransferGas": "250000",
+      "transferGasUsed": "125000",
+      "revertReasonObserved": true
+    },
+    "erc721": {
+      "address": "0xD475E58dD6136A144251fF1387E6AAD2f07D54B7",
+      "deploymentHash": "0xf7b5f5e33e3f8d51db048121d9ca3465de2a3b2c7d24232dbf54b04a6a892aa2",
+      "mintHash": "0x728ecf4c84c56bb9aa1faad2959207614ce863e65170a5e9316e2be0f8806824",
+      "mintLogs": 1,
+      "token0Owner": "0xDB1A2E05aB7FBE8d9cd2E196a69f0BAA4e689b8B"
+    }
+  }
+}

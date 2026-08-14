@@ -1,0 +1,12 @@
+[
+  {
+    "at": "2026-07-29T16:09:09.143Z",
+    "decision": "stopped validator-1 (25% power offline; quorum retained)",
+    "reason": "scenario plan step for this canonical fault drill"
+  },
+  {
+    "at": "2026-07-29T16:09:20.901Z",
+    "decision": "restarted validator-1; no state was edited",
+    "reason": "scenario plan step for this canonical fault drill"
+  }
+]

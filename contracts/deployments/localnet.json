@@ -1,0 +1,239 @@
+{
+  "$schema": "./deployment-registry-v1.schema.json",
+  "chain": {
+    "cosmosChainId": "torium-localnet-1",
+    "evmChainId": 1414484556,
+    "genesisSha256": "86d77e6e1907e10e92217e1484cbf89e224b03bacdbf67f441b3307502a96808"
+  },
+  "entries": [
+    {
+      "abiSha256": "c2945c7c124f352233c6f8b1cccd1ae6094be40205bd7dc423f1fbdf7533ad04",
+      "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "artifactPath": "contracts/generated/abi/IToriumNative.json",
+      "artifactSha256": "12c77d679e64532ed2f2c6e0c35b440ddfd1d859e73e0f364922120085a2aa1d",
+      "classification": "protocol-precompile",
+      "code": {
+        "interfaceSourceSha256": "3c9a1ddd7a318bc225b5e8a817a23f8953384c0a8ec1b2d74f01b412e110cf2f",
+        "kind": "protocol-precompile"
+      },
+      "configuration": {
+        "decimals": 18,
+        "denom": "atorium",
+        "genesisStatePath": "app_state.erc20.native_precompiles",
+        "module": "erc20"
+      },
+      "contractName": "IToriumNative",
+      "deployment": null,
+      "id": "torium-native",
+      "implementationVersion": "protocol-v1",
+      "roles": [],
+      "status": "active",
+      "upgradeModel": "protocol-upgrade",
+      "verification": {
+        "evidencePath": "chain/tests/e2e/run.sh",
+        "kind": "genesis-and-call-conformance",
+        "observedInGenesis": true
+      }
+    },
+    {
+      "abiSha256": "8225006d05f2e5c4ec786bb692ce653a6da63c77457dccc2f9fadc11ba560d67",
+      "address": "0xB6fCC3ce2f13543eB801Efd20a63bd1B4c4Efc1d",
+      "artifactPath": "contracts/generated/abi/ToriumCreate2Factory.json",
+      "artifactSha256": "b9da9e6ce8c8a30940316ba322271e0f04e720d7e5aa79c0dce3f7059d065177",
+      "classification": "post-genesis-create",
+      "code": {
+        "creationCodeKeccak256": "0xee161de04cad95593df8b92ae29766ea677b84e9a6533a4f523b45e7ede8104d",
+        "kind": "evm-bytecode",
+        "runtimeCodeKeccak256": "0x1c8443d4510a3e5ab30fadbca17e932276bf09c93a6c6cbce40081cbf0273e55"
+      },
+      "configuration": {
+        "constructorArguments": [],
+        "constructorArgumentsAbi": "0x"
+      },
+      "contractName": "ToriumCreate2Factory",
+      "deployment": {
+        "broadcast": false,
+        "deployerAddress": "0x91A7144cA92BfDc90a9A80Eecc3083959Ed90Bf3",
+        "deployerNonce": "0",
+        "expectedAddress": "0xB6fCC3ce2f13543eB801Efd20a63bd1B4c4Efc1d",
+        "strategy": "fixture-deployer-create-v1",
+        "transactionHash": null
+      },
+      "id": "torium-create2-factory",
+      "implementationVersion": "1.0.0",
+      "roles": [],
+      "status": "planned",
+      "upgradeModel": "immutable-versioned-redeployment",
+      "verification": {
+        "kind": "planned-runtime-code-hash",
+        "observedOnChain": false
+      }
+    },
+    {
+      "abiSha256": "5d3a2b5febf5121f51a25eb193b4916c96a60cf90bcec23195064490f8c8d55e",
+      "address": null,
+      "artifactPath": "contracts/generated/abi/ToriumRewardDistributor.json",
+      "artifactSha256": "7d52e1a1dcbed81f0c1f39deb9157dff188554c95d7984384a37ebf06fac1e13",
+      "classification": "post-genesis-deterministic",
+      "code": {
+        "creationCodeKeccak256": "0x9bbe4570571fd415bf06261d8a7b03df86028bf10643552c9bbf45e8daf2c839",
+        "kind": "evm-bytecode",
+        "runtimeCodeKeccak256": "0xb62ef55f634464915f38d47b62b694265eb18c1e91c3b95adc045f0ab805968a"
+      },
+      "configuration": {
+        "constructorArguments": null,
+        "constructorArgumentsAbi": null,
+        "constructorSchema": [
+          {
+            "name": "defaultAdminDelay_",
+            "type": "uint48"
+          },
+          {
+            "name": "initialAdmin_",
+            "type": "address"
+          },
+          {
+            "name": "initialPublisher_",
+            "type": "address"
+          },
+          {
+            "name": "initialPauser_",
+            "type": "address"
+          },
+          {
+            "name": "initialClawbackOperator_",
+            "type": "address"
+          },
+          {
+            "name": "treasury_",
+            "type": "address"
+          },
+          {
+            "name": "publicationDelay_",
+            "type": "uint64"
+          },
+          {
+            "name": "clawbackDelay_",
+            "type": "uint64"
+          }
+        ],
+        "fundingModel": "exact-native-value-equals-merkle-sum-root",
+        "publisherAllocationTrust": "trusted-off-chain-dataset",
+        "treasuryModel": "fixed-constructor-address-delayed-expiry-clawback"
+      },
+      "contractName": "ToriumRewardDistributor",
+      "deployment": null,
+      "id": "reward-distributor",
+      "implementationVersion": "1.0.0",
+      "roles": [
+        {
+          "assignment": "unassigned",
+          "authority": "delayed-admin-transfer",
+          "role": "DEFAULT_ADMIN_ROLE"
+        },
+        {
+          "assignment": "unassigned",
+          "authority": "default-admin-managed",
+          "role": "EPOCH_PUBLISHER_ROLE"
+        },
+        {
+          "assignment": "unassigned",
+          "authority": "default-admin-managed",
+          "role": "PAUSER_ROLE"
+        },
+        {
+          "assignment": "unassigned",
+          "authority": "default-admin-managed",
+          "role": "CLAWBACK_ROLE"
+        }
+      ],
+      "status": "planned",
+      "upgradeModel": "immutable-versioned-redeployment",
+      "verification": {
+        "deploymentEvidence": null,
+        "kind": "artifact-and-static-tests-only",
+        "observedOnChain": false
+      }
+    },
+    {
+      "abiSha256": "8c584a0731ba994e5ceaa131d6558f4f521ef7d77b6bd57b2813999c0ad64f48",
+      "address": null,
+      "artifactPath": "contracts/generated/abi/ToriumAttestationRegistry.json",
+      "artifactSha256": "441a3cd789a15bd27e2b4a4d24bf8917a48956841264f1dc49a391fe3a676d8d",
+      "classification": "post-genesis-deterministic",
+      "code": {
+        "creationCodeKeccak256": "0x63764414c6540d9a26f0a83049d8d2bf06a6906334d9454024dfb5f76ef5b8ee",
+        "kind": "evm-bytecode",
+        "runtimeCodeKeccak256": "0x5b116d7520ab2a3f5129d62096841e0def2df8d82ad5c9bfb82ec189bca10705"
+      },
+      "configuration": {
+        "benchmarkPlan": {
+          "command": "make -C contracts gas-snapshot-check",
+          "evidencePath": "contracts/gas-snapshots/attestation-registry-v1.snapshot",
+          "evidenceSha256": "6ab8387de23d8fafa0e38169911a7a4feb38dbf682254479022acfa770ea512e",
+          "stableCases": [
+            "testGasAttest()",
+            "testGasSupersede()",
+            "testGasRevoke()"
+          ],
+          "status": "committed-pinned-snapshot"
+        },
+        "canonicalHashAlgorithm": "torium-attestation-canonical-bytes-v1",
+        "commitmentFieldOrder": [
+          "schemaId",
+          "schemaVersion:uint32",
+          "subject",
+          "referenceHash",
+          "contentHash",
+          "metadataHash",
+          "metadataUriHash",
+          "supersedes"
+        ],
+        "constructorArguments": [],
+        "constructorArgumentsAbi": "0x",
+        "identifierDomain": "chain-id-registry-address-issuer-nonce-commitment",
+        "issuerAuthorization": "permissionless-msg-sender",
+        "replayProtection": "issuer-scoped-payload-excluding-supersedes-permanent",
+        "storageModel": "hashes-and-minimal-identifiers-only",
+        "supersessionConstraint": "same-issuer-schema-id-and-subject"
+      },
+      "contractName": "ToriumAttestationRegistry",
+      "deployment": null,
+      "id": "attestation-registry",
+      "implementationVersion": "1.0.0",
+      "roles": [],
+      "status": "planned",
+      "upgradeModel": "immutable-versioned-redeployment",
+      "verification": {
+        "benchmarkEvidence": {
+          "checkCommand": "make -C contracts gas-snapshot-check",
+          "kind": "foundry-gas-snapshot",
+          "path": "contracts/gas-snapshots/attestation-registry-v1.snapshot",
+          "sha256": "6ab8387de23d8fafa0e38169911a7a4feb38dbf682254479022acfa770ea512e"
+        },
+        "deploymentEvidence": null,
+        "kind": "artifact-and-static-tests-only",
+        "observedOnChain": false
+      }
+    }
+  ],
+  "environment": "localnet",
+  "generatedBy": "contracts/scripts/generate-artifacts.mjs",
+  "registryVersion": "0.1.0",
+  "releaseStatus": "local-only-valueless",
+  "schemaVersion": 1,
+  "toolchain": {
+    "bytecodeHash": "none",
+    "cborMetadata": false,
+    "evmVersion": "prague",
+    "foundryImage": "ghcr.io/foundry-rs/foundry@sha256:8347b728d5d393dac1c018691b36f506d23b9dcd78341d40ea0fcb11c3a19cdd",
+    "foundryVersion": "1.7.1",
+    "openZeppelinVersion": "5.6.1",
+    "optimizerEnabled": true,
+    "optimizerRuns": 200,
+    "solidityImage": "ethereum/solc:0.8.30@sha256:b116bf835554d40c501feab0b2c943a8c5eec003b804bcc5b326b85c93da00c2",
+    "solidityLongVersion": "0.8.30+commit.73712a01",
+    "solidityVersion": "0.8.30",
+    "viaIr": false
+  }
+}

@@ -1,0 +1,20 @@
+# Proposer-censorship drill overlay for issue #119. Used ONLY by
+# chain/resilience/run-scenario-v0.mjs, and only for the duration of the
+# `local-proposer-censorship` scenario.
+#
+# It replaces validator-1's image with `toriumd:censor-fixture` — the image
+# produced by `make -C chain/app container-censor-fixture`, which is the only
+# build in this repository that passes the `toriumcensorfixture` tag. Every
+# other validator keeps the release image, so exactly 25% of the voting power
+# censors, matching the scenario's `byzantinePower: 25`.
+#
+# The runner sets TORIUM_CENSOR_NEEDLE to the hex fragment identifying the one
+# transaction under test, so unrelated traffic is untouched and the drill's
+# claim is precise.
+name: torium-localnet
+
+services:
+  validator-1:
+    image: toriumd:censor-fixture
+    environment:
+      TORIUM_CENSOR_PREPARE_PROPOSAL: hex:${TORIUM_CENSOR_NEEDLE:?the drill must name the transaction fragment to censor}

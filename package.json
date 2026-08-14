@@ -1,0 +1,21 @@
+{
+  "name": "torium",
+  "private": true,
+  "packageManager": "pnpm@10.27.0",
+  "scripts": {
+    "build:sdk": "pnpm --filter @torium-network/sdk build",
+    "build:docs": "pnpm --filter developer-docs build",
+    "verify:docs": "pnpm --filter developer-docs verify",
+    "check-types": "pnpm -r check-types"
+  },
+  "devDependencies": {
+    "ajv": "8.17.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "19.1.0",
+      "react-dom": "19.1.0",
+      "@radix-ui/react-compose-refs": "1.1.3"
+    }
+  }
+}

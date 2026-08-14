@@ -1,0 +1,111 @@
+{
+  "benchmarkEvidence": [
+    {
+      "checkCommand": "make -C contracts gas-snapshot-check",
+      "ciGate": "deferred-to-issue-126",
+      "kind": "foundry-gas-snapshot",
+      "path": "contracts/gas-snapshots/attestation-registry-v1.snapshot",
+      "sha256": "6ab8387de23d8fafa0e38169911a7a4feb38dbf682254479022acfa770ea512e"
+    }
+  ],
+  "components": [
+    {
+      "abiSha256": "c2945c7c124f352233c6f8b1cccd1ae6094be40205bd7dc423f1fbdf7533ad04",
+      "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "addressEvidence": "canonical-genesis",
+      "artifactPath": "contracts/generated/abi/IToriumNative.json",
+      "artifactSha256": "12c77d679e64532ed2f2c6e0c35b440ddfd1d859e73e0f364922120085a2aa1d",
+      "classification": "protocol-precompile",
+      "id": "torium-native",
+      "implementationVersion": "protocol-v1",
+      "status": "active",
+      "transactionHash": null
+    },
+    {
+      "abiSha256": "8225006d05f2e5c4ec786bb692ce653a6da63c77457dccc2f9fadc11ba560d67",
+      "address": "0xB6fCC3ce2f13543eB801Efd20a63bd1B4c4Efc1d",
+      "addressEvidence": "predicted-not-deployed",
+      "artifactPath": "contracts/generated/abi/ToriumCreate2Factory.json",
+      "artifactSha256": "b9da9e6ce8c8a30940316ba322271e0f04e720d7e5aa79c0dce3f7059d065177",
+      "classification": "post-genesis-create",
+      "id": "torium-create2-factory",
+      "implementationVersion": "1.0.0",
+      "status": "planned",
+      "transactionHash": null
+    },
+    {
+      "abiSha256": "5d3a2b5febf5121f51a25eb193b4916c96a60cf90bcec23195064490f8c8d55e",
+      "address": null,
+      "addressEvidence": "not-assigned-or-deployed",
+      "artifactPath": "contracts/generated/abi/ToriumRewardDistributor.json",
+      "artifactSha256": "7d52e1a1dcbed81f0c1f39deb9157dff188554c95d7984384a37ebf06fac1e13",
+      "classification": "post-genesis-deterministic",
+      "id": "reward-distributor",
+      "implementationVersion": "1.0.0",
+      "status": "planned",
+      "transactionHash": null,
+      "trustBoundary": {
+        "funding": "exact-native-value-equals-merkle-sum-root",
+        "publisherAllocation": "trusted-off-chain-dataset",
+        "treasury": "fixed-constructor-address-delayed-expiry-clawback"
+      }
+    },
+    {
+      "abiSha256": "8c584a0731ba994e5ceaa131d6558f4f521ef7d77b6bd57b2813999c0ad64f48",
+      "address": null,
+      "addressEvidence": "not-assigned-or-deployed",
+      "artifactPath": "contracts/generated/abi/ToriumAttestationRegistry.json",
+      "artifactSha256": "441a3cd789a15bd27e2b4a4d24bf8917a48956841264f1dc49a391fe3a676d8d",
+      "classification": "post-genesis-deterministic",
+      "id": "attestation-registry",
+      "implementationVersion": "1.0.0",
+      "status": "planned",
+      "transactionHash": null,
+      "trustBoundary": {
+        "canonicalHashing": "torium-attestation-canonical-bytes-v1",
+        "issuerAuthenticity": "transaction-sender-address-only",
+        "legalTimestamp": "not-asserted",
+        "privacy": "hashes-are-not-anonymization-or-confidentiality",
+        "truth": "not-asserted"
+      }
+    }
+  ],
+  "environment": "localnet",
+  "generatedBy": "contracts/scripts/generate-artifacts.mjs",
+  "notice": "DO NOT EDIT: generated contract foundation; predicted addresses are not deployments.",
+  "publicDeployment": false,
+  "referenceFixtures": [
+    {
+      "claimCount": 3,
+      "epochId": "7",
+      "kind": "offline-reference-vector",
+      "merkleRoot": "0xd692683c8bbeeed46328190d8263258744761627c555877d81b617cac717a95c",
+      "outputPayloadSha256": "86faf4d8e1fa898b22876b2f5d279ecaeef4cf817e4b633f416bd394cc21be7d",
+      "path": "contracts/fixtures/rewards/example.fixture.json",
+      "rootSum": "3500000000000000025",
+      "sha256": "05feb0fa8ef3f84d0a67181799b9214cbf22e5f38864226eebbb5b86797b5842",
+      "treeFormat": "torium-merkle-sum-v1"
+    },
+    {
+      "algorithm": "torium-attestation-canonical-bytes-v1",
+      "kind": "offline-canonical-hash-vector-set",
+      "nonClaims": [
+        "no-rfc8785-jcs-json-canonicalization",
+        "no-unicode-normalization",
+        "no-uri-normalization",
+        "hashes-do-not-prove-authenticity-truth-or-availability",
+        "hashes-do-not-provide-confidentiality",
+        "low-entropy-inputs-are-dictionary-attackable",
+        "do-not-place-sensitive-large-or-personal-payloads-on-chain"
+      ],
+      "path": "contracts/fixtures/attestations/canonical-hash-v1.json",
+      "sha256": "7abe73e77b1c2358b65b24264204ec56ff871b8a8709a58b470b94542c30798d",
+      "vectorCount": 4,
+      "vectorSet": "torium-attestation-canonical-hash-v1",
+      "verifiedBy": "contracts/scripts/validate-attestation-vectors.mjs"
+    }
+  ],
+  "releaseStatus": "local-only-valueless",
+  "schemaVersion": 1,
+  "source": "contracts/deployments/localnet.json"
+}

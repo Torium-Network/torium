@@ -1,0 +1,66 @@
+{
+  "$schema": "./faucet-policy-v1.schema.json",
+  "schemaVersion": 1,
+  "profileVersion": "1.0.0",
+  "status": "active-local-only",
+  "environment": "localnet",
+  "ownerIssue": 97,
+  "warning": "VALUELESS LOCAL DEVELOPMENT ONLY — tTOR dispensed by this faucet has no monetary value.",
+  "network": {
+    "cosmosChainId": "torium-localnet-1",
+    "evmChainId": 1414484556,
+    "baseDenom": "atorium",
+    "displayDenom": "tTOR",
+    "decimals": 18
+  },
+  "exposure": {
+    "defaultListenAddress": "127.0.0.1:8080",
+    "composeInternalListenAddress": "0.0.0.0:8080",
+    "composeHostEndpoint": "http://127.0.0.1:8080",
+    "hostPublishing": "loopback-only",
+    "publicUseAllowed": false
+  },
+  "funding": {
+    "defaultAmountBaseUnits": "10000000000000000000",
+    "minimumAmountBaseUnits": "1000000000000000000",
+    "maximumAmountPerRequestBaseUnits": "25000000000000000000",
+    "maximumAmountPerAddressWindowBaseUnits": "100000000000000000000",
+    "addressWindowSeconds": 3600,
+    "cooldownSeconds": 30,
+    "transactionTimeoutSeconds": 45
+  },
+  "http": {
+    "maximumRequestBodyBytes": 4096,
+    "readHeaderTimeoutSeconds": 5,
+    "readTimeoutSeconds": 10,
+    "writeTimeoutSeconds": 55,
+    "idleTimeoutSeconds": 60
+  },
+  "signer": {
+    "fixtureAccount": "faucet",
+    "source": "deterministically-derived-disposable-local-fixture",
+    "lifetime": "process-memory-only",
+    "privateKeyPersistence": false,
+    "privateKeyInEnvironment": false,
+    "privateKeyInApi": false,
+    "privateKeyInLogs": false,
+    "publicNetworkReuseAllowed": false
+  },
+  "privacy": {
+    "requestBodiesLogged": false,
+    "mnemonicsAccepted": false,
+    "privateKeysAccepted": false,
+    "signedRawTransactionsReturned": false
+  },
+  "publicProfile": {
+    "implemented": false,
+    "ownerIssue": 172,
+    "requiredBeforePublicUse": [
+      "isolated production signer",
+      "persistent distributed quota state",
+      "abuse and bot controls",
+      "monitoring and alerting",
+      "incident response and funding limits"
+    ]
+  }
+}

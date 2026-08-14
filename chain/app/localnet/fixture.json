@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "warning": "VALUELESS LOCAL DEVELOPMENT NETWORK ONLY — NEVER REUSE THESE DETERMINISTIC FIXTURES",
+  "genesis_time": "2026-07-14T00:00:00Z",
+  "cosmos_chain_id": "torium-localnet-1",
+  "evm_chain_id": 1414484556,
+  "base_denom": "atorium",
+  "display_denom": "tTOR",
+  "decimals": 18,
+  "total_supply_base_units": "1000000000000000000000000000",
+  "power_reduction": "1000000000000000000",
+  "minimum_validator_self_delegation_base_units": "1000000000000000000",
+  "consensus": {
+    "max_block_bytes": 5242880,
+    "max_block_gas": 30000000,
+    "expected_total_power": 100,
+    "expected_commit_quorum_power": 67
+  },
+  "commission": {
+    "rate": "0.05",
+    "maximum_rate": "0.20",
+    "maximum_change_rate": "0.01"
+  },
+  "accounts": [
+    {
+      "name": "validator-0",
+      "role": "validator",
+      "account_number": 0,
+      "derivation_context": "validator-0",
+      "allocation_base_units": "1000000000000000000000",
+      "self_delegation_base_units": "25000000000000000000",
+      "expected_voting_power": 25
+    },
+    {
+      "name": "validator-1",
+      "role": "validator",
+      "account_number": 1,
+      "derivation_context": "validator-1",
+      "allocation_base_units": "1000000000000000000000",
+      "self_delegation_base_units": "25000000000000000000",
+      "expected_voting_power": 25
+    },
+    {
+      "name": "validator-2",
+      "role": "validator",
+      "account_number": 2,
+      "derivation_context": "validator-2",
+      "allocation_base_units": "1000000000000000000000",
+      "self_delegation_base_units": "25000000000000000000",
+      "expected_voting_power": 25
+    },
+    {
+      "name": "validator-3",
+      "role": "validator",
+      "account_number": 3,
+      "derivation_context": "validator-3",
+      "allocation_base_units": "1000000000000000000000",
+      "self_delegation_base_units": "25000000000000000000",
+      "expected_voting_power": 25
+    },
+    {
+      "name": "faucet",
+      "role": "development",
+      "account_number": 4,
+      "derivation_context": "faucet",
+      "allocation_base_units": "900000000000000000000000000"
+    },
+    {
+      "name": "deployer",
+      "role": "development",
+      "account_number": 5,
+      "derivation_context": "deployer",
+      "allocation_base_units": "50000000000000000000000000"
+    },
+    {
+      "name": "sdk-user",
+      "role": "development",
+      "account_number": 6,
+      "derivation_context": "sdk-user",
+      "allocation_base_units": "25000000000000000000000000"
+    },
+    {
+      "name": "test-user",
+      "role": "development",
+      "account_number": 7,
+      "derivation_context": "test-user",
+      "allocation_base_units": "24996000000000000000000000"
+    }
+  ]
+}

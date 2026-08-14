@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/chain/trust-model-v1.schema.json",
+  "title": "Torium validator trust and finality model v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "modelVersion",
+    "status",
+    "updatedAt",
+    "protocol",
+    "sources",
+    "consensusAssumptions",
+    "livenessParameterOwners",
+    "stages",
+    "validatorLifecycle",
+    "finalityContract",
+    "faultScenarios",
+    "publicMessaging",
+    "proofOfParticipation"
+  ],
+  "properties": {
+    "$schema": { "const": "./trust-model-v1.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "modelVersion": {
+      "type": "string",
+      "pattern": "^1\\.0\\.0-local\\.[1-9][0-9]*$"
+    },
+    "status": { "const": "local-development-contract" },
+    "updatedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "protocol": {
+      "type": "object",
+      "required": ["path", "version", "consensusEngine", "consensusVersion"]
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["name", "version", "commit", "url"]
+      }
+    },
+    "consensusAssumptions": {
+      "type": "object",
+      "required": [
+        "quorumRule",
+        "integerQuorumFormula",
+        "safetyAssumption",
+        "livenessAssumption",
+        "networkModel",
+        "validatorCountIsSecurityBoundary",
+        "votingPowerIsSecurityBoundary"
+      ]
+    },
+    "livenessParameterOwners": {
+      "type": "array",
+      "minItems": 7,
+      "items": {
+        "type": "object",
+        "required": [
+          "parameter",
+          "ownerIssues",
+          "status",
+          "localValue",
+          "localStatus",
+          "ratificationIssues",
+          "rationale"
+        ]
+      }
+    },
+    "stages": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "environment",
+          "activation",
+          "validatorCount",
+          "independentOperatorCount",
+          "votingPower",
+          "totalVotingPower",
+          "commitQuorumPower",
+          "decentralizationClaimAllowed",
+          "controls"
+        ]
+      }
+    },
+    "validatorLifecycle": {
+      "type": "object",
+      "required": [
+        "localRatification",
+        "bootstrap",
+        "admission",
+        "removal",
+        "states",
+        "evidence",
+        "parameterOwners"
+      ],
+      "properties": {
+        "localRatification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "issue",
+            "protocolVersion",
+            "publicActivationAllowed",
+            "publicActivationGateIssue"
+          ],
+          "properties": {
+            "issue": { "const": 100 },
+            "protocolVersion": { "const": "1.0.0-local.5" },
+            "publicActivationAllowed": { "const": false },
+            "publicActivationGateIssue": { "const": 127 }
+          }
+        },
+        "parameterOwners": {
+          "type": "array",
+          "minItems": 20,
+          "items": {
+            "type": "object",
+            "required": ["parameter", "ownerIssues", "status", "rationale"],
+            "properties": {
+              "parameter": { "type": "string", "minLength": 5 },
+              "ownerIssues": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "integer", "minimum": 1 }
+              },
+              "status": { "enum": ["ratified-local-only", "unratified"] },
+              "localValue": { "type": "string", "minLength": 1 },
+              "rationale": { "type": "string", "minLength": 20 }
+            }
+          }
+        }
+      }
+    },
+    "finalityContract": {
+      "type": "object",
+      "required": [
+        "commitMeaning",
+        "sdkDefaultConfirmationBlocks",
+        "jsonRpcFinalizedTag",
+        "jsonRpcSafeStateQueries",
+        "explorerLabel",
+        "clientTrustRequirements"
+      ]
+    },
+    "faultScenarios": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "testId",
+          "stage",
+          "fault",
+          "availablePower",
+          "byzantinePower",
+          "expectedLiveness",
+          "expectedSafety",
+          "ownerIssues"
+        ]
+      }
+    },
+    "publicMessaging": {
+      "type": "object",
+      "required": [
+        "allowedCurrentClaims",
+        "forbiddenUntilEvidenceAndLaunch",
+        "requiredQualifier"
+      ]
+    },
+    "proofOfParticipation": {
+      "type": "object",
+      "required": [
+        "consensusInfluence",
+        "validatorAdmissionInfluence",
+        "votingPowerInfluence",
+        "status",
+        "requirementsBeforeChange"
+      ]
+    }
+  }
+}

@@ -1,0 +1,68 @@
+---
+title: Attestation registry
+description: Canonical hashing, issuance, verification, supersession, revocation and privacy limits.
+docId: contracts-attestations
+version: v0
+status: foundation
+ownerIssue: 142
+sourceOfTruth: contracts/src/attestations/ToriumAttestationRegistry.sol
+sourceStatus: existing
+---
+
+`ToriumAttestationRegistry` records issuer-owned hash commitments with no
+administrators, allowlists or privileged roles. The caller is always the
+issuer; payload bytes stay off-chain.
+
+## Canonical hashing
+
+The `torium-attestation-canonical-bytes-v1` rule hashes exact UTF-8 bytes
+with keccak-256 — no JSON canonicalization, Unicode normalization or URI
+rewriting. The committed vectors in
+`contracts/fixtures/attestations/canonical-hash-v1.json` lock the SDK
+helpers to the contract encoding:
+
+```ts
+import {
+  computeToriumAttestationCommitment,
+  computeToriumAttestationId,
+  hashToriumAttestationUtf8,
+} from "@torium-network/sdk/contracts";
+
+const payload = {
+  schemaId, schemaVersion, subject,
+  contentHash: hashToriumAttestationUtf8(contentBytes),
+  metadataHash: hashToriumAttestationUtf8(metadataJson),
+  metadataUriHash: hashToriumAttestationUtf8(metadataUri),
+};
+const commitment = computeToriumAttestationCommitment(payload);
+```
+
+Attestation IDs are domain-separated over the chain ID, registry address,
+issuer, issuer nonce and commitment, so `preflightToriumAttestation` can
+predict the exact on-chain ID before signing — the conformance suite proves
+the prediction against the live chain.
+
+## Lifecycle
+
+- **Issue** — `attest` validates non-zero payload fields, blocks replayed
+  payloads by a permanent replay key (which deliberately excludes the
+  supersession edge), and emits `AttestationIssued`.
+- **Verify** — `verify` checks an active record against an expected issuer
+  and commitment; `getToriumAttestation` returns the full typed record with a
+  `missing | active | superseded | revoked` status.
+- **Supersede** — a new attestation may retire one active prior record with
+  the same issuer, schema and subject; mismatches revert
+  (`IssuerMismatch`, `SchemaMismatch`, `SubjectMismatch`) and preflight
+  reports them as structured blockers first.
+- **Revoke** — only the original issuer can revoke an active record, with a
+  non-zero reason hash; revocation is permanent and recorded with its
+  timestamp.
+
+## Privacy constraints
+
+Hashes do not provide confidentiality: low-entropy inputs are dictionary
+attackable, and on-chain records are permanent. Do not commit sensitive,
+large or personal payloads — publish only content the subject can tolerate
+being linkable forever, and keep payload bytes and metadata off-chain. The
+registry proves integrity and issuer ownership of a commitment; it does not
+prove the truth, authenticity or availability of the underlying content.

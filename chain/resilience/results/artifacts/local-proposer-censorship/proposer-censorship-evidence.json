@@ -1,0 +1,116 @@
+{
+  "marker": "a22f5b74fedc797cab3fc8c97c17473d0b27ddf396d826b033a23c597d2ee10d",
+  "censoringNode": "validator-1",
+  "censoringProposerAddress": "778693A0B69FEEC0C1764C8431B951FDAA33F4AD",
+  "censoringImage": "toriumd:censor-fixture",
+  "censoringImageId": "sha256:acb963f8fbfee559bec8d088f46f2a045a9cc9df1bf58f1bc83d0cefa96d271b",
+  "binaryBoundary": {
+    "releaseImageContainsFixture": false,
+    "fixtureImageContainsFixture": true
+  },
+  "windowStartHeight": 756,
+  "windowEndHeight": 766,
+  "heightsProposedByCensoringValidator": [
+    758,
+    762,
+    766
+  ],
+  "dropRecords": [
+    {
+      "height": 758,
+      "dropped": 1,
+      "kept": 0,
+      "policy": "drop-transactions-containing-hex:a22f5b74fedc797cab3fc8c97c17473d0b27ddf396d826b033a23c597d2ee10d"
+    },
+    {
+      "height": 762,
+      "dropped": 2,
+      "kept": 0,
+      "policy": "drop-transactions-containing-hex:a22f5b74fedc797cab3fc8c97c17473d0b27ddf396d826b033a23c597d2ee10d"
+    }
+  ],
+  "markedTransactions": [
+    {
+      "hash": "0x97b7aa55b68cbc46579132ba7ce43066606e8abd3f7395d86c6ce7b4b818fcb1",
+      "submittedAt": "2026-07-29T21:50:21.612Z",
+      "includedAtHeight": 759
+    },
+    {
+      "hash": "0xc15ebc1c61d0ac2251682b2a64400cb690f9b71a8aca14a828e30dd5f59168aa",
+      "submittedAt": "2026-07-29T21:50:22.519Z",
+      "includedAtHeight": 759
+    },
+    {
+      "hash": "0xb7656109680ff9e3283b63e3f7707d3607ee69470fcbce73c69d4410bddeccaa",
+      "submittedAt": "2026-07-29T21:50:23.426Z",
+      "includedAtHeight": 759
+    },
+    {
+      "hash": "0x76e028b74570ee864f40576dbe8534d2eaa9bff25e3ab37b46ebd29f52a7a060",
+      "submittedAt": "2026-07-29T21:50:24.340Z",
+      "includedAtHeight": 760
+    },
+    {
+      "hash": "0x3db2c788f3197c01f0d9d353acfd7c9a84bd61aaa6edfabacbefacbf64b1b2b5",
+      "submittedAt": "2026-07-29T21:50:25.247Z",
+      "includedAtHeight": 760
+    },
+    {
+      "hash": "0x0a62e85110a9cdf9c4e8053adca8cb38839cef2fbba70efab8c0ed92e418888c",
+      "submittedAt": "2026-07-29T21:50:26.161Z",
+      "includedAtHeight": 760
+    },
+    {
+      "hash": "0x22e49530c32ac4a22f2544acca27e3ea72e84239584a4697cdadfa8121ee9213",
+      "submittedAt": "2026-07-29T21:50:27.069Z",
+      "includedAtHeight": 761
+    },
+    {
+      "hash": "0x95580eee86c130737766e0e531b8762d4d8bd35f1a7e1d6571b307b0224ef79e",
+      "submittedAt": "2026-07-29T21:50:27.984Z",
+      "includedAtHeight": 761
+    },
+    {
+      "hash": "0x023ffd16a995982d8d87c413718b130124a9520c3545d6a436befa37e404ae8f",
+      "submittedAt": "2026-07-29T21:50:28.894Z",
+      "includedAtHeight": 761
+    },
+    {
+      "hash": "0xd4611ba366f66952f7d59f7d086ed9f6639112db246d96a97a1e13199f645f9e",
+      "submittedAt": "2026-07-29T21:50:29.806Z",
+      "includedAtHeight": 763
+    },
+    {
+      "hash": "0xbb5b109951f98b91b5af61ab426da161ed31a73c6170796582c90b032a70cbd3",
+      "submittedAt": "2026-07-29T21:50:30.719Z",
+      "includedAtHeight": 763
+    },
+    {
+      "hash": "0x9b7d81840906036ba248ce470fad1f865311c70ca016cdacf9e0b87a3b041c95",
+      "submittedAt": "2026-07-29T21:50:31.630Z",
+      "includedAtHeight": 763
+    },
+    {
+      "hash": "0xe8d28234c7ba6db537a85d47a774aa35dba70952b77e2fe9cffab06456e84f43",
+      "submittedAt": "2026-07-29T21:50:32.539Z",
+      "includedAtHeight": 763
+    },
+    {
+      "hash": "0x49b4fd406aab9191ba2e95264678e486af508d2a97a4fd776cb5e9f21fb18108",
+      "submittedAt": "2026-07-29T21:50:33.450Z",
+      "includedAtHeight": 764
+    }
+  ],
+  "markedTransactionsIncluded": 14,
+  "markedTransactionsIncludedByCensoringValidator": 0,
+  "inclusionHeightRange": [
+    759,
+    764
+  ],
+  "recovery": {
+    "restoredImage": "toriumd:local",
+    "fixtureActiveAfterRecovery": false,
+    "followUpTransaction": "0xaf427bdcd4299d794083bbdcf68cc9ca2b699b35389f4b1977090ced081b7f2a",
+    "followUpIncludedAtHeight": 771
+  }
+}

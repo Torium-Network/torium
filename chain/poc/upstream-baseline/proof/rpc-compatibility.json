@@ -1,0 +1,370 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-14T18:40:44.373Z",
+  "target": {
+    "rpcUrl": "http://127.0.0.1:8545",
+    "wsUrl": "ws://127.0.0.1:8546",
+    "expectedChainId": 262144
+  },
+  "account": {
+    "sender": "0xC6Fe5D33615a1C52c08018c47E8Bc53646A0E101",
+    "recipient": "0x963EBDf2e1f8DB8707D05FC75bfeFFBa1B5BaC17"
+  },
+  "checks": {
+    "initialBlock": "101",
+    "clientVersion": {
+      "ok": true,
+      "result": "Version dev ()\nCompiled at  using Go go1.25.9 (arm64)"
+    },
+    "chainId": {
+      "ok": true,
+      "result": "0x40000"
+    },
+    "rpcModules": {
+      "ok": true,
+      "result": {
+        "debug": "1.0",
+        "eth": "1.0",
+        "net": "1.0",
+        "personal": "1.0",
+        "rpc": "1.0",
+        "txpool": "1.0",
+        "web3": "1.0"
+      }
+    },
+    "clients": {
+      "viem": {
+        "chainId": 262144,
+        "sender": "0xC6Fe5D33615a1C52c08018c47E8Bc53646A0E101"
+      },
+      "ethers": {
+        "chainId": "262144",
+        "sender": "0xC6Fe5D33615a1C52c08018c47E8Bc53646A0E101"
+      }
+    },
+    "signedTransfer": {
+      "hash": "0xad9c9a7b59095dc0dad09f0bcfab09a4a796b7cd3f36ffbe438bd55c73ec3a13",
+      "status": "success",
+      "blockNumber": "102",
+      "recipientDeltaWei": "1"
+    },
+    "contractDeployment": {
+      "hash": "0xf4233f8d71834b408a584488f432d31dc36b91662ba9590ccdd2f5089f7f8e63",
+      "address": "0xa7f16731951d943768cf2053485b69ef61fef8be",
+      "status": "success"
+    },
+    "feeHistory": {
+      "emptyBlock": {
+        "ok": true,
+        "result": {
+          "oldestBlock": "0x1",
+          "reward": [["0x0", "0x0", "0x0"]],
+          "baseFeePerGas": ["0x342770c0", "0x2da282a8"],
+          "gasUsedRatio": [0],
+          "baseFeePerBlobGas": ["0x1", "0x1"],
+          "blobGasUsedRatio": [0]
+        }
+      },
+      "recentBlocks": {
+        "ok": true,
+        "result": {
+          "oldestBlock": "0x63",
+          "reward": [
+            ["0x0", "0x0", "0x0"],
+            ["0x0", "0x0", "0x0"],
+            ["0x0", "0x0", "0x0"],
+            ["0xad", "0xad", "0xad"],
+            ["0x97", "0x97", "0x97"]
+          ],
+          "baseFeePerGas": [
+            "0x716",
+            "0x633",
+            "0x56d",
+            "0x4bf",
+            "0x427",
+            "0x3a2"
+          ],
+          "gasUsedRatio": [
+            0, 0, 0, 0.0000048894435178696745, 0.000012678559872479774
+          ],
+          "baseFeePerBlobGas": ["0x1", "0x1", "0x1", "0x1", "0x1", "0x1"],
+          "blobGasUsedRatio": [0, 0, 0, 0, 0]
+        }
+      },
+      "configuredCap100": {
+        "ok": true,
+        "oldestBlock": "0x4",
+        "blockCount": 100,
+        "baseFeeCount": 101,
+        "rewardCount": 100
+      },
+      "overConfiguredCap101": {
+        "ok": false,
+        "error": {
+          "code": -32000,
+          "message": "FeeHistory user block count 101 higher than 100"
+        }
+      }
+    },
+    "blockTags": {
+      "eth_getBlockByNumber": {
+        "latest": {
+          "ok": true,
+          "shape": "object",
+          "keys": [
+            "baseFeePerGas",
+            "blobGasUsed",
+            "difficulty",
+            "excessBlobGas",
+            "extraData",
+            "gasLimit",
+            "gasUsed",
+            "hash",
+            "logsBloom",
+            "miner",
+            "mixHash",
+            "nonce",
+            "number",
+            "parentBeaconBlockRoot",
+            "parentHash",
+            "receiptsRoot",
+            "requestsHash",
+            "sha3Uncles",
+            "size",
+            "stateRoot",
+            "timestamp",
+            "transactions",
+            "transactionsRoot",
+            "uncles",
+            "withdrawals",
+            "withdrawalsRoot"
+          ]
+        },
+        "pending": {
+          "ok": true,
+          "shape": "object",
+          "keys": [
+            "baseFeePerGas",
+            "blobGasUsed",
+            "difficulty",
+            "excessBlobGas",
+            "extraData",
+            "gasLimit",
+            "gasUsed",
+            "hash",
+            "logsBloom",
+            "miner",
+            "mixHash",
+            "nonce",
+            "number",
+            "parentBeaconBlockRoot",
+            "parentHash",
+            "receiptsRoot",
+            "requestsHash",
+            "sha3Uncles",
+            "size",
+            "stateRoot",
+            "timestamp",
+            "transactions",
+            "transactionsRoot",
+            "uncles",
+            "withdrawals",
+            "withdrawalsRoot"
+          ]
+        },
+        "safe": {
+          "ok": true,
+          "shape": "object",
+          "keys": [
+            "baseFeePerGas",
+            "blobGasUsed",
+            "difficulty",
+            "excessBlobGas",
+            "extraData",
+            "gasLimit",
+            "gasUsed",
+            "hash",
+            "logsBloom",
+            "miner",
+            "mixHash",
+            "nonce",
+            "number",
+            "parentBeaconBlockRoot",
+            "parentHash",
+            "receiptsRoot",
+            "requestsHash",
+            "sha3Uncles",
+            "size",
+            "stateRoot",
+            "timestamp",
+            "transactions",
+            "transactionsRoot",
+            "uncles",
+            "withdrawals",
+            "withdrawalsRoot"
+          ]
+        },
+        "finalized": {
+          "ok": true,
+          "shape": "object",
+          "keys": [
+            "baseFeePerGas",
+            "blobGasUsed",
+            "difficulty",
+            "excessBlobGas",
+            "extraData",
+            "gasLimit",
+            "gasUsed",
+            "hash",
+            "logsBloom",
+            "miner",
+            "mixHash",
+            "nonce",
+            "number",
+            "parentBeaconBlockRoot",
+            "parentHash",
+            "receiptsRoot",
+            "requestsHash",
+            "sha3Uncles",
+            "size",
+            "stateRoot",
+            "timestamp",
+            "transactions",
+            "transactionsRoot",
+            "uncles",
+            "withdrawals",
+            "withdrawalsRoot"
+          ]
+        }
+      },
+      "eth_getBalance": {
+        "latest": {
+          "ok": true,
+          "shape": "string",
+          "value": "0x3635c95721045d7f41"
+        },
+        "pending": {
+          "ok": true,
+          "shape": "string",
+          "value": "0x3635c95721045d7f41"
+        },
+        "safe": {
+          "ok": false,
+          "error": {
+            "code": -32602,
+            "message": "invalid argument 1: hex string without 0x prefix"
+          }
+        },
+        "finalized": {
+          "ok": true,
+          "shape": "string",
+          "value": "0x3635c95721045d7f41"
+        }
+      },
+      "eth_getTransactionCount": {
+        "latest": {
+          "ok": true,
+          "shape": "string",
+          "value": "0x8"
+        },
+        "pending": {
+          "ok": true,
+          "shape": "string",
+          "value": "0x8"
+        },
+        "safe": {
+          "ok": false,
+          "error": {
+            "code": -32602,
+            "message": "invalid argument 1: hex string without 0x prefix"
+          }
+        },
+        "finalized": {
+          "ok": true,
+          "shape": "string",
+          "value": "0x8"
+        }
+      },
+      "eth_call": {
+        "latest": {
+          "ok": true,
+          "shape": "string",
+          "value": "0x"
+        },
+        "pending": {
+          "ok": true,
+          "shape": "string",
+          "value": "0x"
+        },
+        "safe": {
+          "ok": false,
+          "error": {
+            "code": -32602,
+            "message": "invalid argument 1: hex string without 0x prefix"
+          }
+        },
+        "finalized": {
+          "ok": true,
+          "shape": "string",
+          "value": "0x"
+        }
+      }
+    },
+    "tracing": {
+      "traceTransactionDefault": {
+        "ok": true,
+        "shape": "object",
+        "keys": ["failed", "gas", "returnValue", "structLogs"]
+      },
+      "traceTransactionCallTracer": {
+        "ok": true,
+        "shape": "object",
+        "keys": ["from", "gas", "gasUsed", "input", "to", "type", "value"]
+      },
+      "traceCall": {
+        "ok": true,
+        "shape": "object",
+        "keys": ["failed", "gas", "returnValue", "structLogs"]
+      },
+      "traceBlockByNumber": {
+        "ok": true,
+        "shape": "array",
+        "length": 1
+      },
+      "traceBlockByHash": {
+        "ok": true,
+        "shape": "array",
+        "length": 1
+      }
+    },
+    "webSocket": {
+      "triggerHash": "0xbc3474dc7d0859a165f1f9f4ae77d9e782c43461474743734fd86b7ea426008b",
+      "triggerStatus": "success",
+      "emittedLogs": 1,
+      "subscriptions": {
+        "newHeads": {
+          "acknowledged": true,
+          "received": true,
+          "sampleType": "object"
+        },
+        "logs": {
+          "acknowledged": true,
+          "received": true,
+          "sampleType": "object"
+        },
+        "newPendingTransactions": {
+          "acknowledged": true,
+          "received": true,
+          "sampleType": "string"
+        }
+      }
+    },
+    "webSocketBrowserOrigin": {
+      "origin": "http://localhost",
+      "accepted": false,
+      "httpStatus": 403,
+      "statusMessage": "Forbidden"
+    },
+    "finalBlock": "104"
+  }
+}

@@ -1,0 +1,122 @@
+name: torium-localnet
+
+x-validator: &validator
+  image: ${TORIUM_IMAGE:-toriumd:local}
+  user: "${TORIUM_UID:-10001}:${TORIUM_GID:-10001}"
+  restart: "no"
+  read_only: true
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+  logging:
+    driver: json-file
+    options:
+      max-size: 10m
+      max-file: "3"
+  tmpfs:
+    - /tmp:rw,noexec,nosuid,size=64m
+  command:
+    - start
+    - --home
+    - /var/lib/torium
+    - --log_format
+    - json
+    - --log_no_color
+    # Starts the EVM JSON-RPC metrics server; effective only where JSON-RPC
+    # itself is enabled (validator-0), a no-op on consensus-only validators.
+    - --metrics
+  healthcheck:
+    test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:26657/health"]
+    interval: 5s
+    timeout: 3s
+    start_period: 30s
+    retries: 12
+  networks:
+    - consensus
+
+services:
+  validator-0:
+    <<: *validator
+    hostname: validator-0
+    volumes:
+      - ./.state/container/validator-0:/var/lib/torium
+    ports:
+      - "127.0.0.1:1317:1317"
+      - "127.0.0.1:6065:6065"
+      - "127.0.0.1:8545:8545"
+      - "127.0.0.1:8546:8546"
+      - "127.0.0.1:9090:9090"
+      - "127.0.0.1:26656:26656"
+      - "127.0.0.1:26657:26657"
+      - "127.0.0.1:26660:26660"
+
+  validator-1:
+    <<: *validator
+    hostname: validator-1
+    volumes:
+      - ./.state/container/validator-1:/var/lib/torium
+    ports:
+      - "127.0.0.1:26756:26656"
+      - "127.0.0.1:26757:26657"
+
+  validator-2:
+    <<: *validator
+    hostname: validator-2
+    volumes:
+      - ./.state/container/validator-2:/var/lib/torium
+    ports:
+      - "127.0.0.1:26856:26656"
+      - "127.0.0.1:26857:26657"
+
+  validator-3:
+    <<: *validator
+    hostname: validator-3
+    volumes:
+      - ./.state/container/validator-3:/var/lib/torium
+    ports:
+      - "127.0.0.1:26956:26656"
+      - "127.0.0.1:26957:26657"
+
+  faucet:
+    image: ${TORIUM_IMAGE:-toriumd:local}
+    user: "${TORIUM_UID:-10001}:${TORIUM_GID:-10001}"
+    restart: "no"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+      - /var/lib/torium:rw,noexec,nosuid,size=1m
+    entrypoint:
+      - torium-faucet
+    command:
+      - --listen-address
+      - 0.0.0.0:8080
+      - --rpc-url
+      - http://validator-0:8545
+      - --allow-container-bind
+    depends_on:
+      validator-0:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/healthz"]
+      interval: 5s
+      timeout: 3s
+      start_period: 10s
+      retries: 12
+    ports:
+      - "127.0.0.1:8080:8080"
+    networks:
+      - consensus
+
+networks:
+  consensus:
+    driver: bridge

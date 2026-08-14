@@ -1,0 +1,71 @@
+# Local-only scrape configuration for issue #115. Every target is a loopback
+# service on the developer host; no public endpoint, no remote write, no
+# external alert receiver.
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+  external_labels:
+    environment: localnet
+    cosmos_chain_id: torium-localnet-1
+
+rule_files:
+  - /etc/prometheus/alert-rules.yml
+
+scrape_configs:
+  # Role: controller view of the whole localnet (#115 target localnet-health-v2)
+  - job_name: localnet-health
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["host.docker.internal:9468"]
+        labels:
+          torium_role: controller
+          torium_target: localnet-health-v2
+
+  # Role: validator consensus metrics (#115 target comet-consensus-metrics)
+  - job_name: comet-consensus
+    static_configs:
+      - targets: ["host.docker.internal:26660"]
+        labels:
+          torium_role: validator
+          torium_node: validator-0
+          torium_target: comet-consensus-metrics
+
+  # Role: EVM JSON-RPC service metrics (#115 target cosmos-evm-json-rpc-metrics).
+  # The go-ethereum metrics exporter serves Prometheus text at
+  # /debug/metrics/prometheus, not /metrics.
+  - job_name: cosmos-evm-json-rpc
+    metrics_path: /debug/metrics/prometheus
+    static_configs:
+      - targets: ["host.docker.internal:6065"]
+        labels:
+          torium_role: public-rpc
+          torium_node: validator-0
+          torium_target: cosmos-evm-json-rpc-metrics
+
+  # Role: private archive RPC gateway (#115 target archive-gateway-metrics).
+  # The gateway publishes only its enforced surface to host loopback; the raw
+  # archive RPC behind it is published nowhere, so this is the only archive-lane
+  # endpoint a collector can reach. Present only while the #114 archive lane is
+  # running (make -C chain/localnet archive-up).
+  - job_name: archive-rpc-gateway
+    static_configs:
+      - targets: ["host.docker.internal:38545"]
+        labels:
+          torium_role: archive-rpc-gateway
+          torium_target: archive-gateway-metrics
+
+  # Role: public faucet service metrics (#172 operator surface)
+  - job_name: public-faucet
+    static_configs:
+      - targets: ["host.docker.internal:8091"]
+        labels:
+          torium_role: faucet
+          torium_target: public-faucet-service
+
+  # Role: collector self-observation, so a collector outage is visible
+  - job_name: prometheus-self
+    static_configs:
+      - targets: ["127.0.0.1:9090"]
+        labels:
+          torium_role: collector
+          torium_target: prometheus-self

@@ -1,0 +1,63 @@
+---
+title: Connect to the testnet
+description: Endpoints, faucet, first RPC call and first transaction on the public Torium Testnet.
+docId: getting-started
+version: v0
+status: foundation
+ownerIssue: 139
+sourceOfTruth: chain/config/identifiers.json
+sourceStatus: existing
+---
+
+The Torium Testnet is a public, valueless network for building and testing. It may be halted,
+rolled back to a recent snapshot, or fully reset with a new genesis; resets are announced in
+[Releases](/v0/releases). Never deploy anything you cannot redeploy.
+
+## Endpoints
+
+| Surface | URL |
+| --- | --- |
+| JSON-RPC (HTTPS) | `https://rpc.testnet.torium.network` |
+| JSON-RPC (WebSocket) | `wss://ws.testnet.torium.network` |
+| Faucet | `https://faucet.testnet.torium.network` |
+| Explorer | `https://explorer.testnet.torium.network` |
+
+Endpoints are rate-limited. For sustained or bursty workloads, run your own node against the
+public P2P layer instead of hammering the shared RPC.
+
+## First call
+
+```bash
+curl -s https://rpc.testnet.torium.network \
+  -H 'content-type: application/json' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"eth_chainId","params":[]}'
+# → {"jsonrpc":"2.0","id":1,"result":"0x544f5254"}
+```
+
+Any EVM library works the same way — Torium keeps standard JSON-RPC semantics, so viem, ethers,
+Foundry's `cast`, and wallet tooling behave as they do on any EVM chain.
+
+## Get test funds
+
+Request tTOR from the [faucet](https://faucet.testnet.torium.network). One request per address
+per day; amounts and the global daily budget are capped. tTOR has no market value and no
+entitlement of any kind — it exists so you can pay testnet gas.
+
+## First transaction with the SDK
+
+```ts
+import { toriumTestnet } from "@torium-network/sdk/chains";
+import { createToriumPublicClient } from "@torium-network/sdk/clients";
+import { http } from "viem";
+
+const client = createToriumPublicClient({
+  chain: toriumTestnet,
+  transport: http("https://rpc.testnet.torium.network"),
+});
+
+const status = await client.getToriumNetworkStatus();
+console.log(status.observedChainId, await client.getBlockNumber());
+```
+
+Continue with the [SDK guides](/v0/sdk) for wallets, transactions and error handling, or connect
+[MetaMask, Foundry and Hardhat](/v0/evm-tools) directly.

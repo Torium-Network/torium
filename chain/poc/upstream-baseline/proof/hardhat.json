@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-14T18:44:32.946Z",
+  "hardhat": "3.9.1",
+  "network": "cosmosEvm",
+  "chainType": "l1",
+  "chainId": "0x40000",
+  "blockNumber": "0x90",
+  "feeHistoryOldestBlock": "0x8f"
+}

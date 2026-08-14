@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/faucet-policy-v1.json",
+  "title": "Torium valueless local faucet policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "profileVersion",
+    "status",
+    "environment",
+    "ownerIssue",
+    "warning",
+    "network",
+    "exposure",
+    "funding",
+    "http",
+    "signer",
+    "privacy",
+    "publicProfile"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "profileVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "status": { "const": "active-local-only" },
+    "environment": { "const": "localnet" },
+    "ownerIssue": { "const": 97 },
+    "warning": { "type": "string", "minLength": 1 },
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cosmosChainId",
+        "evmChainId",
+        "baseDenom",
+        "displayDenom",
+        "decimals"
+      ],
+      "properties": {
+        "cosmosChainId": { "const": "torium-localnet-1" },
+        "evmChainId": { "const": 1414484556 },
+        "baseDenom": { "const": "atorium" },
+        "displayDenom": { "const": "tTOR" },
+        "decimals": { "const": 18 }
+      }
+    },
+    "exposure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "defaultListenAddress",
+        "composeInternalListenAddress",
+        "composeHostEndpoint",
+        "hostPublishing",
+        "publicUseAllowed"
+      ],
+      "properties": {
+        "defaultListenAddress": { "const": "127.0.0.1:8080" },
+        "composeInternalListenAddress": { "const": "0.0.0.0:8080" },
+        "composeHostEndpoint": { "const": "http://127.0.0.1:8080" },
+        "hostPublishing": { "const": "loopback-only" },
+        "publicUseAllowed": { "const": false }
+      }
+    },
+    "funding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "defaultAmountBaseUnits",
+        "minimumAmountBaseUnits",
+        "maximumAmountPerRequestBaseUnits",
+        "maximumAmountPerAddressWindowBaseUnits",
+        "addressWindowSeconds",
+        "cooldownSeconds",
+        "transactionTimeoutSeconds"
+      ],
+      "properties": {
+        "defaultAmountBaseUnits": { "$ref": "#/$defs/positiveBaseUnits" },
+        "minimumAmountBaseUnits": { "$ref": "#/$defs/positiveBaseUnits" },
+        "maximumAmountPerRequestBaseUnits": { "$ref": "#/$defs/positiveBaseUnits" },
+        "maximumAmountPerAddressWindowBaseUnits": { "$ref": "#/$defs/positiveBaseUnits" },
+        "addressWindowSeconds": { "type": "integer", "minimum": 1 },
+        "cooldownSeconds": { "type": "integer", "minimum": 1 },
+        "transactionTimeoutSeconds": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "http": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maximumRequestBodyBytes",
+        "readHeaderTimeoutSeconds",
+        "readTimeoutSeconds",
+        "writeTimeoutSeconds",
+        "idleTimeoutSeconds"
+      ],
+      "properties": {
+        "maximumRequestBodyBytes": { "type": "integer", "minimum": 1 },
+        "readHeaderTimeoutSeconds": { "type": "integer", "minimum": 1 },
+        "readTimeoutSeconds": { "type": "integer", "minimum": 1 },
+        "writeTimeoutSeconds": { "type": "integer", "minimum": 1 },
+        "idleTimeoutSeconds": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "signer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fixtureAccount",
+        "source",
+        "lifetime",
+        "privateKeyPersistence",
+        "privateKeyInEnvironment",
+        "privateKeyInApi",
+        "privateKeyInLogs",
+        "publicNetworkReuseAllowed"
+      ],
+      "properties": {
+        "fixtureAccount": { "const": "faucet" },
+        "source": { "const": "deterministically-derived-disposable-local-fixture" },
+        "lifetime": { "const": "process-memory-only" },
+        "privateKeyPersistence": { "const": false },
+        "privateKeyInEnvironment": { "const": false },
+        "privateKeyInApi": { "const": false },
+        "privateKeyInLogs": { "const": false },
+        "publicNetworkReuseAllowed": { "const": false }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requestBodiesLogged",
+        "mnemonicsAccepted",
+        "privateKeysAccepted",
+        "signedRawTransactionsReturned"
+      ],
+      "properties": {
+        "requestBodiesLogged": { "const": false },
+        "mnemonicsAccepted": { "const": false },
+        "privateKeysAccepted": { "const": false },
+        "signedRawTransactionsReturned": { "const": false }
+      }
+    },
+    "publicProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["implemented", "ownerIssue", "requiredBeforePublicUse"],
+      "properties": {
+        "implemented": { "const": false },
+        "ownerIssue": { "const": 172 },
+        "requiredBeforePublicUse": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "positiveBaseUnits": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*$"
+    }
+  }
+}

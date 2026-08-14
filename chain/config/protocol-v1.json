@@ -1,0 +1,549 @@
+{
+  "$schema": "./protocol-v1.schema.json",
+  "schemaVersion": 1,
+  "protocolVersion": "1.0.0-local.5",
+  "genesisFormatVersion": 1,
+  "status": "local-development-contract",
+  "updatedAt": "2026-07-15",
+  "sources": {
+    "identifiers": {
+      "path": "./identifiers.json",
+      "manifestVersion": "0.2.0"
+    },
+    "upstream": {
+      "repository": "https://github.com/cosmos/evm",
+      "release": "v0.7.0",
+      "commit": "f4ab9a3e3fbe353468327d5cacda94b33b41ed11",
+      "supportMatrix": "../poc/upstream-baseline/support-matrix.json"
+    },
+    "toolchain": "../toolchain.json",
+    "governance": {
+      "path": "./governance-v1.json",
+      "contractVersion": "1.0.0-local.2"
+    }
+  },
+  "networkProfiles": [
+    {
+      "environment": "localnet",
+      "activation": "active-local-only",
+      "cosmosChainId": "torium-localnet-1",
+      "evmChainId": 1414484556,
+      "evmChainIdHex": "0x544f524c",
+      "nativeSymbol": "tTOR",
+      "publicEndpointsAllowed": false
+    },
+    {
+      "environment": "devnet",
+      "activation": "reserved-private-inactive",
+      "cosmosChainId": "torium-devnet-1",
+      "evmChainId": 1414484548,
+      "evmChainIdHex": "0x544f5244",
+      "nativeSymbol": "tTOR",
+      "publicEndpointsAllowed": false
+    },
+    {
+      "environment": "testnet",
+      "activation": "reserved-public-inactive",
+      "cosmosChainId": "torium-testnet-1",
+      "evmChainId": 1414484564,
+      "evmChainIdHex": "0x544f5254",
+      "nativeSymbol": "tTOR",
+      "publicEndpointsAllowed": false
+    },
+    {
+      "environment": "mainnet",
+      "activation": "reserved-public-inactive",
+      "cosmosChainId": "torium-1",
+      "evmChainId": 5525330,
+      "evmChainIdHex": "0x544f52",
+      "nativeSymbol": "TOR",
+      "publicEndpointsAllowed": false
+    }
+  ],
+  "accounts": {
+    "evmKeyType": "secp256k1",
+    "accountBytes": 20,
+    "coinType": 60,
+    "defaultDerivationPath": "m/44'/60'/0'/0/0",
+    "publicKeyToAddress": "keccak256(uncompressed-secp256k1-public-key-without-0x04)[12:32]",
+    "relationship": "same-20-bytes-two-encodings",
+    "canonical": {
+      "jsonRpc": "0x-hex",
+      "sdkAndDocs": "eip55-checksummed-0x",
+      "cosmosRestAndGrpc": "bech32",
+      "comparison": "normalized-20-byte-value"
+    },
+    "bech32Prefixes": {
+      "account": "torium",
+      "accountPublicKey": "toriumpub",
+      "validatorOperator": "toriumvaloper",
+      "validatorOperatorPublicKey": "toriumvaloperpub",
+      "validatorConsensus": "toriumvalcons",
+      "validatorConsensusPublicKey": "toriumvalconspub"
+    },
+    "testVectors": [
+      {
+        "hex": "0x0000000000000000000000000000000000000000",
+        "bech32Account": "torium1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqmhxxp0",
+        "bech32ValidatorOperator": "toriumvaloper1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqgm0m7r",
+        "bech32ValidatorConsensus": "toriumvalcons1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqugu8jz"
+      },
+      {
+        "hex": "0x52908400098527886E0F7030069857D2E4169EE7",
+        "bech32Account": "torium122gggqqfs5ncsms0wqcqdxzh6tjpd8h8qzqrsf",
+        "bech32ValidatorOperator": "toriumvaloper122gggqqfs5ncsms0wqcqdxzh6tjpd8h8nwf709",
+        "bech32ValidatorConsensus": "toriumvalcons122gggqqfs5ncsms0wqcqdxzh6tjpd8h88a6zry"
+      },
+      {
+        "hex": "0x000000000000000000000000000000000000dEaD",
+        "bech32Account": "torium1qqqqqqqqqqqqqqqqqqqqqqqqqqqqph4dan4mxl",
+        "bech32ValidatorOperator": "toriumvaloper1qqqqqqqqqqqqqqqqqqqqqqqqqqqqph4dwluxen",
+        "bech32ValidatorConsensus": "toriumvalcons1qqqqqqqqqqqqqqqqqqqqqqqqqqqqph4d6v064j"
+      },
+      {
+        "hex": "0x00112233445566778899AABbCCdDeeFf00112233",
+        "bech32Account": "torium1qqgjyv6y24n80zye42aueh0wluqpzg3nn2jt40",
+        "bech32ValidatorOperator": "toriumvaloper1qqgjyv6y24n80zye42aueh0wluqpzg3nqxmk2r",
+        "bech32ValidatorConsensus": "toriumvalcons1qqgjyv6y24n80zye42aueh0wluqpzg3n54g2xz"
+      }
+    ]
+  },
+  "nativeAsset": {
+    "baseDenom": "atorium",
+    "displayDenom": "TOR",
+    "localDisplayDenom": "tTOR",
+    "decimals": 18,
+    "powerReduction": "1000000000000000000",
+    "oneDisplayUnitInBaseUnits": "1000000000000000000",
+    "canonicalLedger": "cosmos-bank-balance-exposed-to-evm",
+    "consumerSurfaces": [
+      "evm-native-value",
+      "evm-gas-fees",
+      "cosmos-bank",
+      "staking",
+      "distribution-rewards",
+      "governance-deposits",
+      "cli-rest-grpc",
+      "json-rpc-wallet-explorer-sdk",
+      "solidity-native-facade"
+    ],
+    "issuance": {
+      "model": "genesis-capped-non-inflationary",
+      "mintModuleIncluded": false,
+      "inflationPerYear": "0",
+      "postGenesisNativeMintingAllowed": false,
+      "applicationRestriction": "deny-atorium-in-x-bank-mint-coins"
+    },
+    "burns": {
+      "allowed": true,
+      "policy": "protocol-authorized-module-paths-only",
+      "effect": "permanently-reduce-x-bank-total-supply",
+      "visibility": "committed-bank-burn-events-and-supply-query",
+      "silentOrReversibleBurnAllowed": false
+    },
+    "supplyAccounting": {
+      "totalSupplySource": "x-bank-supply-atorium",
+      "balanceSource": "x-bank-balance-atorium",
+      "baseUnits": "unsigned-integer-atorium",
+      "reconciliationInvariant": "sum-bank-balances-equals-x-bank-total-supply",
+      "representationConversionChangesSupply": false
+    },
+    "solidityInterface": {
+      "kind": "native-werc20-precompile-bank-backed-facade",
+      "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "contractOwner": "erc20-module",
+      "duplicateWrappedSupply": false,
+      "nativeConversionAllowed": false,
+      "permissionlessRegistration": false,
+      "depositBehavior": "returns-msg-value-to-caller-and-emits-compatibility-event",
+      "withdrawBehavior": "validates-native-balance-and-emits-compatibility-event-without-transfer"
+    },
+    "localnetGenesisSupplyBaseUnits": "1000000000000000000000000000",
+    "localnetGenesisSupplyDisplay": "1000000000",
+    "publicGenesisSupply": {
+      "status": "not-defined-not-publishable",
+      "amountBaseUnits": null,
+      "allocation": "not-defined",
+      "approvalRequired": true,
+      "deploymentGateIssue": 127
+    },
+    "validatorEconomicsOwnerIssues": [88, 100]
+  },
+  "consensus": {
+    "engine": "CometBFT",
+    "version": "v0.39.3",
+    "targetBlockTimeMs": 2000,
+    "finality": {
+      "model": "cometbft-commit-with-greater-than-two-thirds-voting-power",
+      "sdkDefaultConfirmationBlocks": 1,
+      "ethereumBeaconFinalityEquivalent": false,
+      "jsonRpcFinalizedTag": "latest-committed-cometbft-state",
+      "jsonRpcSafeStateQueries": "unsupported-until-conformance-proves-otherwise",
+      "trustModelOwnerIssue": 88
+    },
+    "block": {
+      "maxBytes": 5242880,
+      "maxGas": 30000000,
+      "targetGas": 15000000
+    },
+    "transaction": {
+      "maxEvmEncodedBytes": 131072,
+      "maxCosmosEncodedBytes": 262144,
+      "maxGasWanted": 25000000
+    }
+  },
+  "validatorEconomics": {
+    "status": "ratified-local-only",
+    "publicActivation": {
+      "allowed": false,
+      "gateIssue": 127,
+      "requiresFreshGenesisReview": true
+    },
+    "staking": {
+      "bondDenom": "atorium",
+      "powerReduction": "1000000000000000000",
+      "minimumSelfDelegationBaseUnits": "1000000000000000000",
+      "maximumActiveValidators": 100,
+      "maximumEntries": 7,
+      "historicalEntries": 10000,
+      "unbondingTimeSeconds": 1814400
+    },
+    "commission": {
+      "minimumRate": "0.05",
+      "maximumRate": "0.20",
+      "maximumDailyChangeRate": "0.01"
+    },
+    "distribution": {
+      "funding": "transaction-fees-and-existing-bank-balances-only",
+      "communityTax": "0.02",
+      "withdrawAddressEnabled": true,
+      "nativeMintingAllowed": false
+    },
+    "slashing": {
+      "signedBlocksWindow": 100,
+      "minimumSignedPerWindow": "0.50",
+      "downtimeJailDurationSeconds": 600,
+      "downtimeSlashFraction": "0.01",
+      "doubleSignSlashFraction": "0.05",
+      "doubleSignJail": "permanent-tombstone"
+    },
+    "evidence": {
+      "acceptedMisbehavior": ["duplicate-vote", "light-client-attack"],
+      "maximumAgeBlocks": 100000,
+      "maximumAgeDurationSeconds": 172800,
+      "maximumBytesPerBlock": 1048576
+    },
+    "lifecycle": {
+      "validatorCreation": "permissionless-on-chain-transaction-subject-to-policy",
+      "validatorRemoval": "stake-driven-unbonding-no-admin-delete",
+      "supportedOperations": [
+        "create-validator",
+        "edit-validator",
+        "delegate",
+        "redelegate",
+        "undelegate",
+        "withdraw-delegation-rewards",
+        "withdraw-validator-commission",
+        "unjail"
+      ],
+      "querySurfaces": [
+        "cli",
+        "cosmos-rest",
+        "grpc",
+        "evm-staking-distribution-slashing-precompiles",
+        "explorer-indexer-readable-events"
+      ],
+      "privilegedNativeMintRequired": false
+    },
+    "accounting": {
+      "baseUnit": "integer-atorium",
+      "powerConversion": "floor-staked-atorium-divided-by-1e18",
+      "delegationShareDust": "less-than-or-equal-to-one-base-unit-per-delegation-conversion",
+      "invariants": [
+        "sum-bank-balances-equals-x-bank-total-supply",
+        "bonded-and-not-bonded-pools-reconcile-with-staking-state",
+        "validator-delegator-shares-equal-sum-of-delegation-shares",
+        "rewards-and-commission-never-create-native-supply"
+      ]
+    }
+  },
+  "fees": {
+    "profile": "local-development-only",
+    "pricingModel": "eip1559",
+    "enabledAtHeight": 1,
+    "initialBaseFeeBaseUnitsPerGas": "1000000000",
+    "minimumBaseFeeBaseUnitsPerGas": "1000000000",
+    "baseFeeChangeDenominator": 8,
+    "elasticityMultiplier": 2,
+    "minimumGasMultiplier": "0.5",
+    "minimumPriorityFeeBaseUnitsPerGas": "1",
+    "validatorMinimumGasPrice": "0atorium",
+    "feeCollectorDisposition": "cosmos-fee-collector-then-distribution",
+    "baseFeeBurned": false,
+    "ethereumBurnSemanticsClaimed": false,
+    "unusedGasRefunded": true,
+    "nativeSupplyChangedByFeeCollection": false,
+    "parameterChangeControl": {
+      "consensusAuthority": "cosmos-governance-module-account",
+      "ownerIssue": 106,
+      "directOperatorMutationAllowed": false
+    },
+    "publicProfile": {
+      "status": "not-defined-not-activatable",
+      "activationAllowed": false,
+      "gateIssue": 127,
+      "requiredEvidenceIssues": [118, 120]
+    },
+    "economicsValidationOwnerIssue": 105
+  },
+  "transactions": {
+    "evm": {
+      "acceptedTypes": [
+        {
+          "type": 0,
+          "name": "legacy",
+          "requiredEips": [155]
+        },
+        {
+          "type": 1,
+          "name": "access-list",
+          "requiredEips": [2718, 2930]
+        },
+        {
+          "type": 2,
+          "name": "dynamic-fee",
+          "requiredEips": [1559, 2718]
+        }
+      ],
+      "rejectedTypes": [
+        {
+          "type": 3,
+          "name": "blob",
+          "reason": "no Ethereum data-availability or blob fee market"
+        },
+        {
+          "type": 4,
+          "name": "set-code",
+          "reason": "upstream implementation is disabled at admission pending a separate EIP-7702 security decision and conformance gate"
+        }
+      ],
+      "allowUnprotectedTransactions": false,
+      "chainIdReplayProtectionRequired": true
+    },
+    "cosmos": {
+      "enabled": true,
+      "signMode": "SIGN_MODE_DIRECT",
+      "legacyAminoJsonSigning": false,
+      "accountSequenceReplayProtectionRequired": true
+    },
+    "localnetResetReplayWarning": "A deterministic reset reuses a valueless local chain ID and may make old signed transactions replayable if account sequence and balance also reset. Reset tooling must delete transaction artifacts and wallets must clear local activity. Public chain IDs are never reused after a genesis reset."
+  },
+  "evm": {
+    "executionFork": "Prague",
+    "permissionlessContractCreation": true,
+    "permissionlessContractCalls": true,
+    "extraEips": [],
+    "historyServeWindowBlocks": 8192,
+    "upstreamExamplePreinstallsAllowed": false,
+    "activeCustomPrecompiles": [
+      {
+        "address": "0x0000000000000000000000000000000000000100",
+        "name": "p256"
+      },
+      {
+        "address": "0x0000000000000000000000000000000000000400",
+        "name": "bech32"
+      },
+      {
+        "address": "0x0000000000000000000000000000000000000800",
+        "name": "staking"
+      },
+      {
+        "address": "0x0000000000000000000000000000000000000801",
+        "name": "distribution"
+      },
+      {
+        "address": "0x0000000000000000000000000000000000000804",
+        "name": "bank"
+      },
+      {
+        "address": "0x0000000000000000000000000000000000000805",
+        "name": "governance"
+      },
+      {
+        "address": "0x0000000000000000000000000000000000000806",
+        "name": "slashing"
+      }
+    ],
+    "explicitlyInactivePrecompiles": [
+      {
+        "address": "0x0000000000000000000000000000000000000802",
+        "name": "ics20"
+      },
+      {
+        "address": "0x0000000000000000000000000000000000000807",
+        "name": "ics02"
+      }
+    ]
+  },
+  "modules": {
+    "included": [
+      "auth",
+      "bank",
+      "consensus",
+      "distribution",
+      "erc20",
+      "evidence",
+      "evm",
+      "feemarket",
+      "genutil",
+      "gov",
+      "slashing",
+      "staking",
+      "upgrade"
+    ],
+    "excluded": [
+      "authz",
+      "circuit",
+      "feegrant",
+      "ibc",
+      "ibc-transfer",
+      "mint",
+      "vesting"
+    ],
+    "ibcPolicy": {
+      "runtimeComposition": "omitted",
+      "upstreamDependencyMayRemain": true,
+      "genesisSectionAllowed": false,
+      "messageRoutesAllowed": false,
+      "channelsAllowed": false,
+      "relayersAllowed": false,
+      "ibcPrecompilesAllowed": false,
+      "bridgeUxAllowed": false
+    },
+    "erc20Policy": {
+      "moduleIncluded": true,
+      "enableErc20": true,
+      "permissionlessRegistration": false,
+      "nativeTokenPairAtGenesis": true,
+      "nativePrecompileAddress": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "nativePairContractOwner": "module",
+      "nativeRepresentation": "bank-backed-facade-no-duplicate-supply",
+      "nativeConversionAllowed": false,
+      "upstreamExamplePairsAllowed": false,
+      "dynamicPrecompilesAtGenesisAllowed": false
+    }
+  },
+  "mempool": {
+    "profile": "local-development-only",
+    "cometBftType": "app",
+    "minimumPriorityFeeBaseUnitsPerGas": 1,
+    "priceLimitBaseUnitsPerGas": 1,
+    "priceBumpPercent": 10,
+    "accountExecutableSlots": 16,
+    "globalExecutableSlots": 5120,
+    "accountQueuedSlots": 64,
+    "globalQueuedSlots": 1024,
+    "queuedLifetimeSeconds": 10800,
+    "includedNonceCacheSize": 4096,
+    "pendingProposalTimeoutMs": 250,
+    "checkTxTimeoutMs": 5000,
+    "insertQueueSize": 5000,
+    "transactionTrackerEnabled": false,
+    "cosmosPoolMaxTransactions": 1000,
+    "maximumEvmTransactionBytes": 131072,
+    "maximumCosmosTransactionBytes": 262144,
+    "cometReapMaxBytes": 5242880,
+    "cometReapMaxGas": 30000000,
+    "replacementRule": "both-fee-cap-and-tip-cap-must-increase-by-at-least-price-bump",
+    "rpcAcceptanceGuaranteesRetention": false,
+    "networkWideReplacementGuaranteed": false,
+    "parameterChangeControl": "versioned-coordinated-node-configuration-rollout",
+    "abuseModel": {
+      "underpricedTransactions": "rejected-before-proposal",
+      "oversizedEvmTransactions": "rejected-above-131072-encoded-bytes",
+      "oversizedCosmosTransactions": "rejected-above-262144-encoded-bytes",
+      "oversizedRpcRequests": "rejected-above-5242880-body-bytes-or-100-batch-requests",
+      "stateGrowthGasLowerBoundPerNewSlot": 20000,
+      "theoreticalNewSlotsAtTargetGas": 750,
+      "theoreticalNewSlotsAtBlockGasLimit": 1500,
+      "modelExcludesTransactionCallAndColdAccessOverhead": true,
+      "sustainedStateGrowthBounded": false,
+      "publicCapacityClaimed": false,
+      "capacityEvidenceOwnerIssues": [118, 120]
+    }
+  },
+  "rpc": {
+    "defaultNamespaces": ["eth", "net", "web3"],
+    "operatorOnlyNamespaces": ["debug", "txpool"],
+    "disabledNamespaces": ["miner", "personal"],
+    "limits": {
+      "ethCallGasCap": 25000000,
+      "ethCallTimeoutMs": 5000,
+      "feeHistoryBlockCap": 100,
+      "getLogsResultCap": 10000,
+      "getLogsBlockRangeCap": 10000,
+      "httpBodyBytes": 5242880,
+      "httpBatchRequests": 100,
+      "httpBatchResponseBytes": 25000000
+    },
+    "webSocket": {
+      "browserWildcardOriginAllowed": false,
+      "replayMissedSubscriptions": false,
+      "clientReconnectAndBackfillRequired": true
+    },
+    "allowInsecureUnlock": false
+  },
+  "ports": {
+    "nodeOffset": 100,
+    "defaults": {
+      "rest": 1317,
+      "pprof": 6060,
+      "jsonRpcMetrics": 6065,
+      "gethMetrics": 8100,
+      "jsonRpcHttp": 8545,
+      "jsonRpcWebSocket": 8546,
+      "grpc": 9090,
+      "grpcWeb": 9091,
+      "p2p": 26656,
+      "cometRpc": 26657,
+      "abci": 26658,
+      "cometMetrics": 26660
+    },
+    "hostPublishing": "loopback-only",
+    "containerBinding": "all-interfaces-inside-isolated-local-network"
+  },
+  "compatibility": {
+    "specVersioning": "semver",
+    "configurationNamespace": "torium.chain.v1",
+    "genesisArtifact": "canonical-json-plus-sha256",
+    "nonBreaking": [
+      "documentation clarification without behavior change",
+      "additive disabled-by-default RPC client capability",
+      "implementation fix that preserves consensus state and wire behavior"
+    ],
+    "breaking": [
+      "state transition or consensus behavior change",
+      "chain ID, address bytes, derivation path, denomination, decimals or power-reduction change",
+      "module, precompile, accepted transaction type or fee-disposition change",
+      "removal or semantic change of a stable RPC, REST or gRPC field",
+      "genesis supply or allocation change after public genesis freeze"
+    ],
+    "breakingChangeProcess": "new spec version, owner issue, migration/upgrade handler, local upgrade rehearsal, conformance matrix, compatibility manifest and release notes",
+    "publicGenesisResetRule": "allocate a new Cosmos and EIP-155 chain ID; never reuse the abandoned public replay domain",
+    "localGenesisResetRule": "same valueless local identifier may be reused only with explicit reset warnings and artifact cleanup"
+  },
+  "owners": {
+    "protocol": 86,
+    "trustAndFinality": 88,
+    "threatModel": 90,
+    "genesis": 91,
+    "nodeComposition": 94,
+    "nativeAsset": 104,
+    "feeEconomics": 105,
+    "upgradesAndGovernance": 106,
+    "conformance": 107,
+    "validatorLifecycle": 100,
+    "rpcProfiles": 114
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "caseId": "native-transfer-bounded-burst-run-1",
+  "workloadId": "native-transfer-bounded-burst",
+  "startedAtMilliseconds": 1785363551704,
+  "endedAtMilliseconds": 1785363555811,
+  "samples": [
+    {
+      "outcome": "success",
+      "included": true,
+      "acknowledgementLatencyMilliseconds": 2.859625000000051,
+      "inclusionLatencyMilliseconds": 1969.1605419999996,
+      "receiptLatencyMilliseconds": 1970.5027920000002,
+      "gasUsed": 21000
+    },
+    {
+      "outcome": "success",
+      "included": true,
+      "acknowledgementLatencyMilliseconds": 8.203375000000051,
+      "inclusionLatencyMilliseconds": 1969.3166669999996,
+      "receiptLatencyMilliseconds": 1972.2467920000004,
+      "gasUsed": 21000
+    },
+    {
+      "outcome": "success",
+      "included": true,
+      "acknowledgementLatencyMilliseconds": 6.868874999999662,
+      "inclusionLatencyMilliseconds": 1969.434709,
+      "receiptLatencyMilliseconds": 1973.063959,
+      "gasUsed": 21000
+    },
+    {
+      "outcome": "success",
+      "included": true,
+      "acknowledgementLatencyMilliseconds": 8.606459000000086,
+      "inclusionLatencyMilliseconds": 1968.320584,
+      "receiptLatencyMilliseconds": 1969.6634169999998,
+      "gasUsed": 21000
+    },
+    {
+      "outcome": "success",
+      "included": true,
+      "acknowledgementLatencyMilliseconds": 7.175833999999668,
+      "inclusionLatencyMilliseconds": 1968.3810419999995,
+      "receiptLatencyMilliseconds": 1969.69425,
+      "gasUsed": 21000
+    },
+    {
+      "outcome": "success",
+      "included": true,
+      "acknowledgementLatencyMilliseconds": 3.9493750000001455,
+      "inclusionLatencyMilliseconds": 1969.1625830000003,
+      "receiptLatencyMilliseconds": 1971.908708,
+      "gasUsed": 21000
+    },
+    {
+      "outcome": "success",
+      "included": true,
+      "acknowledgementLatencyMilliseconds": 3.024249999999938,
+      "inclusionLatencyMilliseconds": 1968.3945419999995,
+      "receiptLatencyMilliseconds": 1970.1672079999994,
+      "gasUsed": 21000
+    },
+    {
+      "outcome": "success",
+      "included": true,
+      "acknowledgementLatencyMilliseconds": 5.415790999999899,
+      "inclusionLatencyMilliseconds": 1968.44025,
+      "receiptLatencyMilliseconds": 1969.9321249999998,
+      "gasUsed": 21000
+    },
+    {
+      "outcome": "success",
+      "included": true,
+      "acknowledgementLatencyMilliseconds": 1.5639579999997295,
+      "inclusionLatencyMilliseconds": 2132.671625,
+      "receiptLatencyMilliseconds": 2135.948208,
+      "gasUsed": 21000
+    },
+    {
+      "outcome": "success",
+      "included": true,
+      "acknowledgementLatencyMilliseconds": 1.564542000000074,
+      "inclusionLatencyMilliseconds": 2132.7626249999994,
+      "receiptLatencyMilliseconds": 2136.3080419999997,
+      "gasUsed": 21000
+    },
+    {
+      "outcome": "success",
+      "included": true,
+      "acknowledgementLatencyMilliseconds": 3.6975000000002183,
+      "inclusionLatencyMilliseconds": 2133.2499580000003,
+      "receiptLatencyMilliseconds": 2135.7394160000003,
+      "gasUsed": 21000
+    },
+    {
+      "outcome": "success",
+      "included": true,
+      "acknowledgementLatencyMilliseconds": 2.263500000000022,
+      "inclusionLatencyMilliseconds": 2132.4290410000003,
+      "receiptLatencyMilliseconds": 2135.033958,
+      "gasUsed": 21000
+    },
+    {
+      "outcome": "success",
+      "included": true,
+      "acknowledgementLatencyMilliseconds": 3.4445000000005166,
+      "inclusionLatencyMilliseconds": 2131.1616670000003,
+      "receiptLatencyMilliseconds": 2135.3420830000005,
+      "gasUsed": 21000
+    },
+    {
+      "outcome": "success",
+      "included": true,
+      "acknowledgementLatencyMilliseconds": 3.097458000000188,
+      "inclusionLatencyMilliseconds": 2131.1077080000005,
+      "receiptLatencyMilliseconds": 2134.085,
+      "gasUsed": 21000
+    },
+    {
+      "outcome": "success",
+      "included": true,
+      "acknowledgementLatencyMilliseconds": 4.111541999999645,
+      "inclusionLatencyMilliseconds": 2131.23575,
+      "receiptLatencyMilliseconds": 2134.394042,
+      "gasUsed": 21000
+    },
+    {
+      "outcome": "success",
+      "included": true,
+      "acknowledgementLatencyMilliseconds": 3.0903330000001006,
+      "inclusionLatencyMilliseconds": 2129.088125,
+      "receiptLatencyMilliseconds": 2132.300333,
+      "gasUsed": 21000
+    }
+  ]
+}

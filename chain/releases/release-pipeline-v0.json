@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "contractId": "torium-release-pipeline-v0",
+  "ownerIssue": 122,
+  "status": "implemented-local-only-publication-HOLD",
+  "publicationAllowed": false,
+  "signingCustody": {
+    "productionKeys": "user-owned under chain/security/key-custody-v0.json; never generated, stored, or used by automation in this repository",
+    "rehearsalKeys": "throwaway Ed25519 keys generated per rehearsal run inside the untracked output directory, clearly valueless, never committed",
+    "algorithm": "ed25519",
+    "signedArtifacts": [
+      "SHA256SUMS",
+      "provenance-v1.json"
+    ]
+  },
+  "reproducibility": {
+    "builder": "digest-pinned golang container from chain/toolchain.json, CGO musl, -trimpath, -buildvcs=false, fixed ldflags, SOURCE_DATE_EPOCH from the release commit",
+    "binaries": [
+      "toriumd",
+      "torium-genesis",
+      "torium-localnet",
+      "torium-localnet-state",
+      "torium-faucet",
+      "torium-public-faucet",
+      "torium-archive-gateway"
+    ],
+    "platforms": [
+      "linux/amd64",
+      "linux/arm64"
+    ],
+    "container": "BuildKit OCI archive with rewrite-timestamp and SOURCE_DATE_EPOCH; base images digest-pinned in chain/app/Dockerfile",
+    "proof": "two independent --no-cache builds must produce byte-identical SHA256SUMS across binaries, archives, and the OCI image (chain/releases/build-release-v0.sh --reproducibility-check); verified 2026-07-29",
+    "knownNonHermeticInput": "apk package installs resolve against the Alpine repository at build time; the double build fails closed if the repository state drifts between the two builds. apk's own /var/log/apk.log records wall-clock install time and is removed inside the same Dockerfile layer, and BuildKit's provenance/SBOM attestations are disabled because this pipeline issues its own."
+  },
+  "sbom": {
+    "format": "SPDX 2.3 JSON",
+    "generator": "chain/releases/generate-sbom-v0.mjs",
+    "source": "chain/app/go.mod + chain/app/go.sum plus digest-pinned toolchain images; deterministic ordering, no network access"
+  },
+  "provenance": {
+    "format": "in-toto Statement v1 with SLSA provenance v1 predicate",
+    "generator": "chain/releases/generate-provenance-v0.mjs",
+    "materials": [
+      "git commit",
+      "chain/toolchain.json sha256",
+      "chain/app/go.sum sha256",
+      "chain/app/Dockerfile sha256"
+    ],
+    "subjects": "every built binary, archive, and OCI image digest from SHA256SUMS"
+  },
+  "gatedInputsRule": {
+    "statement": "A release build may only consume artifacts that passed the #121 gates; the builder refuses to run on a dirty tree and records the exact commit it built.",
+    "requiredGates": [
+      "docs-required-and-coverage",
+      "sdk-contracts-examples-verify",
+      "network-artifacts-drift",
+      "performance-contract",
+      "resilience-contract",
+      "ci-gate-contract-drift"
+    ],
+    "heavyGate": "chain-acceptance runs label-gated or locally per the chain E2E policy; a public release additionally requires its local five-suite evidence"
+  },
+  "workflow": {
+    "file": ".github/workflows/chain-release.yml",
+    "trigger": "workflow_dispatch only; never on push or pull_request",
+    "behavior": "runs the same build + verify scripts and uploads the output as a workflow artifact; it publishes nothing and has no registry, image, or release permissions"
+  },
+  "verification": "chain/releases/verify-release-v0.mjs checks SHA256SUMS, SBOM/go.sum agreement, provenance materials against the pinned toolchain, and Ed25519 signatures when a public key is supplied",
+  "holds": [
+    "No publication: no registry push, no GitHub release, no image push, no public download endpoint until the user-owned release phase approves one.",
+    "Production signing keys and their custody remain user-owned (#117/#121); rehearsals use throwaway keys only.",
+    "Version numbers stay 0.1.0-local.* until a public release decision assigns a real scheme."
+  ]
+}

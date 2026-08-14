@@ -1,0 +1,245 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-14T18:51:51.363Z",
+  "lastExtendedAt": "2026-07-15T15:02:28Z",
+  "extensions": [
+    {
+      "issue": 86,
+      "evidence": "Torium protocol v1 defines the same-byte 0x/Bech32 contract and validates four bidirectional address vectors independently produced with the exact upstream evmd debug addr command."
+    },
+    {
+      "issue": 88,
+      "evidence": "Torium trust model v1 consumes the exact CometBFT finality contract, distinguishes authority stages from decentralization, and assigns stable fault-test IDs without upgrading any untested capability."
+    },
+    {
+      "issue": 90,
+      "evidence": "Torium threat model v1 maps every high/critical chain, contract, RPC, operator, artifact, and recovery risk to prevention, detection, recovery, owners, executable test IDs, residual risk, and blocking public-release gates without upgrading untested compatibility claims."
+    },
+    {
+      "issue": 107,
+      "evidence": "Canonical Torium localnet conformance deploys and mutates unmodified OpenZeppelin ERC-20/ERC-721 contracts with pinned clients, executes a 64-case Ethereum state-test subset against the exact Cosmos go-ethereum replacement, proves transaction types 0/1/2, rejects wrong-chain and unprotected signatures, and records fee-history, replacement, nonce-gap, capacity, RPC, and gas-estimation boundaries."
+    }
+  ],
+  "allowedStates": ["supported", "partial", "stub", "unsupported"],
+  "baseline": {
+    "cosmosEvmRelease": "v0.7.0",
+    "cosmosEvmCommit": "f4ab9a3e3fbe353468327d5cacda94b33b41ed11",
+    "cometBft": "v0.39.3",
+    "mempool": "app",
+    "evmChainId": 262144,
+    "cosmosChainId": "local-4221",
+    "identifierStatus": "noncanonical-poc-fixture",
+    "identifierConstraint": "EIP-155 ID 262144 is registered to MPCQ Mainnet. Preserve it only in historical #89 evidence; canonical Torium IDs come from chain/config/identifiers.json."
+  },
+  "downstreamContracts": [86, 88, 90, 107, 112, 131, 132],
+  "capabilities": [
+    {
+      "id": "chain.four-validator-localnet",
+      "state": "supported",
+      "evidence": "Four validators produced blocks and recovered after a validator restart.",
+      "consumerIssues": [107]
+    },
+    {
+      "id": "evm.state-test-curated-subset",
+      "state": "supported",
+      "evidence": "All 64 selected Cancun and Prague cases from 13 byte-pinned ethereum/tests v16.0 fixtures pass against github.com/cosmos/go-ethereum v1.17.2-cosmos-0 with zero runtime skips.",
+      "consumerIssues": [107]
+    },
+    {
+      "id": "evm.transaction-envelopes-type-0-1-2",
+      "state": "supported",
+      "evidence": "Canonical localnet accepted EIP-155 protected legacy type 0, EIP-2930 type 1, and EIP-1559 type 2 transactions and returned receipt types 0x0, 0x1, and 0x2.",
+      "consumerIssues": [107, 131, 132]
+    },
+    {
+      "id": "evm.transaction-envelopes-type-3-4",
+      "state": "unsupported",
+      "evidence": "Canonical localnet immediately rejected blob type 3 and did not retain or propose set-code type 4 after its asynchronous RPC acknowledgement; the Torium ante policy independently rejects both before ordinary EVM handling.",
+      "constraint": "Torium has no blob data-availability market and does not enable EIP-7702 delegated code; clients must reject both envelope types instead of downgrading or emulating them.",
+      "consumerIssues": [107, 131, 132]
+    },
+    {
+      "id": "evm.chain-id-replay-protection",
+      "state": "supported",
+      "evidence": "Canonical localnet rejected a legacy transaction signed for EIP-155 chain ID 1414484557 and rejected a Homestead-style unprotected legacy transaction while leaving the sender nonce unchanged.",
+      "consumerIssues": [107, 131, 132]
+    },
+    {
+      "id": "rpc.signed-evm-transfer",
+      "state": "supported",
+      "evidence": "A locally signed EIP-1559 transfer changed the recipient balance by exactly 1 wei.",
+      "consumerIssues": [107, 132]
+    },
+    {
+      "id": "rpc.eth-fee-history",
+      "state": "partial",
+      "evidence": "Canonical Torium localnet returned exactly 100 entries at the configured cap, rejected 101 with JSON-RPC -32000, and reported gasUsedRatio 1 plus linked current/next base fees for a block that used all 30,000,000 configured gas.",
+      "constraint": "The method has a non-geth 100-block user cap that SDK fee estimation must preserve and surface.",
+      "consumerIssues": [107, 132]
+    },
+    {
+      "id": "rpc.eth-estimate-gas-contract-execution",
+      "state": "partial",
+      "evidence": "On canonical Torium localnet, viem eth_estimateGas returned 22,430 for an OpenZeppelin ERC-20 transfer; a transaction submitted with that limit reverted, while an explicit 250,000 limit succeeded and consumed 125,000 gas.",
+      "constraint": "SDK and tooling integrations must expose the raw estimate and use a documented configurable contract-call gas margin until the Cosmos EVM estimator matches committed execution.",
+      "consumerIssues": [107, 131, 132]
+    },
+    {
+      "id": "rpc.block-tag-latest",
+      "state": "supported",
+      "evidence": "Block, balance, nonce, and eth_call probes passed.",
+      "consumerIssues": [107, 131]
+    },
+    {
+      "id": "rpc.block-tag-pending",
+      "state": "partial",
+      "evidence": "Block, balance, nonce, and eth_call probes return values.",
+      "constraint": "The probe did not establish a distinct pending-state view; consumers must not assume geth-equivalent pending semantics.",
+      "consumerIssues": [107, 131, 132]
+    },
+    {
+      "id": "rpc.block-tag-safe",
+      "state": "partial",
+      "evidence": "eth_getBlockByNumber accepts safe, but eth_getBalance, eth_getTransactionCount, and eth_call fail with JSON-RPC -32602.",
+      "constraint": "SDK clients must capability-detect or reject safe for state queries.",
+      "consumerIssues": [107, 131]
+    },
+    {
+      "id": "rpc.block-tag-finalized",
+      "state": "partial",
+      "evidence": "Block, balance, nonce, and eth_call probes return values.",
+      "constraint": "Cosmos EVM does not expose Ethereum beacon-chain finality semantics; document this as CometBFT-finalized state rather than Ethereum's finalized tag contract.",
+      "consumerIssues": [107, 131]
+    },
+    {
+      "id": "rpc.historical-state-call",
+      "state": "supported",
+      "evidence": "After a contract value changed from 0 to 96, eth_call at the explicit pre-mutation block continued to return 0 while latest returned 96.",
+      "consumerIssues": [107, 131]
+    },
+    {
+      "id": "rpc.websocket-subscriptions",
+      "state": "supported",
+      "evidence": "newHeads, logs, and newPendingTransactions were acknowledged and delivered to a non-browser WS client.",
+      "consumerIssues": [107, 131, 132]
+    },
+    {
+      "id": "rpc.websocket-browser-origin",
+      "state": "unsupported",
+      "evidence": "The reference configuration rejects Origin: http://localhost with HTTP 403.",
+      "constraint": "#114 must define an explicit allowlist for browser-facing profiles; do not enable wildcard origins by default.",
+      "consumerIssues": [107, 131]
+    },
+    {
+      "id": "rpc.websocket-restart-recovery",
+      "state": "supported",
+      "evidence": "Restart closed the socket; HTTP recovered; a new socket received the next head and HTTP backfilled missed heights.",
+      "constraint": "Reconnect and backfill are client responsibilities; the node does not replay missed subscription messages.",
+      "consumerIssues": [107, 131, 132]
+    },
+    {
+      "id": "rpc.debug-trace-methods",
+      "state": "supported",
+      "evidence": "The pinned Cosmos EVM engine returned data for debug_traceTransaction, debug_traceCall, debug_traceBlockByNumber, and debug_traceBlockByHash in the #89 trace-enabled PoC profile.",
+      "consumerIssues": [107, 112]
+    },
+    {
+      "id": "rpc.default-profile-debug-trace-methods",
+      "state": "unsupported",
+      "evidence": "Canonical Torium default-profile calls to debug_traceTransaction, debug_traceCall, and debug_traceBlockByNumber return JSON-RPC -32601.",
+      "constraint": "Wallets and SDKs must reject or surface unavailable tracing on the default endpoint; engine support is not endpoint support.",
+      "consumerIssues": [107, 112, 114, 131]
+    },
+    {
+      "id": "rpc.operator-profile-debug-trace-methods",
+      "state": "stub",
+      "evidence": "The engine capability is known, but no named Torium operator/debug endpoint profile or canonical success-envelope proof exists yet.",
+      "constraint": "Issues #112 and #114 own the bounded profile, limits, and trace envelope required before explorer or operator use.",
+      "consumerIssues": [112, 114]
+    },
+    {
+      "id": "explorer.blockscout-base-indexing",
+      "state": "supported",
+      "evidence": "Blockscout v11.2.2 completed fresh migrations/indexing, preserved indexed data across restart, and cleared a controlled block refetch marker.",
+      "consumerIssues": [112]
+    },
+    {
+      "id": "explorer.blockscout-internal-transactions",
+      "state": "unsupported",
+      "evidence": "Blockscout expects debug_traceBlockByNumber entries with txHash and result; Cosmos EVM returns result-only entries and triggers FunctionClauseError in the fetcher.",
+      "constraint": "Run with INDEXER_DISABLE_INTERNAL_TRANSACTIONS_FETCHER=true until #112 selects a tested adapter/fork or upstream fix.",
+      "consumerIssues": [112]
+    },
+    {
+      "id": "mempool.same-nonce-fee-bump-local",
+      "state": "partial",
+      "evidence": "On canonical localnet with consensus halted, a 9% bump was rejected and an exact 10% bump of both fee cap and tip cap replaced the transaction on the receiving validator.",
+      "constraint": "The replacement was not observed on the peer while consensus was halted; no network-wide RBF guarantee is allowed.",
+      "consumerIssues": [107, 132]
+    },
+    {
+      "id": "mempool.nonce-gap-queue-promotion",
+      "state": "supported",
+      "evidence": "On canonical localnet, nonce N+2 was admitted before N+1 without changing committed or pending nonce; both committed in nonce order after the gap was filled and quorum resumed.",
+      "consumerIssues": [107, 132]
+    },
+    {
+      "id": "mempool.capacity-retention",
+      "state": "partial",
+      "evidence": "Canonical config validates executable/queued account limits of 16/64 and global limits of 5120/1024; the default profile disables txpool and asynchronous RPC acknowledgement cannot establish the exact live retention boundary.",
+      "constraint": "RPC acceptance is not a retention guarantee and the exact boundary is not observable from the default endpoint; SDK lifecycle APIs must surface dropped/replaced/unknown outcomes.",
+      "consumerIssues": [107, 132]
+    },
+    {
+      "id": "client.viem-2.55.2",
+      "state": "supported",
+      "evidence": "Chain discovery, balance reads, contract deployment, log transaction, and signed transfer passed.",
+      "consumerIssues": [107, 131, 132]
+    },
+    {
+      "id": "client.ethers-6.17.0",
+      "state": "supported",
+      "evidence": "Static-network connection, account derivation, and post-transfer balance verification passed.",
+      "consumerIssues": [107, 131, 132]
+    },
+    {
+      "id": "client.hardhat-3.9.1",
+      "state": "supported",
+      "evidence": "Solidity 0.8.30/Prague compilation and L1 provider chain/fee-history calls passed.",
+      "consumerIssues": [107]
+    },
+    {
+      "id": "client.foundry-1.7.1",
+      "state": "supported",
+      "evidence": "cast read chain ID 262144 and sent a successful signed 1-wei transaction.",
+      "consumerIssues": [107]
+    },
+    {
+      "id": "wallet.metamask-13.39.2",
+      "state": "supported",
+      "evidence": "A clean extension profile imported the disposable upstream fixture, added chain 0x40000, and approved a successful 1-wei transaction.",
+      "consumerIssues": [107, 132]
+    },
+    {
+      "id": "account.bech32-and-hex-representation",
+      "state": "supported",
+      "evidence": "The exact upstream evmd debug addr command produced all four vectors in chain/config/protocol-v1.json; validate-protocol-v1.mjs checks EIP-55 fixtures, Bech32 checksum/HRP, exact 20-byte decoding, and bidirectional byte equality.",
+      "constraint": "#131 still owns the versioned public SDK and Cosmos REST/gRPC representation surface; consumers must generate from the protocol manifest rather than invent a mapping.",
+      "consumerIssues": [131]
+    },
+    {
+      "id": "torium.cosmos-rest-grpc-extension-contract",
+      "state": "stub",
+      "evidence": "No Torium-specific REST/gRPC stability surface exists in the unmodified baseline.",
+      "constraint": "#131 must define this surface separately from Ethereum JSON-RPC and version it explicitly.",
+      "consumerIssues": [131]
+    },
+    {
+      "id": "protocol.ibc-and-bridges",
+      "state": "unsupported",
+      "evidence": "Explicitly excluded from Torium v1 scope.",
+      "constraint": "Do not enable IBC modules, ICS precompiles, or bridge claims through this baseline decision.",
+      "consumerIssues": []
+    }
+  ]
+}

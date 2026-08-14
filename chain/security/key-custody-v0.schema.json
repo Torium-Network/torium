@@ -1,0 +1,528 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/chain/key-custody-v0.schema.json",
+  "title": "Torium key custody v0 contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "custodyVersion",
+    "status",
+    "ownerIssue",
+    "publicLaunchAllowed",
+    "scope",
+    "sources",
+    "securityInvariants",
+    "localDeveloperRecoveryArchive",
+    "keyInventory",
+    "lifecyclePolicies",
+    "signerRestoreGuard",
+    "remoteSignerAndHsm",
+    "consensusRotationConstraint",
+    "twoPersonControls",
+    "compromiseRunbooks",
+    "holds"
+  ],
+  "properties": {
+    "$schema": { "const": "./key-custody-v0.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "custodyVersion": {
+      "type": "string",
+      "pattern": "^0\\.1\\.0-local\\.[1-9][0-9]*$"
+    },
+    "status": { "const": "defined-local-v0-not-activated-publicly" },
+    "ownerIssue": { "const": 117 },
+    "publicLaunchAllowed": { "const": false },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "liveDeployment",
+        "toriumBackendIntegration",
+        "toriumBackendKeyAuthority",
+        "productionSecretMaterialPresent",
+        "bridge",
+        "layer2"
+      ],
+      "properties": {
+        "environment": { "const": "local-development-only" },
+        "liveDeployment": { "const": false },
+        "toriumBackendIntegration": { "const": false },
+        "toriumBackendKeyAuthority": { "const": false },
+        "productionSecretMaterialPresent": { "const": false },
+        "bridge": { "const": false },
+        "layer2": { "const": false }
+      }
+    },
+    "sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identifiers",
+        "trustModel",
+        "threatModel",
+        "nodeRoles",
+        "governance",
+        "secretPolicy",
+        "recoveryPolicy",
+        "filePvFormat",
+        "localRecoveryGuide",
+        "localRuntimeSource",
+        "localAccountsGuide",
+        "validatorLifecycleGuide",
+        "signerStateGuard",
+        "signerStateGuardTest",
+        "compromiseRunbook"
+      ],
+      "properties": {
+        "identifiers": { "$ref": "#/$defs/manifestSource" },
+        "trustModel": { "$ref": "#/$defs/modelSource" },
+        "threatModel": { "$ref": "#/$defs/threatSource" },
+        "nodeRoles": { "$ref": "#/$defs/ownedProfileSource" },
+        "governance": { "$ref": "#/$defs/ownedContractSource" },
+        "secretPolicy": { "$ref": "#/$defs/ownedPolicySource" },
+        "recoveryPolicy": { "$ref": "#/$defs/ownedRecoverySource" },
+        "filePvFormat": { "$ref": "#/$defs/filePvFormat" },
+        "localRecoveryGuide": { "$ref": "#/$defs/path" },
+        "localRuntimeSource": { "$ref": "#/$defs/path" },
+        "localAccountsGuide": { "$ref": "#/$defs/path" },
+        "validatorLifecycleGuide": { "$ref": "#/$defs/path" },
+        "signerStateGuard": { "$ref": "#/$defs/path" },
+        "signerStateGuardTest": { "$ref": "#/$defs/path" },
+        "compromiseRunbook": { "$ref": "#/$defs/path" }
+      }
+    },
+    "securityInvariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contractContainsPrivateMaterial",
+        "contractContainsMnemonic",
+        "contractContainsRecoveryShare",
+        "publicIdentifiersOnly",
+        "singleActiveConsensusSignerRequired",
+        "clonedConsensusSignerAllowed",
+        "availabilityMayOverrideDoubleSignSafety",
+        "operatorNodeBackupMayContainConsensusKeyOrSignerState",
+        "secretMayEnterRepository",
+        "secretMayEnterContainerLayer",
+        "secretMayEnterProcessArguments",
+        "secretMayEnterLogs",
+        "secretMayEnterSupportBundle",
+        "publicDeterministicFixtureIsProductionSecret",
+        "publicDeterministicFixtureProductionReuseAllowed"
+      ],
+      "properties": {
+        "contractContainsPrivateMaterial": { "const": false },
+        "contractContainsMnemonic": { "const": false },
+        "contractContainsRecoveryShare": { "const": false },
+        "publicIdentifiersOnly": { "const": true },
+        "singleActiveConsensusSignerRequired": { "const": true },
+        "clonedConsensusSignerAllowed": { "const": false },
+        "availabilityMayOverrideDoubleSignSafety": { "const": false },
+        "operatorNodeBackupMayContainConsensusKeyOrSignerState": {
+          "const": false
+        },
+        "secretMayEnterRepository": { "const": false },
+        "secretMayEnterContainerLayer": { "const": false },
+        "secretMayEnterProcessArguments": { "const": false },
+        "secretMayEnterLogs": { "const": false },
+        "secretMayEnterSupportBundle": { "const": false },
+        "publicDeterministicFixtureIsProductionSecret": { "const": false },
+        "publicDeterministicFixtureProductionReuseAllowed": { "const": false }
+      }
+    },
+    "localDeveloperRecoveryArchive": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ownerIssue",
+        "scope",
+        "containsPublicDeterministicConsensusSignerFixture",
+        "containsSignerState",
+        "authenticatedPublisher",
+        "encrypted",
+        "productionPromotionAllowed"
+      ],
+      "properties": {
+        "ownerIssue": { "const": 98 },
+        "scope": { "const": "disposable-local-debugging-only" },
+        "containsPublicDeterministicConsensusSignerFixture": { "const": true },
+        "containsSignerState": { "const": true },
+        "authenticatedPublisher": { "const": false },
+        "encrypted": { "const": false },
+        "productionPromotionAllowed": { "const": false }
+      }
+    },
+    "keyInventory": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": { "$ref": "#/$defs/keyClass" }
+    },
+    "lifecyclePolicies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generation",
+        "storage",
+        "backup",
+        "rotation",
+        "revocation",
+        "destruction"
+      ],
+      "properties": {
+        "generation": { "$ref": "#/$defs/lifecyclePolicy" },
+        "storage": { "$ref": "#/$defs/lifecyclePolicy" },
+        "backup": { "$ref": "#/$defs/lifecyclePolicy" },
+        "rotation": { "$ref": "#/$defs/lifecyclePolicy" },
+        "revocation": { "$ref": "#/$defs/lifecyclePolicy" },
+        "destruction": { "$ref": "#/$defs/lifecyclePolicy" }
+      }
+    },
+    "signerRestoreGuard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "implementation",
+        "status",
+        "validatorStoppedEvidenceRequired",
+        "validatorStoppedEvidenceAutomated",
+        "keyPath",
+        "statePath",
+        "requiredFileMode",
+        "sameConsensusIdentityRequired",
+        "privateKeySeedMustDerivePublicKey",
+        "signatureOverSignBytesRequired",
+        "signBytesChainIdAndHrsVerified",
+        "trustedMaximumHeightRequired",
+        "trustedMaximumHeightEvidenceAutomated",
+        "positionOrder",
+        "candidateMayBeBehind",
+        "samePositionSignBytesMustMatch",
+        "secretMaterialReturned",
+        "liveRestoreDrillPassed"
+      ],
+      "properties": {
+        "implementation": { "const": "chain/operator/signer-state-guard.mjs" },
+        "status": {
+          "const": "implemented-offline-local-guard-runtime-admission-not-wired"
+        },
+        "validatorStoppedEvidenceRequired": { "const": true },
+        "validatorStoppedEvidenceAutomated": { "const": false },
+        "keyPath": { "const": "config/priv_validator_key.json" },
+        "statePath": { "const": "data/priv_validator_state.json" },
+        "requiredFileMode": { "const": "0600" },
+        "sameConsensusIdentityRequired": { "const": true },
+        "privateKeySeedMustDerivePublicKey": { "const": true },
+        "signatureOverSignBytesRequired": { "const": true },
+        "signBytesChainIdAndHrsVerified": { "const": false },
+        "trustedMaximumHeightRequired": { "const": true },
+        "trustedMaximumHeightEvidenceAutomated": { "const": false },
+        "positionOrder": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "height" },
+            { "const": "round" },
+            { "const": "step" }
+          ],
+          "items": false,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "candidateMayBeBehind": { "const": false },
+        "samePositionSignBytesMustMatch": { "const": true },
+        "secretMaterialReturned": { "const": false },
+        "liveRestoreDrillPassed": { "const": false }
+      }
+    },
+    "remoteSignerAndHsm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "requiredForLocalDevelopment",
+        "publicValidatorDecision",
+        "candidates",
+        "selectedProvider",
+        "selectedProtocol",
+        "keyExportable",
+        "highAvailabilityMode",
+        "failoverMode",
+        "latencyBudgetMilliseconds",
+        "availabilityTarget",
+        "compatibilityTested",
+        "criteria"
+      ],
+      "properties": {
+        "status": { "const": "hold-evaluation-not-completed" },
+        "requiredForLocalDevelopment": { "const": false },
+        "publicValidatorDecision": { "type": "null" },
+        "candidates": { "type": "array", "maxItems": 0 },
+        "selectedProvider": { "type": "null" },
+        "selectedProtocol": { "type": "null" },
+        "keyExportable": { "type": "null" },
+        "highAvailabilityMode": { "type": "null" },
+        "failoverMode": { "type": "null" },
+        "latencyBudgetMilliseconds": { "type": "null" },
+        "availabilityTarget": { "type": "null" },
+        "compatibilityTested": { "const": false },
+        "criteria": { "$ref": "#/$defs/nonEmptyStrings" }
+      }
+    },
+    "consensusRotationConstraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inPlacePrivateKeyEditAllowed",
+        "inPlaceOperatorAddressRotationAssumed",
+        "replacementMode",
+        "localReplacementDrillPassed",
+        "publicReplacementDrillPassed",
+        "status"
+      ],
+      "properties": {
+        "inPlacePrivateKeyEditAllowed": { "const": false },
+        "inPlaceOperatorAddressRotationAssumed": { "const": false },
+        "replacementMode": { "type": "string", "minLength": 50 },
+        "localReplacementDrillPassed": { "const": false },
+        "publicReplacementDrillPassed": { "const": false },
+        "status": { "const": "explicitly-constrained-not-yet-tested" }
+      }
+    },
+    "twoPersonControls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "minimumApprovals", "approvers", "actions"],
+      "properties": {
+        "status": { "const": "identified-not-configured" },
+        "minimumApprovals": { "type": "null" },
+        "approvers": { "type": "array", "maxItems": 0 },
+        "actions": { "$ref": "#/$defs/nonEmptyStrings" }
+      }
+    },
+    "compromiseRunbooks": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": { "$ref": "#/$defs/runbook" }
+    },
+    "holds": {
+      "type": "array",
+      "minItems": 13,
+      "maxItems": 13,
+      "items": { "$ref": "#/$defs/hold" }
+    }
+  },
+  "$defs": {
+    "path": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._/-]*$",
+      "maxLength": 256
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-local\\.[0-9]+)?$"
+    },
+    "nonEmptyStrings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 240 }
+    },
+    "manifestSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "manifestVersion"],
+      "properties": {
+        "path": { "$ref": "#/$defs/path" },
+        "manifestVersion": { "$ref": "#/$defs/version" }
+      }
+    },
+    "modelSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "modelVersion"],
+      "properties": {
+        "path": { "$ref": "#/$defs/path" },
+        "modelVersion": { "$ref": "#/$defs/version" }
+      }
+    },
+    "threatSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "modelVersion",
+        "riskIds",
+        "invariantIds",
+        "releaseGateIds"
+      ],
+      "properties": {
+        "path": { "$ref": "#/$defs/path" },
+        "modelVersion": { "$ref": "#/$defs/version" },
+        "riskIds": { "$ref": "#/$defs/nonEmptyStrings" },
+        "invariantIds": { "$ref": "#/$defs/nonEmptyStrings" },
+        "releaseGateIds": { "$ref": "#/$defs/nonEmptyStrings" }
+      }
+    },
+    "ownedProfileSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "profileVersion", "ownerIssue"],
+      "properties": {
+        "path": { "$ref": "#/$defs/path" },
+        "profileVersion": { "$ref": "#/$defs/version" },
+        "ownerIssue": { "const": 114 }
+      }
+    },
+    "ownedPolicySource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "policyVersion", "ownerIssue"],
+      "properties": {
+        "path": { "$ref": "#/$defs/path" },
+        "policyVersion": { "$ref": "#/$defs/version" },
+        "ownerIssue": { "const": 90 }
+      }
+    },
+    "ownedContractSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "contractVersion", "ownerIssue"],
+      "properties": {
+        "path": { "$ref": "#/$defs/path" },
+        "contractVersion": { "$ref": "#/$defs/version" },
+        "ownerIssue": { "const": 106 }
+      }
+    },
+    "ownedRecoverySource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "recoveryVersion", "ownerIssue"],
+      "properties": {
+        "path": { "$ref": "#/$defs/path" },
+        "recoveryVersion": { "$ref": "#/$defs/version" },
+        "ownerIssue": { "const": 116 }
+      }
+    },
+    "filePvFormat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "goModPath",
+        "module",
+        "version",
+        "replacementAllowed",
+        "signatureEncoding",
+        "signBytesEncoding",
+        "heightType",
+        "roundType",
+        "stepValues"
+      ],
+      "properties": {
+        "goModPath": { "const": "chain/app/go.mod" },
+        "module": { "const": "github.com/cometbft/cometbft" },
+        "version": { "const": "v0.39.3" },
+        "replacementAllowed": { "const": false },
+        "signatureEncoding": { "const": "canonical-base64-ed25519-64-bytes" },
+        "signBytesEncoding": { "const": "canonical-uppercase-hex" },
+        "heightType": { "const": "non-negative-int64" },
+        "roundType": { "const": "non-negative-int32" },
+        "stepValues": {
+          "type": "array",
+          "prefixItems": [
+            { "const": 0 },
+            { "const": 1 },
+            { "const": 2 },
+            { "const": 3 }
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        }
+      }
+    },
+    "keyClass": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "algorithm",
+        "publicIdentifier",
+        "allowedIdentities",
+        "authorities",
+        "localMode",
+        "publicMode",
+        "runtimeDelivery",
+        "backup",
+        "rotation",
+        "ownerIssues"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]+$" },
+        "kind": { "type": "string", "pattern": "^[a-z][a-z0-9-]+$" },
+        "algorithm": { "type": ["string", "null"] },
+        "publicIdentifier": { "type": "string", "minLength": 5 },
+        "allowedIdentities": { "$ref": "#/$defs/nonEmptyStrings" },
+        "authorities": { "$ref": "#/$defs/nonEmptyStrings" },
+        "localMode": { "type": "string", "minLength": 10 },
+        "publicMode": { "type": "string", "pattern": "^hold-" },
+        "runtimeDelivery": { "type": "string", "minLength": 15 },
+        "backup": { "type": "string", "minLength": 15 },
+        "rotation": { "type": "string", "minLength": 20 },
+        "ownerIssues": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "lifecyclePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "selectedMechanism", "requirements"],
+      "properties": {
+        "status": { "type": "string", "pattern": "^hold-" },
+        "selectedMechanism": { "type": "null" },
+        "requirements": { "$ref": "#/$defs/nonEmptyStrings" },
+        "shareThreshold": { "type": "null" },
+        "totalShares": { "type": "null" },
+        "custodians": { "type": "array", "maxItems": 0 },
+        "scheduledIntervalDays": { "type": "null" },
+        "witnessCount": { "type": "null" }
+      }
+    },
+    "runbook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "keyClass", "anchor", "lastDrillAt", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]+$" },
+        "keyClass": { "type": "string", "pattern": "^[a-z][a-z0-9-]+$" },
+        "anchor": { "type": "string", "pattern": "^[a-z][a-z0-9-]+$" },
+        "lastDrillAt": { "type": "null" },
+        "status": { "const": "authored-not-drilled" }
+      }
+    },
+    "hold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "ownerIssue", "evidenceIssues", "requirement"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]+$" },
+        "ownerIssue": { "type": "integer", "minimum": 1 },
+        "evidenceIssues": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "integer", "minimum": 1 }
+        },
+        "requirement": { "type": "string", "minLength": 70, "maxLength": 320 }
+      }
+    }
+  }
+}

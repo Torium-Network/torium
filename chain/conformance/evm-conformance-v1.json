@@ -1,0 +1,936 @@
+{
+  "$schema": "./evm-conformance-v1.schema.json",
+  "schemaVersion": 1,
+  "registryVersion": "1.0.0-local.3",
+  "status": "local-development-contract",
+  "ownerIssue": 107,
+  "baseline": {
+    "path": "../poc/upstream-baseline/support-matrix.json",
+    "schemaVersion": 1,
+    "cosmosEvmRelease": "v0.7.0",
+    "cosmosEvmCommit": "f4ab9a3e3fbe353468327d5cacda94b33b41ed11",
+    "allowedStates": ["supported", "partial", "stub", "unsupported"]
+  },
+  "statePolicy": {
+    "unknownState": "reject",
+    "regression": "reject",
+    "upgrade": "require-state-change-evidence",
+    "maturityOrder": ["unsupported", "stub", "partial", "supported"]
+  },
+  "evidenceCatalog": [
+    {
+      "id": "EVD-BASELINE-MATRIX",
+      "kind": "baseline",
+      "path": "../poc/upstream-baseline/support-matrix.json",
+      "ownerIssues": [89, 107],
+      "description": "Versioned Cosmos EVM v0.7.0 capability states and downstream constraints produced by the upstream decision spike."
+    },
+    {
+      "id": "EVD-RPC-COMPATIBILITY",
+      "kind": "proof",
+      "path": "../poc/upstream-baseline/proof/rpc-compatibility.json",
+      "ownerIssues": [89, 107],
+      "description": "Signed transfer, clients, fee history, block tags, debug traces, and WebSocket proof from the pinned upstream baseline."
+    },
+    {
+      "id": "EVD-FEE-HISTORY-SATURATION",
+      "kind": "proof",
+      "path": "../poc/upstream-baseline/proof/fee-history-saturation.json",
+      "ownerIssues": [89, 107],
+      "description": "Bounded-block-gas proof that records a fully saturated block and its eth_feeHistory response."
+    },
+    {
+      "id": "EVD-WEBSOCKET-RESILIENCE",
+      "kind": "proof",
+      "path": "../poc/upstream-baseline/proof/websocket-resilience.json",
+      "ownerIssues": [89, 107, 131],
+      "description": "Socket disconnect, explicit reconnect, new subscription, and HTTP backfill proof."
+    },
+    {
+      "id": "EVD-MEMPOOL",
+      "kind": "proof",
+      "path": "../poc/upstream-baseline/proof/mempool.json",
+      "ownerIssues": [89, 107, 132],
+      "description": "Receiving-node fee bump, nonce gap, peer observation, and account queue retention proof."
+    },
+    {
+      "id": "EVD-HARDHAT",
+      "kind": "proof",
+      "path": "../poc/upstream-baseline/proof/hardhat.json",
+      "ownerIssues": [89, 107],
+      "description": "Pinned Hardhat and Solidity Prague compilation and provider proof."
+    },
+    {
+      "id": "EVD-FOUNDRY",
+      "kind": "proof",
+      "path": "../poc/upstream-baseline/proof/foundry.json",
+      "ownerIssues": [89, 107],
+      "description": "Pinned Foundry chain discovery and signed transaction proof."
+    },
+    {
+      "id": "EVD-METAMASK",
+      "kind": "proof",
+      "path": "../poc/upstream-baseline/proof/metamask.json",
+      "ownerIssues": [89, 107, 132],
+      "description": "Pinned MetaMask custom-network import and approved transaction proof from a disposable profile."
+    },
+    {
+      "id": "EVD-BLOCKSCOUT",
+      "kind": "proof",
+      "path": "../poc/upstream-baseline/proof/blockscout.json",
+      "ownerIssues": [89, 112],
+      "description": "Pinned Blockscout base indexing and incompatible internal-transaction trace-envelope proof."
+    },
+    {
+      "id": "EVD-PROTOCOL-CONTRACT",
+      "kind": "protocol-contract",
+      "path": "../config/protocol-v1.json",
+      "ownerIssues": [86, 107, 131],
+      "description": "Canonical Torium identifiers, transaction envelopes, finality semantics, active precompiles, and explicit bridge exclusions."
+    },
+    {
+      "id": "EVD-TORIUM-TOOLING",
+      "kind": "proof",
+      "path": "../tests/tooling/proof/tooling-conformance.json",
+      "ownerIssues": [107, 131, 132],
+      "description": "Canonical four-validator proof for viem, ethers, Hardhat, Foundry, OpenZeppelin ERC-20/ERC-721 execution, and the observed contract-call gas-estimation difference."
+    },
+    {
+      "id": "EVD-TORIUM-STATE-SUBSET",
+      "kind": "proof",
+      "path": "../tests/state-conformance/proof/state-conformance.json",
+      "ownerIssues": [107],
+      "description": "Byte-pinned 13-fixture, 64-case Cancun and Prague state-test selection executed against the exact Cosmos go-ethereum replacement with zero runtime skips."
+    },
+    {
+      "id": "EVD-TORIUM-RPC",
+      "kind": "proof",
+      "path": "../tests/rpc/proof/rpc-conformance.json",
+      "ownerIssues": [96, 107, 112, 114, 131, 132],
+      "description": "Canonical localnet proof for per-method block tags, JSON-RPC errors and batch limits, WebSocket origins/subscriptions/reconnect/backfill, and the default profile's disabled debug surface."
+    },
+    {
+      "id": "EVD-TORIUM-FEES",
+      "kind": "proof",
+      "path": "../tests/fees/proof/fee-conformance.json",
+      "ownerIssues": [91, 107, 131, 132],
+      "description": "Canonical localnet proof for transaction types 0/1/2, wrong-chain and unprotected-signature rejection, fee-history boundaries and saturation, receiving-node replacement, nonce gaps, resource limits, and fee accounting."
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "chain.four-validator-localnet",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "required-live",
+      "constraintAcknowledged": false,
+      "deviationIds": [],
+      "skipIds": [],
+      "evidenceIds": ["EVD-BASELINE-MATRIX"],
+      "downstreamIssues": [107],
+      "downstreamImpact": "Conformance claims require a real multi-validator chain rather than a single-process EVM simulation.",
+      "sdkBehavior": "standard"
+    },
+    {
+      "id": "evm.state-test-curated-subset",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "required-static",
+      "constraintAcknowledged": false,
+      "deviationIds": [],
+      "skipIds": [],
+      "evidenceIds": ["EVD-TORIUM-STATE-SUBSET"],
+      "downstreamIssues": [107],
+      "downstreamImpact": "Selected opcode, precompile, state-root, log-root, rollback, transient-state, and creation behavior is continuously checked against pinned upstream vectors.",
+      "sdkBehavior": "standard"
+    },
+    {
+      "id": "evm.transaction-envelopes-type-0-1-2",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "required-live",
+      "constraintAcknowledged": false,
+      "deviationIds": [],
+      "skipIds": [],
+      "evidenceIds": ["EVD-TORIUM-FEES"],
+      "downstreamIssues": [107, 131, 132],
+      "downstreamImpact": "Wallet and SDK transaction builders may emit the three tested standard envelopes and must preserve their receipt type.",
+      "sdkBehavior": "standard"
+    },
+    {
+      "id": "evm.transaction-envelopes-type-3-4",
+      "baselineState": "unsupported",
+      "targetState": "unsupported",
+      "lane": "required-live",
+      "constraintAcknowledged": true,
+      "deviationIds": ["DEV-014"],
+      "skipIds": [],
+      "evidenceIds": ["EVD-TORIUM-FEES", "EVD-PROTOCOL-CONTRACT"],
+      "downstreamIssues": [107, 131, 132],
+      "downstreamImpact": "SDK and wallet builders must reject type 3 and type 4 before submission and must never silently translate them to another envelope.",
+      "sdkBehavior": "reject"
+    },
+    {
+      "id": "evm.chain-id-replay-protection",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "required-live",
+      "constraintAcknowledged": false,
+      "deviationIds": [],
+      "skipIds": [],
+      "evidenceIds": ["EVD-TORIUM-FEES", "EVD-PROTOCOL-CONTRACT"],
+      "downstreamIssues": [107, 131, 132],
+      "downstreamImpact": "Clients must sign for the exact Torium replay domain; the endpoint rejects another EIP-155 chain ID and unprotected legacy signatures.",
+      "sdkBehavior": "standard"
+    },
+    {
+      "id": "rpc.signed-evm-transfer",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "required-live",
+      "constraintAcknowledged": false,
+      "deviationIds": [],
+      "skipIds": [],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY", "EVD-TORIUM-TOOLING"],
+      "downstreamIssues": [107, 132],
+      "downstreamImpact": "Wallet and SDK send flows may rely on standard locally signed EVM transactions only while the chain ID and receipt are verified.",
+      "sdkBehavior": "standard"
+    },
+    {
+      "id": "rpc.eth-fee-history",
+      "baselineState": "partial",
+      "targetState": "partial",
+      "lane": "required-live",
+      "constraintAcknowledged": true,
+      "deviationIds": ["DEV-001"],
+      "skipIds": [],
+      "evidenceIds": [
+        "EVD-RPC-COMPATIBILITY",
+        "EVD-FEE-HISTORY-SATURATION",
+        "EVD-TORIUM-FEES"
+      ],
+      "downstreamIssues": [107, 132],
+      "downstreamImpact": "Fee estimation must preserve and surface the non-geth 100-block request cap while consuming canonical saturated-block data.",
+      "sdkBehavior": "capability-detect"
+    },
+    {
+      "id": "rpc.eth-estimate-gas-contract-execution",
+      "baselineState": "partial",
+      "targetState": "partial",
+      "lane": "required-live",
+      "constraintAcknowledged": true,
+      "deviationIds": ["DEV-012"],
+      "skipIds": [],
+      "evidenceIds": ["EVD-TORIUM-TOOLING"],
+      "downstreamIssues": [107, 131, 132],
+      "downstreamImpact": "Contract writes require a visible, configurable gas margin until estimated gas matches committed Cosmos EVM execution.",
+      "sdkBehavior": "capability-detect"
+    },
+    {
+      "id": "rpc.block-tag-latest",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "required-live",
+      "constraintAcknowledged": false,
+      "deviationIds": [],
+      "skipIds": [],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY", "EVD-TORIUM-RPC"],
+      "downstreamIssues": [107, 131],
+      "downstreamImpact": "Standard latest-state block and account queries are available to clients.",
+      "sdkBehavior": "standard"
+    },
+    {
+      "id": "rpc.block-tag-pending",
+      "baselineState": "partial",
+      "targetState": "partial",
+      "lane": "required-live",
+      "constraintAcknowledged": true,
+      "deviationIds": ["DEV-002"],
+      "skipIds": [],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY", "EVD-TORIUM-RPC"],
+      "downstreamIssues": [107, 131, 132],
+      "downstreamImpact": "Clients may send the tag but cannot claim a distinct geth-equivalent pending-state view.",
+      "sdkBehavior": "capability-detect"
+    },
+    {
+      "id": "rpc.block-tag-safe",
+      "baselineState": "partial",
+      "targetState": "partial",
+      "lane": "required-live",
+      "constraintAcknowledged": true,
+      "deviationIds": ["DEV-003"],
+      "skipIds": [],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY", "EVD-TORIUM-RPC"],
+      "downstreamIssues": [107, 131],
+      "downstreamImpact": "The SDK must gate safe by RPC method instead of advertising a network-wide safe-tag capability.",
+      "sdkBehavior": "capability-detect"
+    },
+    {
+      "id": "rpc.block-tag-finalized",
+      "baselineState": "partial",
+      "targetState": "partial",
+      "lane": "required-live",
+      "constraintAcknowledged": true,
+      "deviationIds": ["DEV-004"],
+      "skipIds": [],
+      "evidenceIds": [
+        "EVD-RPC-COMPATIBILITY",
+        "EVD-PROTOCOL-CONTRACT",
+        "EVD-TORIUM-RPC"
+      ],
+      "downstreamIssues": [107, 131],
+      "downstreamImpact": "Client documentation and APIs must describe CometBFT committed state, not Ethereum beacon finality.",
+      "sdkBehavior": "capability-detect"
+    },
+    {
+      "id": "rpc.historical-state-call",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "required-live",
+      "constraintAcknowledged": false,
+      "deviationIds": [],
+      "skipIds": [],
+      "evidenceIds": ["EVD-TORIUM-RPC"],
+      "downstreamIssues": [107, 131],
+      "downstreamImpact": "SDK clients may execute eth_call against explicit retained block heights and distinguish old state from latest state.",
+      "sdkBehavior": "standard"
+    },
+    {
+      "id": "rpc.websocket-subscriptions",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "required-live",
+      "constraintAcknowledged": false,
+      "deviationIds": [],
+      "skipIds": [],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY", "EVD-TORIUM-RPC"],
+      "downstreamIssues": [107, 131, 132],
+      "downstreamImpact": "Non-browser clients may consume new heads, logs, and pending transaction notifications with explicit lifecycle handling.",
+      "sdkBehavior": "standard"
+    },
+    {
+      "id": "rpc.websocket-browser-origin",
+      "baselineState": "unsupported",
+      "targetState": "unsupported",
+      "lane": "required-live",
+      "constraintAcknowledged": true,
+      "deviationIds": ["DEV-005"],
+      "skipIds": ["SKIP-002"],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY", "EVD-TORIUM-RPC"],
+      "downstreamIssues": [107, 131],
+      "downstreamImpact": "Browser SDKs must not assume direct WebSocket access until a named origin profile exists.",
+      "sdkBehavior": "capability-detect"
+    },
+    {
+      "id": "rpc.websocket-restart-recovery",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "required-live",
+      "constraintAcknowledged": true,
+      "deviationIds": ["DEV-006"],
+      "skipIds": [],
+      "evidenceIds": ["EVD-WEBSOCKET-RESILIENCE", "EVD-TORIUM-RPC"],
+      "downstreamIssues": [107, 131, 132],
+      "downstreamImpact": "SDK subscription helpers must reconnect and backfill over HTTP because the node does not replay missed events.",
+      "sdkBehavior": "capability-detect"
+    },
+    {
+      "id": "rpc.debug-trace-methods",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "preserved-downstream",
+      "constraintAcknowledged": false,
+      "deviationIds": [],
+      "skipIds": [],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY"],
+      "downstreamIssues": [107, 112],
+      "downstreamImpact": "This records only the pinned engine capability; endpoint consumers must use one of the explicit profile capabilities instead.",
+      "sdkBehavior": "not-applicable"
+    },
+    {
+      "id": "rpc.default-profile-debug-trace-methods",
+      "baselineState": "unsupported",
+      "targetState": "unsupported",
+      "lane": "required-live",
+      "constraintAcknowledged": true,
+      "deviationIds": ["DEV-013"],
+      "skipIds": [],
+      "evidenceIds": ["EVD-TORIUM-RPC"],
+      "downstreamIssues": [107, 112, 114, 131],
+      "downstreamImpact": "Ordinary wallet and SDK endpoints return -32601 for debug methods and clients must preserve that unsupported result.",
+      "sdkBehavior": "reject"
+    },
+    {
+      "id": "rpc.operator-profile-debug-trace-methods",
+      "baselineState": "stub",
+      "targetState": "stub",
+      "lane": "preserved-downstream",
+      "constraintAcknowledged": true,
+      "deviationIds": ["DEV-013"],
+      "skipIds": ["SKIP-006"],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY", "EVD-TORIUM-RPC"],
+      "downstreamIssues": [112, 114],
+      "downstreamImpact": "Explorer and operator integrations remain blocked until a separately bounded profile proves success and error envelopes.",
+      "sdkBehavior": "not-applicable"
+    },
+    {
+      "id": "explorer.blockscout-base-indexing",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "preserved-downstream",
+      "constraintAcknowledged": false,
+      "deviationIds": [],
+      "skipIds": [],
+      "evidenceIds": ["EVD-BLOCKSCOUT"],
+      "downstreamIssues": [112],
+      "downstreamImpact": "Explorer selection may rely on base indexing while issue #112 owns the production-shaped profile.",
+      "sdkBehavior": "not-applicable"
+    },
+    {
+      "id": "explorer.blockscout-internal-transactions",
+      "baselineState": "unsupported",
+      "targetState": "unsupported",
+      "lane": "preserved-downstream",
+      "constraintAcknowledged": true,
+      "deviationIds": ["DEV-007"],
+      "skipIds": ["SKIP-003"],
+      "evidenceIds": ["EVD-BLOCKSCOUT"],
+      "downstreamIssues": [112],
+      "downstreamImpact": "Explorer deployments must keep internal-transaction fetching disabled until #112 proves an adapter or upstream fix.",
+      "sdkBehavior": "not-applicable"
+    },
+    {
+      "id": "mempool.same-nonce-fee-bump-local",
+      "baselineState": "partial",
+      "targetState": "partial",
+      "lane": "required-live",
+      "constraintAcknowledged": true,
+      "deviationIds": ["DEV-008"],
+      "skipIds": [],
+      "evidenceIds": ["EVD-MEMPOOL", "EVD-TORIUM-FEES"],
+      "downstreamIssues": [107, 132],
+      "downstreamImpact": "Transaction clients must expose local replacement as a capability and never promise network-wide RBF.",
+      "sdkBehavior": "capability-detect"
+    },
+    {
+      "id": "mempool.nonce-gap-queue-promotion",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "required-live",
+      "constraintAcknowledged": false,
+      "deviationIds": [],
+      "skipIds": [],
+      "evidenceIds": ["EVD-MEMPOOL", "EVD-TORIUM-FEES"],
+      "downstreamIssues": [107, 132],
+      "downstreamImpact": "Clients may submit nonce gaps but still must reconcile later inclusion and eviction outcomes.",
+      "sdkBehavior": "standard"
+    },
+    {
+      "id": "mempool.capacity-retention",
+      "baselineState": "partial",
+      "targetState": "partial",
+      "lane": "required-live",
+      "constraintAcknowledged": true,
+      "deviationIds": ["DEV-009"],
+      "skipIds": [],
+      "evidenceIds": ["EVD-MEMPOOL", "EVD-TORIUM-FEES"],
+      "downstreamIssues": [107, 132],
+      "downstreamImpact": "RPC acknowledgement must remain distinct from retained, dropped, replaced, and finalized transaction states.",
+      "sdkBehavior": "capability-detect"
+    },
+    {
+      "id": "client.viem-2.55.2",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "required-live",
+      "constraintAcknowledged": false,
+      "deviationIds": [],
+      "skipIds": [],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY", "EVD-TORIUM-TOOLING"],
+      "downstreamIssues": [107, 131, 132],
+      "downstreamImpact": "Torium client APIs may compose with the pinned viem version without chain-specific patches.",
+      "sdkBehavior": "standard"
+    },
+    {
+      "id": "client.ethers-6.17.0",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "required-live",
+      "constraintAcknowledged": false,
+      "deviationIds": [],
+      "skipIds": [],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY", "EVD-TORIUM-TOOLING"],
+      "downstreamIssues": [107, 131, 132],
+      "downstreamImpact": "Torium client APIs may compose with the pinned ethers version without chain-specific patches.",
+      "sdkBehavior": "standard"
+    },
+    {
+      "id": "client.hardhat-3.9.1",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "required-live",
+      "constraintAcknowledged": false,
+      "deviationIds": [],
+      "skipIds": [],
+      "evidenceIds": ["EVD-HARDHAT", "EVD-TORIUM-TOOLING"],
+      "downstreamIssues": [107],
+      "downstreamImpact": "Developers may compile Prague-targeted Solidity and connect Hardhat to Torium using standard network configuration.",
+      "sdkBehavior": "standard"
+    },
+    {
+      "id": "client.foundry-1.7.1",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "required-live",
+      "constraintAcknowledged": false,
+      "deviationIds": [],
+      "skipIds": [],
+      "evidenceIds": ["EVD-FOUNDRY", "EVD-TORIUM-TOOLING"],
+      "downstreamIssues": [107],
+      "downstreamImpact": "Developers may use the pinned Foundry release for chain reads and signed transactions.",
+      "sdkBehavior": "standard"
+    },
+    {
+      "id": "wallet.metamask-13.39.2",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "required-live",
+      "constraintAcknowledged": false,
+      "deviationIds": [],
+      "skipIds": ["SKIP-001"],
+      "evidenceIds": ["EVD-METAMASK"],
+      "downstreamIssues": [107, 132],
+      "downstreamImpact": "Wallet metadata and transaction flows may target MetaMask, while headed UI proof remains a pinned manual lane.",
+      "sdkBehavior": "standard"
+    },
+    {
+      "id": "account.bech32-and-hex-representation",
+      "baselineState": "supported",
+      "targetState": "supported",
+      "lane": "preserved-downstream",
+      "constraintAcknowledged": true,
+      "deviationIds": ["DEV-010"],
+      "skipIds": [],
+      "evidenceIds": ["EVD-PROTOCOL-CONTRACT", "EVD-BASELINE-MATRIX"],
+      "downstreamIssues": [131],
+      "downstreamImpact": "The SDK must generate both representations from the same 20 bytes and keep the separate Cosmos API stability surface explicit.",
+      "sdkBehavior": "standard"
+    },
+    {
+      "id": "torium.cosmos-rest-grpc-extension-contract",
+      "baselineState": "stub",
+      "targetState": "stub",
+      "lane": "preserved-downstream",
+      "constraintAcknowledged": true,
+      "deviationIds": ["DEV-010"],
+      "skipIds": ["SKIP-004"],
+      "evidenceIds": ["EVD-BASELINE-MATRIX", "EVD-PROTOCOL-CONTRACT"],
+      "downstreamIssues": [131],
+      "downstreamImpact": "SDK release work must not present upstream Cosmos REST or gRPC endpoints as a stable Torium extension contract.",
+      "sdkBehavior": "reject"
+    },
+    {
+      "id": "protocol.ibc-and-bridges",
+      "baselineState": "unsupported",
+      "targetState": "unsupported",
+      "lane": "scope-exclusion",
+      "constraintAcknowledged": true,
+      "deviationIds": ["DEV-011"],
+      "skipIds": ["SKIP-005"],
+      "evidenceIds": ["EVD-PROTOCOL-CONTRACT", "EVD-BASELINE-MATRIX"],
+      "downstreamIssues": [],
+      "downstreamImpact": "Current chain and SDK claims must exclude IBC, ICS precompiles, and bridges.",
+      "sdkBehavior": "not-applicable"
+    }
+  ],
+  "deviations": [
+    {
+      "id": "DEV-001",
+      "capabilityIds": ["rpc.eth-fee-history"],
+      "summary": "Fee history is bounded by a non-geth 100-block user-request cap.",
+      "rationale": "Canonical Torium localnet proves the 100-block boundary, explicit 101-block rejection, and a 30,000,000-gas saturated block; compatibility remains partial because clients must preserve the smaller request limit.",
+      "risk": "A client that silently truncates or assumes geth's larger default can hide an RPC boundary error and produce incomplete fee estimates.",
+      "ownerIssues": [107, 132],
+      "evidenceIds": [
+        "EVD-RPC-COMPATIBILITY",
+        "EVD-FEE-HISTORY-SATURATION",
+        "EVD-TORIUM-FEES"
+      ],
+      "documentationPaths": [
+        "./README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Expose the block-count cap, request canonical ranges explicitly, and return the endpoint's above-cap error unchanged.",
+        "wallet": "Use the canonical fee-history values without describing the local development curve as a public fee recommendation."
+      },
+      "sdkRule": "Capability-detect eth_feeHistory and surface explicit RPC errors; never silently truncate requests above the supported boundary."
+    },
+    {
+      "id": "DEV-002",
+      "capabilityIds": ["rpc.block-tag-pending"],
+      "summary": "Pending-tag calls respond, but a distinct geth-equivalent pending-state view is unproven.",
+      "rationale": "Response availability alone does not establish that uncommitted transactions are reflected consistently across account and call methods.",
+      "risk": "Wallets can display a nonce or balance as authoritative even though distributed mempools have different local views.",
+      "ownerIssues": [107, 131, 132],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY"],
+      "documentationPaths": [
+        "./README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Label pending results as node-local and preserve unknown or dropped transaction outcomes.",
+        "wallet": "Reconcile pending state with committed nonce and receipts."
+      },
+      "sdkRule": "Do not advertise geth-equivalent pending semantics; expose the partial capability and node-local result."
+    },
+    {
+      "id": "DEV-003",
+      "capabilityIds": ["rpc.block-tag-safe"],
+      "summary": "Safe-tag support is method-specific.",
+      "rationale": "Block lookup accepted safe while balance, nonce, and eth_call state queries returned JSON-RPC -32602 in the pinned baseline.",
+      "risk": "A single network-level safe flag causes otherwise valid SDK calls to fail at runtime.",
+      "ownerIssues": [107, 131],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY"],
+      "documentationPaths": [
+        "./README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Maintain a per-method block-tag matrix and reject unsupported safe state queries before dispatch.",
+        "wallet": "Use committed latest or finalized semantics when a safe state method is unavailable."
+      },
+      "sdkRule": "Capability-detect safe per RPC method; never infer state-query support from eth_getBlockByNumber."
+    },
+    {
+      "id": "DEV-004",
+      "capabilityIds": ["rpc.block-tag-finalized"],
+      "summary": "Finalized names latest committed CometBFT state rather than Ethereum beacon finality.",
+      "rationale": "Torium is a standalone CometBFT L1 and does not run Ethereum's beacon consensus or its justified/finalized checkpoint model.",
+      "risk": "Ethereum-specific confirmation language can overstate the consensus model and mislead integrators.",
+      "ownerIssues": [88, 107, 131],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY", "EVD-PROTOCOL-CONTRACT"],
+      "documentationPaths": [
+        "./README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Describe the returned state as CometBFT committed and keep Ethereum beacon equivalence false.",
+        "wallet": "Use Torium confirmation terminology rather than Ethereum epoch or checkpoint wording."
+      },
+      "sdkRule": "Surface finalized only with Torium's CometBFT semantic description; do not alias it to beacon finality."
+    },
+    {
+      "id": "DEV-005",
+      "capabilityIds": ["rpc.websocket-browser-origin"],
+      "summary": "The reference WebSocket profile rejects browser Origin headers.",
+      "rationale": "A browser-facing allowlist belongs to an explicit endpoint profile; wildcard origin enablement is not a compatibility fix.",
+      "risk": "Browser clients fail to connect, while an unsafe wildcard workaround would create an inappropriate public default.",
+      "ownerIssues": [107, 114, 131],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY", "EVD-TORIUM-RPC"],
+      "documentationPaths": [
+        "./README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Capability-detect browser WebSockets and retain HTTP polling or provider fallback.",
+        "operator": "Issue #114 must define an explicit origin allowlist before browser-facing WebSockets are enabled."
+      },
+      "sdkRule": "Do not retry through an unsafe wildcard endpoint or mask the 403 response."
+    },
+    {
+      "id": "DEV-006",
+      "capabilityIds": ["rpc.websocket-restart-recovery"],
+      "summary": "Subscription recovery requires reconnect and HTTP backfill by the client.",
+      "rationale": "The server closes sockets during restart and does not replay missed notifications after a new subscription is established.",
+      "risk": "Consumers that only reconnect can silently miss heads or logs between connections.",
+      "ownerIssues": [107, 131, 132],
+      "evidenceIds": ["EVD-WEBSOCKET-RESILIENCE", "EVD-TORIUM-RPC"],
+      "documentationPaths": [
+        "./README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Track the last committed cursor, reconnect, backfill by HTTP, then resume subscriptions.",
+        "wallet": "Transaction and event views must reconcile after connection loss."
+      },
+      "sdkRule": "A successful reconnect is not complete until the missed-height range has been backfilled."
+    },
+    {
+      "id": "DEV-007",
+      "capabilityIds": ["explorer.blockscout-internal-transactions"],
+      "summary": "Blockscout internal-transaction indexing is incompatible with the observed trace envelope.",
+      "rationale": "Cosmos EVM returned result-only debug_traceBlockByNumber entries while the pinned Blockscout fetcher required txHash and result fields.",
+      "risk": "Enabling the fetcher produces repeated indexer failures and incomplete explorer data.",
+      "ownerIssues": [112],
+      "evidenceIds": ["EVD-BLOCKSCOUT"],
+      "documentationPaths": [
+        "./README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "explorer": "Keep the internal-transaction fetcher disabled until a pinned adapter or upstream fix passes conformance.",
+        "sdk": "Do not treat explorer internal transactions as canonical chain data."
+      },
+      "sdkRule": "No SDK method may synthesize internal transactions from this unsupported explorer surface."
+    },
+    {
+      "id": "DEV-008",
+      "capabilityIds": ["mempool.same-nonce-fee-bump-local"],
+      "summary": "Same-nonce fee bump is a receiving-node capability, not network-wide RBF.",
+      "rationale": "Canonical localnet rejected 9% and accepted the configured exact 10% fee-cap and tip-cap bump on the receiving validator, but does not establish a network-wide propagation guarantee.",
+      "risk": "A wallet can declare an original transaction replaced even though peers may still retain a different candidate.",
+      "ownerIssues": [107, 132],
+      "evidenceIds": ["EVD-MEMPOOL", "EVD-TORIUM-FEES"],
+      "documentationPaths": [
+        "./README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Expose tested threshold and scope, then resolve both hashes through receipts and committed nonce.",
+        "wallet": "Use uncertain or local-replacement states until one candidate commits."
+      },
+      "sdkRule": "Never advertise Ethereum-wide RBF; replacement remains partial and receiving-node scoped."
+    },
+    {
+      "id": "DEV-009",
+      "capabilityIds": ["mempool.capacity-retention"],
+      "summary": "RPC acceptance does not guarantee mempool retention.",
+      "rationale": "The baseline showed acknowledgement beyond retention; canonical Torium additionally fixes 16/64 account and 5120/1024 global executable/queued limits, while the default endpoint intentionally cannot observe an exact live txpool boundary.",
+      "risk": "Clients can wait forever for an acknowledged hash that was never retained or later disappeared.",
+      "ownerIssues": [107, 132],
+      "evidenceIds": ["EVD-MEMPOOL", "EVD-TORIUM-FEES"],
+      "documentationPaths": [
+        "./README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Model submitted, pending, committed, dropped, replaced, and unknown separately.",
+        "wallet": "Reconcile hashes, nonce, and receipts instead of treating submission acknowledgement as finality."
+      },
+      "sdkRule": "eth_sendRawTransaction success records submission acknowledgement only."
+    },
+    {
+      "id": "DEV-010",
+      "capabilityIds": [
+        "account.bech32-and-hex-representation",
+        "torium.cosmos-rest-grpc-extension-contract"
+      ],
+      "summary": "Address byte equivalence is proven, while a Torium-specific Cosmos API stability contract is not defined.",
+      "rationale": "The same 20-byte account can be rendered as 0x and Bech32 without making every upstream REST or gRPC endpoint a stable SDK promise.",
+      "risk": "An SDK can couple public APIs to unstable upstream protobuf or REST surfaces and make future upgrades breaking by accident.",
+      "ownerIssues": [131],
+      "evidenceIds": ["EVD-BASELINE-MATRIX", "EVD-PROTOCOL-CONTRACT"],
+      "documentationPaths": [
+        "./README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Generate address conversions from the protocol contract and reject unspecified Torium extension calls.",
+        "protocol": "Issue #131 must version the selected REST and gRPC extension surface separately."
+      },
+      "sdkRule": "Support the byte-preserving address conversion but do not imply a stable Cosmos extension API."
+    },
+    {
+      "id": "DEV-011",
+      "capabilityIds": ["protocol.ibc-and-bridges"],
+      "summary": "IBC, ICS precompiles, and bridges are excluded from the current standalone L1 contract.",
+      "rationale": "The current roadmap proves the Torium chain and EVM SDK first; cross-chain transport is a separate future decision.",
+      "risk": "Premature bridge or IBC claims can expose nonexistent methods and incompatible asset assumptions to integrators.",
+      "ownerIssues": [107],
+      "evidenceIds": ["EVD-BASELINE-MATRIX", "EVD-PROTOCOL-CONTRACT"],
+      "documentationPaths": [
+        "./README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Do not export bridge or IBC APIs from the current SDK contract.",
+        "protocol": "Keep ICS-02 and ICS-20 precompiles inactive until a separate roadmap authorizes and tests them."
+      },
+      "sdkRule": "Reject or omit IBC and bridge operations; never emulate them through unrelated RPC methods."
+    },
+    {
+      "id": "DEV-012",
+      "capabilityIds": ["rpc.eth-estimate-gas-contract-execution"],
+      "summary": "Contract-call eth_estimateGas can materially understate committed execution gas.",
+      "rationale": "The canonical OpenZeppelin ERC-20 transfer returned 22,430 gas, reverted when submitted at that exact limit, and succeeded with a 250,000 limit while consuming 125,000 gas.",
+      "risk": "Wallets or SDKs that submit the raw estimate as the gas limit can turn a valid contract write into a reverted transaction and charge a fee without changing state.",
+      "ownerIssues": [107, 131, 132],
+      "evidenceIds": ["EVD-TORIUM-TOOLING"],
+      "documentationPaths": [
+        "./README.md",
+        "../tests/tooling/README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Return the raw estimate, apply only a documented configurable margin to contract writes, and expose the submitted gas limit.",
+        "wallet": "Show the estimated and submitted limits distinctly; do not describe the margin as extra gas necessarily consumed.",
+        "protocol": "Retest this capability whenever the Cosmos EVM execution or gas-accounting dependency changes."
+      },
+      "sdkRule": "Never silently submit the raw contract estimate as a guaranteed-safe gas limit; expose both estimate and configured margin."
+    },
+    {
+      "id": "DEV-013",
+      "capabilityIds": [
+        "rpc.default-profile-debug-trace-methods",
+        "rpc.operator-profile-debug-trace-methods"
+      ],
+      "summary": "Debug tracing exists in the pinned engine but is intentionally absent from the default wallet and SDK endpoint profile.",
+      "rationale": "The upstream engine proof covers trace response data, while the canonical default profile returns JSON-RPC -32601 for debug_traceTransaction, debug_traceBlockByNumber, and debug_traceCall. Explorer tracing needs a separately named operator profile.",
+      "risk": "An explorer or diagnostic client pointed at the default endpoint will fail, while enabling debug globally would expand an expensive RPC surface for ordinary clients.",
+      "ownerIssues": [107, 112, 114],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY", "EVD-TORIUM-RPC"],
+      "documentationPaths": [
+        "./README.md",
+        "../tests/rpc/README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Capability-detect debug methods and preserve the -32601 response on the default profile.",
+        "explorer": "Use only the future named operator profile after its trace envelope and limits pass #112/#114 acceptance.",
+        "operator": "Do not add debug to the ordinary wallet/SDK namespace set."
+      },
+      "sdkRule": "Treat trace support as endpoint-profile-specific; never infer it from the chain ID or ordinary eth namespace."
+    },
+    {
+      "id": "DEV-014",
+      "capabilityIds": ["evm.transaction-envelopes-type-3-4"],
+      "summary": "Blob type 3 and set-code type 4 are intentionally unsupported by Torium protocol v1.",
+      "rationale": "Torium is a standalone CometBFT EVM L1 without Ethereum blob data availability, and delegated EIP-7702 code remains outside the ratified transaction model. Canonical live admission and the Torium ante policy reject these envelopes.",
+      "risk": "A client that assumes all Prague-decoded envelopes are enabled can submit work that receives an asynchronous RPC acknowledgement but is never retained or proposed.",
+      "ownerIssues": [107, 131, 132],
+      "evidenceIds": ["EVD-TORIUM-FEES", "EVD-PROTOCOL-CONTRACT"],
+      "documentationPaths": [
+        "./README.md",
+        "../tests/fees/README.md",
+        "../app/README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Reject transaction type 3 and type 4 locally and preserve any endpoint rejection without retrying as another type.",
+        "wallet": "Do not expose blob or delegated-code transaction construction for Torium protocol v1.",
+        "protocol": "Keep both fail-closed at admission until a separately versioned protocol decision changes the accepted envelope set."
+      },
+      "sdkRule": "Never downgrade, translate, or emulate type 3 or type 4; return an explicit unsupported-transaction-type result."
+    }
+  ],
+  "skips": [
+    {
+      "id": "SKIP-001",
+      "capabilityIds": ["wallet.metamask-13.39.2"],
+      "scope": "Headed MetaMask UI automation in the default pull-request CI lane.",
+      "rationale": "The pinned #89 disposable-browser proof remains committed. The canonical runner reaches Torium Localnet network selection, account connection, faucet funding, and MetaMask's transaction confirmation surface, but the 13.39.2 fee-warning modal is intentionally deferred from #107 after repeated headed attempts; visible extension UI is also unsuitable for scarce default CI minutes.",
+      "risk": "Canonical wallet metadata is exercised without a completed canonical signed-transfer screenshot, and a later MetaMask UI release can invalidate selectors before a manual proof refresh notices it.",
+      "ownerIssues": [107, 132],
+      "evidenceIds": ["EVD-METAMASK"],
+      "documentationPaths": [
+        "./README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Validate the wallet metadata and provider contract in CI without claiming that a stale screenshot proves every release.",
+        "wallet": "Refresh the pinned headed proof when the supported MetaMask version changes."
+      },
+      "exitCriteria": "Issue #132 must run and record the headed canonical-localnet signed-transfer proof, and refresh it whenever the pinned MetaMask release or wallet integration contract changes."
+    },
+    {
+      "id": "SKIP-002",
+      "capabilityIds": ["rpc.websocket-browser-origin"],
+      "scope": "Browser-facing WebSocket enablement in the current loopback reference profile.",
+      "rationale": "Origin policy belongs to the explicit public and browser endpoint profiles owned by #114, not to a wildcard conformance override.",
+      "risk": "Direct browser WebSocket clients remain unsupported until the allowlist profile exists.",
+      "ownerIssues": [114],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY", "EVD-TORIUM-RPC"],
+      "documentationPaths": [
+        "./README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Use capability detection and a documented HTTP fallback.",
+        "operator": "Do not publish a wildcard-origin WebSocket endpoint."
+      },
+      "exitCriteria": "Issue #114 defines an explicit-origin browser profile and its conformance tests pass."
+    },
+    {
+      "id": "SKIP-003",
+      "capabilityIds": ["explorer.blockscout-internal-transactions"],
+      "scope": "Blockscout internal-transaction fetcher enablement.",
+      "rationale": "The pinned fetcher cannot consume the observed Cosmos EVM trace envelope without an adapter or upstream change.",
+      "risk": "Internal transactions remain absent from the explorer even though base indexing works.",
+      "ownerIssues": [112],
+      "evidenceIds": ["EVD-BLOCKSCOUT"],
+      "documentationPaths": [
+        "./README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "explorer": "Run base indexing with the fetcher disabled and label internal transactions unsupported.",
+        "sdk": "Use direct canonical RPC data rather than inventing explorer-derived internal transfers."
+      },
+      "exitCriteria": "Issue #112 pins and tests an adapter, fork, or upstream release whose trace envelope is compatible."
+    },
+    {
+      "id": "SKIP-004",
+      "capabilityIds": ["torium.cosmos-rest-grpc-extension-contract"],
+      "scope": "Stable Torium-specific Cosmos REST and gRPC extension APIs.",
+      "rationale": "Upstream endpoints are available for local development, but #131 must select and version the public extension contract before the SDK can promise it.",
+      "risk": "Consumers that bind directly to unspecified endpoints can break during dependency upgrades.",
+      "ownerIssues": [131],
+      "evidenceIds": ["EVD-BASELINE-MATRIX", "EVD-PROTOCOL-CONTRACT"],
+      "documentationPaths": [
+        "./README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Reject unspecified extension methods and keep Ethereum JSON-RPC compatibility separate.",
+        "protocol": "Version only the endpoints explicitly selected by #131."
+      },
+      "exitCriteria": "Issue #131 publishes a versioned method/message contract with compatibility tests and migration policy."
+    },
+    {
+      "id": "SKIP-005",
+      "capabilityIds": ["protocol.ibc-and-bridges"],
+      "scope": "IBC modules, ICS precompiles, bridge contracts, and cross-chain SDK APIs.",
+      "rationale": "Cross-chain behavior is outside the current standalone EVM L1 and SDK deliverable.",
+      "risk": "There is no cross-chain transport or asset-safety guarantee in the current protocol.",
+      "ownerIssues": [107],
+      "evidenceIds": ["EVD-BASELINE-MATRIX", "EVD-PROTOCOL-CONTRACT"],
+      "documentationPaths": [
+        "./README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Omit cross-chain APIs and reject unsupported requests.",
+        "protocol": "Keep IBC modules and ICS precompiles inactive."
+      },
+      "exitCriteria": "A separately approved bridge or IBC roadmap defines trust, protocol, conformance, and SDK contracts."
+    },
+    {
+      "id": "SKIP-006",
+      "capabilityIds": ["rpc.operator-profile-debug-trace-methods"],
+      "scope": "Canonical live success-envelope testing for a dedicated operator/debug RPC profile.",
+      "rationale": "The current localnet exposes only the hardened default wallet/SDK profile; the exact engine methods remain proven by the pinned #89 baseline but no named operator profile exists yet.",
+      "risk": "Explorer trace ingestion cannot be claimed against canonical Torium endpoints until its separately bounded profile is executable.",
+      "ownerIssues": [112, 114],
+      "evidenceIds": ["EVD-RPC-COMPATIBILITY", "EVD-TORIUM-RPC"],
+      "documentationPaths": [
+        "./README.md",
+        "../tests/rpc/README.md",
+        "../../docs/changes/2026-07-15-evm-conformance-registry.md"
+      ],
+      "downstreamImpact": {
+        "sdk": "Return profile-specific unsupported capability for default endpoints.",
+        "explorer": "Do not enable internal tracing or trace-dependent indexing against the default profile.",
+        "operator": "Issue #114 must define limits and exposure before debug success tests move into the canonical lane."
+      },
+      "exitCriteria": "Issues #112 and #114 define a named operator profile and its trace success/error envelopes pass against canonical Torium localnet."
+    }
+  ],
+  "sdkContract": {
+    "maskingForbidden": true,
+    "unknownCapabilityBehavior": "reject",
+    "nonSupportedStateBehavior": "surface-capability-or-reject-operation",
+    "evidenceRequiredForStateChange": true,
+    "consumerIssues": [131, 132]
+  }
+}

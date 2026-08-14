@@ -1,0 +1,54 @@
+---
+title: Installation and compatibility
+description: Install the SDK from npm and verify the pinned chain and viem versions it targets.
+docId: sdk-installation
+version: v0
+status: foundation
+ownerIssue: 141
+sourceOfTruth: packages/torium-sdk/package.json
+sourceStatus: existing
+---
+
+Install the SDK and its viem peer dependency:
+
+```bash
+pnpm add @torium-network/sdk viem
+```
+
+The package is published as `@torium-network/sdk` on the public npm registry. Verify the scope
+before installing — do not substitute an unofficial package with a similar name. viem is a peer
+dependency (`>=2.55.2 <3`); your application installs it directly so your lockfile pins one copy.
+
+## Runtime support
+
+The package declares Node `>=22.23.1 <23` or `>=24 <25` and ships dual ESM/CommonJS builds with
+full type definitions. Browser bundles (Vite) and React Native/Hermes are covered by the release
+verification suite; see [runtimes](/v0/sdk/errors-and-runtimes) for the exact boundaries.
+
+## Compatibility tuple
+
+| Surface | v0 value | Status |
+| --------------------- | ------------------------------- | ---------------------------- |
+| SDK | `@torium-network/sdk@0.1.0` | published |
+| viem | `>=2.55.2 <3` (`2.55.2` tested) | pinned baseline |
+| chain manifest | `0.2.0` | testnet + localnet metadata |
+| testnet EVM chain ID | `1414484564` (`0x544f5254`) | public testnet |
+| localnet EVM chain ID | `1414484556` (`0x544f524c`) | local development |
+| contracts | registry `0.1.0` | pre-deployment |
+
+Each docs version pins exactly one SDK version. When a new SDK release changes behavior, a new
+docs tuple is published alongside it — see [Releases](/v0/releases).
+
+## Building from source
+
+The SDK lives in the Torium repository. From a checkout:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm --filter @torium-network/sdk build
+pnpm --filter @torium-network/sdk validate
+```
+
+`validate` builds and packs the exact tarball, installs it into clean ESM and CommonJS fixtures,
+type-checks the public imports, and checks the generated API report — the same gate the published
+package passed.

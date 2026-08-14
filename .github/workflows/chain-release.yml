@@ -1,0 +1,56 @@
+# Torium reproducible release build (#122). Dispatch-only: it never runs on
+# push or pull_request, consumes only gated inputs (clean checkout of an
+# already-gated commit), and publishes NOTHING — the output is uploaded as a
+# retention-limited workflow artifact for inspection.
+name: chain-release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version string (stays 0.1.0-local.* until a public release decision)"
+        required: false
+        default: "0.1.0-local.1"
+      platforms:
+        description: "Comma-separated platforms"
+        required: false
+        default: "linux/amd64"
+      reproducibility_check:
+        description: "Rebuild with --no-cache and require identical SHA256SUMS"
+        required: false
+        default: "true"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Validate release gates and contracts
+        run: |
+          node chain/releases/validate-release-pipeline-v0.mjs
+          node chain/releases/generate-network-artifacts-v0.mjs --check
+          node chain/scripts/scan-prohibited-secrets.mjs --self-test
+
+      - name: Reproducible build with SBOM, provenance, and verification
+        run: |
+          extra=""
+          if [ "${{ inputs.reproducibility_check }}" = "true" ]; then
+            extra="--reproducibility-check"
+          fi
+          ./chain/releases/build-release-v0.sh \
+            --version "${{ inputs.version }}" \
+            --platforms "${{ inputs.platforms }}" \
+            --output "$RUNNER_TEMP/release" \
+            $extra
+
+      - name: Upload local-only release artifacts (no publication)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: torium-chain-release-${{ inputs.version }}
+          path: ${{ runner.temp }}/release
+          retention-days: 7

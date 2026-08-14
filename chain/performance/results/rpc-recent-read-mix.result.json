@@ -1,0 +1,252 @@
+{
+  "schemaVersion": 1,
+  "resultVersion": "0.1.0",
+  "status": "complete-local",
+  "planVersion": "0.1.0-local.2",
+  "provenance": {
+    "gitCommit": "a163bd0c380ccde6c89b682c3a4186a1e0fcb7c9",
+    "dirtyWorktree": false,
+    "patchSha256": null,
+    "os": "Darwin 25.3.0",
+    "architecture": "arm64",
+    "cpuModel": "Apple M5 Pro",
+    "logicalCores": 15,
+    "memoryBytes": 25769803776,
+    "containerRuntime": "Docker version 29.4.0, build 9d7ad9f",
+    "composeVersion": "5.1.2",
+    "executionBackend": "container",
+    "virtualization": "docker-desktop-linux-vm",
+    "vmAllocation": {
+      "cpuCores": 15,
+      "memoryBytes": 8321011712,
+      "diskBytes": 977843695616
+    },
+    "filesystem": "host-apfs/vm-overlay2",
+    "statePath": "chain/localnet/.state/container",
+    "toolchainSha256": "7429c9d76ac7ea3a9ebec540a53690872e929e8fdd9359631b8b37c2f6879cc8",
+    "runnerVersion": "0.1.0",
+    "runnerSha256": "484437eb7a27c30b8d4fea9001d05c5be7dd6d3d5311817aee282859dd7c54cc",
+    "binaryIdentity": "toriumd (toriumd:local sha256:500ae93cbab1c144313c8a8324c309cfdf738a02f60d47c15852eb9907909c01)",
+    "binarySha256": "9da6f30d0d8387a5a9a7fdc1dc871e46016881d92080790e1fc07bda21c994ae",
+    "genesisSha256": "86d77e6e1907e10e92217e1484cbf89e224b03bacdbf67f441b3307502a96808",
+    "effectiveConfigSha256": "da0ed2b89cbb521d2256cd60015e148188debd8c2963613925d799cb2cfb53ab",
+    "datasetSha256": "c11c6afbfc82e5961a92a6b4534718626dee9c65e0eeaa0f141deaa0386eabf9",
+    "workload": {
+      "id": "rpc-recent-read-mix",
+      "version": 1,
+      "definitionSha256": "85081c4613e2876cbcdaddb3eb20ca0901e4a2d5f42ecf6f3076c8e144496645",
+      "seed": 20260729,
+      "operationCount": 105,
+      "concurrency": 1,
+      "warmupCount": 0,
+      "repetition": 1
+    }
+  },
+  "run": {
+    "startedAt": "2026-07-29T22:17:32.039Z",
+    "endedAt": "2026-07-29T22:17:32.152Z",
+    "startHeight": 1492,
+    "endHeight": 1494,
+    "cosmosChainId": "torium-localnet-1",
+    "evmChainId": 1414484556,
+    "topology": "canonical-four-validator-combined-localnet"
+  },
+  "cases": [
+    {
+      "caseType": "rpc",
+      "caseId": "rpc-recent-read-mix-run-1",
+      "workloadId": "rpc-recent-read-mix",
+      "elapsedMilliseconds": 113,
+      "httpRequestCount": 6,
+      "jsonRpcCallCount": 105,
+      "httpRequestsPerSecond": 53.097345,
+      "jsonRpcCallsPerSecond": 929.20354,
+      "latencyMilliseconds": {
+        "sampleCount": 6,
+        "minimum": 1.149375,
+        "p50": 2.207167,
+        "p95": 101.942584,
+        "maximum": 101.942584,
+        "mean": 18.680556
+      },
+      "limitations": [
+        "exploratory-local-summary-only",
+        "no-p99-or-formal-confidence-claim"
+      ]
+    }
+  ],
+  "chainMetrics": {
+    "blockSampleCount": 0,
+    "averageBlockGasUsed": null,
+    "maximumBlockGasUsed": null,
+    "targetGasUtilization": null,
+    "limitGasUtilization": null,
+    "commitIntervalMilliseconds": {
+      "sampleCount": 0,
+      "minimum": null,
+      "p50": null,
+      "p95": null,
+      "maximum": null,
+      "mean": null
+    },
+    "blockRangeContiguous": true,
+    "finalityModel": "cometbft-committed-block",
+    "jsonRpcFinalizedTag": "latest-committed-cometbft-state",
+    "jsonRpcSafeStateQueries": "unsupported-until-conformance-proves-otherwise",
+    "rpcAcceptanceGuaranteesRetention": false
+  },
+  "rpcMetrics": {
+    "httpRequestCount": 6,
+    "httpSuccessCount": 6,
+    "httpErrorCount": 0,
+    "httpTimeoutCount": 0,
+    "jsonRpcCallCount": 105,
+    "callSuccessCount": 105,
+    "callErrorCount": 0,
+    "callTimeoutCount": 0,
+    "batchCount": 1,
+    "perMethodCounts": [
+      {
+        "method": "eth_feeHistory",
+        "count": 21
+      },
+      {
+        "method": "eth_getBalance",
+        "count": 21
+      },
+      {
+        "method": "eth_getBlockByNumber",
+        "count": 21
+      },
+      {
+        "method": "eth_getLogs",
+        "count": 21
+      },
+      {
+        "method": "eth_getTransactionReceipt",
+        "count": 21
+      }
+    ],
+    "responseBytes": 67227,
+    "latencyMilliseconds": {
+      "sampleCount": 6,
+      "minimum": 1.149375,
+      "p50": 2.207167,
+      "p95": 101.942584,
+      "maximum": 101.942584,
+      "mean": 18.680556
+    }
+  },
+  "resourceDeltas": [
+    {
+      "component": "validator-0",
+      "cpuPercentage": 2.28,
+      "rssBytes": 254384538,
+      "networkRxBytes": 100000,
+      "networkTxBytes": 200000,
+      "blockReadBytes": 0,
+      "blockWriteBytes": 0,
+      "nodeHomeBytes": 0
+    },
+    {
+      "component": "validator-1",
+      "cpuPercentage": 2.45,
+      "rssBytes": 208037478,
+      "networkRxBytes": 100000,
+      "networkTxBytes": 100000,
+      "blockReadBytes": 0,
+      "blockWriteBytes": 0,
+      "nodeHomeBytes": 0
+    },
+    {
+      "component": "validator-2",
+      "cpuPercentage": 2.743333,
+      "rssBytes": 224500122,
+      "networkRxBytes": 100000,
+      "networkTxBytes": 0,
+      "blockReadBytes": 0,
+      "blockWriteBytes": 0,
+      "nodeHomeBytes": 0
+    },
+    {
+      "component": "validator-3",
+      "cpuPercentage": 2.213333,
+      "rssBytes": 216006656,
+      "networkRxBytes": 100000,
+      "networkTxBytes": 100000,
+      "blockReadBytes": 0,
+      "blockWriteBytes": 0,
+      "nodeHomeBytes": 0
+    }
+  ],
+  "stateGrowth": {
+    "nodeHomeBytesDelta": 0,
+    "databaseBytesDelta": null,
+    "storageGrowthBytesPerDay": null,
+    "indexerLagBlocks": null,
+    "diskIops": null,
+    "diskIoLatencyMilliseconds": null
+  },
+  "observations": {
+    "bottlenecks": [
+      {
+        "component": "validator-0",
+        "signal": "single published RPC endpoint serves all workload traffic",
+        "evidence": "workloads target 127.0.0.1:8545, which only validator-0 publishes; the other validators serve consensus only",
+        "severity": "informational"
+      }
+    ],
+    "failureCliffs": [],
+    "regressionEvaluation": null
+  },
+  "artifacts": [
+    {
+      "kind": "raw-rpc-samples",
+      "relativePath": "chain/performance/results/artifacts/rpc-recent-read-mix/raw-rpc-samples.json",
+      "sha256": "39487a7bc430d2416e5daf99d81ca88a2172112aaeb64b9004156dc5a6911b82",
+      "containsSecrets": false
+    },
+    {
+      "kind": "resource-samples",
+      "relativePath": "chain/performance/results/artifacts/rpc-recent-read-mix/resource-samples.json",
+      "sha256": "551fbabd061d2a07a2d92c21b3908feb281cf6d01e6786a14a6129045d45ec0d",
+      "containsSecrets": false
+    },
+    {
+      "kind": "dataset",
+      "relativePath": "chain/performance/results/artifacts/rpc-recent-read-mix/dataset.json",
+      "sha256": "c11c6afbfc82e5961a92a6b4534718626dee9c65e0eeaa0f141deaa0386eabf9",
+      "containsSecrets": false
+    },
+    {
+      "kind": "effective-config",
+      "relativePath": "chain/performance/results/artifacts/rpc-recent-read-mix/validator-0-effective-config.toml",
+      "sha256": "da0ed2b89cbb521d2256cd60015e148188debd8c2963613925d799cb2cfb53ab",
+      "containsSecrets": false
+    },
+    {
+      "kind": "runner",
+      "relativePath": "chain/performance/run-local-baselines.mjs",
+      "sha256": "484437eb7a27c30b8d4fea9001d05c5be7dd6d3d5311817aee282859dd7c54cc",
+      "containsSecrets": false
+    },
+    {
+      "kind": "genesis",
+      "relativePath": "chain/genesis/localnet/genesis.json",
+      "sha256": "86d77e6e1907e10e92217e1484cbf89e224b03bacdbf67f441b3307502a96808",
+      "containsSecrets": false
+    }
+  ],
+  "capacityClaims": {
+    "public": false,
+    "safeTps": null,
+    "safeRpcRequestsPerSecond": null,
+    "billOfMaterialsReady": false
+  },
+  "limitations": [
+    "single-run local smoke on a Docker Desktop VM; no formal confidence interval, no p99, no capacity claim",
+    "commit intervals derive from EVM block timestamps with one-second resolution",
+    "resource deltas come from docker stats sampling (~250ms cadence) and du-based node-home byte deltas",
+    "dirtyWorktree reflects tracked modifications only; freshly generated result artifacts are untracked at run time"
+  ]
+}

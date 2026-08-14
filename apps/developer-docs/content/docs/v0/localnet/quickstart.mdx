@@ -1,0 +1,108 @@
+---
+title: Localnet quickstart
+description: Start, inspect, stop and reset the canonical four-validator Torium network from a clean checkout.
+docId: localnet-quickstart
+version: v0
+status: foundation
+ownerIssue: 140
+sourceOfTruth: chain/localnet/torium-localnet
+sourceStatus: existing
+---
+
+## Prerequisites
+
+The default container path requires:
+
+- Git 2.40 or newer;
+- Docker Engine or Docker Desktop 27 or newer with Compose v2 2.30 or newer;
+- Node.js 22.23.1, the canonical readiness/bootstrap baseline;
+- `make`;
+- `curl` and `jq` for the transaction inspection path;
+- either `shasum` or `sha256sum` for the full clean-checkout E2E command;
+- enough disk space to build the pinned chain image and retain four validator databases.
+
+Host Go is not required for the container backend. The first build may download digest-pinned
+container images; after that, the running chain needs no Torium backend, internet RPC or hosted
+service. On macOS, allow the repository path in Docker Desktop file sharing. On Linux, run Docker in
+a configuration where your user can access it.
+
+Confirm the required tools:
+
+```bash
+node chain/scripts/check-toolchain.mjs
+git --version
+docker version
+docker compose version
+node --version
+make --version
+curl --version
+jq --version
+```
+
+## Start and verify readiness
+
+From the repository root:
+
+```bash
+./chain/localnet/torium-localnet start
+```
+
+The command waits for all four validators, at least 67 voting power, EVM chain ID `1414484556`, an
+increasing block height and the loopback faucet. It prints the genesis checksum, endpoints, quorum,
+per-validator health and public funded fixture addresses. For automation:
+
+```bash
+./chain/localnet/torium-localnet status --json
+```
+
+For a clean-start assertion, capture and inspect the machine-readable report:
+
+```bash
+./chain/localnet/torium-localnet status --json > /tmp/torium-localnet-status.json
+jq -e '
+  .ready == true and
+  .allValidatorsReady == true and
+  .chain.cosmosChainID == "torium-localnet-1" and
+  .chain.evmChainID == 1414484556 and
+  .consensus.availableVotingPower == 100 and
+  (.validators | length) == 4
+' /tmp/torium-localnet-status.json
+```
+
+The JSON health state is one of `booting`, `syncing`, `ready`, `degraded` or `unhealthy`. A degraded
+75-power network remains live; a node-specific status fails when that node is unavailable.
+
+## Observe validator behavior
+
+```bash
+./chain/localnet/torium-localnet logs --node validator-1
+./chain/localnet/torium-localnet stop --node validator-3
+./chain/localnet/torium-localnet status
+./chain/localnet/torium-localnet restart --node validator-3
+```
+
+Stopping one validator preserves quorum. Do not stop a second validator unless you intentionally
+want to observe a safe consensus halt.
+
+## Stop, resume and reset
+
+```bash
+./chain/localnet/torium-localnet stop
+./chain/localnet/torium-localnet start
+```
+
+This resumes preserved state. To destroy local chain data, use the bounded controller rather than
+deleting individual database or signer files:
+
+```bash
+./chain/localnet/torium-localnet reset
+```
+
+The interactive command names the `torium-localnet-1` / `0x544f524c` replay domain and requires
+typing `RESET`. `reset --yes` is for reviewed non-interactive automation only. Separate client
+keyrings and ignored recovery archives may require their own deliberate cleanup. Discard stale wallet
+nonce, transaction-history and chain-state caches after reset; old local signatures may replay when
+the replacement state permits it.
+
+The raw-binary debugger profile requires native Go 1.25.9 and a C toolchain. It is an advanced
+fallback documented in `chain/localnet/README.md`, not a second network topology.

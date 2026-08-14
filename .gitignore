@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Builds
+dist/
+out/
+.next/
+.source/
+.turbo/
+*.tsbuildinfo
+
+# Environment — never commit real env files
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+*.log
+
+# Go
+chain/**/bin/
+
+# Foundry
+contracts/cache/
+contracts/out/

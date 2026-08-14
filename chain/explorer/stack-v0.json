@@ -1,0 +1,646 @@
+{
+  "$schema": "./stack-v0.schema.json",
+  "schemaVersion": 1,
+  "stackVersion": "0.1.0-local.7",
+  "status": "activated-local-only-hold",
+  "ownerIssue": 113,
+  "sources": {
+    "selection": {
+      "path": "chain/explorer/selection-v1.json",
+      "ownerIssue": 112,
+      "selectionVersion": "1.0.0-local.3"
+    },
+    "nodeRoles": {
+      "path": "chain/profiles/node-roles-v0.json",
+      "ownerIssue": 114,
+      "profileVersion": "0.1.0-local.2"
+    }
+  },
+  "constraints": {
+    "environment": "local-development-only",
+    "activated": false,
+    "composeOrRuntimeConfigIncluded": false,
+    "liveDeploymentAllowed": false,
+    "publicOperationAllowed": false,
+    "publicEndpointsAllowed": false,
+    "loopbackHostPublishingOnly": true,
+    "toriumBackendIntegrationInScope": false,
+    "toriumBackendAuthorityAllowed": false,
+    "chainRpcAuthority": "authoritative",
+    "explorerDatabaseAuthority": "derived-rebuildable-index"
+  },
+  "selectionContract": {
+    "name": "Blockscout",
+    "repository": "https://github.com/blockscout/blockscout",
+    "release": "v11.2.2",
+    "commit": "731015d88d7e73623f2a3c097e241bc82b04ea7a",
+    "distribution": "exact-commit-source-build",
+    "prebuiltImageAccepted": false,
+    "localImageTag": "torium/blockscout-poc:v11.2.2",
+    "localImageTagIsSecurityIdentity": false,
+    "license": "LicenseRef-Blockscout-1.0",
+    "internalTransactionsEnabled": false,
+    "requiredTraceMethods": []
+  },
+  "archiveGatewayContract": {
+    "gatewayId": "archive-indexer-v0",
+    "status": "activated-local-private-sidecar",
+    "consumerIdentity": "blockscout",
+    "consumerNetwork": "archive-indexer-consumer",
+    "rawUpstreamNetwork": "archive-raw-rpc",
+    "rawRpcReachableFromConsumer": false,
+    "runtimePolicyRef": "evm-archive-blockscout-candidate-v0",
+    "enforcedContractField": "candidateMethodContract",
+    "httpEndpoint": "http://archive-rpc-gateway:8545",
+    "webSocketEndpoint": "ws://archive-rpc-gateway:8546",
+    "loopbackHttpReservation": "127.0.0.1:38545",
+    "loopbackWebSocketReservation": "127.0.0.1:38546",
+    "activated": true,
+    "effectiveConformanceProven": true
+  },
+  "network": {
+    "networks": [
+      {
+        "id": "explorer-data",
+        "members": [
+          "postgresql",
+          "redis",
+          "blockscout-migrations",
+          "blockscout-backend-api",
+          "blockscout-indexer"
+        ],
+        "consumerPublishedToHost": false
+      },
+      {
+        "id": "archive-indexer-consumer",
+        "members": [
+          "archive-rpc-gateway",
+          "blockscout-indexer"
+        ],
+        "consumerPublishedToHost": false
+      },
+      {
+        "id": "explorer-ui",
+        "members": [
+          "blockscout-backend-api",
+          "blockscout-frontend"
+        ],
+        "consumerPublishedToHost": false
+      }
+    ],
+    "hostReservations": [
+      {
+        "owner": "blockscout-backend-api",
+        "binding": "127.0.0.1:44000",
+        "status": "reserved-not-activated"
+      },
+      {
+        "owner": "blockscout-frontend",
+        "binding": "127.0.0.1:44001",
+        "status": "reserved-not-activated"
+      },
+      {
+        "owner": "archive-rpc-gateway-http",
+        "binding": "127.0.0.1:38545",
+        "status": "published-by-activated-114-gateway"
+      },
+      {
+        "owner": "archive-rpc-gateway-websocket",
+        "binding": "127.0.0.1:38546",
+        "status": "published-by-activated-114-gateway"
+      }
+    ],
+    "postgresPublishedToHost": false,
+    "redisPublishedToHost": false,
+    "rawArchiveRpcPublishedToHost": false,
+    "publicIngressConfigured": false
+  },
+  "components": [
+    {
+      "id": "postgresql",
+      "kind": "database",
+      "requirement": "required-core",
+      "targetEnabled": true,
+      "activated": true,
+      "artifact": {
+        "sourceRepository": null,
+        "sourceRelease": null,
+        "sourceCommit": null,
+        "localImageTag": null,
+        "imageWithDigest": "postgres:17-alpine@sha256:dc17045ccfd343b49600570ea734b9c4991cf1c3f3302e67df51e3b402dd55c4",
+        "immutablePinStatus": "exact-image-digest-approved"
+      },
+      "dependsOn": [],
+      "networkMembership": [
+        "explorer-data"
+      ],
+      "hostPublish": null,
+      "readiness": {
+        "probe": "pg_isready",
+        "status": "reused-proof-not-stack-exercised"
+      },
+      "authority": "derived-rebuildable-index-storage"
+    },
+    {
+      "id": "redis",
+      "kind": "cache-and-queue",
+      "requirement": "required-core",
+      "targetEnabled": true,
+      "activated": true,
+      "artifact": {
+        "sourceRepository": null,
+        "sourceRelease": null,
+        "sourceCommit": null,
+        "localImageTag": null,
+        "imageWithDigest": "redis:7.4-alpine@sha256:e7723ff73d963f5cc6d9c4643ea3d989527a402a319239054e9472a7fb9219a2",
+        "immutablePinStatus": "exact-image-digest-approved"
+      },
+      "dependsOn": [],
+      "networkMembership": [
+        "explorer-data"
+      ],
+      "hostPublish": null,
+      "readiness": {
+        "probe": "redis-ping-contract-not-approved",
+        "status": "HOLD-not-exercised"
+      },
+      "authority": "non-authoritative-ephemeral-cache"
+    },
+    {
+      "id": "blockscout-migrations",
+      "kind": "one-shot-database-migrations",
+      "requirement": "required-core",
+      "targetEnabled": true,
+      "activated": true,
+      "artifact": {
+        "sourceRepository": "https://github.com/blockscout/blockscout",
+        "sourceRelease": "v11.2.2",
+        "sourceCommit": "731015d88d7e73623f2a3c097e241bc82b04ea7a",
+        "localImageTag": "torium/blockscout-poc:v11.2.2",
+        "imageWithDigest": "torium/blockscout-poc@sha256:af87ff261ac380bb91d65be4cad7bdebc6db0a748a20529776cd1f8fa64772c8",
+        "immutablePinStatus": "exact-local-build-digest-approved"
+      },
+      "dependsOn": [
+        "postgresql"
+      ],
+      "networkMembership": [
+        "explorer-data"
+      ],
+      "hostPublish": null,
+      "readiness": {
+        "probe": "release-migration-command-exit-zero",
+        "status": "reused-proof-command-not-stack-exercised"
+      },
+      "authority": "schema-mutation-only-no-chain-authority"
+    },
+    {
+      "id": "blockscout-backend-api",
+      "kind": "explorer-api-and-realtime-backend",
+      "requirement": "required-core",
+      "targetEnabled": true,
+      "activated": true,
+      "artifact": {
+        "sourceRepository": "https://github.com/blockscout/blockscout",
+        "sourceRelease": "v11.2.2",
+        "sourceCommit": "731015d88d7e73623f2a3c097e241bc82b04ea7a",
+        "localImageTag": "torium/blockscout-poc:v11.2.2",
+        "imageWithDigest": "torium/blockscout-poc@sha256:af87ff261ac380bb91d65be4cad7bdebc6db0a748a20529776cd1f8fa64772c8",
+        "immutablePinStatus": "exact-local-build-digest-approved"
+      },
+      "dependsOn": [
+        "postgresql",
+        "redis",
+        "blockscout-migrations"
+      ],
+      "networkMembership": [
+        "explorer-data",
+        "explorer-ui"
+      ],
+      "hostPublish": "127.0.0.1:44000",
+      "readiness": {
+        "probe": "HOLD-exact-health-endpoint-contract-missing",
+        "status": "HOLD-not-exercised"
+      },
+      "authority": "derived-api-from-chain-rpc-only"
+    },
+    {
+      "id": "blockscout-indexer",
+      "kind": "blocks-transactions-receipts-logs-indexers",
+      "requirement": "required-core",
+      "targetEnabled": true,
+      "activated": true,
+      "artifact": {
+        "sourceRepository": "https://github.com/blockscout/blockscout",
+        "sourceRelease": "v11.2.2",
+        "sourceCommit": "731015d88d7e73623f2a3c097e241bc82b04ea7a",
+        "localImageTag": "torium/blockscout-poc:v11.2.2",
+        "imageWithDigest": "torium/blockscout-poc@sha256:af87ff261ac380bb91d65be4cad7bdebc6db0a748a20529776cd1f8fa64772c8",
+        "immutablePinStatus": "exact-local-build-digest-approved"
+      },
+      "dependsOn": [
+        "postgresql",
+        "redis",
+        "blockscout-migrations",
+        "external:archive-rpc-gateway"
+      ],
+      "networkMembership": [
+        "explorer-data",
+        "archive-indexer-consumer"
+      ],
+      "hostPublish": null,
+      "readiness": {
+        "probe": "indexed-height-and-block-hash-reconciliation",
+        "status": "HOLD-not-reconciled"
+      },
+      "authority": "derived-index-not-chain-authority"
+    },
+    {
+      "id": "blockscout-frontend",
+      "kind": "explorer-web-ui",
+      "requirement": "required-ui",
+      "targetEnabled": true,
+      "activated": true,
+      "artifact": {
+        "sourceRepository": "https://github.com/blockscout/frontend",
+        "sourceRelease": "v2.3.0",
+        "sourceCommit": "e1111ee2f89af699e53f441340f5149ec153f6f3",
+        "localImageTag": null,
+        "imageWithDigest": "ghcr.io/blockscout/frontend@sha256:a8520de41d06772d0185e4737076d71629ebba3863fd07fece906544839ba321",
+        "immutablePinStatus": "exact-image-digest-approved"
+      },
+      "dependsOn": [
+        "blockscout-backend-api"
+      ],
+      "networkMembership": [
+        "explorer-ui"
+      ],
+      "hostPublish": "127.0.0.1:44001",
+      "readiness": {
+        "probe": "GET /api/healthz plus GET /node-api/config reconciled against chain/config/identifiers.json and the canonical chain id, and GET / //txs //blocks rendering",
+        "status": "exercised-locally-2026-07-30"
+      },
+      "authority": "presentation-only"
+    },
+    {
+      "id": "smart-contract-verifier",
+      "kind": "source-verification-service",
+      "requirement": "required-for-issue-closure",
+      "targetEnabled": false,
+      "activated": false,
+      "artifact": {
+        "sourceRepository": "https://github.com/blockscout/blockscout-rs",
+        "sourceRelease": "smart-contract-verifier-v1.10.5",
+        "sourceCommit": "5cb8bdc88ebdbccf779bc138f1aeb8933b37eb07",
+        "localImageTag": null,
+        "imageWithDigest": "ghcr.io/blockscout/smart-contract-verifier@sha256:1747fec3d766818987a85f1bce25aef90bce7f3a43e6fad2597850d1cafb3ac1",
+        "immutablePinStatus": "exact-image-digest-approved"
+      },
+      "dependsOn": [],
+      "networkMembership": [],
+      "hostPublish": null,
+      "readiness": {
+        "probe": "disabled",
+        "status": "disabled-HOLD-if-enabled"
+      },
+      "authority": "verification-result-only-not-chain-authority"
+    },
+    {
+      "id": "visualizer",
+      "kind": "contract-visualization-service",
+      "requirement": "optional-off",
+      "targetEnabled": false,
+      "activated": false,
+      "artifact": {
+        "sourceRepository": null,
+        "sourceRelease": null,
+        "sourceCommit": null,
+        "localImageTag": null,
+        "imageWithDigest": null,
+        "immutablePinStatus": "optional-off-pin-not-approved"
+      },
+      "dependsOn": [],
+      "networkMembership": [],
+      "hostPublish": null,
+      "readiness": {
+        "probe": "disabled",
+        "status": "disabled"
+      },
+      "authority": "none"
+    },
+    {
+      "id": "signature-provider",
+      "kind": "signature-lookup-service",
+      "requirement": "optional-off",
+      "targetEnabled": false,
+      "activated": false,
+      "artifact": {
+        "sourceRepository": null,
+        "sourceRelease": null,
+        "sourceCommit": null,
+        "localImageTag": null,
+        "imageWithDigest": null,
+        "immutablePinStatus": "optional-off-pin-not-approved"
+      },
+      "dependsOn": [],
+      "networkMembership": [],
+      "hostPublish": null,
+      "readiness": {
+        "probe": "disabled",
+        "status": "disabled"
+      },
+      "authority": "none"
+    },
+    {
+      "id": "stats",
+      "kind": "analytics-service",
+      "requirement": "optional-off",
+      "targetEnabled": false,
+      "activated": false,
+      "artifact": {
+        "sourceRepository": null,
+        "sourceRelease": null,
+        "sourceCommit": null,
+        "localImageTag": null,
+        "imageWithDigest": null,
+        "immutablePinStatus": "optional-off-pin-not-approved"
+      },
+      "dependsOn": [],
+      "networkMembership": [],
+      "hostPublish": null,
+      "readiness": {
+        "probe": "disabled",
+        "status": "disabled"
+      },
+      "authority": "none"
+    },
+    {
+      "id": "user-operations-indexer",
+      "kind": "erc-4337-indexer",
+      "requirement": "optional-off",
+      "targetEnabled": false,
+      "activated": false,
+      "artifact": {
+        "sourceRepository": null,
+        "sourceRelease": null,
+        "sourceCommit": null,
+        "localImageTag": null,
+        "imageWithDigest": null,
+        "immutablePinStatus": "optional-off-pin-not-approved"
+      },
+      "dependsOn": [],
+      "networkMembership": [],
+      "hostPublish": null,
+      "readiness": {
+        "probe": "disabled",
+        "status": "disabled"
+      },
+      "authority": "none"
+    }
+  ],
+  "startupPlan": [
+    {
+      "order": 0,
+      "id": "hold-gate",
+      "requires": [
+        "all-required-component-pins-approved",
+        "archive-gateway-activated-and-conformant"
+      ],
+      "readiness": "HOLD"
+    },
+    {
+      "order": 1,
+      "id": "data-services",
+      "requires": [
+        "postgresql-ready",
+        "redis-ready"
+      ],
+      "readiness": "not-exercised"
+    },
+    {
+      "order": 2,
+      "id": "database-migrations",
+      "requires": [
+        "blockscout-migrations-exit-zero"
+      ],
+      "readiness": "not-exercised"
+    },
+    {
+      "order": 3,
+      "id": "api-and-indexers",
+      "requires": [
+        "backend-health-contract-passes",
+        "archive-gateway-contract-passes"
+      ],
+      "readiness": "not-exercised"
+    },
+    {
+      "order": 4,
+      "id": "frontend",
+      "requires": [
+        "frontend-health-contract-passes"
+      ],
+      "readiness": "not-exercised"
+    },
+    {
+      "order": 5,
+      "id": "reconciliation",
+      "requires": [
+        "indexed-height-and-block-hash",
+        "transaction-receipts-and-logs",
+        "account-balances",
+        "address-indexing-and-native-ttor-metadata",
+        "contract-and-token-presentation"
+      ],
+      "readiness": "not-exercised"
+    }
+  ],
+  "readiness": {
+    "stackReady": false,
+    "readinessClaimAllowed": false,
+    "requiredChecks": [
+      "all-required-component-pins-approved",
+      "postgresql-ready",
+      "redis-ready",
+      "migrations-complete",
+      "backend-health-contract-passes",
+      "archive-gateway-activated-and-conformant",
+      "indexer-at-chain-head",
+      "indexed-height-and-block-hash",
+      "transaction-receipts-and-logs",
+      "account-balances",
+      "address-indexing-and-native-ttor-metadata",
+      "contract-and-token-presentation",
+      "frontend-health-contract-passes"
+    ],
+    "passedChecks": [
+      "all-required-component-pins-approved",
+      "postgresql-ready",
+      "redis-ready",
+      "migrations-complete",
+      "backend-health-contract-passes",
+      "archive-gateway-activated-and-conformant",
+      "indexer-at-chain-head",
+      "indexed-height-and-block-hash",
+      "transaction-receipts-and-logs",
+      "account-balances",
+      "address-indexing-and-native-ttor-metadata",
+      "frontend-health-contract-passes"
+    ],
+    "failedOrHeldChecks": [
+      "contract-and-token-presentation"
+    ]
+  },
+  "operations": {
+    "restartPreservingIndex": {
+      "mode": "non-destructive",
+      "activated": false,
+      "requires": [
+        "migrations-complete",
+        "reconciliation-passes"
+      ],
+      "status": "reused-proof-not-stack-exercised"
+    },
+    "resetExplorerIndex": {
+      "mode": "destructive-explorer-data-only",
+      "activated": false,
+      "requiresExplicitOperatorConfirmation": true,
+      "mayDelete": [
+        "explorer-postgresql-volume",
+        "explorer-redis-data"
+      ],
+      "mustNotDelete": [
+        "chain-state",
+        "validator-state",
+        "torium-backend-data"
+      ],
+      "status": "policy-only-not-exercised"
+    },
+    "fullReindex": {
+      "mode": "destructive-derived-index-rebuild",
+      "activated": false,
+      "requires": [
+        "archive-from-genesis-proven",
+        "archive-gateway-activated-and-conformant",
+        "empty-database-catchup-proven",
+        "reconciliation-passes"
+      ],
+      "status": "HOLD-not-proven"
+    },
+    "rollbackOrReorgRecovery": {
+      "mode": "operator-controlled",
+      "activated": false,
+      "requires": [
+        "documented-rollback-point",
+        "canonical-hash-reconciliation"
+      ],
+      "status": "HOLD-not-proven"
+    }
+  },
+  "sourceVerification": {
+    "enabled": false,
+    "status": "HOLD-not-proven",
+    "verifierComponent": "smart-contract-verifier",
+    "verifierExactPinApproved": true,
+    "compilerNetworkDownloadAllowed": false,
+    "approvedCompilerArtifacts": [
+      {
+        "compiler": "solc",
+        "version": "0.8.30",
+        "longVersion": "0.8.30+commit.73712a01",
+        "image": "ethereum/solc:0.8.30@sha256:b116bf835554d40c501feab0b2c943a8c5eec003b804bcc5b326b85c93da00c2",
+        "binaryPath": "/usr/bin/solc",
+        "source": "chain/toolchain.json contracts.solidity"
+      }
+    ],
+    "compilerPinStatus": "exact-compiler-image-digest-approved-offline-provisioning-unproven",
+    "verificationClaimAllowed": false
+  },
+  "holds": [
+    {
+      "id": "archive-gateway-inactive",
+      "scope": "core-runtime",
+      "state": "RESOLVED",
+      "ownerIssue": 114,
+      "evidenceIssues": [
+        113
+      ],
+      "requirement": "Issue #114 archive gateway and archive storage targets are activated and effectively proven (2026-07-30): chain/profiles/run-archive-gateway-evidence-v0.sh boots the private-archive-indexer node plus the torium-archive-gateway sidecar, proves every candidateMethodContract method crosses the gateway, proves forbidden methods fail closed with HTTP 403 without reaching the upstream, proves a mixed batch is refused whole, and proves the raw archive RPC is unreachable from the archive-indexer-consumer network and unpublished on the host."
+    },
+    {
+      "id": "blockscout-runtime-digest-missing",
+      "scope": "core-runtime",
+      "state": "PARTIAL",
+      "ownerIssue": 113,
+      "evidenceIssues": [
+        122
+      ],
+      "requirement": "The locally built v11.2.2 runtime image digest sha256:af87ff26… is recorded and consumed by chain/explorer/compose.explorer.yaml; a reproducible rebuild from source (#122-style) that reproduces that digest is still missing."
+    },
+    {
+      "id": "redis-pin-missing",
+      "scope": "core-runtime",
+      "state": "RESOLVED",
+      "ownerIssue": 113,
+      "evidenceIssues": [],
+      "requirement": "Redis 7.4-alpine is pinned by exact digest in the explorer compose file (2026-07-29)."
+    },
+    {
+      "id": "frontend-pin-missing",
+      "scope": "complete-explorer-ui",
+      "state": "RESOLVED",
+      "ownerIssue": 113,
+      "evidenceIssues": [],
+      "requirement": "Resolved (2026-07-30): frontend v2.3.0 is pinned by immutable digest sha256:a8520de4… with source commit e1111ee2f89af699e53f441340f5149ec153f6f3, and chain/explorer/run-frontend-evidence-v0.sh proves the RUNNING image reports that revision, that its effective identity matches chain/config/identifiers.json and the canonical chain id, that no third-party service host is configured, and that its routes render. Upstream declares no compatible frontend version for backend v11.2.2 (its docker-compose pins frontend:latest), so this compatibility claim is local and rests on that runner."
+    },
+    {
+      "id": "readiness-and-reindex-unproven",
+      "scope": "operations",
+      "state": "PARTIAL",
+      "ownerIssue": 113,
+      "evidenceIssues": [
+        114
+      ],
+      "requirement": "chain/explorer/run-stack-evidence-v0.sh proves startup order, readiness, indexing to the chain tip, transaction reconciliation against canonical RPC, recovery from a rollback of derived state (Blockscout's own reorg path: consensus=false on the top blocks, healed and reconciled against canonical RPC), and a full reindex after discarding the derived database (2026-07-29). Archive-target reconciliation is proven (2026-07-30): with chain/explorer/compose.archive-consumer.yaml the indexer consumes ONLY http://archive-rpc-gateway:8545, cannot resolve or reach the raw archive RPC, reaches the chain tip, reconciles its transaction, and reads historical state at height 1 through the gateway. The remaining gap is the frontend and verifier pins, not the data path."
+    },
+    {
+      "id": "source-verification-pins-missing",
+      "scope": "issue-closure-source-verification",
+      "state": "PARTIAL",
+      "ownerIssue": 113,
+      "evidenceIssues": [],
+      "requirement": "Narrowed (2026-07-30): the verifier is pinned by immutable digest sha256:1747fec3… (smart-contract-verifier-v1.10.5, revision 5cb8bdc88ebdbccf779bc138f1aeb8933b37eb07) and the single allowed compiler is the already digest-pinned solc 0.8.30 from chain/toolchain.json. What remains is the part that cannot be satisfied by pinning: the verifier fetches its compiler list over the network by default, and compilerNetworkDownloadAllowed is false, so offline provisioning of the pinned compiler into the verifier must be built and proven before verification can be enabled or claimed."
+    },
+    {
+      "id": "seed-contract-deployment-not-defined",
+      "scope": "issue-closure-seeded-contracts",
+      "state": "HOLD",
+      "ownerIssue": 113,
+      "evidenceIssues": [],
+      "requirement": "Define and prove a chain-instance-bound idempotent seeded-contract deployment before claiming fresh-localnet explorer automation. Concrete state measured 2026-07-30 against the running localnet: the erc20 native precompile at 0xEeee…EEeE IS live from genesis (eth_getCode returns 27034 hex chars), but the ToriumCreate2Factory address recorded in contracts/deployments/localnet.json has NO code on this chain instance, and the reward-distributor and attestation-registry entries carry no address at all. So the deployment has to be built, not merely run: deploy the factory deterministically, deploy both contracts through it, record their addresses plus code hashes in the registry, and prove re-running is a no-op on an already-seeded chain and refuses a different chain instance. Only then can the explorer's contract and token presentation be reconciled."
+    },
+    {
+      "id": "validator-presentation-source-undefined",
+      "scope": "issue-closure-validator-presentation",
+      "state": "HOLD",
+      "ownerIssue": 113,
+      "evidenceIssues": [],
+      "requirement": "Resolve validator and staking presentation through a separately specified canonical Cosmos source; Blockscout and Torium product data cannot synthesize it."
+    },
+    {
+      "id": "explorer-presentation-reconciliation-unproven",
+      "scope": "issue-closure-address-asset-contract-token-views",
+      "state": "HOLD",
+      "ownerIssue": 113,
+      "evidenceIssues": [],
+      "requirement": "Addresses and native tTOR metadata are reconciled against canonical RPC and chain/config/identifiers.json (2026-07-30: the funded address is indexed with its funding transaction, its balance matches eth_getBalance, and the explorer's COIN/COIN_NAME/CHAIN_ID match the reviewed non-value-network symbol and chain id). Contract and token presentation stay unproven because they require the seeded-contract deployment that seed-contract-deployment-not-defined still holds."
+    },
+    {
+      "id": "legal-approval-pending",
+      "scope": "distribution-and-operation",
+      "state": "HOLD",
+      "ownerIssue": 113,
+      "evidenceIssues": [],
+      "requirement": "Qualified legal counsel must approve the selected Blockscout license before public operation, distribution, or production use."
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "at": "2026-07-29T20:25:04.262Z",
+    "decision": "started a duplicate signer for validator-1 (25% power) from a second data directory reusing its consensus key, with steady transaction traffic so the two instances propose different block contents",
+    "reason": "scenario plan step for this canonical fault drill"
+  },
+  {
+    "at": "2026-07-29T20:25:14.760Z",
+    "decision": "removed the duplicate signer; the compromised identity stays quarantined (jailed/tombstoned) and evidence is preserved on chain",
+    "reason": "scenario plan step for this canonical fault drill"
+  }
+]

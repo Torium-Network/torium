@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-14T18:51:51.363Z",
+  "target": {
+    "rpcUrl": "http://127.0.0.1:8545",
+    "chainId": 262144,
+    "profile": "poc-bounded-block-gas",
+    "configuredMaxGas": "42000"
+  },
+  "checks": {
+    "freshBlock": "4",
+    "transactionHashes": [
+      "0x7ac37e10f57da834eeffd9c3f982a4819f0ef452e4530d99787e1b71f84ca11b",
+      "0xf58687489cf8b4d2e9dd79d1455808476bd090da672810af43a57b569b0b8f40"
+    ],
+    "saturatedBlock": {
+      "number": "5",
+      "gasLimit": "42000",
+      "gasUsed": "42000",
+      "transactionCount": 2
+    },
+    "feeHistory": {
+      "oldestBlock": "0x5",
+      "gasUsedRatio": 1,
+      "baseFeePerGas": ["0x1e925e87", "0x2264aa57"],
+      "reward": [["0xbebc200"]]
+    }
+  }
+}

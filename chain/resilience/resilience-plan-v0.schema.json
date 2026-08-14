@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/chain/resilience-plan-v0.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "planVersion",
+    "status",
+    "ownerIssue",
+    "scope",
+    "sources",
+    "finalityContract",
+    "canonicalScenarios",
+    "extensionScenarios",
+    "reportContract",
+    "releaseReadiness",
+    "holds"
+  ],
+  "properties": {
+    "$schema": { "const": "./resilience-plan-v0.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "planVersion": {
+      "type": "string",
+      "pattern": "^0\\.1\\.0-local\\.[1-9][0-9]*$"
+    },
+    "status": {
+      "enum": ["defined-local-only-not-executed", "partially-executed-local-runner"]
+    },
+    "ownerIssue": { "const": 119 },
+    "scope": { "$ref": "#/$defs/scope" },
+    "sources": {
+      "type": "object",
+      "minProperties": 8,
+      "additionalProperties": { "$ref": "#/$defs/source" }
+    },
+    "finalityContract": { "$ref": "#/$defs/finalityContract" },
+    "canonicalScenarios": {
+      "type": "array",
+      "minItems": 11,
+      "maxItems": 11,
+      "items": { "$ref": "#/$defs/canonicalScenario" }
+    },
+    "extensionScenarios": {
+      "type": "array",
+      "minItems": 12,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/extensionScenario" }
+    },
+    "reportContract": { "$ref": "#/$defs/reportContract" },
+    "releaseReadiness": { "$ref": "#/$defs/releaseReadiness" },
+    "holds": {
+      "type": "array",
+      "minItems": 6,
+      "items": { "type": "string", "minLength": 12 }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "version"],
+      "properties": {
+        "path": { "type": "string", "pattern": "^chain/" },
+        "version": { "type": "string", "minLength": 1 }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "topology",
+        "executionEnabled",
+        "publicOrRemoteTargetsAllowed",
+        "liveDeploymentAllowed",
+        "toriumBackendIntegrationInScope",
+        "bridgeInScope",
+        "l2InScope",
+        "manualStateEditsAllowed",
+        "capacityOrSecurityClaimAllowed"
+      ],
+      "properties": {
+        "environment": { "const": "local-development-only" },
+        "topology": { "const": "canonical-four-validator-combined-localnet" },
+        "executionEnabled": { "const": false },
+        "publicOrRemoteTargetsAllowed": { "const": false },
+        "liveDeploymentAllowed": { "const": false },
+        "toriumBackendIntegrationInScope": { "const": false },
+        "bridgeInScope": { "const": false },
+        "l2InScope": { "const": false },
+        "manualStateEditsAllowed": { "const": false },
+        "capacityOrSecurityClaimAllowed": { "const": false }
+      }
+    },
+    "finalityContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commitMeaning",
+        "sameHeightConflictingCommitExpectedUnderAssumptions",
+        "ethereumBeaconFinalityClaimAllowed",
+        "manualStateEditRecoveryAllowed",
+        "contradictoryCommitDisposition",
+        "assumptionViolationDisposition"
+      ],
+      "properties": {
+        "commitMeaning": { "type": "string", "minLength": 20 },
+        "sameHeightConflictingCommitExpectedUnderAssumptions": {
+          "const": false
+        },
+        "ethereumBeaconFinalityClaimAllowed": { "const": false },
+        "manualStateEditRecoveryAllowed": { "const": false },
+        "contradictoryCommitDisposition": { "const": "release-blocking" },
+        "assumptionViolationDisposition": {
+          "const": "release-blocking-no-safety-claim"
+        }
+      }
+    },
+    "canonicalScenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "testId",
+        "availablePower",
+        "byzantinePower",
+        "expectedLiveness",
+        "expectedSafety",
+        "expectedFinality",
+        "expectedRecovery",
+        "existingEvidence",
+        "executionStatus",
+        "executed",
+        "reportPath"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^local-" },
+        "testId": {
+          "type": "string",
+          "pattern": "^chaos\\.(consensus|dependencies)\\.local\\."
+        },
+        "availablePower": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "byzantinePower": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "expectedLiveness": { "type": "string", "minLength": 4 },
+        "expectedSafety": { "type": "string", "minLength": 4 },
+        "expectedFinality": { "type": "string", "minLength": 12 },
+        "expectedRecovery": { "type": "string", "minLength": 12 },
+        "existingEvidence": { "$ref": "#/$defs/evidence" },
+        "executionStatus": {
+          "type": "string",
+          "pattern": "^(HOLD-|executed-)"
+        },
+        "executed": { "type": "boolean" },
+        "reportPath": { "type": ["string", "null"] }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "paths"],
+      "properties": {
+        "level": {
+          "enum": [
+            "none",
+            "module-only",
+            "functional-partial",
+            "historical-reference",
+            "runner-executed"
+          ]
+        },
+        "paths": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^chain/" }
+        }
+      }
+    },
+    "extensionScenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "expectedBoundary"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^local-" },
+        "status": { "const": "HOLD-not-executed-v0" },
+        "expectedBoundary": { "type": "string", "minLength": 16 }
+      }
+    },
+    "reportContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "committedReportGlob",
+        "automaticDiscoveryEnabled",
+        "requiredTimelineEvents",
+        "requiredEvidence",
+        "passingReportsAccepted",
+        "extensionReportsAccepted",
+        "contradictoryCommitForcesUnsafeReleaseBlocked",
+        "manualStateEditFailsValidation"
+      ],
+      "properties": {
+        "schema": {
+          "const": "chain/resilience/resilience-result-v0.schema.json"
+        },
+        "committedReportGlob": {
+          "const": "chain/resilience/results/*.result.json"
+        },
+        "automaticDiscoveryEnabled": { "const": true },
+        "requiredTimelineEvents": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "requiredEvidence": {
+          "type": "array",
+          "minItems": 6,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "passingReportsAccepted": { "type": "boolean" },
+        "extensionReportsAccepted": { "const": false },
+        "contradictoryCommitForcesUnsafeReleaseBlocked": { "const": true },
+        "manualStateEditFailsValidation": { "const": true }
+      }
+    },
+    "releaseReadiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ready",
+        "status",
+        "requiredCanonicalScenarioCount",
+        "executedCanonicalScenarioCount",
+        "passedCanonicalScenarioCount",
+        "unresolvedUnsafeOutcomeCount"
+      ],
+      "properties": {
+        "ready": { "const": false },
+        "status": { "type": "string", "pattern": "^HOLD-" },
+        "requiredCanonicalScenarioCount": { "const": 11 },
+        "executedCanonicalScenarioCount": { "type": "integer", "minimum": 0 },
+        "passedCanonicalScenarioCount": { "type": "integer", "minimum": 0 },
+        "unresolvedUnsafeOutcomeCount": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    }
+  }
+}

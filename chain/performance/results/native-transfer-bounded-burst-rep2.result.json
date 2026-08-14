@@ -1,0 +1,261 @@
+{
+  "schemaVersion": 1,
+  "resultVersion": "0.1.0",
+  "status": "complete-local",
+  "planVersion": "0.1.0-local.2",
+  "provenance": {
+    "gitCommit": "a163bd0c380ccde6c89b682c3a4186a1e0fcb7c9",
+    "dirtyWorktree": false,
+    "patchSha256": null,
+    "os": "Darwin 25.3.0",
+    "architecture": "arm64",
+    "cpuModel": "Apple M5 Pro",
+    "logicalCores": 15,
+    "memoryBytes": 25769803776,
+    "containerRuntime": "Docker version 29.4.0, build 9d7ad9f",
+    "composeVersion": "5.1.2",
+    "executionBackend": "container",
+    "virtualization": "docker-desktop-linux-vm",
+    "vmAllocation": {
+      "cpuCores": 15,
+      "memoryBytes": 8321011712,
+      "diskBytes": 977843695616
+    },
+    "filesystem": "host-apfs/vm-overlay2",
+    "statePath": "chain/localnet/.state/container",
+    "toolchainSha256": "7429c9d76ac7ea3a9ebec540a53690872e929e8fdd9359631b8b37c2f6879cc8",
+    "runnerVersion": "0.1.0",
+    "runnerSha256": "484437eb7a27c30b8d4fea9001d05c5be7dd6d3d5311817aee282859dd7c54cc",
+    "binaryIdentity": "toriumd (toriumd:local sha256:500ae93cbab1c144313c8a8324c309cfdf738a02f60d47c15852eb9907909c01)",
+    "binarySha256": "9da6f30d0d8387a5a9a7fdc1dc871e46016881d92080790e1fc07bda21c994ae",
+    "genesisSha256": "86d77e6e1907e10e92217e1484cbf89e224b03bacdbf67f441b3307502a96808",
+    "effectiveConfigSha256": "da0ed2b89cbb521d2256cd60015e148188debd8c2963613925d799cb2cfb53ab",
+    "datasetSha256": "7f314d865d65faac78199c25dd01573091973223acf28095c24aceef1d521e43",
+    "workload": {
+      "id": "native-transfer-bounded-burst",
+      "version": 1,
+      "definitionSha256": "54ececbdc0dd536ecc6c206a6a133c3427901cb49927f47fa505afa9dd99fe79",
+      "seed": 20260729,
+      "operationCount": 16,
+      "concurrency": 8,
+      "warmupCount": 0,
+      "repetition": 1
+    }
+  },
+  "run": {
+    "startedAt": "2026-07-29T22:18:20.833Z",
+    "endedAt": "2026-07-29T22:18:25.134Z",
+    "startHeight": 1514,
+    "endHeight": 1516,
+    "cosmosChainId": "torium-localnet-1",
+    "evmChainId": 1414484556,
+    "topology": "canonical-four-validator-combined-localnet"
+  },
+  "cases": [
+    {
+      "caseType": "transaction",
+      "caseId": "native-transfer-bounded-burst-run-1",
+      "workloadId": "native-transfer-bounded-burst",
+      "counts": {
+        "sample": 16,
+        "includedCommitted": 16,
+        "committedSuccess": 16,
+        "committedRevert": 0,
+        "unexpectedRevert": 0,
+        "submissionFailed": 0,
+        "dropped": 0
+      },
+      "elapsedMilliseconds": 4301,
+      "includedCommittedTps": 3.720065,
+      "successfulTps": 3.720065,
+      "latencyMilliseconds": {
+        "acknowledgement": {
+          "sampleCount": 16,
+          "minimum": 1.05275,
+          "p50": 3.343959,
+          "p95": 6.542458,
+          "maximum": 6.542458,
+          "mean": 3.446227
+        },
+        "inclusion": {
+          "sampleCount": 16,
+          "minimum": 1949.581875,
+          "p50": 1952.489,
+          "p95": 2345.8025,
+          "maximum": 2345.8025,
+          "mean": 2148.116042
+        },
+        "receipt": {
+          "sampleCount": 16,
+          "minimum": 1951.669042,
+          "p50": 1954.044167,
+          "p95": 2347.872667,
+          "maximum": 2347.872667,
+          "mean": 2149.846732
+        }
+      },
+      "gasUsed": {
+        "sampleCount": 16,
+        "total": 336000,
+        "mean": 21000
+      },
+      "limitations": [
+        "exploratory-local-summary-only",
+        "no-p99-or-formal-confidence-claim"
+      ]
+    }
+  ],
+  "chainMetrics": {
+    "blockSampleCount": 3,
+    "averageBlockGasUsed": 112000,
+    "maximumBlockGasUsed": 168000,
+    "targetGasUtilization": 0.007467,
+    "limitGasUtilization": 0.003733,
+    "commitIntervalMilliseconds": {
+      "sampleCount": 2,
+      "minimum": 2000,
+      "p50": 2000,
+      "p95": 2000,
+      "maximum": 2000,
+      "mean": 2000
+    },
+    "blockRangeContiguous": true,
+    "finalityModel": "cometbft-committed-block",
+    "jsonRpcFinalizedTag": "latest-committed-cometbft-state",
+    "jsonRpcSafeStateQueries": "unsupported-until-conformance-proves-otherwise",
+    "rpcAcceptanceGuaranteesRetention": false
+  },
+  "rpcMetrics": {
+    "httpRequestCount": 0,
+    "httpSuccessCount": 0,
+    "httpErrorCount": 0,
+    "httpTimeoutCount": 0,
+    "jsonRpcCallCount": 0,
+    "callSuccessCount": 0,
+    "callErrorCount": 0,
+    "callTimeoutCount": 0,
+    "batchCount": 0,
+    "perMethodCounts": [],
+    "responseBytes": 0,
+    "latencyMilliseconds": {
+      "sampleCount": 0,
+      "minimum": null,
+      "p50": null,
+      "p95": null,
+      "maximum": null,
+      "mean": null
+    }
+  },
+  "resourceDeltas": [
+    {
+      "component": "validator-0",
+      "cpuPercentage": 7.395,
+      "rssBytes": 255642829,
+      "networkRxBytes": 400000,
+      "networkTxBytes": 300000,
+      "blockReadBytes": 0,
+      "blockWriteBytes": 0,
+      "nodeHomeBytes": 1048576
+    },
+    {
+      "component": "validator-1",
+      "cpuPercentage": 4.3075,
+      "rssBytes": 210658918,
+      "networkRxBytes": 100000,
+      "networkTxBytes": 100000,
+      "blockReadBytes": 0,
+      "blockWriteBytes": 0,
+      "nodeHomeBytes": 0
+    },
+    {
+      "component": "validator-2",
+      "cpuPercentage": 4.5025,
+      "rssBytes": 225548698,
+      "networkRxBytes": 100000,
+      "networkTxBytes": 100000,
+      "blockReadBytes": 0,
+      "blockWriteBytes": 0,
+      "nodeHomeBytes": 1048576
+    },
+    {
+      "component": "validator-3",
+      "cpuPercentage": 2.2675,
+      "rssBytes": 216426086,
+      "networkRxBytes": 200000,
+      "networkTxBytes": 100000,
+      "blockReadBytes": 0,
+      "blockWriteBytes": 0,
+      "nodeHomeBytes": 1048576
+    }
+  ],
+  "stateGrowth": {
+    "nodeHomeBytesDelta": 3145728,
+    "databaseBytesDelta": null,
+    "storageGrowthBytesPerDay": null,
+    "indexerLagBlocks": null,
+    "diskIops": null,
+    "diskIoLatencyMilliseconds": null
+  },
+  "observations": {
+    "bottlenecks": [
+      {
+        "component": "validator-0",
+        "signal": "single published RPC endpoint serves all workload traffic",
+        "evidence": "workloads target 127.0.0.1:8545, which only validator-0 publishes; the other validators serve consensus only",
+        "severity": "informational"
+      }
+    ],
+    "failureCliffs": [],
+    "regressionEvaluation": null
+  },
+  "artifacts": [
+    {
+      "kind": "raw-transaction-samples",
+      "relativePath": "chain/performance/results/artifacts/native-transfer-bounded-burst-rep2/raw-transaction-samples.json",
+      "sha256": "a510700b4ec5ffcdaddccc2fdac1c8c7a62cd6823abe774b66705be115d388a4",
+      "containsSecrets": false
+    },
+    {
+      "kind": "resource-samples",
+      "relativePath": "chain/performance/results/artifacts/native-transfer-bounded-burst-rep2/resource-samples.json",
+      "sha256": "edd5195232f8965b5983d6744966070361739b945fa1563f1e29937502c017f5",
+      "containsSecrets": false
+    },
+    {
+      "kind": "dataset",
+      "relativePath": "chain/performance/results/artifacts/native-transfer-bounded-burst-rep2/dataset.json",
+      "sha256": "7f314d865d65faac78199c25dd01573091973223acf28095c24aceef1d521e43",
+      "containsSecrets": false
+    },
+    {
+      "kind": "effective-config",
+      "relativePath": "chain/performance/results/artifacts/native-transfer-bounded-burst-rep2/validator-0-effective-config.toml",
+      "sha256": "da0ed2b89cbb521d2256cd60015e148188debd8c2963613925d799cb2cfb53ab",
+      "containsSecrets": false
+    },
+    {
+      "kind": "runner",
+      "relativePath": "chain/performance/run-local-baselines.mjs",
+      "sha256": "484437eb7a27c30b8d4fea9001d05c5be7dd6d3d5311817aee282859dd7c54cc",
+      "containsSecrets": false
+    },
+    {
+      "kind": "genesis",
+      "relativePath": "chain/genesis/localnet/genesis.json",
+      "sha256": "86d77e6e1907e10e92217e1484cbf89e224b03bacdbf67f441b3307502a96808",
+      "containsSecrets": false
+    }
+  ],
+  "capacityClaims": {
+    "public": false,
+    "safeTps": null,
+    "safeRpcRequestsPerSecond": null,
+    "billOfMaterialsReady": false
+  },
+  "limitations": [
+    "single-run local smoke on a Docker Desktop VM; no formal confidence interval, no p99, no capacity claim",
+    "commit intervals derive from EVM block timestamps with one-second resolution",
+    "resource deltas come from docker stats sampling (~250ms cadence) and du-based node-home byte deltas",
+    "dirtyWorktree reflects tracked modifications only; freshly generated result artifacts are untracked at run time"
+  ]
+}

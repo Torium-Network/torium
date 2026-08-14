@@ -1,0 +1,5 @@
+ToriumCreate2FactoryAssuranceTest:testGasFactoryDeploy() (gas: 119051)
+ToriumCreate2FactoryAssuranceTest:testGasFactoryResolve() (gas: 121343)
+ToriumRewardDistributorAssuranceTest:testGasRewardClaim() (gas: 263750)
+ToriumRewardDistributorAssuranceTest:testGasRewardClawback() (gas: 244941)
+ToriumRewardDistributorAssuranceTest:testGasRewardPublish() (gas: 153523)

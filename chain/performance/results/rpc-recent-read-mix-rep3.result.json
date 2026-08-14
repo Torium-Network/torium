@@ -1,0 +1,252 @@
+{
+  "schemaVersion": 1,
+  "resultVersion": "0.1.0",
+  "status": "complete-local",
+  "planVersion": "0.1.0-local.2",
+  "provenance": {
+    "gitCommit": "a163bd0c380ccde6c89b682c3a4186a1e0fcb7c9",
+    "dirtyWorktree": false,
+    "patchSha256": null,
+    "os": "Darwin 25.3.0",
+    "architecture": "arm64",
+    "cpuModel": "Apple M5 Pro",
+    "logicalCores": 15,
+    "memoryBytes": 25769803776,
+    "containerRuntime": "Docker version 29.4.0, build 9d7ad9f",
+    "composeVersion": "5.1.2",
+    "executionBackend": "container",
+    "virtualization": "docker-desktop-linux-vm",
+    "vmAllocation": {
+      "cpuCores": 15,
+      "memoryBytes": 8321011712,
+      "diskBytes": 977843695616
+    },
+    "filesystem": "host-apfs/vm-overlay2",
+    "statePath": "chain/localnet/.state/container",
+    "toolchainSha256": "7429c9d76ac7ea3a9ebec540a53690872e929e8fdd9359631b8b37c2f6879cc8",
+    "runnerVersion": "0.1.0",
+    "runnerSha256": "484437eb7a27c30b8d4fea9001d05c5be7dd6d3d5311817aee282859dd7c54cc",
+    "binaryIdentity": "toriumd (toriumd:local sha256:500ae93cbab1c144313c8a8324c309cfdf738a02f60d47c15852eb9907909c01)",
+    "binarySha256": "9da6f30d0d8387a5a9a7fdc1dc871e46016881d92080790e1fc07bda21c994ae",
+    "genesisSha256": "86d77e6e1907e10e92217e1484cbf89e224b03bacdbf67f441b3307502a96808",
+    "effectiveConfigSha256": "da0ed2b89cbb521d2256cd60015e148188debd8c2963613925d799cb2cfb53ab",
+    "datasetSha256": "4ef5aa1a42d7173b76de3843625cf0ab56aceea1af2ba37145291f07db5dca84",
+    "workload": {
+      "id": "rpc-recent-read-mix",
+      "version": 1,
+      "definitionSha256": "85081c4613e2876cbcdaddb3eb20ca0901e4a2d5f42ecf6f3076c8e144496645",
+      "seed": 20260729,
+      "operationCount": 105,
+      "concurrency": 1,
+      "warmupCount": 0,
+      "repetition": 1
+    }
+  },
+  "run": {
+    "startedAt": "2026-07-29T22:19:25.295Z",
+    "endedAt": "2026-07-29T22:19:25.440Z",
+    "startHeight": 1543,
+    "endHeight": 1545,
+    "cosmosChainId": "torium-localnet-1",
+    "evmChainId": 1414484556,
+    "topology": "canonical-four-validator-combined-localnet"
+  },
+  "cases": [
+    {
+      "caseType": "rpc",
+      "caseId": "rpc-recent-read-mix-run-1",
+      "workloadId": "rpc-recent-read-mix",
+      "elapsedMilliseconds": 145,
+      "httpRequestCount": 6,
+      "jsonRpcCallCount": 105,
+      "httpRequestsPerSecond": 41.37931,
+      "jsonRpcCallsPerSecond": 724.137931,
+      "latencyMilliseconds": {
+        "sampleCount": 6,
+        "minimum": 1.936166,
+        "p50": 3.545167,
+        "p95": 127.18175,
+        "maximum": 127.18175,
+        "mean": 24.079222
+      },
+      "limitations": [
+        "exploratory-local-summary-only",
+        "no-p99-or-formal-confidence-claim"
+      ]
+    }
+  ],
+  "chainMetrics": {
+    "blockSampleCount": 0,
+    "averageBlockGasUsed": null,
+    "maximumBlockGasUsed": null,
+    "targetGasUtilization": null,
+    "limitGasUtilization": null,
+    "commitIntervalMilliseconds": {
+      "sampleCount": 0,
+      "minimum": null,
+      "p50": null,
+      "p95": null,
+      "maximum": null,
+      "mean": null
+    },
+    "blockRangeContiguous": true,
+    "finalityModel": "cometbft-committed-block",
+    "jsonRpcFinalizedTag": "latest-committed-cometbft-state",
+    "jsonRpcSafeStateQueries": "unsupported-until-conformance-proves-otherwise",
+    "rpcAcceptanceGuaranteesRetention": false
+  },
+  "rpcMetrics": {
+    "httpRequestCount": 6,
+    "httpSuccessCount": 6,
+    "httpErrorCount": 0,
+    "httpTimeoutCount": 0,
+    "jsonRpcCallCount": 105,
+    "callSuccessCount": 105,
+    "callErrorCount": 0,
+    "callTimeoutCount": 0,
+    "batchCount": 1,
+    "perMethodCounts": [
+      {
+        "method": "eth_feeHistory",
+        "count": 21
+      },
+      {
+        "method": "eth_getBalance",
+        "count": 21
+      },
+      {
+        "method": "eth_getBlockByNumber",
+        "count": 21
+      },
+      {
+        "method": "eth_getLogs",
+        "count": 21
+      },
+      {
+        "method": "eth_getTransactionReceipt",
+        "count": 21
+      }
+    ],
+    "responseBytes": 67020,
+    "latencyMilliseconds": {
+      "sampleCount": 6,
+      "minimum": 1.936166,
+      "p50": 3.545167,
+      "p95": 127.18175,
+      "maximum": 127.18175,
+      "mean": 24.079222
+    }
+  },
+  "resourceDeltas": [
+    {
+      "component": "validator-0",
+      "cpuPercentage": 3.003333,
+      "rssBytes": 255537971,
+      "networkRxBytes": 100000,
+      "networkTxBytes": 200000,
+      "blockReadBytes": 0,
+      "blockWriteBytes": 0,
+      "nodeHomeBytes": 0
+    },
+    {
+      "component": "validator-1",
+      "cpuPercentage": 3.503333,
+      "rssBytes": 214119219,
+      "networkRxBytes": 100000,
+      "networkTxBytes": 0,
+      "blockReadBytes": 0,
+      "blockWriteBytes": 0,
+      "nodeHomeBytes": 0
+    },
+    {
+      "component": "validator-2",
+      "cpuPercentage": 11.486667,
+      "rssBytes": 228589568,
+      "networkRxBytes": 100000,
+      "networkTxBytes": 100000,
+      "blockReadBytes": 0,
+      "blockWriteBytes": 0,
+      "nodeHomeBytes": 0
+    },
+    {
+      "component": "validator-3",
+      "cpuPercentage": 3.22,
+      "rssBytes": 221144678,
+      "networkRxBytes": 100000,
+      "networkTxBytes": 100000,
+      "blockReadBytes": 0,
+      "blockWriteBytes": 0,
+      "nodeHomeBytes": 0
+    }
+  ],
+  "stateGrowth": {
+    "nodeHomeBytesDelta": 0,
+    "databaseBytesDelta": null,
+    "storageGrowthBytesPerDay": null,
+    "indexerLagBlocks": null,
+    "diskIops": null,
+    "diskIoLatencyMilliseconds": null
+  },
+  "observations": {
+    "bottlenecks": [
+      {
+        "component": "validator-0",
+        "signal": "single published RPC endpoint serves all workload traffic",
+        "evidence": "workloads target 127.0.0.1:8545, which only validator-0 publishes; the other validators serve consensus only",
+        "severity": "informational"
+      }
+    ],
+    "failureCliffs": [],
+    "regressionEvaluation": null
+  },
+  "artifacts": [
+    {
+      "kind": "raw-rpc-samples",
+      "relativePath": "chain/performance/results/artifacts/rpc-recent-read-mix-rep3/raw-rpc-samples.json",
+      "sha256": "736e7bc174e53e4c0699efbf479893fd9bc8b21bd5ab6e6da5488e496a0f908c",
+      "containsSecrets": false
+    },
+    {
+      "kind": "resource-samples",
+      "relativePath": "chain/performance/results/artifacts/rpc-recent-read-mix-rep3/resource-samples.json",
+      "sha256": "9450ca787cc5895f83eabc9ec000a11bdd4f6a7de0ce959aae23dd3a3002c73a",
+      "containsSecrets": false
+    },
+    {
+      "kind": "dataset",
+      "relativePath": "chain/performance/results/artifacts/rpc-recent-read-mix-rep3/dataset.json",
+      "sha256": "4ef5aa1a42d7173b76de3843625cf0ab56aceea1af2ba37145291f07db5dca84",
+      "containsSecrets": false
+    },
+    {
+      "kind": "effective-config",
+      "relativePath": "chain/performance/results/artifacts/rpc-recent-read-mix-rep3/validator-0-effective-config.toml",
+      "sha256": "da0ed2b89cbb521d2256cd60015e148188debd8c2963613925d799cb2cfb53ab",
+      "containsSecrets": false
+    },
+    {
+      "kind": "runner",
+      "relativePath": "chain/performance/run-local-baselines.mjs",
+      "sha256": "484437eb7a27c30b8d4fea9001d05c5be7dd6d3d5311817aee282859dd7c54cc",
+      "containsSecrets": false
+    },
+    {
+      "kind": "genesis",
+      "relativePath": "chain/genesis/localnet/genesis.json",
+      "sha256": "86d77e6e1907e10e92217e1484cbf89e224b03bacdbf67f441b3307502a96808",
+      "containsSecrets": false
+    }
+  ],
+  "capacityClaims": {
+    "public": false,
+    "safeTps": null,
+    "safeRpcRequestsPerSecond": null,
+    "billOfMaterialsReady": false
+  },
+  "limitations": [
+    "single-run local smoke on a Docker Desktop VM; no formal confidence interval, no p99, no capacity claim",
+    "commit intervals derive from EVM block timestamps with one-second resolution",
+    "resource deltas come from docker stats sampling (~250ms cadence) and du-based node-home byte deltas",
+    "dirtyWorktree reflects tracked modifications only; freshly generated result artifacts are untracked at run time"
+  ]
+}

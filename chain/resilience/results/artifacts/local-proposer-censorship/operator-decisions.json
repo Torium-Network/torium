@@ -1,0 +1,12 @@
+[
+  {
+    "at": "2026-07-29T21:50:18.351Z",
+    "decision": "replaced validator-1 with the build-tag-gated censoring fixture image (25% of voting power) configured to drop transactions carrying a 32-byte marker; every other validator keeps toriumd:local",
+    "reason": "scenario plan step for this canonical fault drill"
+  },
+  {
+    "at": "2026-07-29T21:50:51.387Z",
+    "decision": "restored validator-1 to toriumd:local; no state was edited and the censoring code is absent from the restored binary",
+    "reason": "scenario plan step for this canonical fault drill"
+  }
+]

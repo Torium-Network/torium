@@ -1,0 +1,157 @@
+name: Torium Chain E2E
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+    paths:
+      - ".github/workflows/chain-e2e.yml"
+      - "chain/app/**"
+      - "chain/conformance/**"
+      - "chain/config/**"
+      - "chain/genesis/**"
+      - "chain/localnet/**"
+      - "chain/operator/**"
+      - "chain/poc/upstream-baseline/**"
+      - "chain/security/**"
+      - "chain/tests/e2e/**"
+      - "chain/tests/fees/**"
+      - "chain/tests/rpc/**"
+      - "chain/tests/faucet/**"
+      - "chain/tests/governance-upgrade/**"
+      - "chain/tests/sdk-conformance/**"
+      - "chain/tests/state-conformance/**"
+      - "chain/tests/tooling/**"
+      - "chain/toolchain.json"
+      - "packages/torium-sdk/**"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/chain-e2e.yml"
+      - "chain/app/**"
+      - "chain/conformance/**"
+      - "chain/config/**"
+      - "chain/genesis/**"
+      - "chain/localnet/**"
+      - "chain/operator/**"
+      - "chain/poc/upstream-baseline/**"
+      - "chain/security/**"
+      - "chain/tests/e2e/**"
+      - "chain/tests/fees/**"
+      - "chain/tests/rpc/**"
+      - "chain/tests/faucet/**"
+      - "chain/tests/governance-upgrade/**"
+      - "chain/tests/sdk-conformance/**"
+      - "chain/tests/state-conformance/**"
+      - "chain/tests/tooling/**"
+      - "chain/toolchain.json"
+      - "packages/torium-sdk/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: torium-chain-e2e-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: Run clean-checkout chain acceptance
+    if: >-
+      github.event_name != 'pull_request' ||
+      contains(github.event.pull_request.labels.*.name, 'ci:full-chain-e2e')
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Use pinned Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.23.1
+
+      - name: Free runner disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /opt/hostedtoolcache/CodeQL /usr/local/.ghcup
+          df -h /
+
+      - name: Validate the EVM capability and deviation registry
+        run: node chain/conformance/validate-evm-conformance-v1.mjs
+
+      - name: Run Torium chain application unit tests
+        run: chain/app/scripts/run-in-toolchain.sh go test ./...
+
+      - name: Run pinned Ethereum state-test subset
+        run: make -C chain/tests/state-conformance test
+
+      - name: Run canonical four-validator E2E suite
+        run: make -C chain/tests/e2e test
+
+      - name: Run fee and anti-spam acceptance suite
+        run: make -C chain/tests/fees test
+
+      - name: Run local endpoint acceptance suite
+        run: make -C chain/tests/rpc test
+
+      - name: Run valueless local faucet acceptance suite
+        run: make -C chain/tests/faucet test
+
+      - name: Reclaim Docker build cache before the upgrade suite
+        run: |
+          docker builder prune --force
+          df -h /
+
+      - name: Run governance and versioned upgrade acceptance suite
+        run: make -C chain/tests/governance-upgrade test
+
+      - name: Run wallet and Solidity tooling conformance suite
+        run: make -C chain/tests/tooling test
+
+      - name: Upload failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: torium-chain-e2e-diagnostics
+          path: |
+            chain/tests/e2e/.artifacts/
+            chain/tests/fees/.artifacts/
+            chain/tests/rpc/.artifacts/
+            chain/tests/faucet/.artifacts/
+            chain/tests/governance-upgrade/.artifacts/
+            chain/tests/tooling/.artifacts/
+          if-no-files-found: warn
+          include-hidden-files: true
+          retention-days: 7
+
+  sdk-conformance:
+    name: Run packed-SDK localnet conformance
+    if: >-
+      github.event_name != 'pull_request' ||
+      contains(github.event.pull_request.labels.*.name, 'ci:full-chain-e2e')
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: "10.27.0"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22.23.1"
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install SDK workspace dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts --filter @torium-network/sdk --filter .
+
+      - name: Run the conformance suite against a disposable localnet
+        run: chain/tests/sdk-conformance/run.sh

@@ -1,0 +1,72 @@
+---
+title: Reward distributor
+description: Merkle-sum epochs, exact funding, claims, clawback, roles and trust boundaries.
+docId: contracts-rewards
+version: v0
+status: foundation
+ownerIssue: 142
+sourceOfTruth: contracts/src/rewards/ToriumRewardDistributor.sol
+sourceStatus: existing
+---
+
+`ToriumRewardDistributor` distributes native TOR through immutable Merkle-sum
+epochs. Every claim proof reconstructs both the root hash and the aggregate
+root sum, and epoch publication must attach exactly that sum as native value —
+a committed tree can never be published underfunded.
+
+## Merkle-sum format
+
+The tree format is `torium-merkle-sum-v1` (see the committed reference vector
+`contracts/fixtures/rewards/example.fixture.json`): leaves are
+`keccak256(abi.encode(epochId, index, account, amount))` with the amount as
+the leaf sum; parents sort the pair by hash ascending and commit both child
+sums. The SDK mirrors this byte-for-byte:
+
+```ts
+import {
+  hashToriumRewardLeaf,
+  hashToriumRewardNode,
+  processToriumRewardProof,
+} from "@torium-network/sdk/contracts";
+
+const { rootHash, rootSum } = processToriumRewardProof(leaf, proof);
+```
+
+## Lifecycle
+
+1. **Publish** — an `EPOCH_PUBLISHER_ROLE` holder calls `publishEpoch` with
+   the next sequential epoch ID, a fresh root hash, the root sum, and a claim
+   window; the attached value must equal the root sum.
+   `prepareToriumRewardEpochPublication` encodes this and sets the value
+   automatically.
+2. **Claim** — anyone may submit a claim for a committed leaf inside the
+   window. `preflightToriumRewardClaim` rebuilds the proof locally and
+   reports structured blockers (`epoch-not-found`, `claim-not-started`,
+   `claim-window-closed`, `already-claimed`, `malformed-proof`,
+   `invalid-proof`, `distributor-paused`) before any signature.
+3. **Clawback** — after the window plus the clawback delay, a
+   `CLAWBACK_ROLE` holder can sweep unclaimed liability to the immutable
+   treasury address only.
+
+## Revert paths
+
+Invalid submissions revert with typed custom errors
+(`InvalidProof`, `ClaimAlreadyProcessed`, `ClaimWindowClosed`,
+`FundingDoesNotMatchRootSum`, …). `simulateToriumContractRequest` decodes
+them into `ToriumContractError` values with `errorName` and arguments; the
+localnet conformance suite demonstrates the double-claim and tampered-amount
+paths live.
+
+## Trust boundary
+
+The Merkle-sum proof makes the aggregate liability independently verifiable;
+it does not decide who deserves a reward. The publisher chooses the dataset
+and can omit or misallocate recipients, so allocation policy remains an
+explicit publisher trust boundary. Treasury, publication delay and clawback
+delay are fixed at deployment with no mutation entrypoints, and
+`AccessControlDefaultAdminRules` gates role changes behind the admin delay.
+Pausing (`PAUSER_ROLE`) halts publication, claims and clawback but never
+reassigns funds.
+
+No production deployment exists: the registry entry stays `planned` with a
+`null` address, and local testing deploys a fresh instance per run.

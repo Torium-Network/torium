@@ -1,0 +1,301 @@
+{
+  "$schema": "./selection-v1.schema.json",
+  "schemaVersion": 1,
+  "selectionVersion": "1.0.0-local.3",
+  "status": "conditional-local-candidate",
+  "ownerIssue": 112,
+  "constraints": {
+    "environment": "local-development-only",
+    "standaloneL1Only": true,
+    "liveDeploymentAllowed": false,
+    "publicOperationAllowed": false,
+    "distributionAllowed": false,
+    "backendIntegrationInScope": false,
+    "bridgeOrL2InScope": false
+  },
+  "selected": {
+    "name": "Blockscout",
+    "componentType": "evm-indexer-and-explorer-api",
+    "repository": "https://github.com/blockscout/blockscout",
+    "release": "v11.2.2",
+    "commit": "731015d88d7e73623f2a3c097e241bc82b04ea7a",
+    "distribution": "exact-commit-source-build",
+    "prebuiltImageAccepted": false,
+    "localImageTag": "torium/blockscout-poc:v11.2.2",
+    "localImageTagIsSecurityIdentity": false,
+    "license": "LicenseRef-Blockscout-1.0"
+  },
+  "runtime": {
+    "database": {
+      "engine": "PostgreSQL",
+      "image": "postgres:17-alpine@sha256:dc17045ccfd343b49600570ea734b9c4991cf1c3f3302e67df51e3b402dd55c4",
+      "role": "derived-rebuildable-index",
+      "hostBinding": "none-internal-compose-network-only"
+    },
+    "cache": {
+      "proofMinimalBackendRedisEnabled": false,
+      "proofScope": "The reused #89 compose proves only a minimal backend/API indexer without Redis.",
+      "fullUpstreamStackRedisRequired": true,
+      "approvedRedisImage": null,
+      "approvedRuntimeRedisEnabled": false,
+      "reason": "The exact-commit upstream full-stack compose depends on Redis, but no digest-pinned Redis image or full-stack local proof is approved yet."
+    },
+    "fullUpstreamStack": {
+      "status": "not-approved-runtime",
+      "componentBoundary": {
+        "approvedLocalProof": ["backend-indexer-api", "postgresql"],
+        "requiredByFullUpstreamButUnapproved": ["redis"],
+        "notSelected": [
+          "frontend",
+          "stats",
+          "smart-contract-verifier",
+          "visualizer",
+          "signature-provider",
+          "user-operations-indexer"
+        ]
+      },
+      "resourceEnvelope": "upstream-guidance-only-not-torium-measured",
+      "releaseCadence": {
+        "status": "upstream-reviewed",
+        "releaseLine": "v11",
+        "observedReleases": 10,
+        "windowStart": "2026-05-01",
+        "windowEnd": "2026-07-03"
+      },
+      "upgradePath": "not-exercised"
+    },
+    "network": {
+      "apiHostBinding": "127.0.0.1:44000",
+      "databasePublishedToHost": false,
+      "publicEndpointsAllowed": false,
+      "proofComposeIsApprovedRuntimeConfig": false,
+      "proofComposeKnownBinding": "0.0.0.0:44000",
+      "requiredRuntimeBindingChange": "Replace the proof-only 44000:4000 mapping with 127.0.0.1:44000:4000 before reuse."
+    }
+  },
+  "rpcDependency": {
+    "ownerIssue": 114,
+    "targetProfileManifest": "chain/profiles/node-roles-v0.json",
+    "targetProfileId": "private-archive-indexer",
+    "targetProfileActivated": true,
+    "requiredProfile": "private-non-validator-archive-indexer-rpc",
+    "status": "target-activated-gateway-enforced-local",
+    "currentLocalProfile": "chain/config/rpc-profile-v1.json",
+    "currentLocalProfileSatisfiesRequirement": false,
+    "validatorOrPublicProfileWideningAllowed": false,
+    "privateAllowlistedTransportRequired": true,
+    "archiveHistoricalStateRequired": true,
+    "fullGenesisHistoryRequiredForRebuild": true,
+    "standardMethodContractStatus": "candidate-reconciled-against-activated-gateway",
+    "requiredStandardMethods": [],
+    "candidateStandardMethods": [
+      "web3_clientVersion",
+      "net_version",
+      "net_listening",
+      "net_peerCount",
+      "eth_chainId",
+      "eth_blockNumber",
+      "eth_syncing",
+      "eth_gasPrice",
+      "eth_getBalance",
+      "eth_getBlockByNumber",
+      "eth_getBlockByHash",
+      "eth_getTransactionByHash",
+      "eth_getTransactionReceipt",
+      "eth_getLogs",
+      "eth_call",
+      "eth_getCode",
+      "eth_getStorageAt",
+      "eth_estimateGas",
+      "eth_feeHistory",
+      "eth_getTransactionCount"
+    ],
+    "traceRequirementStatus": "none-in-v0-internal-transactions-disabled",
+    "requiredTraceMethods": [],
+    "provenButNotEnabledTraceMethods": [
+      "debug_traceTransaction",
+      "debug_traceCall",
+      "debug_traceBlockByNumber",
+      "debug_traceBlockByHash"
+    ]
+  },
+  "features": {
+    "baseBlocksAndTransactions": "supported-by-reused-local-proof",
+    "receiptsLogsAndBalances": "reconciled-against-canonical-rpc",
+    "contractAndTokenPresentation": "explorer-native-not-torium-source-of-truth",
+    "contractVerification": "not-proven",
+    "internalTransactions": {
+      "status": "disabled-known-incompatibility",
+      "environmentVariable": "INDEXER_DISABLE_INTERNAL_TRANSACTIONS_FETCHER",
+      "requiredValue": "true",
+      "cosmosEvmTraceEntryKeys": ["result"],
+      "blockscoutRequiredTraceEntryKeys": ["result", "txHash"],
+      "adapterOrForkSelected": false,
+      "userFacingSupportClaimAllowed": false
+    }
+  },
+  "sourceOfTruth": {
+    "chainRpc": "authoritative",
+    "explorerPostgres": "derived-rebuildable-index",
+    "toriumBackend": "prohibited-as-chain-source-of-truth",
+    "toriumBackendTablesAllowed": false,
+    "reconciliationRequiredBeforeReady": [
+      "indexed-height-and-block-hash",
+      "transaction-receipts-and-logs",
+      "account-balances"
+    ]
+  },
+  "operations": {
+    "freshGenesisAutoFollow": "not-proven",
+    "emptyDatabaseCatchupToExistingHeight": "reused-local-proof",
+    "restartPersistence": "reused-local-proof",
+    "controlledSingleBlockRefetch": "reused-local-proof",
+    "fullDestructiveReindex": "not-proven",
+    "rollbackAndReorgRecovery": "not-proven",
+    "assumptions": [
+      {
+        "id": "restart-preserves-postgres-volume",
+        "state": "reused-local-proof",
+        "requirement": "A restart may resume only after database migrations succeed and indexed height/hash reconcile with private RPC."
+      },
+      {
+        "id": "reindex-requires-private-archive-history",
+        "state": "blocked-by-114",
+        "requirement": "A full rebuild must use the private archive/indexer profile and must never widen validator or public RPC."
+      },
+      {
+        "id": "database-reset-is-explicit-and-destructive",
+        "state": "policy-only-not-exercised-here",
+        "requirement": "Operators must stop the indexer, explicitly discard only the explorer database volume, rerun migrations, and reconcile before readiness."
+      },
+      {
+        "id": "reorg-recovery-is-unproven",
+        "state": "release-blocking-gap",
+        "requirement": "No rollback, deep reorg, backup restore, or canonical-chain replacement claim is allowed from the #89 marker-clear proof."
+      }
+    ]
+  },
+  "legalGate": {
+    "required": true,
+    "status": "pending",
+    "reviewAuthority": "qualified-legal-counsel",
+    "requiredBefore": ["public-operation", "distribution", "production-use"],
+    "approvalReference": null,
+    "publicOperationAllowed": false,
+    "distributionAllowed": false
+  },
+  "evidence": [
+    {
+      "id": "upstream-pins",
+      "path": "chain/poc/upstream-baseline/pins.json",
+      "sha256": "cc677553cd6e7890b895e4cec345d1a937de31c3a7fa253dec1eee7208ef3538",
+      "reuse": "version-license-and-postgres-pin"
+    },
+    {
+      "id": "support-matrix",
+      "path": "chain/poc/upstream-baseline/support-matrix.json",
+      "sha256": "a177bf4d71e8d2054f0709e0774e84335997b470ddad9f2987224cef13d41842",
+      "reuse": "base-indexing-and-internal-transaction-support-status"
+    },
+    {
+      "id": "blockscout-proof",
+      "path": "chain/poc/upstream-baseline/proof/blockscout.json",
+      "sha256": "e93f13768aded37d26427ec1d6d1fa853046b96892a02b35712e51a526961557",
+      "reuse": "empty-database-catchup-restart-marker-clear-and-trace-envelope-mismatch"
+    },
+    {
+      "id": "rpc-compatibility-proof",
+      "path": "chain/poc/upstream-baseline/proof/rpc-compatibility.json",
+      "sha256": "f29fe6bbb509815dbb577088e7f83a56b3b72915c989e87f14c298a17ca7f7ee",
+      "reuse": "raw-rpc-support-context-only"
+    },
+    {
+      "id": "proof-compose",
+      "path": "chain/poc/upstream-baseline/blockscout-compose.yml",
+      "sha256": "dbcede9173edb7f26802e5e57df68936d9b88c3177f31cd3877ad08427895bf5",
+      "reuse": "proof-reproduction-reference-not-approved-runtime-config"
+    },
+    {
+      "id": "source-build-script",
+      "path": "chain/poc/upstream-baseline/scripts/build-blockscout.sh",
+      "sha256": "787e4b203ecaea928c1152e34f22033ba8a556b7647fa83a054a8b2a6acb18a6",
+      "reuse": "exact-tag-and-commit-source-build"
+    },
+    {
+      "id": "proof-probe-script",
+      "path": "chain/poc/upstream-baseline/scripts/probe-blockscout.sh",
+      "sha256": "6bfde1073e7ba621c48d0a23fbe6e072476670606a747babb407aa9d9842cc92",
+      "reuse": "historical-proof-method-reference-only"
+    },
+    {
+      "id": "current-local-rpc-profile",
+      "path": "chain/config/rpc-profile-v1.json",
+      "sha256": "865cc2af1bc787415542ade5a72506a036a448edda1de7b0719bc3c0e0dab22a",
+      "reuse": "combined-role-loopback-evidence-does-not-activate-114-target-profiles"
+    }
+  ],
+  "alternatives": [
+    {
+      "id": "blockscout-v11-source-build",
+      "decision": "conditional-local-selection",
+      "reason": "Reuses the #89 base-indexing proof and avoids a Torium-owned chain indexer, subject to disabled internal transactions, #114, and legal approval."
+    },
+    {
+      "id": "blockscout-trace-adapter-or-fork",
+      "decision": "deferred",
+      "reason": "No maintained adapter, owner, upstream acceptance, rebase budget, or replacement-envelope proof exists."
+    },
+    {
+      "id": "torium-custom-indexer",
+      "decision": "rejected",
+      "reason": "It would duplicate chain indexing and make Torium responsible for a new consensus-derived source of truth."
+    },
+    {
+      "id": "otterscan-v2-11-0-erigon",
+      "decision": "rejected",
+      "reason": "Otterscan depends on Erigon-specific explorer APIs that the Cosmos EVM v0.7.0 RPC proof does not provide, adding an unproven node/indexing stack."
+    },
+    {
+      "id": "routescan-managed-service",
+      "decision": "rejected-for-current-scope",
+      "reason": "A managed public service conflicts with local-first development and has no self-hosted, legal, data-custody, or Torium RPC compatibility proof."
+    },
+    {
+      "id": "existing-torscan-product-backend",
+      "decision": "rejected",
+      "reason": "The existing product backend is not a canonical chain indexer and must never become the source of truth for blocks, receipts, logs, balances, or contracts."
+    }
+  ],
+  "releaseGates": [
+    {
+      "id": "private-archive-profile-114",
+      "state": "blocked",
+      "requirement": "Issue #114 activates and proves the defined private non-validator archive/indexer RPC target against effective runtime configuration."
+    },
+    {
+      "id": "legal-approval",
+      "state": "blocked",
+      "requirement": "Qualified legal counsel approves the Blockscout license for the intended operation and distribution model."
+    },
+    {
+      "id": "runtime-local-bindings",
+      "state": "blocked",
+      "requirement": "A future runtime config binds the API to loopback and does not publish PostgreSQL."
+    },
+    {
+      "id": "full-stack-dependencies",
+      "state": "blocked",
+      "requirement": "Pin Redis and every enabled upstream service, measure Torium resources, and exercise the upgrade path before approving the full stack."
+    },
+    {
+      "id": "reindex-reorg-contract",
+      "state": "blocked",
+      "requirement": "Fresh-genesis auto-follow, full rebuild, rollback/reorg, and complete reconciliation behavior are proven against #114."
+    },
+    {
+      "id": "internal-transactions",
+      "state": "accepted-local-limitation",
+      "requirement": "The fetcher remains disabled and no support claim is made until a maintained fix is selected and proven."
+    }
+  ]
+}

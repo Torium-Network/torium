@@ -1,0 +1,21 @@
+{
+  "name": "@torium-network/cosmos-evm-baseline-probe",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "probe:fee-history-saturation": "node fee-history-saturation-probe.mjs",
+    "probe:metamask": "node metamask-probe.mjs",
+    "probe": "node probe.mjs",
+    "probe:mempool": "node mempool-probe.mjs",
+    "probe:resilience": "node resilience-probe.mjs"
+  },
+  "dependencies": {
+    "ethers": "6.17.0",
+    "viem": "2.55.2",
+    "ws": "8.21.0"
+  },
+  "devDependencies": {
+    "hardhat": "3.9.1",
+    "playwright": "1.61.1"
+  }
+}

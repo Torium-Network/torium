@@ -1,0 +1,621 @@
+{
+  "$schema": "./recovery-v0.schema.json",
+  "schemaVersion": 1,
+  "recoveryVersion": "0.1.0-local.1",
+  "status": "defined-production-shape-local-only-not-activated",
+  "ownerIssue": 116,
+  "publicLaunchAllowed": false,
+  "scope": {
+    "environment": "local-development-only",
+    "liveDeployment": false,
+    "toriumBackendIntegration": false,
+    "toriumBackendTrustAuthority": false,
+    "bridge": false,
+    "layer2": false
+  },
+  "sources": {
+    "identifiers": {
+      "path": "chain/config/identifiers.json",
+      "manifestVersion": "0.2.0"
+    },
+    "trustModel": {
+      "path": "chain/config/trust-model-v1.json",
+      "modelVersion": "1.0.0-local.5"
+    },
+    "threatModel": {
+      "path": "chain/security/threat-model-v1.json",
+      "modelVersion": "1.0.0-local.5",
+      "riskIds": [
+        "T008",
+        "T019"
+      ],
+      "invariantIds": [
+        "INV007",
+        "INV018"
+      ],
+      "releaseGateIds": [
+        "G06"
+      ]
+    },
+    "nodeRoles": {
+      "path": "chain/profiles/node-roles-v0.json",
+      "profileVersion": "0.1.0-local.2",
+      "ownerIssue": 114
+    },
+    "developerRecovery": {
+      "typesPath": "chain/app/localnet/recovery_types.go",
+      "statePath": "chain/app/localnet/recovery_state.go",
+      "versionPath": "chain/app/internal/version/version.go",
+      "guidePath": "chain/localnet/RECOVERY.md",
+      "format": "torium-localnet-recovery-v1",
+      "ownerIssue": 98
+    },
+    "keyLifecycle": {
+      "guidePath": "chain/operator/VALIDATOR_LIFECYCLE.md",
+      "ownerIssue": 117
+    }
+  },
+  "securityInvariants": {
+    "chainIsAuthority": true,
+    "explorerDatabaseAuthority": "derived-rebuildable-index",
+    "checksumProvidesAuthenticity": false,
+    "singleProviderMayDefineTrustAnchor": false,
+    "hotMultiDatabaseCopyAllowed": false,
+    "genericRestoreMayOverwriteSignerState": false,
+    "staleOrClonedSignerMustFailClosed": true,
+    "unknownMeansZero": false,
+    "stateSyncImpliesArchiveHistory": false
+  },
+  "developerEnvelopeCompatibility": {
+    "status": "shared-field-contract-only-not-production-backup",
+    "productionPayloadReuseAllowed": false,
+    "productionTrustReuseAllowed": false,
+    "migrationDrillExecuted": false,
+    "reusableFields": {
+      "chain": [
+        "cosmosChainId",
+        "evmChainId",
+        "genesisSha256",
+        "height",
+        "blockHash",
+        "appHash"
+      ],
+      "binary": [
+        "version",
+        "commit",
+        "protocolVersion",
+        "go",
+        "cosmosEVM",
+        "cosmosSDK",
+        "cometBFT",
+        "goEthereum"
+      ],
+      "node": [
+        "name",
+        "latestHeight",
+        "blockHash",
+        "appHash",
+        "dataBytes"
+      ],
+      "file": [
+        "path",
+        "size",
+        "mode",
+        "sha256"
+      ]
+    },
+    "forbiddenPromotions": [
+      "public deterministic fixture keys",
+      "unsigned sha256 sidecar as authenticity",
+      "container or raw profile as operator role",
+      "local payload limits as capacity policy",
+      "exact binary equality as upgrade compatibility",
+      "local dataBytes as storage growth estimate"
+    ]
+  },
+  "roleStoragePolicies": [
+    {
+      "role": "validator",
+      "storagePolicyRef": "consensus-minimal-v0",
+      "pruningStrategy": "default",
+      "keepRecent": 0,
+      "interval": 0,
+      "minRetainBlocks": 0,
+      "txIndex": "null",
+      "indexEvents": [],
+      "targetFromGenesis": false,
+      "queryWindowBlocks": null,
+      "queryWindowStatus": "unproven",
+      "snapshotInterval": 0,
+      "snapshotKeepRecent": 2,
+      "discardAbciResponses": false,
+      "activated": false,
+      "evidenceComplete": false,
+      "status": "hold-unmeasured-not-runtime-activated"
+    },
+    {
+      "role": "sentry",
+      "storagePolicyRef": "consensus-minimal-v0",
+      "pruningStrategy": "default",
+      "keepRecent": 0,
+      "interval": 0,
+      "minRetainBlocks": 0,
+      "txIndex": "null",
+      "indexEvents": [],
+      "targetFromGenesis": false,
+      "queryWindowBlocks": null,
+      "queryWindowStatus": "unproven",
+      "snapshotInterval": 0,
+      "snapshotKeepRecent": 2,
+      "discardAbciResponses": false,
+      "activated": false,
+      "evidenceComplete": false,
+      "status": "hold-unmeasured-not-runtime-activated"
+    },
+    {
+      "role": "full",
+      "storagePolicyRef": "query-v0",
+      "pruningStrategy": "default",
+      "keepRecent": 0,
+      "interval": 0,
+      "minRetainBlocks": 0,
+      "txIndex": "kv",
+      "indexEvents": [],
+      "targetFromGenesis": false,
+      "queryWindowBlocks": null,
+      "queryWindowStatus": "unproven",
+      "snapshotInterval": 0,
+      "snapshotKeepRecent": 2,
+      "discardAbciResponses": false,
+      "activated": false,
+      "evidenceComplete": false,
+      "status": "hold-unmeasured-not-runtime-activated"
+    },
+    {
+      "role": "public-rpc",
+      "storagePolicyRef": "query-v0",
+      "pruningStrategy": "default",
+      "keepRecent": 0,
+      "interval": 0,
+      "minRetainBlocks": 0,
+      "txIndex": "kv",
+      "indexEvents": [],
+      "targetFromGenesis": false,
+      "queryWindowBlocks": null,
+      "queryWindowStatus": "unproven",
+      "snapshotInterval": 0,
+      "snapshotKeepRecent": 2,
+      "discardAbciResponses": false,
+      "activated": false,
+      "evidenceComplete": false,
+      "status": "hold-unmeasured-not-runtime-activated"
+    },
+    {
+      "role": "private-archive-indexer",
+      "storagePolicyRef": "archive-indexer-v0",
+      "pruningStrategy": "nothing",
+      "keepRecent": 0,
+      "interval": 0,
+      "minRetainBlocks": 0,
+      "txIndex": "kv",
+      "indexEvents": [],
+      "targetFromGenesis": true,
+      "queryWindowBlocks": null,
+      "queryWindowStatus": "proven-full-history-from-genesis",
+      "snapshotInterval": 0,
+      "snapshotKeepRecent": 2,
+      "discardAbciResponses": false,
+      "activated": true,
+      "evidenceComplete": true,
+      "status": "runtime-activated-recovery-objective-unmeasured"
+    }
+  ],
+  "pruningAcceptance": {
+    "effectiveConfigEvidence": false,
+    "storageGrowthMeasured": false,
+    "rpcBoundaryQueriesProven": false,
+    "sdkBoundaryQueriesProven": false,
+    "explorerBoundaryQueriesProven": false,
+    "historicalEvidenceWindowPreserved": false,
+    "stateSyncAvailabilityPreserved": false,
+    "zeroPlaceholderMayActivateConfig": false
+  },
+  "stateSync": {
+    "enabled": false,
+    "status": "hold-unconfigured-untrusted",
+    "rpcServers": [],
+    "snapshotServers": [],
+    "minimumIndependentProviders": 2,
+    "trustHeight": null,
+    "trustHash": null,
+    "expectedAppHash": null,
+    "trustPeriodSeconds": null,
+    "trustLevel": null,
+    "metadataPublisher": null,
+    "trustPeriodParameterStatus": "unratified",
+    "mustBeLessThanUnbondingSeconds": 1814400,
+    "newNodeSyncProven": false,
+    "expiredTrustFailsClosedProven": false,
+    "mismatchFailsClosedProven": false
+  },
+  "snapshots": {
+    "developerRuntimeEnvelope": {
+      "format": "torium-localnet-recovery-v1",
+      "status": "proven-local-developer-only",
+      "signed": false,
+      "encrypted": false,
+      "mayContainValuelessFixtureKeys": true,
+      "publicPublicationAllowed": false,
+      "operatorRestoreAllowed": false
+    },
+    "operatorApplicationSnapshot": {
+      "format": "torium-operator-application-snapshot-v0",
+      "enabled": false,
+      "status": "hold-no-signed-publication-or-restore-drill",
+      "captureMode": null,
+      "providerIds": [],
+      "publicationEndpoints": [],
+      "signatureAlgorithm": null,
+      "signatureKeyId": null,
+      "encryptionProfile": null,
+      "requiredMetadata": [
+        "cosmosChainId",
+        "evmChainId",
+        "genesisSha256",
+        "height",
+        "blockHash",
+        "appHash",
+        "binaryVersion",
+        "sourceCommit",
+        "dependencyIdentity",
+        "createdAt",
+        "providerId",
+        "payloadSha256",
+        "signatureAlgorithm",
+        "signatureKeyId",
+        "signature"
+      ],
+      "signerKeyOrStatePayloadAllowed": false,
+      "heightAppHashSemantics": {
+        "latestAnchor": "at the latest committed height, use consensus state LastBlockHeight and AppHash",
+        "historicalAnchor": "for an older height H, verify the post-commit app hash from the canonical H+1 header"
+      },
+      "restoreProven": false,
+      "publicationProven": false
+    }
+  },
+  "backupScopes": [
+    {
+      "id": "validator-node-state",
+      "ownerIssue": 116,
+      "sourceIdentities": [
+        "validator"
+      ],
+      "authority": "rebuildable-chain-copy",
+      "includes": [
+        "application state",
+        "CometBFT block and consensus data"
+      ],
+      "excludes": [
+        "consensus private key",
+        "priv_validator_state.json"
+      ],
+      "rebuildAllowed": true,
+      "schedule": null,
+      "destination": null,
+      "verification": "cold-consistent anchor and payload verification",
+      "status": "hold-no-operator-storage-selected"
+    },
+    {
+      "id": "full-rpc-node-state",
+      "ownerIssue": 116,
+      "sourceIdentities": [
+        "full",
+        "public-rpc"
+      ],
+      "authority": "rebuildable-chain-copy",
+      "includes": [
+        "application state",
+        "query index",
+        "CometBFT data"
+      ],
+      "excludes": [
+        "operator keys",
+        "RPC credentials"
+      ],
+      "rebuildAllowed": true,
+      "schedule": null,
+      "destination": null,
+      "verification": "query-window and anchor verification",
+      "status": "hold-no-operator-storage-selected"
+    },
+    {
+      "id": "archive-history",
+      "ownerIssue": 116,
+      "sourceIdentities": [
+        "private-archive-indexer"
+      ],
+      "authority": "rebuildable-chain-copy",
+      "includes": [
+        "from-genesis application and transaction history"
+      ],
+      "excludes": [
+        "consumer credentials",
+        "signer state"
+      ],
+      "rebuildAllowed": true,
+      "schedule": null,
+      "destination": null,
+      "verification": "from-genesis boundary and anchor verification",
+      "status": "hold-no-operator-storage-selected"
+    },
+    {
+      "id": "explorer-database",
+      "ownerIssue": 116,
+      "sourceIdentities": [
+        "blockscout-postgresql"
+      ],
+      "authority": "derived-rebuildable-index",
+      "includes": [
+        "Blockscout PostgreSQL derived index"
+      ],
+      "excludes": [
+        "L1 trust authority",
+        "chain signer material"
+      ],
+      "rebuildAllowed": true,
+      "schedule": null,
+      "destination": null,
+      "verification": "canonical reindex comparison",
+      "status": "hold-explorer-inactive"
+    },
+    {
+      "id": "node-configuration",
+      "ownerIssue": 116,
+      "sourceIdentities": [
+        "operator-configuration"
+      ],
+      "authority": "reviewed-configuration-copy",
+      "includes": [
+        "genesis",
+        "role profile",
+        "secret-free configuration"
+      ],
+      "excludes": [
+        "private keys",
+        "credentials",
+        "environment secrets"
+      ],
+      "rebuildAllowed": false,
+      "schedule": null,
+      "destination": null,
+      "verification": "version, checksum, and secret-scan verification",
+      "status": "hold-no-operator-storage-selected"
+    },
+    {
+      "id": "validator-signer-state",
+      "ownerIssue": 117,
+      "sourceIdentities": [
+        "validator"
+      ],
+      "authority": "double-sign-safety-state",
+      "includes": [
+        "monotonic last-sign state under #117 custody"
+      ],
+      "excludes": [
+        "generic node-state snapshot",
+        "cloned live signer"
+      ],
+      "rebuildAllowed": false,
+      "schedule": null,
+      "destination": null,
+      "verification": "monotonicity and no-concurrent-signer gate",
+      "status": "hold-owned-by-issue-117"
+    }
+  ],
+  "retention": {
+    "automaticDeletionEnabled": false,
+    "localSnapshotKeepRecentIsProductionPolicy": false,
+    "classes": [
+      "operator-snapshots",
+      "node-backups",
+      "signer-state-backups",
+      "archive-history",
+      "explorer-database",
+      "corruption-evidence",
+      "restore-audit-evidence"
+    ],
+    "retentionCount": null,
+    "retentionDays": null,
+    "immutabilityDays": null,
+    "deletionMode": null,
+    "status": "hold-unmeasured-policy-unratified"
+  },
+  "accessControl": {
+    "status": "hold-no-operator-identities-or-provider",
+    "publicRead": false,
+    "publicWrite": false,
+    "principals": [],
+    "twoPersonActions": [
+      "delete-backup",
+      "change-retention",
+      "publish-trust-metadata",
+      "restore-validator-signer-state"
+    ],
+    "auditLogDestination": null,
+    "breakGlassProcedure": null,
+    "reviewIntervalDays": null
+  },
+  "encryption": {
+    "status": "hold-no-kms-or-key-custody-selected",
+    "atRestRequired": true,
+    "inTransitRequired": true,
+    "clientSideBeforeUploadRequired": true,
+    "algorithm": null,
+    "keyProvider": null,
+    "keyId": null,
+    "rotationDays": null,
+    "recoveryShares": null
+  },
+  "restoreVerification": {
+    "status": "contract-defined-runtime-unproven",
+    "operatorDrillsExecuted": false,
+    "localDeveloperEvidenceOnly": true,
+    "failClosedChecks": [
+      "cosmos and EVM chain identity",
+      "genesis SHA-256",
+      "height, block hash, and app hash semantics",
+      "payload checksum and detached signature",
+      "binary, source, dependency, and upgrade compatibility",
+      "independent provider comparison and trust expiry",
+      "corrupt source preservation for investigation",
+      "signer-state monotonicity and no concurrent clone"
+    ],
+    "requiredDrills": [
+      "clean new-node state sync",
+      "operator snapshot restore",
+      "validator stale-signer rejection",
+      "full and public RPC restore",
+      "archive restore or from-genesis rebuild",
+      "explorer restore or canonical reindex",
+      "developer-envelope to operator-workflow migration"
+    ]
+  },
+  "recoveryObjectives": {
+    "status": "hold-unmeasured-no-objective-claimed",
+    "measurementOwners": [
+      118,
+      119
+    ],
+    "objectives": [
+      "validator-node-state",
+      "full-rpc-node-state",
+      "archive-history",
+      "explorer-database",
+      "node-configuration",
+      "validator-signer-state"
+    ],
+    "rpoSeconds": null,
+    "rtoSeconds": null,
+    "restoreThroughputBytesPerSecond": null,
+    "storageGrowthBytesPerDay": null,
+    "lastDrillAt": null,
+    "evidencePath": null
+  },
+  "holds": [
+    {
+      "id": "role-storage-runtime-inactive",
+      "ownerIssue": 114,
+      "evidenceIssues": [
+        116,
+        118
+      ],
+      "requirement": "Activate and prove effective pruning, indexing, snapshot, and query-window configuration for every node role."
+    },
+    {
+      "id": "state-sync-trust-unratified",
+      "ownerIssue": 116,
+      "evidenceIssues": [
+        123
+      ],
+      "requirement": "Select independent providers and ratify trust height, hash, period, level, expiry, and mismatch behavior."
+    },
+    {
+      "id": "snapshot-envelope-and-publication-unproven",
+      "ownerIssue": 116,
+      "evidenceIssues": [
+        117,
+        119
+      ],
+      "requirement": "Define and prove the signed operator snapshot envelope, publisher identity, safe publication, and restore verification."
+    },
+    {
+      "id": "snapshot-signing-custody-unselected",
+      "ownerIssue": 117,
+      "evidenceIssues": [
+        116
+      ],
+      "requirement": "Select detached-signature keys, custody, algorithm, rotation, revocation, recovery, and compromise response."
+    },
+    {
+      "id": "backup-storage-and-access-unselected",
+      "ownerIssue": 116,
+      "evidenceIssues": [],
+      "requirement": "Select backup destination, schedule, access identities, audit sink, offsite replicas, and restore source policy."
+    },
+    {
+      "id": "encryption-custody-unselected",
+      "ownerIssue": 117,
+      "evidenceIssues": [
+        116
+      ],
+      "requirement": "Select encryption envelope, key provider, key identity, rotation, revocation, and recovery-share custody under #117."
+    },
+    {
+      "id": "retention-policy-unmeasured",
+      "ownerIssue": 116,
+      "evidenceIssues": [
+        118
+      ],
+      "requirement": "Ratify retention, immutability, deletion, offsite replica, and accountability evidence windows from measured capacity."
+    },
+    {
+      "id": "signer-recovery-unproven",
+      "ownerIssue": 117,
+      "evidenceIssues": [
+        116,
+        119
+      ],
+      "requirement": "Prove monotonic signer-state recovery and reject stale or concurrently active validator signer clones."
+    },
+    {
+      "id": "rpo-rto-and-growth-unmeasured",
+      "ownerIssue": 116,
+      "evidenceIssues": [
+        118,
+        119
+      ],
+      "requirement": "Measure snapshot duration, storage growth, restore throughput, RPO, and RTO under declared hardware and workloads."
+    },
+    {
+      "id": "operator-recovery-drills-unproven",
+      "ownerIssue": 116,
+      "evidenceIssues": [
+        119
+      ],
+      "requirement": "Snapshot creation, corrupt-archive rejection, and atomic restore-to-consensus are exercised by chain/recovery/run-restore-drill-v0.sh (2026-07-29); clean state sync, role restore or rebuild, explorer reindex, and local-envelope migration remain unexercised."
+    },
+    {
+      "id": "chaos-recovery-drills-unproven",
+      "ownerIssue": 119,
+      "evidenceIssues": [
+        116
+      ],
+      "requirement": "Inject corruption, truncation, provider loss, disk pressure, partitions, and restart faults into recovery workflows."
+    },
+    {
+      "id": "explorer-recovery-inactive",
+      "ownerIssue": 113,
+      "evidenceIssues": [
+        116
+      ],
+      "requirement": "Activate the explorer stack before proving PostgreSQL restore, canonical reindex, and index-lag recovery behavior."
+    },
+    {
+      "id": "archive-recovery-inactive",
+      "ownerIssue": 114,
+      "evidenceIssues": [
+        116
+      ],
+      "requirement": "Activate the private archive role before proving from-genesis rebuild, restore, retention, and query boundaries."
+    },
+    {
+      "id": "public-operation-deferred",
+      "ownerIssue": 127,
+      "evidenceIssues": [
+        116
+      ],
+      "requirement": "Keep publication endpoints, public credentials, infrastructure purchases, and live operation outside this local-only v0."
+    }
+  ]
+}

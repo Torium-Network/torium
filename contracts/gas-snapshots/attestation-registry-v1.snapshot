@@ -1,0 +1,3 @@
+ToriumAttestationRegistryTest:testGasAttest() (gas: 267731)
+ToriumAttestationRegistryTest:testGasRevoke() (gas: 292400)
+ToriumAttestationRegistryTest:testGasSupersede() (gas: 548125)

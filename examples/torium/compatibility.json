@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "sdk": {
+    "package": "@torium-network/sdk",
+    "version": "0.1.0",
+    "policyVersion": "0.1.0"
+  },
+  "chain": {
+    "environment": "localnet",
+    "manifestVersion": "0.2.0",
+    "cosmosChainId": "torium-localnet-1",
+    "evmChainId": 1414484556
+  },
+  "tooling": {
+    "node": "22.23.1",
+    "pnpm": "10.27.0",
+    "viem": "2.55.2",
+    "vite": "7.3.1",
+    "expo": "54.0.33",
+    "reactNative": "0.81.5",
+    "metro": "0.83.3",
+    "hermesBytecodeVersion": 96,
+    "hardhat": "3.9.1",
+    "foundry": "1.7.1",
+    "solidity": "0.8.30"
+  },
+  "runtimeEvidence": {
+    "staticBuild": "issue-143",
+    "nodeModules": "issue-136-ci-node-22-and-24",
+    "nodeLocalnet": "issue-137",
+    "injectedBrowser": "issue-136-mocked-provider; issue-137-live-wallet",
+    "reactNativeHermes": "issue-136-metro-bytecode; issue-137-live-device",
+    "solidityLocalnet": "issue-137",
+    "rewardAndAttestation": "issue-134"
+  }
+}

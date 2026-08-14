@@ -1,0 +1,156 @@
+---
+title: Wallets and transactions
+description: Connect caller-owned accounts and use viem transaction actions without giving the SDK custody of keys.
+docId: sdk-wallets-transactions
+version: v0
+status: foundation
+ownerIssue: 141
+sourceOfTruth: packages/torium-sdk/src/wallet.ts
+sourceStatus: existing
+---
+
+SDK 0.1.0 provides a Torium-bound viem wallet client plus a conservative EIP-1559 transaction
+foundation. It validates and simulates a request before signing, submits exactly once, and reports
+receipt outcomes without pretending that a returned RPC hash proves retention or inclusion.
+Replacement/cancellation classification is not yet implemented. Stable normalized errors,
+cancellation, per-action timeouts and redacted diagnostics are available under `./errors`.
+
+## Provider and account ownership
+
+Use a caller-owned EIP-1193 provider for an injected or WalletConnect-style wallet:
+
+```ts
+import { toriumLocalnet } from "@torium-network/sdk/chains";
+import { createToriumWalletClient } from "@torium-network/sdk/wallet";
+import { custom, type EIP1193Provider } from "viem";
+
+const provider = (window as Window & { ethereum?: EIP1193Provider }).ethereum;
+if (!provider) throw new Error("No injected EIP-1193 wallet is available");
+
+const wallet = createToriumWalletClient({
+  chain: toriumLocalnet,
+  transport: custom(provider),
+});
+```
+
+`window.ethereum` is illustrative; detect provider availability in your application and do not
+assume a browser global on Node or React Native. The SDK never generates, stores, uploads or logs a
+mnemonic or private key. For local scripts, keep disposable test keys outside source control and
+never reuse them on any network with value.
+
+Before requesting a signature, show the user the selected chain, recipient, value, calldata and fee
+estimate. Reject wrong-chain state instead of silently switching networks. Network addition or
+switching requires explicit wallet API calls and explicit user approval.
+
+## Amounts and fees
+
+TOR and tTOR use 18 decimals. Use the SDK's strict, locale-neutral parser for Torium-native amounts:
+
+```ts
+import {
+  formatToriumAmount,
+  parseToriumAmount,
+} from "@torium-network/sdk/utils";
+
+const value = parseToriumAmount("0.125");
+const machineDisplay = formatToriumAmount(value);
+```
+
+The parser accepts a string and returns atorium `bigint`; it never trims, rounds or accepts locale
+separators. `formatToriumAmount` produces machine formatting, not user-locale UI. Direct viem
+`parseEther`/`formatEther` remains equivalent for valid 18-decimal values. Never use floating-point
+arithmetic for balances, transaction values, gas prices or fees.
+
+## Safe transaction sequence
+
+The stable helper makes the write boundary explicit:
+
+1. Validate the selected endpoint and chain identity.
+2. Run preflight, which simulates and estimates gas even when the request already contains a gas
+   limit.
+3. Show the chain, recipient, value, calldata and fee result to the user and obtain approval.
+4. Submit once through the caller-owned wallet client; the helper repeats fresh preflight immediately
+   before signing. RPC acceptance does not by itself prove
+   mempool retention, inclusion or finality.
+5. Wait for and inspect the receipt. A timeout becomes `unknown`; ordinary RPC failures still throw.
+   Re-query by hash before deciding what to show the user.
+6. Reconcile application state from the chain.
+
+The helper accepts the standard EIP-1559 subset needed for native transfers, contract calls and
+contract deployment. It does not invent a Torium transaction envelope:
+
+```ts
+import { parseToriumAmount } from "@torium-network/sdk/utils";
+import {
+  preflightToriumTransaction,
+  sendToriumTransactionOnce,
+  waitForToriumTransaction,
+} from "@torium-network/sdk/wallet";
+
+const [account] = await wallet.getAddresses();
+if (!account) throw new Error("Connect an account before sending");
+
+const transaction = {
+  account,
+  to: "0x0000000000000000000000000000000000000001" as const,
+  value: parseToriumAmount("0.001"),
+};
+
+const review = await preflightToriumTransaction(client, transaction);
+if (!review.canSubmit) throw new Error(review.blockers.join(", "));
+// Present review to the user before requesting a signature.
+
+const submission = await sendToriumTransactionOnce(
+  wallet,
+  client,
+  transaction,
+  {
+    timeoutMs: 30_000,
+    authorize: async (freshReview) => {
+      // Render and confirm these final gas, fee, nonce and encoded-size values.
+      return showFinalConfirmation(freshReview);
+    },
+  }
+);
+const outcome = await waitForToriumTransaction(client, {
+  hash: submission.hash,
+});
+
+if (outcome.status === "unknown") {
+  // Do not automatically resubmit. Reconcile the hash through another healthy RPC.
+}
+```
+
+## Capability boundaries
+
+`toriumTransactionCapabilities` is frozen and machine-readable. The current local profile uses a 10%
+configured bump rule for both fee cap and tip cap, but the only observed successful replacement was
+local to the receiving node. Network propagation was not proven. Every Torium chain therefore sets
+viem's `supportsTransactionReplacementDetection` to `false`.
+
+The receipt helper requests one confirmation, which means the transaction is in
+CometBFT-committed state. It returns `committed` or `reverted` from a matching receipt, and `unknown`
+only for viem's receipt-timeout error. It never reports `dropped`, `replaced` or `cancelled`, and it
+never retries a write. Stable replacement/cancellation helpers require the multi-validator evidence
+consolidated in the release verification suite.
+
+Preflight and receipt polling accept `signal`, `timeoutMs`, `requestId`, and an opt-in diagnostics
+hook. Preflight is an idempotent read and may receive an explicit retry policy capped at three total
+attempts. Submission accepts the same control/diagnostic fields but deliberately has no retry option:
+timeout or transport ambiguity does not authorize a second wallet invocation.
+
+The base wallet continues to expose standard viem legacy and EIP-2930 actions. The stable Torium
+preflight/send helper intentionally rejects legacy gas price, blobs, authorization lists, chain
+overrides and `assertChainId: false`.
+
+`authorize` is mandatory because the submit helper repeats preflight and may resolve newer gas, fee
+or nonce values than an earlier preview. The exact fresh values are passed to this callback before
+the wallet is invoked. Returning `false` prevents signing. The helper then signs those resolved
+values, not the older partial request. Recipient, value, calldata and normalized access list come
+from the immutable snapshot taken when submission begins; mutating the original request during an
+async confirmation cannot change the signed transaction. Authorization succeeds only on the
+literal boolean `true`.
+
+The [executable examples](/v0/examples) apply this lifecycle in a Node CLI, injected browser wallet,
+platform-owned mobile account boundary and generic Solidity deployment flow. Runtime matrix and
+localnet conformance evidence remain consolidated in the release verification suite.

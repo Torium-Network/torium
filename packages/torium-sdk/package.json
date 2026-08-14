@@ -1,0 +1,150 @@
+{
+  "name": "@torium-network/sdk",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Local-first TypeScript SDK foundation for the Torium sovereign EVM L1",
+  "keywords": [
+    "torium",
+    "evm",
+    "blockchain",
+    "sdk",
+    "viem"
+  ],
+  "license": "Apache-2.0",
+  "author": "Torium Network",
+  "homepage": "https://torium.network/docs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Torium-Network/torium.git",
+    "directory": "packages/torium-sdk"
+  },
+  "bugs": {
+    "url": "https://github.com/Torium-Network/torium/issues"
+  },
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "LICENSE",
+    "README.md",
+    "SECURITY.md"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/types/index.d.mts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/types/index.d.cts",
+        "default": "./dist/cjs/index.js"
+      }
+    },
+    "./chains": {
+      "import": {
+        "types": "./dist/types/chains.d.mts",
+        "default": "./dist/esm/chains.js"
+      },
+      "require": {
+        "types": "./dist/types/chains.d.cts",
+        "default": "./dist/cjs/chains.js"
+      }
+    },
+    "./clients": {
+      "import": {
+        "types": "./dist/types/clients.d.mts",
+        "default": "./dist/esm/clients.js"
+      },
+      "require": {
+        "types": "./dist/types/clients.d.cts",
+        "default": "./dist/cjs/clients.js"
+      }
+    },
+    "./wallet": {
+      "import": {
+        "types": "./dist/types/wallet.d.mts",
+        "default": "./dist/esm/wallet.js"
+      },
+      "require": {
+        "types": "./dist/types/wallet.d.cts",
+        "default": "./dist/cjs/wallet.js"
+      }
+    },
+    "./contracts": {
+      "import": {
+        "types": "./dist/types/contracts.d.mts",
+        "default": "./dist/esm/contracts.js"
+      },
+      "require": {
+        "types": "./dist/types/contracts.d.cts",
+        "default": "./dist/cjs/contracts.js"
+      }
+    },
+    "./errors": {
+      "import": {
+        "types": "./dist/types/errors.d.mts",
+        "default": "./dist/esm/errors.js"
+      },
+      "require": {
+        "types": "./dist/types/errors.d.cts",
+        "default": "./dist/cjs/errors.js"
+      }
+    },
+    "./utils": {
+      "import": {
+        "types": "./dist/types/utils.d.mts",
+        "default": "./dist/esm/utils.js"
+      },
+      "require": {
+        "types": "./dist/types/utils.d.cts",
+        "default": "./dist/cjs/utils.js"
+      }
+    },
+    "./experimental": {
+      "import": {
+        "types": "./dist/types/experimental.d.mts",
+        "default": "./dist/esm/experimental.js"
+      },
+      "require": {
+        "types": "./dist/types/experimental.d.cts",
+        "default": "./dist/cjs/experimental.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=22.23.1 <23 || >=24 <25"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check-types": "tsc --noEmit -p tsconfig.json",
+    "format:check": "prettier --check .",
+    "lint": "pnpm run format:check && pnpm run build && publint --strict",
+    "format": "prettier --write .",
+    "prepack": "node scripts/ensure-built.mjs",
+    "test": "pnpm run build && node --test test/*.test.mjs",
+    "validate": "pnpm run build && node scripts/validate-package.mjs && node scripts/validate-release-readiness.mjs",
+    "validate:chains": "node scripts/ensure-built.mjs && node scripts/validate-chains.mjs",
+    "verify": "pnpm run format:check && pnpm run check-types && pnpm run build && node scripts/validate-chains.mjs && node scripts/validate-read-capabilities.mjs && node scripts/validate-utils.mjs && node scripts/validate-wallet-capabilities.mjs && node --test test/*.test.mjs && node scripts/validate-package.mjs && node scripts/validate-release-readiness.mjs"
+  },
+  "peerDependencies": {
+    "viem": ">=2.55.2 <3"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.5",
+    "prettier": "3.8.1",
+    "publint": "0.3.21",
+    "rollup": "4.57.0",
+    "typescript": "5.9.3",
+    "viem": "2.55.2"
+  }
+}

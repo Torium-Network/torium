@@ -1,0 +1,296 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/chain/performance-v0.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "performanceVersion",
+    "status",
+    "ownerIssue",
+    "scope",
+    "sources",
+    "knownProtocolLimits",
+    "activeWorkloads",
+    "deferredWorkloads",
+    "scenarios",
+    "measurementContract",
+    "regressionPolicy",
+    "capacityClaims",
+    "holds"
+  ],
+  "properties": {
+    "$schema": { "const": "./performance-v0.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "performanceVersion": {
+      "type": "string",
+      "pattern": "^0\\.1\\.0-local\\.[1-9][0-9]*$"
+    },
+    "status": {
+      "enum": ["defined-local-smoke-not-executed", "executed-local-baselines"]
+    },
+    "ownerIssue": { "const": 118 },
+    "scope": { "$ref": "#/$defs/scope" },
+    "sources": {
+      "type": "object",
+      "minProperties": 10,
+      "additionalProperties": { "$ref": "#/$defs/source" }
+    },
+    "knownProtocolLimits": { "$ref": "#/$defs/knownLimits" },
+    "activeWorkloads": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 4,
+      "items": { "$ref": "#/$defs/activeWorkload" }
+    },
+    "deferredWorkloads": {
+      "type": "array",
+      "minItems": 7,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/holdItem" }
+    },
+    "scenarios": {
+      "type": "array",
+      "minItems": 6,
+      "items": { "$ref": "#/$defs/scenario" }
+    },
+    "measurementContract": { "$ref": "#/$defs/measurementContract" },
+    "regressionPolicy": { "$ref": "#/$defs/regressionPolicy" },
+    "capacityClaims": { "$ref": "#/$defs/capacityClaims" },
+    "holds": {
+      "type": "array",
+      "minItems": 6,
+      "items": { "type": "string", "minLength": 10 }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "version"],
+      "properties": {
+        "path": { "type": "string", "pattern": "^chain/" },
+        "version": { "type": "string", "minLength": 1 }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "activeTopology",
+        "publicLaunchAllowed",
+        "publicCapacityClaimed",
+        "vpsSizingAllowed",
+        "roleComparisonProven",
+        "toriumBackendIntegrationInScope",
+        "bridgeInScope",
+        "l2InScope",
+        "deploymentInScope"
+      ],
+      "properties": {
+        "environment": { "const": "local-development-only" },
+        "activeTopology": {
+          "const": "canonical-four-validator-combined-localnet"
+        },
+        "publicLaunchAllowed": { "const": false },
+        "publicCapacityClaimed": { "const": false },
+        "vpsSizingAllowed": { "const": false },
+        "roleComparisonProven": { "const": false },
+        "toriumBackendIntegrationInScope": { "const": false },
+        "bridgeInScope": { "const": false },
+        "l2InScope": { "const": false },
+        "deploymentInScope": { "const": false }
+      }
+    },
+    "knownLimits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maximumBlockBytes",
+        "maximumBlockGas",
+        "targetBlockGas",
+        "accountExecutableSlots",
+        "maximumEvmTransactionBytes",
+        "rpcBatchRequests",
+        "rpcMaximumOpenConnections",
+        "rpcBatchResponseBytes",
+        "status"
+      ],
+      "properties": {
+        "maximumBlockBytes": { "type": "integer", "minimum": 1 },
+        "maximumBlockGas": { "type": "integer", "minimum": 1 },
+        "targetBlockGas": { "type": "integer", "minimum": 1 },
+        "accountExecutableSlots": { "type": "integer", "minimum": 1 },
+        "maximumEvmTransactionBytes": { "type": "integer", "minimum": 1 },
+        "rpcBatchRequests": { "type": "integer", "minimum": 1 },
+        "rpcMaximumOpenConnections": { "type": "integer", "minimum": 1 },
+        "rpcBatchResponseBytes": { "type": "integer", "minimum": 1 },
+        "status": {
+          "const": "configured-functional-limits-not-capacity-evidence"
+        }
+      }
+    },
+    "activeWorkload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "status",
+        "scenario",
+        "concurrency",
+        "measures"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 3 },
+        "version": { "const": 1 },
+        "status": {
+          "enum": ["defined-not-executed", "executed-local-baseline"]
+        },
+        "scenario": { "type": "string" },
+        "operationCount": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "concurrency": { "type": "integer", "minimum": 1, "maximum": 16 },
+        "measures": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "methods": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^eth_" }
+        },
+        "httpRequestCount": { "type": "integer", "minimum": 1 },
+        "jsonRpcCallCount": { "type": "integer", "minimum": 1 },
+        "batchCount": { "type": "integer", "minimum": 0 },
+        "exactBatchSize": { "type": "integer", "minimum": 1 },
+        "endpoint": { "enum": ["validator-0-public-rpc", "archive-rpc-gateway"] },
+        "historicalDepthFractions": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "holdItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "reason"],
+      "properties": {
+        "id": { "type": "string", "minLength": 3 },
+        "status": { "const": "HOLD-not-measured-v0" },
+        "reason": { "type": "string", "minLength": 8 }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "durationSeconds", "repetitions"],
+      "properties": {
+        "id": { "type": "string" },
+        "status": { "enum": ["defined-not-executed", "HOLD-not-measured-v0"] },
+        "durationSeconds": { "type": ["integer", "null"], "minimum": 1 },
+        "repetitions": { "type": ["integer", "null"], "minimum": 1 }
+      }
+    },
+    "measurementContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "latencyStatistics",
+        "formalConfidenceClaimed",
+        "p99Claimed",
+        "outcomes",
+        "inclusionRecordedSeparately",
+        "latencyStages",
+        "resourceSignals",
+        "resourceNonClaims",
+        "requiredProvenance"
+      ],
+      "properties": {
+        "latencyStatistics": {
+          "type": "array",
+          "const": ["minimum", "p50", "p95", "maximum", "mean"]
+        },
+        "formalConfidenceClaimed": { "const": false },
+        "p99Claimed": { "const": false },
+        "outcomes": {
+          "type": "array",
+          "const": [
+            "success",
+            "expected-revert",
+            "unexpected-revert",
+            "submission-failed",
+            "dropped"
+          ]
+        },
+        "inclusionRecordedSeparately": { "const": true },
+        "latencyStages": {
+          "type": "array",
+          "const": [
+            "submission-to-acknowledgement",
+            "submission-to-inclusion",
+            "submission-to-receipt"
+          ]
+        },
+        "resourceSignals": {
+          "type": "array",
+          "minItems": 5,
+          "items": { "type": "string" }
+        },
+        "resourceNonClaims": {
+          "type": "array",
+          "minItems": 4,
+          "items": { "type": "string" }
+        },
+        "requiredProvenance": {
+          "type": "array",
+          "minItems": 8,
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "regressionPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "blockingCiEnabled",
+        "scheduledBenchmarkEnabled",
+        "thresholds"
+      ],
+      "properties": {
+        "status": { "const": "HOLD-no-stable-runner-or-baseline" },
+        "blockingCiEnabled": { "const": false },
+        "scheduledBenchmarkEnabled": { "const": false },
+        "thresholds": { "type": "null" }
+      }
+    },
+    "capacityClaims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "safeTps",
+        "safeRpcRequestsPerSecond",
+        "validatorSizing",
+        "rpcSizing",
+        "archiveSizing",
+        "explorerSizing",
+        "billOfMaterialsReady"
+      ],
+      "properties": {
+        "safeTps": { "type": "null" },
+        "safeRpcRequestsPerSecond": { "type": "null" },
+        "validatorSizing": { "type": "null" },
+        "rpcSizing": { "type": "null" },
+        "archiveSizing": { "type": "null" },
+        "explorerSizing": { "type": "null" },
+        "billOfMaterialsReady": { "const": false }
+      }
+    }
+  }
+}

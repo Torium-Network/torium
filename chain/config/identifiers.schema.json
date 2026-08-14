@@ -1,0 +1,269 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/chain-identifiers-v1.json",
+  "title": "Torium canonical chain and public namespace identifiers",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "manifestVersion",
+    "status",
+    "updatedAt",
+    "product",
+    "namespaces",
+    "addressing",
+    "currency",
+    "walletMetadata",
+    "networks",
+    "nonCanonicalFixtures",
+    "consumerIssues",
+    "deferred"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "manifestVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "status": {
+      "enum": ["prelaunch-locked", "testnet", "mainnet"]
+    },
+    "updatedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "product": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["publicName"],
+      "properties": {
+        "publicName": {
+          "const": "Torium"
+        }
+      }
+    },
+    "namespaces": {
+      "type": "object",
+      "required": ["npm", "github", "docs"]
+    },
+    "addressing": {
+      "type": "object",
+      "required": ["evm", "cosmos"]
+    },
+    "currency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseDenom",
+        "decimals",
+        "denomUnits",
+        "mainnet",
+        "nonValueNetworks"
+      ],
+      "properties": {
+        "baseDenom": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]{2,127}$"
+        },
+        "decimals": {
+          "const": 18
+        },
+        "denomUnits": {
+          "type": "array",
+          "minItems": 2
+        },
+        "mainnet": {
+          "type": "object",
+          "required": ["name", "symbol", "tickerStatus", "fallbackSymbol"]
+        },
+        "nonValueNetworks": {
+          "type": "object",
+          "required": ["name", "symbol", "hasMarketValue"]
+        }
+      }
+    },
+    "walletMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eip3085Source",
+        "localnetDefaults",
+        "publicEndpointStatus",
+        "blockExplorerStatus",
+        "iconAssetStatus"
+      ],
+      "properties": {
+        "eip3085Source": {
+          "const": "networks"
+        },
+        "localnetDefaults": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "rpcUrls",
+            "webSocketUrls",
+            "blockExplorerUrls",
+            "publishable"
+          ],
+          "properties": {
+            "rpcUrls": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^http://(127\\.0\\.0\\.1|localhost):[0-9]+$"
+              },
+              "minItems": 1
+            },
+            "webSocketUrls": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^ws://(127\\.0\\.0\\.1|localhost):[0-9]+$"
+              },
+              "minItems": 1
+            },
+            "blockExplorerUrls": {
+              "type": "array",
+              "maxItems": 0
+            },
+            "publishable": {
+              "const": false
+            }
+          }
+        },
+        "publicEndpointStatus": {
+          "const": "deferred-unpublished"
+        },
+        "blockExplorerStatus": {
+          "type": "string"
+        },
+        "iconAssetStatus": {
+          "type": "string"
+        }
+      }
+    },
+    "networks": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "$ref": "#/$defs/network"
+      }
+    },
+    "nonCanonicalFixtures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "evmChainId", "cosmosChainId", "reason"]
+      }
+    },
+    "consumerIssues": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "uniqueItems": true
+    },
+    "deferred": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "displayName",
+        "public",
+        "nativeCurrencySymbol",
+        "evm",
+        "cosmos"
+      ],
+      "properties": {
+        "environment": {
+          "enum": ["localnet", "devnet", "testnet", "mainnet"]
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "nativeCurrencySymbol": {
+          "enum": ["tTOR", "TOR"]
+        },
+        "evm": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "chainId",
+            "chainIdHex",
+            "networkId",
+            "caip2",
+            "shortName",
+            "registryStatus"
+          ],
+          "properties": {
+            "chainId": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2147483647
+            },
+            "chainIdHex": {
+              "type": "string",
+              "pattern": "^0x[0-9a-f]+$"
+            },
+            "networkId": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2147483647
+            },
+            "caip2": {
+              "type": "string",
+              "pattern": "^eip155:[1-9][0-9]*$"
+            },
+            "shortName": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]*$"
+            },
+            "registryStatus": {
+              "enum": [
+                "local-only-not-registered",
+                "collision-checked-unreserved",
+                "registered"
+              ]
+            },
+            "collisionFallback": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "cosmos": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["chainId"],
+          "properties": {
+            "chainId": {
+              "type": "string",
+              "pattern": "^[a-z0-9-]+-[1-9][0-9]*$"
+            }
+          }
+        }
+      }
+    }
+  }
+}

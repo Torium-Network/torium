@@ -1,0 +1,737 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/node-roles-v0.schema.json",
+  "title": "Torium node-role contract v0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "profileVersion",
+    "status",
+    "ownerIssue",
+    "publicLaunchAllowed",
+    "publicClientScope",
+    "publicCosmosApiDelegatedIssue",
+    "sources",
+    "localNetwork",
+    "tracePolicy",
+    "runtimePolicies",
+    "storagePolicies",
+    "consumerGateways",
+    "roles"
+  ],
+  "properties": {
+    "$schema": { "const": "./node-roles-v0.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "profileVersion": {
+      "type": "string",
+      "pattern": "^0\\.1\\.0-local\\.[1-9][0-9]*$"
+    },
+    "status": { "const": "defined-local-v0-not-activated-publicly" },
+    "ownerIssue": { "const": 114 },
+    "publicLaunchAllowed": { "const": false },
+    "publicClientScope": { "const": "evm-only-v0" },
+    "publicCosmosApiDelegatedIssue": { "const": 131 },
+    "sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identifiers",
+        "protocol",
+        "currentLocalRpcProfile",
+        "explorerSelection"
+      ],
+      "properties": {
+        "identifiers": { "$ref": "#/$defs/versionedSource" },
+        "protocol": { "$ref": "#/$defs/versionedSource" },
+        "currentLocalRpcProfile": { "$ref": "#/$defs/versionedSource" },
+        "explorerSelection": {
+          "allOf": [
+            { "$ref": "#/$defs/versionedSource" },
+            {
+              "type": "object",
+              "required": ["ownerIssue"],
+              "properties": { "ownerIssue": { "const": 112 } }
+            }
+          ]
+        }
+      }
+    },
+    "localNetwork": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "cosmosChainId",
+        "evmChainId",
+        "evmChainIdHex",
+        "public"
+      ],
+      "properties": {
+        "environment": { "const": "localnet" },
+        "cosmosChainId": { "type": "string", "minLength": 8 },
+        "evmChainId": { "type": "integer", "minimum": 1 },
+        "evmChainIdHex": { "type": "string", "pattern": "^0x[0-9a-f]+$" },
+        "public": { "const": false }
+      }
+    },
+    "tracePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "requiredMethods",
+        "provenButDisabledMethods",
+        "operatorNamespaceEnabledOnAnyRole",
+        "activationRequiresNewProfileVersionAndConformance"
+      ],
+      "properties": {
+        "status": { "const": "proven-upstream-poc-but-not-enabled-v0" },
+        "requiredMethods": { "const": [] },
+        "provenButDisabledMethods": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^debug_trace" }
+        },
+        "operatorNamespaceEnabledOnAnyRole": { "const": false },
+        "activationRequiresNewProfileVersionAndConformance": { "const": true }
+      }
+    },
+    "runtimePolicies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "disabled",
+        "comet-diagnostic-v0",
+        "cosmos-query-v0",
+        "evm-public-v0",
+        "evm-archive-blockscout-candidate-v0"
+      ],
+      "properties": {
+        "disabled": { "$ref": "#/$defs/disabledPolicy" },
+        "comet-diagnostic-v0": { "$ref": "#/$defs/cometPolicy" },
+        "cosmos-query-v0": { "$ref": "#/$defs/cosmosPolicy" },
+        "evm-public-v0": {
+          "allOf": [
+            { "$ref": "#/$defs/evmPolicy" },
+            {
+              "type": "object",
+              "required": ["id", "status", "consumerMethodContract"],
+              "properties": {
+                "id": { "const": "evm-public-v0" },
+                "status": { "const": "defined-local-loopback-only" },
+                "consumerMethodContract": { "type": "array" },
+                "candidateMethodContract": false
+              }
+            }
+          ]
+        },
+        "evm-archive-blockscout-candidate-v0": {
+          "allOf": [
+            { "$ref": "#/$defs/evmPolicy" },
+            {
+              "type": "object",
+              "required": ["id", "status", "candidateMethodContract"],
+              "properties": {
+                "id": { "const": "evm-archive-blockscout-candidate-v0" },
+                "status": { "enum": ["candidate-not-activated", "candidate-gateway-enforced-local"] },
+                "candidateMethodContract": { "type": "array" },
+                "consumerMethodContract": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    "storagePolicies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["consensus-minimal-v0", "query-v0", "archive-indexer-v0"],
+      "properties": {
+        "consensus-minimal-v0": { "$ref": "#/$defs/storagePolicy" },
+        "query-v0": { "$ref": "#/$defs/storagePolicy" },
+        "archive-indexer-v0": { "$ref": "#/$defs/storagePolicy" }
+      }
+    },
+    "consumerGateways": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["archive-indexer-v0"],
+      "properties": {
+        "archive-indexer-v0": {
+          "$ref": "#/$defs/archiveConsumerGateway"
+        }
+      }
+    },
+    "roles": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": { "$ref": "#/$defs/role" }
+    }
+  },
+  "$defs": {
+    "disabledPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "enabled"],
+      "properties": {
+        "id": { "const": "disabled" },
+        "enabled": { "const": false }
+      }
+    },
+    "cometPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "enabled",
+        "unsafe",
+        "corsOrigins",
+        "pprofAddress",
+        "deprecatedGrpcAddress",
+        "nativePerMethodAllowlistSupported",
+        "enforcementLayer",
+        "gatewayActivated",
+        "effectiveConformanceProven",
+        "limits",
+        "consumerMethodContract"
+      ],
+      "properties": {
+        "id": { "const": "comet-diagnostic-v0" },
+        "enabled": { "const": true },
+        "unsafe": { "const": false },
+        "corsOrigins": { "const": [] },
+        "pprofAddress": { "const": "" },
+        "deprecatedGrpcAddress": { "const": "" },
+        "nativePerMethodAllowlistSupported": { "const": false },
+        "enforcementLayer": { "const": "required-policy-gateway" },
+        "gatewayActivated": { "const": false },
+        "effectiveConformanceProven": { "const": false },
+        "limits": { "$ref": "#/$defs/cometLimits" },
+        "consumerMethodContract": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "cometLimits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxOpenConnections",
+        "subscriptionBufferSize",
+        "webSocketWriteBufferSize",
+        "maxSubscriptionClients",
+        "maxSubscriptionsPerClient",
+        "maxRequestBodyBytes",
+        "maxRequestHeaderBytes",
+        "maxBatchRequests"
+      ],
+      "properties": {
+        "maxOpenConnections": { "type": "integer", "minimum": 1 },
+        "subscriptionBufferSize": { "type": "integer", "minimum": 1 },
+        "webSocketWriteBufferSize": { "type": "integer", "minimum": 1 },
+        "maxSubscriptionClients": { "type": "integer", "minimum": 1 },
+        "maxSubscriptionsPerClient": { "type": "integer", "minimum": 1 },
+        "maxRequestBodyBytes": { "type": "integer", "minimum": 1 },
+        "maxRequestHeaderBytes": { "type": "integer", "minimum": 1 },
+        "maxBatchRequests": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "cosmosPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "enabled", "rest", "grpc"],
+      "properties": {
+        "id": { "const": "cosmos-query-v0" },
+        "enabled": { "const": true },
+        "rest": { "$ref": "#/$defs/cosmosRest" },
+        "grpc": { "$ref": "#/$defs/cosmosGrpc" }
+      }
+    },
+    "cosmosRest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxOpenConnections",
+        "maxRequestBodyBytes",
+        "readTimeoutSeconds",
+        "writeTimeoutSeconds",
+        "unsafeCors",
+        "swagger"
+      ],
+      "properties": {
+        "maxOpenConnections": { "type": "integer", "minimum": 1 },
+        "maxRequestBodyBytes": { "type": "integer", "minimum": 1 },
+        "readTimeoutSeconds": { "type": "integer", "minimum": 1 },
+        "writeTimeoutSeconds": { "type": "integer", "minimum": 1 },
+        "unsafeCors": { "const": false },
+        "swagger": { "const": false }
+      }
+    },
+    "cosmosGrpc": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maxReceiveBytes",
+        "maxSendBytes",
+        "skipCheckHeader",
+        "grpcWebEnabled"
+      ],
+      "properties": {
+        "maxReceiveBytes": { "type": "integer", "minimum": 1 },
+        "maxSendBytes": { "type": "integer", "minimum": 1 },
+        "skipCheckHeader": { "const": false },
+        "grpcWebEnabled": { "const": false }
+      }
+    },
+    "evmPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "status",
+        "enabled",
+        "nativePerMethodAllowlistSupported",
+        "enforcementLayer",
+        "gatewayActivated",
+        "effectiveConformanceProven",
+        "namespaces",
+        "limits",
+        "safety",
+        "webSocket"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "status": { "type": "string" },
+        "enabled": { "const": true },
+        "nativePerMethodAllowlistSupported": { "const": false },
+        "enforcementLayer": { "const": "required-policy-gateway" },
+        "gatewayActivated": { "type": "boolean" },
+        "effectiveConformanceProven": { "type": "boolean" },
+        "namespaces": { "const": ["eth", "net", "web3"] },
+        "consumerMethodContract": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "candidateMethodContract": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "limits": { "$ref": "#/$defs/evmLimits" },
+        "safety": { "$ref": "#/$defs/evmSafety" },
+        "webSocket": { "$ref": "#/$defs/evmWebSocket" }
+      }
+    },
+    "evmLimits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ethCallGas",
+        "ethCallTimeoutMilliseconds",
+        "feeHistoryBlocks",
+        "getLogsResults",
+        "getLogsBlockRange",
+        "httpBodyBytes",
+        "batchRequests",
+        "batchResponseBytes",
+        "maxOpenConnections",
+        "httpReadWriteTimeoutMilliseconds",
+        "httpIdleTimeoutMilliseconds"
+      ],
+      "properties": {
+        "ethCallGas": { "type": "integer", "minimum": 1 },
+        "ethCallTimeoutMilliseconds": { "type": "integer", "minimum": 1 },
+        "feeHistoryBlocks": { "type": "integer", "minimum": 1 },
+        "getLogsResults": { "type": "integer", "minimum": 1 },
+        "getLogsBlockRange": { "type": "integer", "minimum": 1 },
+        "httpBodyBytes": { "type": "integer", "minimum": 1 },
+        "batchRequests": { "type": "integer", "minimum": 1 },
+        "batchResponseBytes": { "type": "integer", "minimum": 1 },
+        "maxOpenConnections": { "type": "integer", "minimum": 1 },
+        "httpReadWriteTimeoutMilliseconds": { "type": "integer", "minimum": 1 },
+        "httpIdleTimeoutMilliseconds": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "evmSafety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowInsecureUnlock",
+        "allowUnprotectedTransactions",
+        "profiling",
+        "customIndexer",
+        "preimageRecording",
+        "tracer"
+      ],
+      "properties": {
+        "allowInsecureUnlock": { "const": false },
+        "allowUnprotectedTransactions": { "const": false },
+        "profiling": { "const": false },
+        "customIndexer": { "const": false },
+        "preimageRecording": { "const": false },
+        "tracer": { "const": "" }
+      }
+    },
+    "evmWebSocket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowedOrigins", "wildcardOriginAllowed", "subscriptions"],
+      "properties": {
+        "allowedOrigins": { "const": ["127.0.0.1", "localhost"] },
+        "wildcardOriginAllowed": { "const": false },
+        "subscriptions": { "const": ["newHeads", "logs"] }
+      }
+    },
+    "runtimePolicyRefs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["comet", "cosmos", "evm"],
+      "properties": {
+        "comet": { "enum": ["disabled", "comet-diagnostic-v0"] },
+        "cosmos": { "enum": ["disabled", "cosmos-query-v0"] },
+        "evm": {
+          "enum": [
+            "disabled",
+            "evm-public-v0",
+            "evm-archive-blockscout-candidate-v0"
+          ]
+        }
+      }
+    },
+    "storagePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "pruningStrategy",
+        "keepRecent",
+        "interval",
+        "minRetainBlocks",
+        "txIndex",
+        "indexEvents",
+        "snapshotInterval",
+        "snapshotKeepRecent",
+        "discardAbciResponses",
+        "queryWindowBlocks",
+        "queryWindowStatus",
+        "targetFromGenesis",
+        "activated",
+        "evidenceComplete"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "pruningStrategy": { "enum": ["default", "nothing"] },
+        "keepRecent": { "const": 0 },
+        "interval": { "const": 0 },
+        "minRetainBlocks": { "const": 0 },
+        "txIndex": { "enum": ["null", "kv"] },
+        "indexEvents": { "const": [] },
+        "snapshotInterval": { "const": 0 },
+        "snapshotKeepRecent": { "const": 2 },
+        "discardAbciResponses": { "const": false },
+        "queryWindowBlocks": { "type": "null" },
+        "queryWindowStatus": { "enum": ["unproven", "proven-full-history-from-genesis"] },
+        "targetFromGenesis": { "type": "boolean" },
+        "activated": { "type": "boolean" },
+        "evidenceComplete": { "type": "boolean" }
+      }
+    },
+    "archiveConsumerGateway": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "status",
+        "gatewayIdentity",
+        "consumers",
+        "consumerNetwork",
+        "rawUpstreamNetwork",
+        "rawArchiveRole",
+        "rawRpcReachableFromConsumers",
+        "runtimePolicyRef",
+        "enforcedContractField",
+        "activated",
+        "effectiveConformanceProven",
+        "listeners"
+      ],
+      "properties": {
+        "id": { "const": "archive-indexer-v0" },
+        "status": { "enum": ["inactive-private-sidecar-target", "activated-local-private-sidecar"] },
+        "gatewayIdentity": { "const": "archive-rpc-gateway" },
+        "consumers": { "const": ["blockscout", "operator"] },
+        "consumerNetwork": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "members"],
+          "properties": {
+            "id": { "const": "archive-indexer-consumer" },
+            "members": {
+              "const": ["archive-rpc-gateway", "blockscout", "operator"]
+            }
+          }
+        },
+        "rawUpstreamNetwork": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "members"],
+          "properties": {
+            "id": { "const": "archive-raw-rpc" },
+            "members": {
+              "const": ["archive-rpc-gateway", "private-archive-indexer"]
+            }
+          }
+        },
+        "rawArchiveRole": { "const": "private-archive-indexer" },
+        "rawRpcReachableFromConsumers": { "const": false },
+        "runtimePolicyRef": {
+          "const": "evm-archive-blockscout-candidate-v0"
+        },
+        "enforcedContractField": { "const": "candidateMethodContract" },
+        "activated": { "type": "boolean" },
+        "effectiveConformanceProven": { "type": "boolean" },
+        "listeners": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["evmHttp", "evmWebSocket"],
+          "properties": {
+            "evmHttp": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["containerBind", "hostPublish", "upstream"],
+              "properties": {
+                "containerBind": { "const": "0.0.0.0:8545" },
+                "hostPublish": { "const": "127.0.0.1:38545" },
+                "upstream": {
+                  "const": "http://private-archive-indexer:8545"
+                }
+              }
+            },
+            "evmWebSocket": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["containerBind", "hostPublish", "upstream"],
+              "properties": {
+                "containerBind": { "const": "0.0.0.0:8546" },
+                "hostPublish": { "const": "127.0.0.1:38546" },
+                "upstream": {
+                  "const": "ws://private-archive-indexer:8546"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "versionedSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^chain/[a-zA-Z0-9._/-]+\\.json$"
+        },
+        "manifestVersion": { "type": "string" },
+        "protocolVersion": { "type": "string" },
+        "profileVersion": { "type": "string" },
+        "selectionVersion": { "type": "string" },
+        "ownerIssue": { "type": "integer" }
+      },
+      "minProperties": 2
+    },
+    "role": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "activation",
+        "localEquivalent",
+        "publicLaunchAllowed",
+        "consensusKey",
+        "p2p",
+        "services",
+        "runtimePolicyRefs",
+        "storagePolicyRef",
+        "resources"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "validator",
+            "sentry",
+            "full",
+            "public-rpc",
+            "private-archive-indexer"
+          ]
+        },
+        "activation": {
+          "enum": [
+            "active-local-partial-topology-evidence-only",
+            "active-local-gateway-fronted",
+            "defined-inactive-local-equivalent"
+          ]
+        },
+        "localEquivalent": { "type": "string", "minLength": 30 },
+        "publicLaunchAllowed": { "const": false },
+        "consensusKey": { "$ref": "#/$defs/consensusKey" },
+        "p2p": { "$ref": "#/$defs/p2p" },
+        "services": { "$ref": "#/$defs/services" },
+        "runtimePolicyRefs": { "$ref": "#/$defs/runtimePolicyRefs" },
+        "storagePolicyRef": {
+          "enum": ["consensus-minimal-v0", "query-v0", "archive-indexer-v0"]
+        },
+        "resources": { "$ref": "#/$defs/resources" }
+      }
+    },
+    "consensusKey": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registeredValidatorSetKeyPermitted",
+        "registeredValidatorSetMembershipRequired",
+        "unregisteredLocalFilePvPermitted",
+        "filePvKeyRelativePath",
+        "filePvStateRelativePath",
+        "stateMonotonicRequired",
+        "filePvPubkeyMustNotMatchRegisteredValidatorSet"
+      ],
+      "properties": {
+        "registeredValidatorSetKeyPermitted": { "type": "boolean" },
+        "registeredValidatorSetMembershipRequired": { "type": "boolean" },
+        "unregisteredLocalFilePvPermitted": { "type": "boolean" },
+        "filePvKeyRelativePath": { "const": "config/priv_validator_key.json" },
+        "filePvStateRelativePath": {
+          "const": "data/priv_validator_state.json"
+        },
+        "stateMonotonicRequired": { "const": true },
+        "filePvPubkeyMustNotMatchRegisteredValidatorSet": { "type": "boolean" }
+      }
+    },
+    "p2p": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "listen",
+        "hostPublish",
+        "persistentPeerRoles",
+        "unconditionalPeerRoles",
+        "privatePeerRoles",
+        "addressBookStrict",
+        "allowDuplicateIp",
+        "seedsAllowed",
+        "seedRoles",
+        "externalAddressAdvertised",
+        "privatePeerIdsRequired",
+        "maximumInboundPeers",
+        "maximumOutboundPeers",
+        "pexEnabled"
+      ],
+      "properties": {
+        "mode": { "type": "string", "minLength": 10 },
+        "listen": { "const": "0.0.0.0:26656" },
+        "hostPublish": {
+          "type": "string",
+          "pattern": "^127\\.0\\.0\\.1:[1-9][0-9]*$"
+        },
+        "persistentPeerRoles": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["validator", "sentry", "full"] }
+        },
+        "unconditionalPeerRoles": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["validator", "sentry", "full"] }
+        },
+        "privatePeerRoles": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["validator", "sentry", "full"] }
+        },
+        "addressBookStrict": { "const": false },
+        "allowDuplicateIp": { "const": true },
+        "seedsAllowed": { "const": false },
+        "seedRoles": { "const": [] },
+        "externalAddressAdvertised": { "const": false },
+        "privatePeerIdsRequired": { "const": true },
+        "maximumInboundPeers": { "type": "integer", "minimum": 1 },
+        "maximumOutboundPeers": { "type": "integer", "minimum": 1 },
+        "pexEnabled": { "type": "boolean" }
+      }
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "containerBind", "hostPublish", "exposure"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "containerBind": {
+          "type": ["string", "null"],
+          "pattern": "^0\\.0\\.0\\.0:[1-9][0-9]*$"
+        },
+        "hostPublish": {
+          "type": ["string", "null"],
+          "pattern": "^127\\.0\\.0\\.1:[1-9][0-9]*$"
+        },
+        "exposure": { "type": "string", "minLength": 8 }
+      }
+    },
+    "services": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cometRpc",
+        "evmHttp",
+        "evmWebSocket",
+        "cosmosRest",
+        "cosmosGrpc",
+        "pprof"
+      ],
+      "properties": {
+        "cometRpc": { "$ref": "#/$defs/service" },
+        "evmHttp": { "$ref": "#/$defs/service" },
+        "evmWebSocket": { "$ref": "#/$defs/service" },
+        "cosmosRest": { "$ref": "#/$defs/service" },
+        "cosmosGrpc": { "$ref": "#/$defs/service" },
+        "pprof": { "$ref": "#/$defs/service" }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "cpuCores",
+        "memoryGiB",
+        "diskGiB",
+        "sustainedIops",
+        "publicCapacityClaimed",
+        "scalingSignals"
+      ],
+      "properties": {
+        "status": { "const": "planning-floor-not-benchmarked" },
+        "cpuCores": { "type": "integer", "minimum": 1 },
+        "memoryGiB": { "type": "integer", "minimum": 1 },
+        "diskGiB": { "type": "integer", "minimum": 1 },
+        "sustainedIops": { "type": "integer", "minimum": 1 },
+        "publicCapacityClaimed": { "const": false },
+        "scalingSignals": {
+          "type": "array",
+          "minItems": 4,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 5 }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "sdkVersion": "0.1.0",
+  "node": {
+    "supportedRange": ">=22.23.1 <23 || >=24 <25",
+    "ciVersions": ["22.23.1", "24.x"],
+    "moduleFormats": ["esm", "commonjs"]
+  },
+  "browser": {
+    "builder": "vite@7.3.1",
+    "target": "es2022",
+    "maximumJavaScriptBytes": 360000,
+    "maximumGzipBytes": 115000,
+    "providerEvidence": "mocked-eip1193-request-shape",
+    "liveWalletEvidenceIssue": 137
+  },
+  "reactNative": {
+    "reactNativeVersion": "0.81.5",
+    "expoVersion": "54.0.33",
+    "metroVersion": "0.83.3",
+    "engine": "Hermes",
+    "bytecodeVersion": 96,
+    "maximumBytecodeBytes": 1310720,
+    "maximumSourceModules": 1000,
+    "platformAccountBoundary": true,
+    "liveDeviceEvidenceIssue": 137
+  },
+  "requiredGlobals": [
+    "BigInt",
+    "URL",
+    "fetch",
+    "AbortController",
+    "AbortSignal",
+    "setTimeout"
+  ],
+  "callerOwned": [
+    "account signing",
+    "account unlock",
+    "provider session",
+    "protected account storage"
+  ],
+  "forbiddenBundleModules": [
+    "buffer",
+    "crypto-browserify",
+    "node-stdlib-browser",
+    "path-browserify",
+    "process",
+    "stream-browserify",
+    "packages/backend",
+    "@clerk",
+    "bullmq",
+    "postgres",
+    "redis"
+  ]
+}

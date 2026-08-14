@@ -1,0 +1,65 @@
+---
+title: Foundry and Hardhat workflow
+description: Compile, deploy, call, test and debug ordinary Solidity against the localnet.
+docId: contracts-tooling
+version: v0
+status: foundation
+ownerIssue: 142
+sourceOfTruth: examples/torium/solidity/README.md
+sourceStatus: existing
+---
+
+Torium is a standard EVM chain: unmodified Solidity 0.8.30, Foundry and
+Hardhat work without Torium-specific patches. The executable references live
+in `examples/torium/solidity/` and run against the disposable localnet.
+
+## Network setup
+
+Point either tool at the localnet EVM RPC:
+
+- RPC URL `http://127.0.0.1:8545` (HTTP on loopback is expected locally and is
+  not a public transport recommendation)
+- chain ID `1414484556` (`0x544f524c`)
+- funded disposable accounts are documented in the
+  [localnet reference](/v0/localnet/reference); their keys are public
+  fixtures and must never touch a real network.
+
+Hardhat declares the network exactly as in
+`examples/torium/solidity/hardhat/hardhat.config.ts`; Foundry needs only
+`--rpc-url` (see `examples/torium/solidity/foundry/run-localnet.sh`).
+
+## Compile, deploy, call
+
+```bash
+# Foundry
+forge build
+forge create src/MyContract.sol:MyContract \
+  --rpc-url http://127.0.0.1:8545 --private-key "$DISPOSABLE_KEY"
+cast call <address> "value()(uint256)" --rpc-url http://127.0.0.1:8545
+cast send <address> "setValue(uint256)" 42 \
+  --rpc-url http://127.0.0.1:8545 --private-key "$DISPOSABLE_KEY"
+```
+
+Deployment and call transactions are ordinary EIP-1559 transactions with
+CometBFT single-block finality; receipts, logs, `eth_getLogs` backfill and
+gas estimation behave as on any EVM chain within the documented
+[public client limits](/v0/sdk/public-client).
+
+## Events, gas and reverts
+
+- Query events with `cast logs`, Hardhat/viem `getContractEvents`, or the SDK.
+- Gas estimation works through `eth_estimateGas`; the localnet enforces the
+  documented fee floors, so keep the default EIP-1559 fee fields.
+- Custom-error reverts return standard revert data. Foundry's
+  `vm.expectRevert` and the SDK's decoded simulation both demonstrate the
+  invalid paths; the Torium system-contract test suites under
+  `contracts/test/` show the full pattern, including fuzz and invariant
+  tests.
+
+## Torium system contracts from tooling
+
+Use only generated artifacts as input: import ABIs from
+`contracts/generated/abi/*.json` (or `@torium-network/sdk/contracts` in
+TypeScript) and resolve addresses through the
+[deployment registry](/v0/contracts/registry). Hand-maintained ABI or address
+copies are rejected by the repository drift gates.

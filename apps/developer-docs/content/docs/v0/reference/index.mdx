@@ -1,0 +1,40 @@
+---
+title: Reference
+description: Generated references and the documentation QA gates that keep them honest.
+docId: reference
+version: v0
+status: foundation
+ownerIssue: 145
+sourceOfTruth: apps/developer-docs/content/generated
+sourceStatus: generated
+---
+
+Reference material is generated from canonical schemas and artifacts;
+handwritten copies of RPC, ABI or network metadata are not accepted here.
+
+## Generated references
+
+- [SDK API reference](/v0/sdk/api-reference) — generated from the package
+  declaration report (`sdk-0.1.0.api.md` + manifest) and byte-compared on
+  every validation run.
+- Contracts foundation manifest (`contracts-localnet-foundation.json`) —
+  anchors the [contracts pages](/v0/contracts) to generated ABI, bytecode and
+  registry identities.
+- Chain, network and wallet metadata flow from `chain/config/identifiers.json`
+  and the generated network-artifact bundle; the
+  [localnet reference](/v0/localnet/reference) is their reading guide.
+
+## Documentation QA gates
+
+Every validation run (`pnpm --filter developer-docs run validate:content`)
+enforces, in order: generated-reference drift (`generate-sdk-reference.mjs
+--check`), structural and link integrity across versions
+(`validate-docs.mjs`), and snippet QA (`check-snippets.mjs`) — TypeScript
+fences must parse, named runtime imports from `@torium-network/sdk` must
+exist in the generated API manifest, repository paths in shell fences must
+exist, and the Torium spelling stays consistent outside the repository slug.
+CI fails on any drift.
+
+Search is served locally by the portal's built-in index; sitemap and robots
+metadata ship with the portal.
+Accessibility and search-quality thresholds are enforced by the docs build.

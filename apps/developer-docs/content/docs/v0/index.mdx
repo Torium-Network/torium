@@ -1,0 +1,34 @@
+---
+title: Torium Developer Docs
+description: Build on the Torium EVM L1 testnet with standard EVM tooling and the TypeScript SDK.
+docId: home
+version: v0
+status: foundation
+ownerIssue: 139
+sourceOfTruth: apps/developer-docs/content/versions.json
+sourceStatus: existing
+---
+
+Torium is a sovereign EVM-compatible L1. The public **Torium Testnet** (`torium-testnet-1`,
+EVM chain ID `1414484564`) runs valueless tTOR test currency, works with standard EVM tooling
+out of the box, and may be reset — treat every deployment and balance as disposable.
+
+## Start here
+
+- [Connect to the testnet](/v0/getting-started)
+- [Use the TypeScript SDK](/v0/sdk)
+- [Connect MetaMask, Foundry and Hardhat](/v0/evm-tools)
+- [Run your own local network](/v0/localnet)
+- [Understand the architecture](/v0/concepts)
+
+## Network at a glance
+
+| | Torium Testnet |
+| --- | --- |
+| EVM chain ID | `1414484564` (`0x544f5254`) |
+| Cosmos chain ID | `torium-testnet-1` |
+| Currency | tTOR (18 decimals) — valueless test currency |
+| Finality | CometBFT BFT consensus; a committed block is final |
+
+Docs versions pin an exact SDK and chain-manifest tuple, so what you read here matches the
+package you install and the chain you connect to.

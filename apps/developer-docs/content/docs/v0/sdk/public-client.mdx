@@ -1,0 +1,90 @@
+---
+title: Public client
+description: Read EVM state, inspect Torium readiness, handle finality and use the local subscription profile safely.
+docId: sdk-public-client
+version: v0
+status: foundation
+ownerIssue: 141
+sourceOfTruth: packages/torium-sdk/src/clients.ts
+sourceStatus: existing
+---
+
+`createToriumPublicClient` returns a standard viem public client plus two Torium-specific actions:
+`getToriumNetworkStatus` and `getToriumReadCapabilities`. Ordinary reads remain ordinary viem calls.
+
+```ts snippet=live
+import { toriumLocalnet } from "@torium-network/sdk/chains";
+import { createToriumPublicClient } from "@torium-network/sdk/clients";
+import { http } from "viem";
+
+const client = createToriumPublicClient({
+  chain: toriumLocalnet,
+  transport: http("http://127.0.0.1:8545"),
+});
+const [height, balance, status] = await Promise.all([
+  client.getBlockNumber(),
+  client.getBalance({ address: "0x0000000000000000000000000000000000000001" }),
+  client.getToriumNetworkStatus(),
+]);
+
+if (height <= 0n) throw new Error("expected a committed block height");
+if (typeof balance !== "bigint") throw new Error("expected a bigint balance");
+if (status.observedChainId !== toriumLocalnet.id) {
+  throw new Error(`chain id mismatch: ${status.observedChainId}`);
+}
+```
+
+`getBlock`, `getTransaction`, `getTransactionReceipt`, `getCode`, `getStorageAt`, `getLogs`, fee and
+gas estimation, `readContract`, watch actions and raw `client.request` use viem's types and behavior.
+
+## Finality and query limits
+
+Torium localnet uses CometBFT finality. A committed block is final under that consensus model;
+`finalized` means the latest CometBFT-committed state, not Ethereum beacon-chain finality. `safe`
+state queries are unsupported by stable helpers, and `pending` does not promise a distinct pending
+state view.
+
+The active profile limits `eth_feeHistory` to 100 blocks. Split log scans into inclusive ranges of at
+most 10,000 blocks with `createToriumLogRanges`. If a response contains exactly 10,000 logs, narrow
+the range instead of assuming it is complete.
+
+## Subscriptions
+
+The local WebSocket profile supports `newHeads`, `logs`, and `newPendingTransactions`
+subscriptions, but not browser-origin WebSockets. The server does not replay missed messages. A production
+consumer must reconnect and backfill the missed range over HTTP; the SDK does not yet implement that
+lifecycle. Treat subscriptions as notifications and reconcile authoritative state through reads.
+
+## Cancellation
+
+Pass an `AbortSignal` to the Torium status action:
+
+```ts
+import { ToriumEndpointValidationError } from "@torium-network/sdk/chains";
+
+const controller = new AbortController();
+const pending = client.getToriumNetworkStatus({
+  signal: controller.signal,
+  timeoutMs: 5_000,
+  retry: { maxAttempts: 3 },
+});
+controller.abort();
+
+try {
+  await pending;
+} catch (error) {
+  if (
+    error instanceof ToriumEndpointValidationError &&
+    error.code === "TORIUM_RPC_ABORTED"
+  ) {
+    // The caller intentionally cancelled the status request.
+  } else {
+    throw error;
+  }
+}
+```
+
+Endpoint cancellation remains a typed, redacted `ToriumEndpointValidationError` with code
+`TORIUM_RPC_ABORTED`; an action-level deadline becomes `TORIUM_TIMEOUT`. The action defaults to one
+attempt and retries only when `retry` is explicitly supplied, up to three total attempts. This
+per-action budget does not replace the caller-owned viem transport's global timeout/retry policy.

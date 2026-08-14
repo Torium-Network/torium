@@ -1,0 +1,43 @@
+# Torium compatibility probe image for the immutable cosmos/evm v0.7.0 tag.
+#
+# Upstream v0.7.0 declares `go 1.25.9` in go.mod while its reference
+# contrib image still uses Go 1.24 with GOTOOLCHAIN=local. Keep this file as
+# the smallest possible clean-machine delta: only the builder toolchain is
+# corrected. The runtime layout and wrapper remain identical to upstream.
+
+ARG ALPINE_TAG=3.23
+
+FROM golang:1.25.9-alpine3.23@sha256:5caaf1cca9dc351e13deafbc3879fd4754801acba8653fa9540cea125d01a71f AS evmd-builder
+WORKDIR /work
+ENV PACKAGES="curl build-base git bash file linux-headers eudev-dev"
+RUN apk add --no-cache $PACKAGES
+
+COPY go.mod go.sum* ./
+RUN go mod download
+
+COPY . .
+RUN LEDGER_ENABLED=false COSMOS_BUILD_OPTIONS="staticlink" BUILD_TAGS=muslc make build
+RUN file /work/build/evmd \
+    && file /work/build/evmd | grep -q "statically linked"
+
+FROM alpine:${ALPINE_TAG}@sha256:fd791d74b68913cbb027c6546007b3f0d3bc45125f797758156952bc2d6daf40 AS run
+RUN apk add --no-cache build-base jq bash curl
+RUN addgroup -g 1025 nonroot \
+    && adduser -D nonroot -u 1025 -G nonroot
+
+EXPOSE 26656 26657 1317 9090 26660 8545 8546 8100
+STOPSIGNAL SIGTERM
+VOLUME /evmd
+WORKDIR /evmd
+
+COPY contrib/images/evmd-env/wrapper.sh /usr/bin/wrapper.sh
+COPY --from=evmd-builder /work/build/evmd /evmd/evmd
+COPY --from=evmd-builder /work/build/evmd /usr/local/bin/evmd
+
+RUN chown nonroot:nonroot /usr/bin/wrapper.sh \
+    && chmod +x /usr/bin/wrapper.sh \
+    && chown -R nonroot:nonroot /evmd
+
+USER nonroot
+ENTRYPOINT ["/usr/bin/wrapper.sh"]
+CMD ["start", "--log_format", "plain", "--minimum-gas-prices", "0.0001atest", "--json-rpc.enable", "true", "--json-rpc.api", "eth,txpool,personal,net,debug,web3", "--chain-id", "local-4221"]

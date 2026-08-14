@@ -1,0 +1,10 @@
+*
+!app/
+!app/**
+app/build/
+!config/
+!config/protocol-v1.json
+!profiles/
+!profiles/node-roles-v0.json
+!genesis/
+!genesis/**

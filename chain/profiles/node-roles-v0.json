@@ -1,0 +1,762 @@
+{
+  "$schema": "./node-roles-v0.schema.json",
+  "schemaVersion": 1,
+  "profileVersion": "0.1.0-local.2",
+  "status": "defined-local-v0-not-activated-publicly",
+  "ownerIssue": 114,
+  "publicLaunchAllowed": false,
+  "publicClientScope": "evm-only-v0",
+  "publicCosmosApiDelegatedIssue": 131,
+  "sources": {
+    "identifiers": {
+      "path": "chain/config/identifiers.json",
+      "manifestVersion": "0.2.0"
+    },
+    "protocol": {
+      "path": "chain/config/protocol-v1.json",
+      "protocolVersion": "1.0.0-local.5"
+    },
+    "currentLocalRpcProfile": {
+      "path": "chain/config/rpc-profile-v1.json",
+      "profileVersion": "1.0.1"
+    },
+    "explorerSelection": {
+      "path": "chain/explorer/selection-v1.json",
+      "selectionVersion": "1.0.0-local.3",
+      "ownerIssue": 112
+    }
+  },
+  "localNetwork": {
+    "environment": "localnet",
+    "cosmosChainId": "torium-localnet-1",
+    "evmChainId": 1414484556,
+    "evmChainIdHex": "0x544f524c",
+    "public": false
+  },
+  "tracePolicy": {
+    "status": "proven-upstream-poc-but-not-enabled-v0",
+    "requiredMethods": [],
+    "provenButDisabledMethods": [
+      "debug_traceTransaction",
+      "debug_traceCall",
+      "debug_traceBlockByNumber",
+      "debug_traceBlockByHash"
+    ],
+    "operatorNamespaceEnabledOnAnyRole": false,
+    "activationRequiresNewProfileVersionAndConformance": true
+  },
+  "runtimePolicies": {
+    "disabled": {
+      "id": "disabled",
+      "enabled": false
+    },
+    "comet-diagnostic-v0": {
+      "id": "comet-diagnostic-v0",
+      "enabled": true,
+      "unsafe": false,
+      "corsOrigins": [],
+      "pprofAddress": "",
+      "deprecatedGrpcAddress": "",
+      "nativePerMethodAllowlistSupported": false,
+      "enforcementLayer": "required-policy-gateway",
+      "gatewayActivated": false,
+      "effectiveConformanceProven": false,
+      "limits": {
+        "maxOpenConnections": 256,
+        "subscriptionBufferSize": 200,
+        "webSocketWriteBufferSize": 200,
+        "maxSubscriptionClients": 100,
+        "maxSubscriptionsPerClient": 5,
+        "maxRequestBodyBytes": 1000000,
+        "maxRequestHeaderBytes": 1048576,
+        "maxBatchRequests": 20
+      },
+      "consumerMethodContract": [
+        "health",
+        "status",
+        "net_info",
+        "blockchain",
+        "block",
+        "block_results",
+        "commit",
+        "validators"
+      ]
+    },
+    "cosmos-query-v0": {
+      "id": "cosmos-query-v0",
+      "enabled": true,
+      "rest": {
+        "maxOpenConnections": 256,
+        "maxRequestBodyBytes": 1000000,
+        "readTimeoutSeconds": 10,
+        "writeTimeoutSeconds": 10,
+        "unsafeCors": false,
+        "swagger": false
+      },
+      "grpc": {
+        "maxReceiveBytes": 10485760,
+        "maxSendBytes": 33554432,
+        "skipCheckHeader": false,
+        "grpcWebEnabled": false
+      }
+    },
+    "evm-public-v0": {
+      "id": "evm-public-v0",
+      "status": "defined-local-loopback-only",
+      "enabled": true,
+      "nativePerMethodAllowlistSupported": false,
+      "enforcementLayer": "required-policy-gateway",
+      "gatewayActivated": false,
+      "effectiveConformanceProven": false,
+      "namespaces": ["eth", "net", "web3"],
+      "consumerMethodContract": [
+        "web3_clientVersion",
+        "net_version",
+        "net_listening",
+        "net_peerCount",
+        "eth_chainId",
+        "eth_blockNumber",
+        "eth_syncing",
+        "eth_gasPrice",
+        "eth_getBalance",
+        "eth_getBlockByNumber",
+        "eth_getBlockByHash",
+        "eth_getTransactionByHash",
+        "eth_getTransactionReceipt",
+        "eth_getLogs",
+        "eth_call",
+        "eth_getCode",
+        "eth_getStorageAt",
+        "eth_estimateGas",
+        "eth_feeHistory",
+        "eth_getTransactionCount",
+        "eth_sendRawTransaction"
+      ],
+      "limits": {
+        "ethCallGas": 25000000,
+        "ethCallTimeoutMilliseconds": 5000,
+        "feeHistoryBlocks": 100,
+        "getLogsResults": 10000,
+        "getLogsBlockRange": 10000,
+        "httpBodyBytes": 5242880,
+        "batchRequests": 100,
+        "batchResponseBytes": 25000000,
+        "maxOpenConnections": 256,
+        "httpReadWriteTimeoutMilliseconds": 30000,
+        "httpIdleTimeoutMilliseconds": 120000
+      },
+      "safety": {
+        "allowInsecureUnlock": false,
+        "allowUnprotectedTransactions": false,
+        "profiling": false,
+        "customIndexer": false,
+        "preimageRecording": false,
+        "tracer": ""
+      },
+      "webSocket": {
+        "allowedOrigins": ["127.0.0.1", "localhost"],
+        "wildcardOriginAllowed": false,
+        "subscriptions": ["newHeads", "logs"]
+      }
+    },
+    "evm-archive-blockscout-candidate-v0": {
+      "id": "evm-archive-blockscout-candidate-v0",
+      "status": "candidate-gateway-enforced-local",
+      "enabled": true,
+      "nativePerMethodAllowlistSupported": false,
+      "enforcementLayer": "required-policy-gateway",
+      "gatewayActivated": true,
+      "effectiveConformanceProven": true,
+      "namespaces": ["eth", "net", "web3"],
+      "candidateMethodContract": [
+        "web3_clientVersion",
+        "net_version",
+        "net_listening",
+        "net_peerCount",
+        "eth_chainId",
+        "eth_blockNumber",
+        "eth_syncing",
+        "eth_gasPrice",
+        "eth_getBalance",
+        "eth_getBlockByNumber",
+        "eth_getBlockByHash",
+        "eth_getTransactionByHash",
+        "eth_getTransactionReceipt",
+        "eth_getLogs",
+        "eth_call",
+        "eth_getCode",
+        "eth_getStorageAt",
+        "eth_estimateGas",
+        "eth_feeHistory",
+        "eth_getTransactionCount"
+      ],
+      "limits": {
+        "ethCallGas": 25000000,
+        "ethCallTimeoutMilliseconds": 5000,
+        "feeHistoryBlocks": 100,
+        "getLogsResults": 10000,
+        "getLogsBlockRange": 10000,
+        "httpBodyBytes": 5242880,
+        "batchRequests": 100,
+        "batchResponseBytes": 25000000,
+        "maxOpenConnections": 256,
+        "httpReadWriteTimeoutMilliseconds": 30000,
+        "httpIdleTimeoutMilliseconds": 120000
+      },
+      "safety": {
+        "allowInsecureUnlock": false,
+        "allowUnprotectedTransactions": false,
+        "profiling": false,
+        "customIndexer": false,
+        "preimageRecording": false,
+        "tracer": ""
+      },
+      "webSocket": {
+        "allowedOrigins": ["127.0.0.1", "localhost"],
+        "wildcardOriginAllowed": false,
+        "subscriptions": ["newHeads", "logs"]
+      }
+    }
+  },
+  "storagePolicies": {
+    "consensus-minimal-v0": {
+      "id": "consensus-minimal-v0",
+      "pruningStrategy": "default",
+      "keepRecent": 0,
+      "interval": 0,
+      "minRetainBlocks": 0,
+      "txIndex": "null",
+      "indexEvents": [],
+      "snapshotInterval": 0,
+      "snapshotKeepRecent": 2,
+      "discardAbciResponses": false,
+      "queryWindowBlocks": null,
+      "queryWindowStatus": "unproven",
+      "targetFromGenesis": false,
+      "activated": false,
+      "evidenceComplete": false
+    },
+    "query-v0": {
+      "id": "query-v0",
+      "pruningStrategy": "default",
+      "keepRecent": 0,
+      "interval": 0,
+      "minRetainBlocks": 0,
+      "txIndex": "kv",
+      "indexEvents": [],
+      "snapshotInterval": 0,
+      "snapshotKeepRecent": 2,
+      "discardAbciResponses": false,
+      "queryWindowBlocks": null,
+      "queryWindowStatus": "unproven",
+      "targetFromGenesis": false,
+      "activated": false,
+      "evidenceComplete": false
+    },
+    "archive-indexer-v0": {
+      "id": "archive-indexer-v0",
+      "pruningStrategy": "nothing",
+      "keepRecent": 0,
+      "interval": 0,
+      "minRetainBlocks": 0,
+      "txIndex": "kv",
+      "indexEvents": [],
+      "snapshotInterval": 0,
+      "snapshotKeepRecent": 2,
+      "discardAbciResponses": false,
+      "queryWindowBlocks": null,
+      "queryWindowStatus": "proven-full-history-from-genesis",
+      "targetFromGenesis": true,
+      "activated": true,
+      "evidenceComplete": true
+    }
+  },
+  "consumerGateways": {
+    "archive-indexer-v0": {
+      "id": "archive-indexer-v0",
+      "status": "activated-local-private-sidecar",
+      "gatewayIdentity": "archive-rpc-gateway",
+      "consumers": ["blockscout", "operator"],
+      "consumerNetwork": {
+        "id": "archive-indexer-consumer",
+        "members": ["archive-rpc-gateway", "blockscout", "operator"]
+      },
+      "rawUpstreamNetwork": {
+        "id": "archive-raw-rpc",
+        "members": ["archive-rpc-gateway", "private-archive-indexer"]
+      },
+      "rawArchiveRole": "private-archive-indexer",
+      "rawRpcReachableFromConsumers": false,
+      "runtimePolicyRef": "evm-archive-blockscout-candidate-v0",
+      "enforcedContractField": "candidateMethodContract",
+      "activated": true,
+      "effectiveConformanceProven": true,
+      "listeners": {
+        "evmHttp": {
+          "containerBind": "0.0.0.0:8545",
+          "hostPublish": "127.0.0.1:38545",
+          "upstream": "http://private-archive-indexer:8545"
+        },
+        "evmWebSocket": {
+          "containerBind": "0.0.0.0:8546",
+          "hostPublish": "127.0.0.1:38546",
+          "upstream": "ws://private-archive-indexer:8546"
+        }
+      }
+    }
+  },
+  "roles": [
+    {
+      "id": "validator",
+      "activation": "active-local-partial-topology-evidence-only",
+      "localEquivalent": "validator-0..3 currently use a local full mesh; validator-0 also hosts the local client surface, so the sentry-only target is not yet instantiated",
+      "publicLaunchAllowed": false,
+      "consensusKey": {
+        "registeredValidatorSetKeyPermitted": true,
+        "registeredValidatorSetMembershipRequired": true,
+        "unregisteredLocalFilePvPermitted": false,
+        "filePvKeyRelativePath": "config/priv_validator_key.json",
+        "filePvStateRelativePath": "data/priv_validator_state.json",
+        "stateMonotonicRequired": true,
+        "filePvPubkeyMustNotMatchRegisteredValidatorSet": false
+      },
+      "p2p": {
+        "mode": "private-validator-behind-sentry-target",
+        "listen": "0.0.0.0:26656",
+        "hostPublish": "127.0.0.1:26656",
+        "persistentPeerRoles": ["sentry"],
+        "unconditionalPeerRoles": ["sentry"],
+        "privatePeerRoles": ["sentry"],
+        "addressBookStrict": false,
+        "allowDuplicateIp": true,
+        "seedsAllowed": false,
+        "seedRoles": [],
+        "externalAddressAdvertised": false,
+        "privatePeerIdsRequired": true,
+        "maximumInboundPeers": 4,
+        "maximumOutboundPeers": 4,
+        "pexEnabled": false
+      },
+      "services": {
+        "cometRpc": {
+          "enabled": true,
+          "containerBind": "0.0.0.0:26657",
+          "hostPublish": "127.0.0.1:26657",
+          "exposure": "loopback-diagnostic-only"
+        },
+        "evmHttp": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        },
+        "evmWebSocket": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        },
+        "cosmosRest": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        },
+        "cosmosGrpc": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        },
+        "pprof": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        }
+      },
+      "runtimePolicyRefs": {
+        "comet": "comet-diagnostic-v0",
+        "cosmos": "disabled",
+        "evm": "disabled"
+      },
+      "storagePolicyRef": "consensus-minimal-v0",
+      "resources": {
+        "status": "planning-floor-not-benchmarked",
+        "cpuCores": 4,
+        "memoryGiB": 8,
+        "diskGiB": 250,
+        "sustainedIops": 1000,
+        "publicCapacityClaimed": false,
+        "scalingSignals": [
+          "consensus-round-latency",
+          "missed-block-rate",
+          "state-commit-duration",
+          "disk-utilization"
+        ]
+      }
+    },
+    {
+      "id": "sentry",
+      "activation": "defined-inactive-local-equivalent",
+      "localEquivalent": "logical boundary only; no separate sentry process is instantiated in v0 localnet",
+      "publicLaunchAllowed": false,
+      "consensusKey": {
+        "registeredValidatorSetKeyPermitted": false,
+        "registeredValidatorSetMembershipRequired": false,
+        "unregisteredLocalFilePvPermitted": true,
+        "filePvKeyRelativePath": "config/priv_validator_key.json",
+        "filePvStateRelativePath": "data/priv_validator_state.json",
+        "stateMonotonicRequired": true,
+        "filePvPubkeyMustNotMatchRegisteredValidatorSet": true
+      },
+      "p2p": {
+        "mode": "validator-shield-and-peer-relay",
+        "listen": "0.0.0.0:26656",
+        "hostPublish": "127.0.0.1:27056",
+        "persistentPeerRoles": ["validator", "sentry"],
+        "unconditionalPeerRoles": ["validator"],
+        "privatePeerRoles": ["validator"],
+        "addressBookStrict": false,
+        "allowDuplicateIp": true,
+        "seedsAllowed": false,
+        "seedRoles": [],
+        "externalAddressAdvertised": false,
+        "privatePeerIdsRequired": true,
+        "maximumInboundPeers": 40,
+        "maximumOutboundPeers": 10,
+        "pexEnabled": true
+      },
+      "services": {
+        "cometRpc": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        },
+        "evmHttp": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        },
+        "evmWebSocket": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        },
+        "cosmosRest": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        },
+        "cosmosGrpc": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        },
+        "pprof": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        }
+      },
+      "runtimePolicyRefs": {
+        "comet": "disabled",
+        "cosmos": "disabled",
+        "evm": "disabled"
+      },
+      "storagePolicyRef": "consensus-minimal-v0",
+      "resources": {
+        "status": "planning-floor-not-benchmarked",
+        "cpuCores": 4,
+        "memoryGiB": 8,
+        "diskGiB": 100,
+        "sustainedIops": 500,
+        "publicCapacityClaimed": false,
+        "scalingSignals": [
+          "peer-count",
+          "p2p-throughput",
+          "connection-churn",
+          "memory-pressure"
+        ]
+      }
+    },
+    {
+      "id": "full",
+      "activation": "defined-inactive-local-equivalent",
+      "localEquivalent": "validator-0 client services approximate this role only for valueless loopback development",
+      "publicLaunchAllowed": false,
+      "consensusKey": {
+        "registeredValidatorSetKeyPermitted": false,
+        "registeredValidatorSetMembershipRequired": false,
+        "unregisteredLocalFilePvPermitted": true,
+        "filePvKeyRelativePath": "config/priv_validator_key.json",
+        "filePvStateRelativePath": "data/priv_validator_state.json",
+        "stateMonotonicRequired": true,
+        "filePvPubkeyMustNotMatchRegisteredValidatorSet": true
+      },
+      "p2p": {
+        "mode": "private-peer-query-node",
+        "listen": "0.0.0.0:26656",
+        "hostPublish": "127.0.0.1:27156",
+        "persistentPeerRoles": ["sentry", "full"],
+        "unconditionalPeerRoles": [],
+        "privatePeerRoles": ["sentry"],
+        "addressBookStrict": false,
+        "allowDuplicateIp": true,
+        "seedsAllowed": false,
+        "seedRoles": [],
+        "externalAddressAdvertised": false,
+        "privatePeerIdsRequired": true,
+        "maximumInboundPeers": 20,
+        "maximumOutboundPeers": 10,
+        "pexEnabled": false
+      },
+      "services": {
+        "cometRpc": {
+          "enabled": true,
+          "containerBind": "0.0.0.0:26657",
+          "hostPublish": "127.0.0.1:27157",
+          "exposure": "loopback-diagnostic-only"
+        },
+        "evmHttp": {
+          "enabled": true,
+          "containerBind": "0.0.0.0:8545",
+          "hostPublish": "127.0.0.1:18545",
+          "exposure": "loopback-only"
+        },
+        "evmWebSocket": {
+          "enabled": true,
+          "containerBind": "0.0.0.0:8546",
+          "hostPublish": "127.0.0.1:18546",
+          "exposure": "loopback-only"
+        },
+        "cosmosRest": {
+          "enabled": true,
+          "containerBind": "0.0.0.0:1317",
+          "hostPublish": "127.0.0.1:11317",
+          "exposure": "loopback-only"
+        },
+        "cosmosGrpc": {
+          "enabled": true,
+          "containerBind": "0.0.0.0:9090",
+          "hostPublish": "127.0.0.1:19090",
+          "exposure": "loopback-only"
+        },
+        "pprof": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        }
+      },
+      "runtimePolicyRefs": {
+        "comet": "comet-diagnostic-v0",
+        "cosmos": "cosmos-query-v0",
+        "evm": "evm-public-v0"
+      },
+      "storagePolicyRef": "query-v0",
+      "resources": {
+        "status": "planning-floor-not-benchmarked",
+        "cpuCores": 8,
+        "memoryGiB": 16,
+        "diskGiB": 500,
+        "sustainedIops": 2000,
+        "publicCapacityClaimed": false,
+        "scalingSignals": [
+          "rpc-p95-latency",
+          "rpc-error-rate",
+          "state-sync-lag",
+          "disk-growth-rate"
+        ]
+      }
+    },
+    {
+      "id": "public-rpc",
+      "activation": "defined-inactive-local-equivalent",
+      "localEquivalent": "loopback-only validator-0 client surface; no public listener, proxy, DNS, or TLS exists",
+      "publicLaunchAllowed": false,
+      "consensusKey": {
+        "registeredValidatorSetKeyPermitted": false,
+        "registeredValidatorSetMembershipRequired": false,
+        "unregisteredLocalFilePvPermitted": true,
+        "filePvKeyRelativePath": "config/priv_validator_key.json",
+        "filePvStateRelativePath": "data/priv_validator_state.json",
+        "stateMonotonicRequired": true,
+        "filePvPubkeyMustNotMatchRegisteredValidatorSet": true
+      },
+      "p2p": {
+        "mode": "private-peer-public-query-node",
+        "listen": "0.0.0.0:26656",
+        "hostPublish": "127.0.0.1:27256",
+        "persistentPeerRoles": ["sentry", "full"],
+        "unconditionalPeerRoles": [],
+        "privatePeerRoles": ["sentry", "full"],
+        "addressBookStrict": false,
+        "allowDuplicateIp": true,
+        "seedsAllowed": false,
+        "seedRoles": [],
+        "externalAddressAdvertised": false,
+        "privatePeerIdsRequired": true,
+        "maximumInboundPeers": 40,
+        "maximumOutboundPeers": 10,
+        "pexEnabled": false
+      },
+      "services": {
+        "cometRpc": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        },
+        "evmHttp": {
+          "enabled": true,
+          "containerBind": "0.0.0.0:8545",
+          "hostPublish": "127.0.0.1:28545",
+          "exposure": "loopback-v0-reverse-proxy-required-later"
+        },
+        "evmWebSocket": {
+          "enabled": true,
+          "containerBind": "0.0.0.0:8546",
+          "hostPublish": "127.0.0.1:28546",
+          "exposure": "loopback-v0-reverse-proxy-required-later"
+        },
+        "cosmosRest": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        },
+        "cosmosGrpc": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        },
+        "pprof": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        }
+      },
+      "runtimePolicyRefs": {
+        "comet": "disabled",
+        "cosmos": "disabled",
+        "evm": "evm-public-v0"
+      },
+      "storagePolicyRef": "query-v0",
+      "resources": {
+        "status": "planning-floor-not-benchmarked",
+        "cpuCores": 8,
+        "memoryGiB": 32,
+        "diskGiB": 500,
+        "sustainedIops": 3000,
+        "publicCapacityClaimed": false,
+        "scalingSignals": [
+          "request-rate",
+          "rpc-p95-latency",
+          "rate-limit-rejections",
+          "websocket-connections",
+          "index-lag"
+        ]
+      }
+    },
+    {
+      "id": "private-archive-indexer",
+      "activation": "active-local-gateway-fronted",
+      "localEquivalent": "instantiated as a 5th non-validator toriumd instance by chain/app/cmd/torium-localnet --archive and chain/profiles/compose.archive-gateway.yaml; consumers reach it only through the archive-rpc-gateway sidecar",
+      "publicLaunchAllowed": false,
+      "consensusKey": {
+        "registeredValidatorSetKeyPermitted": false,
+        "registeredValidatorSetMembershipRequired": false,
+        "unregisteredLocalFilePvPermitted": true,
+        "filePvKeyRelativePath": "config/priv_validator_key.json",
+        "filePvStateRelativePath": "data/priv_validator_state.json",
+        "stateMonotonicRequired": true,
+        "filePvPubkeyMustNotMatchRegisteredValidatorSet": true
+      },
+      "p2p": {
+        "mode": "private-peer-archive-query-node",
+        "listen": "0.0.0.0:26656",
+        "hostPublish": "127.0.0.1:27356",
+        "persistentPeerRoles": ["sentry", "full"],
+        "unconditionalPeerRoles": [],
+        "privatePeerRoles": ["sentry", "full"],
+        "addressBookStrict": false,
+        "allowDuplicateIp": true,
+        "seedsAllowed": false,
+        "seedRoles": [],
+        "externalAddressAdvertised": false,
+        "privatePeerIdsRequired": true,
+        "maximumInboundPeers": 20,
+        "maximumOutboundPeers": 10,
+        "pexEnabled": false
+      },
+      "services": {
+        "cometRpc": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        },
+        "evmHttp": {
+          "enabled": true,
+          "containerBind": "0.0.0.0:8545",
+          "hostPublish": null,
+          "exposure": "gateway-upstream-only"
+        },
+        "evmWebSocket": {
+          "enabled": true,
+          "containerBind": "0.0.0.0:8546",
+          "hostPublish": null,
+          "exposure": "gateway-upstream-only"
+        },
+        "cosmosRest": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        },
+        "cosmosGrpc": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        },
+        "pprof": {
+          "enabled": false,
+          "containerBind": null,
+          "hostPublish": null,
+          "exposure": "disabled"
+        }
+      },
+      "runtimePolicyRefs": {
+        "comet": "disabled",
+        "cosmos": "disabled",
+        "evm": "evm-archive-blockscout-candidate-v0"
+      },
+      "storagePolicyRef": "archive-indexer-v0",
+      "resources": {
+        "status": "planning-floor-not-benchmarked",
+        "cpuCores": 16,
+        "memoryGiB": 64,
+        "diskGiB": 2000,
+        "sustainedIops": 5000,
+        "publicCapacityClaimed": false,
+        "scalingSignals": [
+          "indexer-head-lag",
+          "historical-query-p95",
+          "disk-growth-rate",
+          "database-iops",
+          "rpc-timeouts"
+        ]
+      }
+    }
+  ]
+}

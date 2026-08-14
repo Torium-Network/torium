@@ -1,0 +1,392 @@
+{
+  "$schema": "./network-artifacts-v0.schema.json",
+  "schemaVersion": 1,
+  "bundleVersion": "0.1.0-local.1",
+  "status": "generated-localnet-only-public-artifacts-hold",
+  "ownerIssue": 123,
+  "generatedBy": "node chain/releases/generate-network-artifacts-v0.mjs --write",
+  "scope": {
+    "environment": "local-development-only",
+    "valueStatus": "valueless",
+    "publicPublicationAllowed": false,
+    "liveDeploymentAllowed": false,
+    "backendIntegrationInScope": false,
+    "bridgeInScope": false,
+    "l2InScope": false
+  },
+  "sources": {
+    "identifiers": {
+      "path": "chain/config/identifiers.json",
+      "version": "0.2.0",
+      "sha256": "558f712451571dcbee851a02a91c49349ea19b62545ede0452e0fac6b84c18af"
+    },
+    "identifierAvailability": {
+      "path": "chain/config/identifier-availability.json",
+      "version": "2026-07-14T19:01:44Z",
+      "sha256": "ca5fe795602b99da93a7710f801c65d54ecb6fc566c8d856c3e94377b24916cc"
+    },
+    "protocol": {
+      "path": "chain/config/protocol-v1.json",
+      "version": "1.0.0-local.5",
+      "sha256": "d5d6c4ee460d20b97d46466aa48d2ac6c95b346d4fd4f03c383de2936466a9a8"
+    },
+    "genesis": {
+      "path": "chain/genesis/localnet/genesis.json",
+      "version": "sha256",
+      "sha256": "86d77e6e1907e10e92217e1484cbf89e224b03bacdbf67f441b3307502a96808"
+    },
+    "genesisManifest": {
+      "path": "chain/genesis/localnet/manifest.json",
+      "version": "schema-1",
+      "sha256": "01c0a25e37df4e8337da2cf06f75f4654ed86a70aa60dc24193a44b996497069"
+    },
+    "recovery": {
+      "path": "chain/recovery/recovery-v0.json",
+      "version": "0.1.0-local.1",
+      "sha256": "4dd2216a5fcc90ffa292f2c94be49e846debe605040f73462cce117137f1cbc1"
+    },
+    "governance": {
+      "path": "chain/config/governance-v1.json",
+      "version": "1.0.0-local.2",
+      "sha256": "0d48aec2ab6b3acf72b667aecff540aa47fdc541aa6860969eb2f436fb15c03b"
+    },
+    "nodeRoles": {
+      "path": "chain/profiles/node-roles-v0.json",
+      "version": "0.1.0-local.2",
+      "sha256": "17ace8c2abdfd6367a38d0fd1b6d76727aed65b3fbcd0ab10cef993b897864d1"
+    },
+    "sdk": {
+      "path": "packages/torium-sdk/package.json",
+      "version": "0.1.0",
+      "sha256": "d5ba6d4006f4142d5f00d62d904e09001b4b90b9f3a5576875e21bd80099c65d"
+    },
+    "contracts": {
+      "path": "contracts/deployments/localnet.json",
+      "version": "0.1.0",
+      "sha256": "99678da5c5c1eb2e3b847df5a594dd7092bbcf3d4963e57fbed3c66094073a9f"
+    },
+    "explorerSelection": {
+      "path": "chain/explorer/selection-v1.json",
+      "version": "1.0.0-local.3",
+      "sha256": "b2d5481f98458229cc49e9f0a51d670196a795ddecb02e83625a55497291ccd7"
+    },
+    "explorerStack": {
+      "path": "chain/explorer/stack-v0.json",
+      "version": "0.1.0-local.7",
+      "sha256": "065204b2c6e2f87b943523799b9cd8904494cece8fbb7d17f79c57425e94c684"
+    }
+  },
+  "environments": {
+    "localnet": {
+      "status": "active-valueless-local-development",
+      "public": false,
+      "identifiers": {
+        "displayName": "Torium Localnet",
+        "cosmosChainId": "torium-localnet-1",
+        "evmChainId": 1414484556,
+        "evmChainIdHex": "0x544f524c",
+        "networkId": 1414484556,
+        "caip2": "eip155:1414484556",
+        "shortName": "torium-local",
+        "nativeCurrencySymbol": "tTOR",
+        "registryStatus": "local-only-not-registered"
+      },
+      "nativeCurrency": {
+        "name": "Torium Test Token",
+        "symbol": "tTOR",
+        "baseDenom": "atorium",
+        "decimals": 18,
+        "valueStatus": "valueless-non-market-network"
+      },
+      "genesis": {
+        "path": "chain/genesis/localnet/genesis.json",
+        "sha256": "86d77e6e1907e10e92217e1484cbf89e224b03bacdbf67f441b3307502a96808",
+        "canonicalHashAlgorithm": "sha256",
+        "signature": {
+          "status": "HOLD-unsigned-local-only",
+          "algorithm": null,
+          "keyId": null,
+          "value": null,
+          "requiredForPublicArtifact": true
+        }
+      },
+      "endpoints": {
+        "rpcUrls": [
+          "http://127.0.0.1:8545"
+        ],
+        "webSocketUrls": [
+          "ws://127.0.0.1:8546"
+        ],
+        "blockExplorerUrls": [],
+        "publishable": false
+      },
+      "wallet": {
+        "eip3085": {
+          "chainId": "0x544f524c",
+          "chainName": "Torium Localnet",
+          "nativeCurrency": {
+            "name": "Torium Test Token",
+            "symbol": "tTOR",
+            "decimals": 18
+          },
+          "rpcUrls": [
+            "http://127.0.0.1:8545"
+          ],
+          "blockExplorerUrls": []
+        },
+        "iconAsset": null,
+        "iconStatus": "HOLD-not-selected"
+      },
+      "peerDiscovery": {
+        "status": "HOLD-unpublished",
+        "seeds": [],
+        "persistentPeers": [],
+        "published": false,
+        "privatePeerDataAllowed": false
+      },
+      "stateSync": {
+        "status": "HOLD-unconfigured-untrusted",
+        "enabled": false,
+        "rpcServers": [],
+        "snapshotServers": [],
+        "trustHeight": null,
+        "trustHash": null,
+        "trustPeriodSeconds": null,
+        "mustBeLessThanUnbondingSeconds": 1814400
+      },
+      "snapshot": {
+        "format": "torium-localnet-recovery-v1",
+        "status": "proven-local-developer-only",
+        "signed": false,
+        "publicPublicationAllowed": false,
+        "operatorRestoreAllowed": false
+      }
+    },
+    "devnet": {
+      "status": "reserved-unpublished-no-genesis",
+      "public": false,
+      "identifiers": {
+        "displayName": "Torium Devnet",
+        "cosmosChainId": "torium-devnet-1",
+        "evmChainId": 1414484548,
+        "evmChainIdHex": "0x544f5244",
+        "networkId": 1414484548,
+        "caip2": "eip155:1414484548",
+        "shortName": "torium-dev",
+        "nativeCurrencySymbol": "tTOR",
+        "registryStatus": "local-only-not-registered"
+      },
+      "nativeCurrency": {
+        "name": "Torium Test Token",
+        "symbol": "tTOR",
+        "baseDenom": "atorium",
+        "decimals": 18,
+        "valueStatus": "valueless-non-market-network"
+      },
+      "genesis": null,
+      "endpoints": {
+        "rpcUrls": [],
+        "webSocketUrls": [],
+        "blockExplorerUrls": [],
+        "publishable": false
+      },
+      "wallet": null,
+      "peerDiscovery": {
+        "status": "HOLD-unpublished",
+        "seeds": [],
+        "persistentPeers": [],
+        "published": false,
+        "privatePeerDataAllowed": false
+      },
+      "stateSync": {
+        "status": "HOLD-unconfigured-untrusted",
+        "enabled": false,
+        "rpcServers": [],
+        "snapshotServers": [],
+        "trustHeight": null,
+        "trustHash": null,
+        "trustPeriodSeconds": null,
+        "mustBeLessThanUnbondingSeconds": 1814400
+      },
+      "snapshot": null
+    },
+    "testnet": {
+      "status": "reserved-unpublished-no-genesis",
+      "public": true,
+      "identifiers": {
+        "displayName": "Torium Testnet",
+        "cosmosChainId": "torium-testnet-1",
+        "evmChainId": 1414484564,
+        "evmChainIdHex": "0x544f5254",
+        "networkId": 1414484564,
+        "caip2": "eip155:1414484564",
+        "shortName": "torium-testnet",
+        "nativeCurrencySymbol": "tTOR",
+        "registryStatus": "collision-checked-unreserved"
+      },
+      "nativeCurrency": {
+        "name": "Torium Test Token",
+        "symbol": "tTOR",
+        "baseDenom": "atorium",
+        "decimals": 18,
+        "valueStatus": "valueless-non-market-network"
+      },
+      "genesis": null,
+      "endpoints": {
+        "rpcUrls": [],
+        "webSocketUrls": [],
+        "blockExplorerUrls": [],
+        "publishable": false
+      },
+      "wallet": null,
+      "peerDiscovery": {
+        "status": "HOLD-unpublished",
+        "seeds": [],
+        "persistentPeers": [],
+        "published": false,
+        "privatePeerDataAllowed": false
+      },
+      "stateSync": {
+        "status": "HOLD-unconfigured-untrusted",
+        "enabled": false,
+        "rpcServers": [],
+        "snapshotServers": [],
+        "trustHeight": null,
+        "trustHash": null,
+        "trustPeriodSeconds": null,
+        "mustBeLessThanUnbondingSeconds": 1814400
+      },
+      "snapshot": null
+    },
+    "mainnet": {
+      "status": "reserved-unpublished-no-genesis",
+      "public": true,
+      "identifiers": {
+        "displayName": "Torium",
+        "cosmosChainId": "torium-1",
+        "evmChainId": 5525330,
+        "evmChainIdHex": "0x544f52",
+        "networkId": 5525330,
+        "caip2": "eip155:5525330",
+        "shortName": "torium",
+        "nativeCurrencySymbol": "TOR",
+        "registryStatus": "collision-checked-unreserved"
+      },
+      "nativeCurrency": {
+        "name": "Torium",
+        "symbol": "TOR",
+        "baseDenom": "atorium",
+        "decimals": 18,
+        "valueStatus": "not-launched-no-value-claim"
+      },
+      "genesis": null,
+      "endpoints": {
+        "rpcUrls": [],
+        "webSocketUrls": [],
+        "blockExplorerUrls": [],
+        "publishable": false
+      },
+      "wallet": null,
+      "peerDiscovery": {
+        "status": "HOLD-unpublished",
+        "seeds": [],
+        "persistentPeers": [],
+        "published": false,
+        "privatePeerDataAllowed": false
+      },
+      "stateSync": {
+        "status": "HOLD-unconfigured-untrusted",
+        "enabled": false,
+        "rpcServers": [],
+        "snapshotServers": [],
+        "trustHeight": null,
+        "trustHash": null,
+        "trustPeriodSeconds": null,
+        "mustBeLessThanUnbondingSeconds": 1814400
+      },
+      "snapshot": null
+    }
+  },
+  "compatibility": {
+    "minimumNodeVersion": null,
+    "minimumNodeVersionStatus": "HOLD-not-ratified",
+    "protocolVersion": "1.0.0-local.5",
+    "sdk": {
+      "version": "0.1.0",
+      "status": "local-package-not-published"
+    },
+    "contracts": {
+      "version": "0.1.0",
+      "status": "local-only-valueless"
+    },
+    "explorer": {
+      "version": "1.0.0-local.3/0.1.0-local.7",
+      "status": "conditional-local-candidate/activated-local-only-hold"
+    },
+    "nodeRoles": {
+      "version": "0.1.0-local.2",
+      "status": "defined-local-v0-not-activated-publicly"
+    },
+    "recovery": {
+      "version": "0.1.0-local.1",
+      "status": "defined-production-shape-local-only-not-activated"
+    },
+    "upgrade": {
+      "governanceContractVersion": "1.0.0-local.2",
+      "planName": "torium-local-v1",
+      "preUpgradeVersion": "0.1.0-local.1",
+      "postUpgradeVersion": "0.2.0-local.1",
+      "operatorChecksumPreflightRequired": true
+    },
+    "localnetFormatRehearsal": {
+      "status": "metadata-generated-chain-start-HOLD",
+      "bundleGenerated": true,
+      "bundleValidated": true,
+      "chainStartRehearsedFromBundle": false
+    }
+  },
+  "changePolicy": {
+    "currentBundle": {
+      "requiresRestart": false,
+      "requiresMigration": false,
+      "networkDiscontinuity": false,
+      "note": "metadata packaging only; canonical localnet inputs are unchanged"
+    },
+    "publicGenesisReplacement": {
+      "requiresNewCosmosChainId": true,
+      "requiresNewEvmChainId": true,
+      "requiresBundleVersionIncrement": true,
+      "networkDiscontinuityRequired": true
+    },
+    "identifierAvailability": {
+      "evidencePath": "chain/config/identifier-availability.json",
+      "datedEvidenceOnly": true,
+      "recheckBeforePublication": true
+    },
+    "privateData": {
+      "peerIdsAllowed": false,
+      "privateIpsAllowed": false,
+      "keysAllowed": false,
+      "signerStateAllowed": false
+    }
+  },
+  "releaseReadiness": {
+    "ready": false,
+    "status": "HOLD-local-bundle-only",
+    "checksumsComplete": true,
+    "signatureComplete": false,
+    "publicMetadataComplete": false,
+    "localnetChainStartRehearsalComplete": false
+  },
+  "holds": [
+    "Public genesis signature algorithm and custody are not selected.",
+    "Devnet, testnet and mainnet genesis artifacts do not exist.",
+    "Public RPC, WebSocket and explorer endpoints are unpublished.",
+    "Seed, persistent-peer and trusted state-sync values are unpublished.",
+    "Wallet and registry icon assets are not selected.",
+    "Localnet chain-start consumption is rehearsed by chain/releases/rehearse-chain-start-v0.sh (2026-07-29); public-environment consumption stays unexercised.",
+    "Explorer runtime compatibility remains inactive and conditional.",
+    "SDK and registry packages are local and unpublished.",
+    "Identifier availability must be rechecked immediately before publication."
+  ]
+}

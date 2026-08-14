@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "suite": "torium-state-conformance",
+  "mode": "execute",
+  "status": "pass",
+  "upstreamCommit": "afed83bf2a097cba688a60246429f3a051fe03f6",
+  "engine": "github.com/cosmos/go-ethereum@v1.17.2-cosmos-0",
+  "databaseScheme": "hash",
+  "manifestSha256": "a6bd6cd4af77fbcf8b5858cff92133df8c4d482ec155c5867a09e56a50763d5c",
+  "skipRegistrySha256": "d787d8c4ec2a443f5c777b1c3ea674cd33a83f6f9718ddbbfeda5ea29cd2422a",
+  "fixtureCount": 13,
+  "fixtureBytes": 249968,
+  "testCount": 13,
+  "subtestsSelected": 64,
+  "subtestsRun": 64,
+  "subtestsSkipped": 0,
+  "subtestsByFork": {
+    "Cancun": 32,
+    "Prague": 32
+  }
+}

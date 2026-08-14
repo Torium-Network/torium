@@ -1,0 +1,60 @@
+---
+title: Validators
+description: Local validator lifecycle, signer safety, and key compromise response.
+docId: validators
+version: v0
+status: foundation
+ownerIssue: 144
+sourceOfTruth: docs/operations/torium-validator-signer-lifecycle.md
+sourceStatus: existing
+---
+
+Torium v0 validators exist only on the disposable localnet. There is no public
+validator onboarding, no production key use, and no live value; every key in
+these procedures is a public disposable fixture. The executable local contract
+is `chain/operator/VALIDATOR_LIFECYCLE.md`, and the key/compromise runbook is
+`docs/operations/torium-validator-signer-lifecycle.md`.
+
+## Ratified local parameters
+
+The local staking contract fixes the economics: `1 TOR` minimum
+self-delegation, a 100-validator cap, 21-day unbonding, a `100 / 50%` signing
+window with a 10-minute downtime jail and `1%` slash, and a `5%` double-sign
+slash with permanent tombstoning. Rewards come only from transaction fees or
+existing balances — the validator lifecycle never mints native TOR.
+
+## Two keys, one invariant
+
+An operator holds an account/operator key (signs staking transactions, owns
+the self-delegation) and an Ed25519 consensus key (signs CometBFT proposals
+and votes). The invariant that outranks uptime: **never let two processes
+sign at the same height**. Never copy a consensus key to a second running
+node, never restore `priv_validator_key.json` without its matching
+`priv_validator_state.json`, and never reset height/round/step by hand.
+
+Before activating a same-identity restore candidate, keep both homes offline
+and run the signer-state guard, which verifies the recorded public key, the
+FilePV signature, and the trusted maximum height:
+
+```bash
+node chain/operator/signer-state-guard.mjs \
+  --current-home /offline/current-home \
+  --candidate-home /offline/candidate-home \
+  --trusted-maximum-height <height> \
+  --validator-stopped
+```
+
+## Compromise response
+
+Classify first: a lost or corrupt signer is an availability event; a copied,
+stolen, exposed, or ambiguously restored signer is a compromise and
+double-sign risk — treat uncertainty as compromise. The shared sequence:
+stop or pause the affected authority, preserve read-only evidence, revoke or
+fence the old authority through its ratified mechanism, regenerate through
+the custody path with independent public-identifier verification, review the
+exposure window, and communicate impact without disclosing secret material.
+Production custody, HSM/remote-signer activation, and public ceremonies
+remain deferred and are not authorized by these pages.
+
+Never paste private keys, mnemonics, recovery shares, signer state, or
+unredacted diagnostics into tickets, chats, logs, or repositories.

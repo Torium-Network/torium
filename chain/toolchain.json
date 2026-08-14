@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": 1,
+  "lastReviewedAt": "2026-07-16",
+  "policy": {
+    "canonicalExecution": "container",
+    "hostTools": ["git", "docker", "dockerCompose"],
+    "hostNodeMayRunBootstrap": true,
+    "releaseInputsRequireDigest": true,
+    "unversionedLatestTagsAllowed": false
+  },
+  "runtimes": {
+    "node": {
+      "version": "22.23.1",
+      "image": "node:22.23.1-bookworm-slim@sha256:6c74791e557ce11fc957704f6d4fe134a7bc8d6f5ca4403205b2966bd488f6b3"
+    },
+    "pnpm": {
+      "version": "10.27.0",
+      "source": "root package.json packageManager"
+    },
+    "go": {
+      "version": "1.25.9",
+      "image": "golang:1.25.9-alpine3.23@sha256:5caaf1cca9dc351e13deafbc3879fd4754801acba8653fa9540cea125d01a71f"
+    }
+  },
+  "hostMinimums": {
+    "git": "2.40.0",
+    "docker": "27.0.0",
+    "dockerCompose": "2.30.0"
+  },
+  "verifiedHostReference": {
+    "git": "2.53.0",
+    "docker": "29.4.0",
+    "dockerCompose": "5.1.2"
+  },
+  "chain": {
+    "cosmosEvm": "v0.7.0",
+    "cosmosSdk": "v0.54.3",
+    "cometBft": "v0.39.3"
+  },
+  "protobuf": {
+    "strategy": "buf-via-cosmos-proto-builder",
+    "protoBuilderVersion": "0.18.1",
+    "image": "ghcr.io/cosmos/proto-builder:0.18.1@sha256:d7fb3bcfa865b3c4f85afd25af5be1fc9fafe77f7dab7313a726fb8cc5c5947a",
+    "bufVersion": "1.64.0",
+    "clangFormatVersion": "21.1.2",
+    "standaloneProtocVersion": "35.1",
+    "standaloneProtocRequired": false,
+    "standaloneProtocActivationIssue": 94
+  },
+  "contracts": {
+    "foundry": {
+      "version": "1.7.1",
+      "image": "ghcr.io/foundry-rs/foundry@sha256:8347b728d5d393dac1c018691b36f506d23b9dcd78341d40ea0fcb11c3a19cdd",
+      "activationIssue": 108
+    },
+    "solidity": {
+      "version": "0.8.30",
+      "longVersion": "0.8.30+commit.73712a01",
+      "image": "ethereum/solc:0.8.30@sha256:b116bf835554d40c501feab0b2c943a8c5eec003b804bcc5b326b85c93da00c2",
+      "binaryPath": "/usr/bin/solc",
+      "activationIssue": 108
+    },
+    "openZeppelin": {
+      "version": "5.6.1",
+      "package": "@openzeppelin/contracts",
+      "release": "https://github.com/OpenZeppelin/openzeppelin-contracts/releases/tag/v5.6.1",
+      "activationIssue": 108
+    },
+    "hardhat": {
+      "version": "3.9.1",
+      "role": "compatibility-tests-only",
+      "activationIssue": 112
+    },
+    "solhint": {
+      "version": "5.0.5",
+      "activationIssue": 108
+    },
+    "formatter": {
+      "tool": "forge fmt",
+      "foundryVersion": "1.7.1",
+      "activationIssue": 108
+    },
+    "coverage": {
+      "tool": "forge coverage",
+      "foundryVersion": "1.7.1",
+      "minimumLinePercent": 90,
+      "activationIssue": 108
+    },
+    "analysis": {
+      "tool": "forge lint",
+      "foundryVersion": "1.7.1",
+      "severities": ["high", "med"],
+      "activationIssue": 108
+    },
+    "schemaValidator": {
+      "tool": "ajv",
+      "version": "8.17.1",
+      "activationIssue": 108
+    }
+  },
+  "quality": {
+    "golangciLint": {
+      "version": "2.10.1",
+      "image": "golangci/golangci-lint:v2.10.1-alpine@sha256:33bc6b6156d4c7da87175f187090019769903d04dd408833b83083ed214b0ddf"
+    },
+    "protolint": {
+      "version": "0.44.0",
+      "image": "yoheimuta/protolint:0.44.0@sha256:17db84d7ff35c2b269aea9db8de4a13fb6bd2eda0585eab98623c63bc91484bf"
+    },
+    "gofumpt": {
+      "version": "0.10.0",
+      "module": "mvdan.cc/gofumpt"
+    },
+    "shfmt": {
+      "version": "3.13.1",
+      "image": "mvdan/shfmt:v3.13.1-alpine@sha256:3bd333f7861b51081af39a8ba722c0023983362b46332849aaf57c6d32d96b25"
+    },
+    "prettier": {
+      "version": "3.8.1",
+      "source": "root package.json"
+    },
+    "typescript": {
+      "version": "5.9.3",
+      "source": "pnpm lockfile"
+    }
+  }
+}

@@ -1,0 +1,54 @@
+---
+title: Security
+description: Threat model summary, reporting process and safe integration boundaries.
+docId: security
+version: v0
+status: foundation
+ownerIssue: 144
+sourceOfTruth: docs/security/torium-chain-threat-model-v1.md
+sourceStatus: existing
+---
+
+The normative security register is `chain/security/threat-model-v1.json` with
+its executable validator; `docs/security/torium-chain-threat-model-v1.md`
+explains the model. This page summarizes both without turning local-only
+defaults into public-network guidance.
+
+## Current posture, stated plainly
+
+Torium authorizes only a valueless, local, authority-operated chain. The four
+localnet validators share one administrative trust domain: a local operator
+can censor, halt, reset, replace binaries, and replace the history presented
+to clients. That is deliberate for deterministic consensus and fault testing —
+it is not decentralization, public economic security, or a production control
+plane. Nothing in v0 is safe to integrate against with real value.
+
+## How risk is tracked
+
+Every registered risk is scored likelihood × impact; high and critical risks
+require prevention, detection, recovery, named owners, stable test IDs,
+review triggers, an explicit residual risk, and a blocking public-release
+gate. "Designed" is not "mitigated": public release stays blocked until the
+release process implements and exercises the mapped tests, and the security review owns any later
+public risk-acceptance decision. The register protects validator signer
+state and privileged keys, genesis/chain identity/supply, system contracts
+and the deployment registry, every endpoint surface, release artifacts, and
+recovery paths.
+
+## Reporting a vulnerability
+
+Do not open a public issue. Use the repository's private security advisory
+form (see `packages/torium-sdk/SECURITY.md`); never include private keys,
+mnemonics, seeds, keystores, or key bytes in a report. The compromised-release
+response for the SDK package is documented in `packages/torium-sdk/RELEASING.md`.
+
+## Safe integration boundaries
+
+- Use only disposable fixture keys on the localnet; they are public and
+  valueless by design.
+- Standard EVM tooling connects through the documented public RPC surface;
+  `debug`/`trace`/`admin`-class methods are not part of the public contract.
+- Attestation and reward contracts prove integrity, not truth — see the
+  [contracts pages](/v0/contracts) for their explicit trust boundaries.
+- Operational hardening (CVE scanning, firewalling, host policy) is
+  deliberately deferred scope and must not be assumed present.

@@ -1,0 +1,20 @@
+{
+  "title": "v0",
+  "root": true,
+  "pages": [
+    "index",
+    "getting-started",
+    "concepts",
+    "localnet",
+    "sdk",
+    "evm-tools",
+    "contracts",
+    "examples",
+    "validators",
+    "operations",
+    "security",
+    "reference",
+    "releases",
+    "troubleshooting"
+  ]
+}

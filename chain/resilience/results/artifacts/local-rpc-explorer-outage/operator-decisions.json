@@ -1,0 +1,12 @@
+[
+  {
+    "at": "2026-07-29T16:11:27.290Z",
+    "decision": "stopped the faucet query dependency (consensus untouched)",
+    "reason": "scenario plan step for this canonical fault drill"
+  },
+  {
+    "at": "2026-07-29T16:11:39.217Z",
+    "decision": "restarted the dependency; it re-read canonical chain state",
+    "reason": "scenario plan step for this canonical fault drill"
+  }
+]

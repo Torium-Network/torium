@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "sourceIssue": 107,
+  "registryVersion": "1.0.0-local.3",
+  "capabilities": [
+    { "id": "chain.four-validator-localnet", "state": "supported" },
+    { "id": "evm.state-test-curated-subset", "state": "supported" },
+    {
+      "id": "evm.transaction-envelopes-type-0-1-2",
+      "state": "supported"
+    },
+    {
+      "id": "evm.transaction-envelopes-type-3-4",
+      "state": "unsupported"
+    },
+    { "id": "evm.chain-id-replay-protection", "state": "supported" },
+    { "id": "rpc.signed-evm-transfer", "state": "supported" },
+    { "id": "rpc.eth-fee-history", "state": "partial" },
+    {
+      "id": "rpc.eth-estimate-gas-contract-execution",
+      "state": "partial"
+    },
+    { "id": "rpc.block-tag-latest", "state": "supported" },
+    { "id": "rpc.block-tag-pending", "state": "partial" },
+    { "id": "rpc.block-tag-safe", "state": "partial" },
+    { "id": "rpc.block-tag-finalized", "state": "partial" },
+    { "id": "rpc.historical-state-call", "state": "supported" },
+    { "id": "rpc.websocket-subscriptions", "state": "supported" },
+    { "id": "rpc.websocket-browser-origin", "state": "unsupported" },
+    {
+      "id": "rpc.websocket-restart-recovery",
+      "state": "supported"
+    },
+    { "id": "rpc.debug-trace-methods", "state": "supported" },
+    {
+      "id": "rpc.default-profile-debug-trace-methods",
+      "state": "unsupported"
+    },
+    {
+      "id": "rpc.operator-profile-debug-trace-methods",
+      "state": "stub"
+    },
+    {
+      "id": "explorer.blockscout-base-indexing",
+      "state": "supported"
+    },
+    {
+      "id": "explorer.blockscout-internal-transactions",
+      "state": "unsupported"
+    },
+    {
+      "id": "mempool.same-nonce-fee-bump-local",
+      "state": "partial"
+    },
+    {
+      "id": "mempool.nonce-gap-queue-promotion",
+      "state": "supported"
+    },
+    { "id": "mempool.capacity-retention", "state": "partial" },
+    { "id": "client.viem-2.55.2", "state": "supported" },
+    { "id": "client.ethers-6.17.0", "state": "supported" },
+    { "id": "client.hardhat-3.9.1", "state": "supported" },
+    { "id": "client.foundry-1.7.1", "state": "supported" },
+    { "id": "wallet.metamask-13.39.2", "state": "supported" },
+    {
+      "id": "account.bech32-and-hex-representation",
+      "state": "supported"
+    },
+    {
+      "id": "torium.cosmos-rest-grpc-extension-contract",
+      "state": "stub"
+    },
+    { "id": "protocol.ibc-and-bridges", "state": "unsupported" }
+  ]
+}

@@ -1,0 +1,103 @@
+diff --git a/chain/security/audit-engagement-v0.json b/chain/security/audit-engagement-v0.json
+index 079498e1..7523146e 100644
+--- a/chain/security/audit-engagement-v0.json
++++ b/chain/security/audit-engagement-v0.json
+@@ -8,16 +8,47 @@
+   "auditPackage": {
+     "sourceOfTruth": "the exact roadmap-branch commit recorded at handoff time",
+     "components": [
+-      { "id": "architecture", "path": "docs/architecture/README.md" },
+-      { "id": "threat-model", "path": "chain/security/threat-model-v1.json" },
+-      { "id": "protocol", "path": "chain/config/protocol-v1.json" },
+-      { "id": "privileged-roles", "path": "chain/security/key-custody-v0.json" },
+-      { "id": "contracts-bundle", "path": "contracts/scripts/generate-audit-bundle.mjs", "note": "self-verifying #111 bundle; record its scopeDigestSha256 at handoff (prerequisite: #111 clean handoff)" },
+-      { "id": "chain-application", "path": "chain/app" },
+-      { "id": "sdk", "path": "packages/torium-sdk" },
+-      { "id": "build-release-process", "path": "chain/ci/ci-gates-v0.json" },
+-      { "id": "operations", "path": "docs/operations" },
+-      { "id": "testnet-plan", "path": "infra/torium/public-testnet-plan-v0.json" }
++      {
++        "id": "architecture",
++        "path": "docs/architecture/README.md"
++      },
++      {
++        "id": "threat-model",
++        "path": "chain/security/threat-model-v1.json"
++      },
++      {
++        "id": "protocol",
++        "path": "chain/config/protocol-v1.json"
++      },
++      {
++        "id": "privileged-roles",
++        "path": "chain/security/key-custody-v0.json"
++      },
++      {
++        "id": "contracts-bundle",
++        "path": "contracts/scripts/generate-audit-bundle.mjs",
++        "note": "self-verifying #111 bundle; record its scopeDigestSha256 at handoff (prerequisite: #111 clean handoff)"
++      },
++      {
++        "id": "chain-application",
++        "path": "chain/app"
++      },
++      {
++        "id": "sdk",
++        "path": "packages/torium-sdk"
++      },
++      {
++        "id": "build-release-process",
++        "path": "chain/ci/ci-gates-v0.json"
++      },
++      {
++        "id": "operations",
++        "path": "docs/operations"
++      },
++      {
++        "id": "testnet-plan",
++        "path": "infra/torium/public-testnet-plan-v0.json"
++      }
+     ],
+     "exclusions": [
+       "Torium product backend, mobile apps, and web apps (separate system, out of roadmap scope)",
+@@ -44,13 +75,22 @@
+   ],
+   "findingsPolicy": {
+     "severityScale": "critical / high / medium / low / informational, mapped to the threat-model scoring",
+-    "sla": { "critical": "fix before any further launch step", "high": "fix or explicit accepted-risk before launch", "medium": "scheduled with owner", "low": "backlog" },
++    "sla": {
++      "critical": "fix before any further launch step",
++      "high": "fix or explicit accepted-risk before launch",
++      "medium": "scheduled with owner",
++      "low": "backlog"
++    },
+     "remediation": "one branch per finding family, each retested by the finder or with reproducible evidence",
+-    "acceptedRisk": "requires a written decision record naming the approver; only Şükrü can approve accepted risk for launch-blocking findings",
++    "acceptedRisk": "requires a written decision record naming the approver; only \u015e\u00fckr\u00fc can approve accepted risk for launch-blocking findings",
+     "publicationPolicy": "the final report is published after remediation, with any embargoed items redacted until fixed"
+   },
+   "incidentProcess": {
+-    "severities": ["SEV1 consensus/key/supply compromise", "SEV2 public-surface abuse or data loss", "SEV3 degraded service"],
++    "severities": [
++      "SEV1 consensus/key/supply compromise",
++      "SEV2 public-surface abuse or data loss",
++      "SEV3 degraded service"
++    ],
+     "procedures": {
+       "triageAndContainment": "classify availability-vs-compromise per the signer-lifecycle runbook; contain before recovery",
+       "keyCompromise": "docs/operations/torium-validator-signer-lifecycle.md",
+@@ -72,12 +112,12 @@
+     "safeHarbor": "good-faith research against the valueless testnet is welcome; never against user funds or the product backend"
+   },
+   "ownership": {
+-    "securityOwner": "USER-DECISION: assign before any deployment (two-person team; default Şükrü)",
++    "securityOwner": "USER-DECISION: assign before any deployment (two-person team; default \u015e\u00fckr\u00fc)",
+     "escalationContact": "USER-DECISION: second contact for SEV1 when the owner is unreachable"
+   },
+   "holds": [
+     "No external audit engagement has occurred; nothing may claim audited status.",
+-    "Tabletop exercises are defined but not yet run.",
++    "Tabletop exercises were run 2026-07-29 with evidence records under docs/security/tabletops/; re-run them with the named owners once ownership is assigned.",
+     "#111's clean contract-bundle handoff digest is a prerequisite for the contract scope.",
+     "Ownership/escalation assignments are explicit user decisions before deployment."
+   ]

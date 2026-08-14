@@ -1,0 +1,24 @@
+{
+  "name": "@torium-network/contracts-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22.23.1 <23 || >=24 <25"
+  },
+  "scripts": {
+    "lint": "solhint --max-warnings 0 'src/**/*.sol'",
+    "validate:registry": "node scripts/validate-registry.mjs",
+    "generate": "node scripts/generate-artifacts.mjs",
+    "generate:check": "node scripts/generate-artifacts.mjs --check"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "5.6.1",
+    "viem": "2.55.2"
+  },
+  "devDependencies": {
+    "ajv": "8.17.1",
+    "prettier": "3.8.1",
+    "solhint": "5.0.5"
+  }
+}

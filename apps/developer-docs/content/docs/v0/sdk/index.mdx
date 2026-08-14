@@ -1,0 +1,41 @@
+---
+title: TypeScript SDK
+description: Install and use the Torium TypeScript SDK with viem-compatible clients.
+docId: sdk
+version: v0
+status: foundation
+ownerIssue: 141
+sourceOfTruth: packages/torium-sdk
+sourceStatus: existing
+---
+
+`@torium-network/sdk` is the local-first TypeScript entry point for the Torium sovereign EVM L1. It
+provides canonical chain definitions, endpoint identity checks, a viem-compatible public client and a
+machine-readable capability matrix. It does not connect to the Torium product backend or hold keys.
+
+Install it from npm — see [installation and compatibility](/v0/sdk/installation) for the exact
+version tuple this documentation is pinned to.
+
+## Choose a guide
+
+- [Installation and version compatibility](/v0/sdk/installation)
+- [Chains and transports](/v0/sdk/chains-and-transports)
+- [Public client, reads and subscriptions](/v0/sdk/public-client)
+- [Wallets and transactions](/v0/sdk/wallets-and-transactions)
+- [Errors, runtimes and troubleshooting](/v0/sdk/errors-and-runtimes)
+- [Direct viem and ethers alternatives](/v0/sdk/viem-and-ethers)
+- [Generated API reference](/v0/sdk/api-reference)
+
+## Stable v0 boundary
+
+The `.` root, `./chains`, `./clients`, `./utils`, `./errors`, `./contracts` and the first
+`./wallet` transaction foundation are implemented. The wallet surface binds standard viem clients to
+Torium chains, adds EIP-1559 preflight, submits exactly once and classifies
+committed/reverted/timeout outcomes without claiming replacement detection. The `./contracts`
+surface exposes generated ABIs, the localnet deployment registry, Merkle-sum reward and attestation
+hash helpers, typed reads, claim/attestation preflights, and prepare/simulate steps that compose
+with the wallet lifecycle; its typed actions are validated against committed contract fixtures. The `./experimental` path is
+reserved but intentionally exports no runtime API yet. No API is deprecated in SDK 0.1.0.
+
+Standard EVM operations stay on viem. Torium-prefixed APIs exist only where chain identity,
+readiness, compatibility or Torium-specific capability semantics add value.

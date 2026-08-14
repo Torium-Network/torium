@@ -1,0 +1,368 @@
+{
+  "$schema": "./resilience-plan-v0.schema.json",
+  "schemaVersion": 1,
+  "planVersion": "0.1.0-local.1",
+  "status": "partially-executed-local-runner",
+  "ownerIssue": 119,
+  "scope": {
+    "environment": "local-development-only",
+    "topology": "canonical-four-validator-combined-localnet",
+    "executionEnabled": false,
+    "publicOrRemoteTargetsAllowed": false,
+    "liveDeploymentAllowed": false,
+    "toriumBackendIntegrationInScope": false,
+    "bridgeInScope": false,
+    "l2InScope": false,
+    "manualStateEditsAllowed": false,
+    "capacityOrSecurityClaimAllowed": false
+  },
+  "sources": {
+    "identifiers": {
+      "path": "chain/config/identifiers.json",
+      "version": "0.2.0"
+    },
+    "protocol": {
+      "path": "chain/config/protocol-v1.json",
+      "version": "1.0.0-local.5"
+    },
+    "trustModel": {
+      "path": "chain/config/trust-model-v1.json",
+      "version": "1.0.0-local.5"
+    },
+    "recovery": {
+      "path": "chain/recovery/recovery-v0.json",
+      "version": "0.1.0-local.1"
+    },
+    "observability": {
+      "path": "chain/observability/observability-v0.json",
+      "version": "0.1.0-local.4"
+    },
+    "keyCustody": {
+      "path": "chain/security/key-custody-v0.json",
+      "version": "0.1.0-local.1"
+    },
+    "explorerStack": {
+      "path": "chain/explorer/stack-v0.json",
+      "version": "0.1.0-local.7"
+    },
+    "governance": {
+      "path": "chain/config/governance-v1.json",
+      "version": "1.0.0-local.2"
+    }
+  },
+  "finalityContract": {
+    "commitMeaning": "strictly-more-than-two-thirds precommit voting power for a block under the current validator set",
+    "sameHeightConflictingCommitExpectedUnderAssumptions": false,
+    "ethereumBeaconFinalityClaimAllowed": false,
+    "manualStateEditRecoveryAllowed": false,
+    "contradictoryCommitDisposition": "release-blocking",
+    "assumptionViolationDisposition": "release-blocking-no-safety-claim"
+  },
+  "canonicalScenarios": [
+    {
+      "id": "local-one-validator-offline",
+      "testId": "chaos.consensus.local.one-validator-offline",
+      "availablePower": 75,
+      "byzantinePower": 0,
+      "expectedLiveness": "continues-after-round-delay-if-the-offline-node-was-proposer",
+      "expectedSafety": "no-conflicting-committed-block",
+      "expectedFinality": "committed-heights-remain-single-canonical-history",
+      "expectedRecovery": "restarted-validator-catches-up-from-canonical-peers-without-state-edit",
+      "existingEvidence": {
+        "level": "runner-executed",
+        "paths": [
+          "chain/resilience/run-scenario-v0.mjs"
+        ]
+      },
+      "executionStatus": "executed-local-runner-pass",
+      "executed": true,
+      "reportPath": "chain/resilience/results/local-one-validator-offline.result.json"
+    },
+    {
+      "id": "local-two-validators-offline",
+      "testId": "chaos.consensus.local.two-validators-offline",
+      "availablePower": 50,
+      "byzantinePower": 0,
+      "expectedLiveness": "halts-without-commit-quorum",
+      "expectedSafety": "no-conflicting-committed-block",
+      "expectedFinality": "no-new-cometbft-committed-height-without-strict-quorum",
+      "expectedRecovery": "commits-resume-only-after-strict-quorum-returns",
+      "existingEvidence": {
+        "level": "runner-executed",
+        "paths": [
+          "chain/resilience/run-scenario-v0.mjs"
+        ]
+      },
+      "executionStatus": "executed-local-runner-pass",
+      "executed": true,
+      "reportPath": "chain/resilience/results/local-two-validators-offline.result.json"
+    },
+    {
+      "id": "local-three-one-partition",
+      "testId": "chaos.consensus.local.partition-three-one",
+      "availablePower": 75,
+      "byzantinePower": 0,
+      "expectedLiveness": "75-power-side-continues-and-25-power-side-cannot-commit",
+      "expectedSafety": "isolated-validator-catches-up-without-state-edit",
+      "expectedFinality": "only-75-power-side-may-produce-cometbft-committed-heights",
+      "expectedRecovery": "heal-partition-and-lagging-validator-catches-up-without-state-edit",
+      "existingEvidence": {
+        "level": "runner-executed",
+        "paths": [
+          "chain/resilience/run-scenario-v0.mjs"
+        ]
+      },
+      "executionStatus": "executed-local-runner-pass",
+      "executed": true,
+      "reportPath": "chain/resilience/results/local-three-one-partition.result.json"
+    },
+    {
+      "id": "local-two-two-partition",
+      "testId": "chaos.consensus.local.partition-two-two",
+      "availablePower": 50,
+      "byzantinePower": 0,
+      "expectedLiveness": "both-sides-halt",
+      "expectedSafety": "neither-side-commits-a-conflicting-block",
+      "expectedFinality": "neither-50-power-side-may-produce-cometbft-committed-height",
+      "expectedRecovery": "heal-partition-and-resume-only-after-strict-quorum-returns",
+      "existingEvidence": {
+        "level": "runner-executed",
+        "paths": [
+          "chain/resilience/run-scenario-v0.mjs"
+        ]
+      },
+      "executionStatus": "executed-local-runner-pass",
+      "executed": true,
+      "reportPath": "chain/resilience/results/local-two-two-partition.result.json"
+    },
+    {
+      "id": "local-single-equivocation",
+      "testId": "chaos.consensus.local.single-validator-equivocation",
+      "availablePower": 75,
+      "byzantinePower": 25,
+      "expectedLiveness": "honest-75-power-can-continue",
+      "expectedSafety": "no-conflicting-commit-and-evidence-is-delivered-for-slashing-and-tombstoning",
+      "expectedFinality": "committed-heights-remain-single-canonical-history",
+      "expectedRecovery": "quarantine-signer-preserve-evidence-slash-and-tombstone",
+      "existingEvidence": {
+        "level": "module-only",
+        "paths": [
+          "chain/app/localnet/validator_lifecycle_test.go"
+        ]
+      },
+      "executionStatus": "executed-duplicate-signer-drill-2026-07-29",
+      "executed": true,
+      "reportPath": "chain/resilience/results/local-single-equivocation.result.json"
+    },
+    {
+      "id": "local-unsafe-byzantine-threshold",
+      "testId": "chaos.consensus.local.assumption-violation-two-byzantine",
+      "availablePower": 100,
+      "byzantinePower": 50,
+      "expectedLiveness": "not-guaranteed",
+      "expectedSafety": "not-guaranteed-assumption-violation-must-block-release",
+      "expectedFinality": "no-finality-guarantee-outside-trust-envelope",
+      "expectedRecovery": "stop-experiment-preserve-evidence-and-block-release-readiness",
+      "existingEvidence": {
+        "level": "none",
+        "paths": []
+      },
+      "executionStatus": "executed-assumption-violation-experiment-2026-07-29",
+      "executed": true,
+      "reportPath": "chain/resilience/results/local-unsafe-byzantine-threshold.result.json"
+    },
+    {
+      "id": "local-all-validator-restart",
+      "testId": "chaos.consensus.local.full-stop-restart",
+      "availablePower": 0,
+      "byzantinePower": 0,
+      "expectedLiveness": "halts-while-stopped-and-resumes-after-quorum-returns",
+      "expectedSafety": "same-genesis-and-application-hash-with-no-manual-state-edit",
+      "expectedFinality": "post-restart-commits-extend-same-canonical-history",
+      "expectedRecovery": "restart-persisted-state-with-same-genesis-and-application-hash-without-state-edit",
+      "existingEvidence": {
+        "level": "runner-executed",
+        "paths": [
+          "chain/resilience/run-scenario-v0.mjs"
+        ]
+      },
+      "executionStatus": "executed-local-runner-pass",
+      "executed": true,
+      "reportPath": "chain/resilience/results/local-all-validator-restart.result.json"
+    },
+    {
+      "id": "local-rpc-explorer-outage",
+      "testId": "chaos.dependencies.local.rpc-explorer-outage",
+      "availablePower": 100,
+      "byzantinePower": 0,
+      "expectedLiveness": "consensus-continues",
+      "expectedSafety": "dependency-recovery-backfills-from-canonical-chain",
+      "expectedFinality": "consensus-finality-independent-of-query-dependencies",
+      "expectedRecovery": "restart-dependencies-and-backfill-from-canonical-chain",
+      "existingEvidence": {
+        "level": "runner-executed",
+        "paths": [
+          "chain/resilience/run-scenario-v0.mjs"
+        ]
+      },
+      "executionStatus": "executed-local-runner-pass",
+      "executed": true,
+      "reportPath": "chain/resilience/results/local-rpc-explorer-outage.result.json"
+    },
+    {
+      "id": "local-validator-set-change",
+      "testId": "chaos.consensus.local.validator-set-change",
+      "availablePower": 67,
+      "byzantinePower": 0,
+      "expectedLiveness": "continues-when-new-set-retains-strict-quorum",
+      "expectedSafety": "validator-update-delay-and-historical-power-are-applied-deterministically",
+      "expectedFinality": "commits-use-effective-historical-validator-set",
+      "expectedRecovery": "continue-from-committed-validator-updates-without-state-edit",
+      "existingEvidence": {
+        "level": "module-only",
+        "paths": [
+          "chain/app/localnet/validator_lifecycle_test.go"
+        ]
+      },
+      "executionStatus": "executed-downtime-jailing-set-transition-2026-07-29",
+      "executed": true,
+      "reportPath": "chain/resilience/results/local-validator-set-change.result.json"
+    },
+    {
+      "id": "local-clock-and-network-delay",
+      "testId": "chaos.consensus.local.clock-drift-latency-packet-loss",
+      "availablePower": 100,
+      "byzantinePower": 0,
+      "expectedLiveness": "recovers-after-the-network-is-eventually-timely",
+      "expectedSafety": "no-conflicting-committed-block",
+      "expectedFinality": "committed-heights-remain-single-canonical-history",
+      "expectedRecovery": "remove-fault-and-recover-through-increasing-round-timeouts",
+      "existingEvidence": {
+        "level": "none",
+        "paths": []
+      },
+      "executionStatus": "executed-netem-latency-and-loss-drill-2026-07-29",
+      "executed": true,
+      "reportPath": "chain/resilience/results/local-clock-and-network-delay.result.json"
+    },
+    {
+      "id": "local-proposer-censorship",
+      "testId": "chaos.consensus.local.proposer-transaction-censorship",
+      "availablePower": 100,
+      "byzantinePower": 25,
+      "expectedLiveness": "blocks-continue-but-no-bounded-transaction-inclusion-is-promised",
+      "expectedSafety": "honest-validators-reject-invalid-blocks-and-transaction-lifecycle-remains-observable",
+      "expectedFinality": "block-finality-continues-transaction-inclusion-remains-unbounded",
+      "expectedRecovery": "preserve-transaction-lifecycle-observability-without-inclusion-promise",
+      "existingEvidence": {
+        "level": "none",
+        "paths": []
+      },
+      "executionStatus": "executed-build-tag-gated-censoring-proposal-fixture-2026-07-30",
+      "executed": true,
+      "reportPath": "chain/resilience/results/local-proposer-censorship.result.json"
+    }
+  ],
+  "extensionScenarios": [
+    {
+      "id": "local-disk-full",
+      "status": "HOLD-not-executed-v0",
+      "expectedBoundary": "affected-node-fails-without-conflicting-commit-and-recovers-without-state-edit"
+    },
+    {
+      "id": "local-database-corruption",
+      "status": "HOLD-not-executed-v0",
+      "expectedBoundary": "corruption-is-detected-and-recovery-uses-verified-snapshot-or-resync"
+    },
+    {
+      "id": "local-rpc-capacity-exceeded",
+      "status": "HOLD-not-executed-v0",
+      "expectedBoundary": "consensus-remains-independent-and-client-errors-stay-observable"
+    },
+    {
+      "id": "local-snapshot-restore",
+      "status": "HOLD-not-executed-v0",
+      "expectedBoundary": "restored-node-matches-canonical-app-hash-without-manual-state-edit"
+    },
+    {
+      "id": "local-upgrade-interruption",
+      "status": "HOLD-not-executed-v0",
+      "expectedBoundary": "network-halts-or-recovers-at-versioned-upgrade-boundary-without-state-edit"
+    },
+    {
+      "id": "local-restart-ordering",
+      "status": "HOLD-not-executed-v0",
+      "expectedBoundary": "quorum-resumes-independent-of-safe-node-start-order"
+    },
+    {
+      "id": "local-catch-up",
+      "status": "HOLD-not-executed-v0",
+      "expectedBoundary": "lagging-node-rejoins-canonical-height-and-app-hash"
+    },
+    {
+      "id": "local-explorer-outage",
+      "status": "HOLD-not-executed-v0",
+      "expectedBoundary": "explorer-loss-does-not-change-consensus-authority-and-backfills-from-chain"
+    },
+    {
+      "id": "local-indexer-outage",
+      "status": "HOLD-not-executed-v0",
+      "expectedBoundary": "indexer-loss-does-not-change-consensus-authority-and-backfills-from-chain"
+    },
+    {
+      "id": "local-metrics-outage",
+      "status": "HOLD-not-executed-v0",
+      "expectedBoundary": "metrics-loss-does-not-change-consensus-authority"
+    },
+    {
+      "id": "local-validator-crash-restart",
+      "status": "HOLD-not-executed-v0",
+      "expectedBoundary": "crashed-validator-restarts-from-persisted-state-and-catches-up-without-state-edit"
+    },
+    {
+      "id": "local-state-sync",
+      "status": "HOLD-not-executed-v0",
+      "expectedBoundary": "new-node-verifies-trusted-height-hash-and-matches-canonical-app-hash"
+    }
+  ],
+  "reportContract": {
+    "schema": "chain/resilience/resilience-result-v0.schema.json",
+    "committedReportGlob": "chain/resilience/results/*.result.json",
+    "automaticDiscoveryEnabled": true,
+    "requiredTimelineEvents": [
+      "baseline",
+      "change-applied",
+      "expected-behavior-observed",
+      "recovery-started",
+      "recovery-complete"
+    ],
+    "requiredEvidence": [
+      "git-and-toolchain",
+      "genesis-and-config-hashes",
+      "per-node-heights-and-app-hashes",
+      "commit-observations",
+      "operator-decisions",
+      "content-hashed-artifacts"
+    ],
+    "passingReportsAccepted": true,
+    "extensionReportsAccepted": false,
+    "contradictoryCommitForcesUnsafeReleaseBlocked": true,
+    "manualStateEditFailsValidation": true
+  },
+  "releaseReadiness": {
+    "ready": false,
+    "status": "HOLD-extension-scenarios-held-canonical-coverage-complete",
+    "requiredCanonicalScenarioCount": 11,
+    "executedCanonicalScenarioCount": 11,
+    "passedCanonicalScenarioCount": 10,
+    "unresolvedUnsafeOutcomeCount": 0
+  },
+  "holds": [
+    "The scenario runner drives container stop/start, Docker network partitions, netem delay/loss, duplicate consensus signers, protocol downtime jailing, and a build-tag-gated censoring proposal fixture; no other local chain change driver exists.",
+    "No validator, process, network, filesystem, database, RPC, explorer or metrics dependency is changed by validation.",
+    "Proposer censorship uses a build-tag-gated censoring PrepareProposal fixture (chain/app/censorfixture) on one validator; the tag is never passed by any release or container build, and the drill proves the release binary does not contain the fixture at all. A censoring proposer that also produced INVALID blocks is still out of scope.",
+    "Explorer, indexer and observability runtimes are inactive, so dependency recovery cannot be claimed.",
+    "State sync, snapshot restore objectives and capacity measurements remain unproven.",
+    "No public endpoint, remote host, live deployment or Torium backend may be targeted."
+  ]
+}

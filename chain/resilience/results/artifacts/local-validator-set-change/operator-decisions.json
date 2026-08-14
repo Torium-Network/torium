@@ -1,0 +1,12 @@
+[
+  {
+    "at": "2026-07-29T20:19:04.528Z",
+    "decision": "stopped validator-3 so the protocol itself jails it for downtime (signed_blocks_window 100, minimum_signed_per_window 0.5)",
+    "reason": "scenario plan step for this canonical fault drill"
+  },
+  {
+    "at": "2026-07-29T20:23:42.548Z",
+    "decision": "restarted validator-3; it stays jailed until an explicit unjail transaction, and no state was edited",
+    "reason": "scenario plan step for this canonical fault drill"
+  }
+]

@@ -1,0 +1,506 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/explorer-stack-v0.schema.json",
+  "title": "Torium inactive local explorer stack inventory v0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "stackVersion",
+    "status",
+    "ownerIssue",
+    "sources",
+    "constraints",
+    "selectionContract",
+    "archiveGatewayContract",
+    "network",
+    "components",
+    "startupPlan",
+    "readiness",
+    "operations",
+    "sourceVerification",
+    "holds"
+  ],
+  "properties": {
+    "$schema": { "const": "./stack-v0.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "stackVersion": {
+      "type": "string",
+      "pattern": "^0\\.1\\.0-local\\.[1-9][0-9]*$"
+    },
+    "status": {
+      "enum": ["inactive-local-only-hold", "activated-local-only-hold"]
+    },
+    "ownerIssue": { "const": 113 },
+    "sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selection", "nodeRoles"],
+      "properties": {
+        "selection": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "ownerIssue", "selectionVersion"],
+          "properties": {
+            "path": { "const": "chain/explorer/selection-v1.json" },
+            "ownerIssue": { "const": 112 },
+            "selectionVersion": { "type": "string" }
+          }
+        },
+        "nodeRoles": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "ownerIssue", "profileVersion"],
+          "properties": {
+            "path": { "const": "chain/profiles/node-roles-v0.json" },
+            "ownerIssue": { "const": 114 },
+            "profileVersion": { "type": "string" }
+          }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "activated",
+        "composeOrRuntimeConfigIncluded",
+        "liveDeploymentAllowed",
+        "publicOperationAllowed",
+        "publicEndpointsAllowed",
+        "loopbackHostPublishingOnly",
+        "toriumBackendIntegrationInScope",
+        "toriumBackendAuthorityAllowed",
+        "chainRpcAuthority",
+        "explorerDatabaseAuthority"
+      ],
+      "properties": {
+        "environment": { "const": "local-development-only" },
+        "activated": { "type": "boolean" },
+        "composeOrRuntimeConfigIncluded": { "const": false },
+        "liveDeploymentAllowed": { "const": false },
+        "publicOperationAllowed": { "const": false },
+        "publicEndpointsAllowed": { "const": false },
+        "loopbackHostPublishingOnly": { "const": true },
+        "toriumBackendIntegrationInScope": { "const": false },
+        "toriumBackendAuthorityAllowed": { "const": false },
+        "chainRpcAuthority": { "const": "authoritative" },
+        "explorerDatabaseAuthority": {
+          "const": "derived-rebuildable-index"
+        }
+      }
+    },
+    "selectionContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "repository",
+        "release",
+        "commit",
+        "distribution",
+        "prebuiltImageAccepted",
+        "localImageTag",
+        "localImageTagIsSecurityIdentity",
+        "license",
+        "internalTransactionsEnabled",
+        "requiredTraceMethods"
+      ],
+      "properties": {
+        "name": { "const": "Blockscout" },
+        "repository": { "const": "https://github.com/blockscout/blockscout" },
+        "release": { "const": "v11.2.2" },
+        "commit": {
+          "const": "731015d88d7e73623f2a3c097e241bc82b04ea7a"
+        },
+        "distribution": { "const": "exact-commit-source-build" },
+        "prebuiltImageAccepted": { "const": false },
+        "localImageTag": { "const": "torium/blockscout-poc:v11.2.2" },
+        "localImageTagIsSecurityIdentity": { "const": false },
+        "license": { "const": "LicenseRef-Blockscout-1.0" },
+        "internalTransactionsEnabled": { "const": false },
+        "requiredTraceMethods": { "const": [] }
+      }
+    },
+    "archiveGatewayContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gatewayId",
+        "status",
+        "consumerIdentity",
+        "consumerNetwork",
+        "rawUpstreamNetwork",
+        "rawRpcReachableFromConsumer",
+        "runtimePolicyRef",
+        "enforcedContractField",
+        "httpEndpoint",
+        "webSocketEndpoint",
+        "loopbackHttpReservation",
+        "loopbackWebSocketReservation",
+        "activated",
+        "effectiveConformanceProven"
+      ],
+      "properties": {
+        "gatewayId": { "const": "archive-indexer-v0" },
+        "status": { "enum": ["inactive-private-sidecar-target", "activated-local-private-sidecar"] },
+        "consumerIdentity": { "const": "blockscout" },
+        "consumerNetwork": { "const": "archive-indexer-consumer" },
+        "rawUpstreamNetwork": { "const": "archive-raw-rpc" },
+        "rawRpcReachableFromConsumer": { "const": false },
+        "runtimePolicyRef": {
+          "const": "evm-archive-blockscout-candidate-v0"
+        },
+        "enforcedContractField": { "const": "candidateMethodContract" },
+        "httpEndpoint": { "const": "http://archive-rpc-gateway:8545" },
+        "webSocketEndpoint": { "const": "ws://archive-rpc-gateway:8546" },
+        "loopbackHttpReservation": { "const": "127.0.0.1:38545" },
+        "loopbackWebSocketReservation": { "const": "127.0.0.1:38546" },
+        "activated": { "type": "boolean" },
+        "effectiveConformanceProven": { "type": "boolean" }
+      }
+    },
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "networks",
+        "hostReservations",
+        "postgresPublishedToHost",
+        "redisPublishedToHost",
+        "rawArchiveRpcPublishedToHost",
+        "publicIngressConfigured"
+      ],
+      "properties": {
+        "networks": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/network" }
+        },
+        "hostReservations": {
+          "type": "array",
+          "minItems": 4,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/hostReservation" }
+        },
+        "postgresPublishedToHost": { "const": false },
+        "redisPublishedToHost": { "const": false },
+        "rawArchiveRpcPublishedToHost": { "const": false },
+        "publicIngressConfigured": { "const": false }
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 11,
+      "maxItems": 11,
+      "items": { "$ref": "#/$defs/component" }
+    },
+    "startupPlan": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": { "$ref": "#/$defs/startupStep" }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stackReady",
+        "readinessClaimAllowed",
+        "requiredChecks",
+        "passedChecks",
+        "failedOrHeldChecks"
+      ],
+      "properties": {
+        "stackReady": { "const": false },
+        "readinessClaimAllowed": { "const": false },
+        "requiredChecks": {
+          "type": "array",
+          "minItems": 10,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "passedChecks": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 5 } },
+        "failedOrHeldChecks": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "operations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "restartPreservingIndex",
+        "resetExplorerIndex",
+        "fullReindex",
+        "rollbackOrReorgRecovery"
+      ],
+      "properties": {
+        "restartPreservingIndex": {
+          "$ref": "#/$defs/basicOperation"
+        },
+        "resetExplorerIndex": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "activated",
+            "requiresExplicitOperatorConfirmation",
+            "mayDelete",
+            "mustNotDelete",
+            "status"
+          ],
+          "properties": {
+            "mode": { "const": "destructive-explorer-data-only" },
+            "activated": { "type": "boolean" },
+            "requiresExplicitOperatorConfirmation": { "const": true },
+            "mayDelete": {
+              "const": ["explorer-postgresql-volume", "explorer-redis-data"]
+            },
+            "mustNotDelete": {
+              "const": ["chain-state", "validator-state", "torium-backend-data"]
+            },
+            "status": { "const": "policy-only-not-exercised" }
+          }
+        },
+        "fullReindex": { "$ref": "#/$defs/basicOperation" },
+        "rollbackOrReorgRecovery": { "$ref": "#/$defs/basicOperation" }
+      }
+    },
+    "sourceVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "status",
+        "verifierComponent",
+        "verifierExactPinApproved",
+        "compilerNetworkDownloadAllowed",
+        "approvedCompilerArtifacts",
+        "compilerPinStatus",
+        "verificationClaimAllowed"
+      ],
+      "properties": {
+        "enabled": { "const": false },
+        "status": { "const": "HOLD-not-proven" },
+        "verifierComponent": { "const": "smart-contract-verifier" },
+        "verifierExactPinApproved": { "type": "boolean" },
+        "compilerNetworkDownloadAllowed": { "const": false },
+        "approvedCompilerArtifacts": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "compiler",
+              "version",
+              "longVersion",
+              "image",
+              "binaryPath",
+              "source"
+            ],
+            "properties": {
+              "compiler": { "const": "solc" },
+              "version": { "type": "string", "minLength": 5 },
+              "longVersion": { "type": "string", "minLength": 5 },
+              "image": { "type": "string", "pattern": "@sha256:[0-9a-f]{64}$" },
+              "binaryPath": { "type": "string", "pattern": "^/" },
+              "source": { "type": "string", "minLength": 5 }
+            }
+          }
+        },
+        "compilerPinStatus": {
+          "enum": [
+            "HOLD-no-compiler-version-digest-allowlist",
+            "exact-compiler-image-digest-approved-offline-provisioning-unproven"
+          ]
+        },
+        "verificationClaimAllowed": { "const": false }
+      }
+    },
+    "holds": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": { "$ref": "#/$defs/hold" }
+    }
+  },
+  "$defs": {
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "members", "consumerPublishedToHost"],
+      "properties": {
+        "id": { "type": "string", "minLength": 5 },
+        "members": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "consumerPublishedToHost": { "const": false }
+      }
+    },
+    "hostReservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "binding", "status"],
+      "properties": {
+        "owner": { "type": "string", "minLength": 5 },
+        "binding": {
+          "type": "string",
+          "pattern": "^127\\.0\\.0\\.1:[1-9][0-9]*$"
+        },
+        "status": { "type": "string", "minLength": 10 }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "requirement",
+        "targetEnabled",
+        "activated",
+        "artifact",
+        "dependsOn",
+        "networkMembership",
+        "hostPublish",
+        "readiness",
+        "authority"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 3 },
+        "kind": { "type": "string", "minLength": 3 },
+        "requirement": {
+          "enum": [
+            "required-core",
+            "required-ui",
+            "required-for-issue-closure",
+            "optional-off"
+          ]
+        },
+        "targetEnabled": { "type": "boolean" },
+        "activated": { "type": "boolean" },
+        "artifact": { "$ref": "#/$defs/artifact" },
+        "dependsOn": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "networkMembership": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "hostPublish": {
+          "type": ["string", "null"],
+          "pattern": "^127\\.0\\.0\\.1:[1-9][0-9]*$"
+        },
+        "readiness": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["probe", "status"],
+          "properties": {
+            "probe": { "type": "string", "minLength": 3 },
+            "status": { "type": "string", "minLength": 3 }
+          }
+        },
+        "authority": { "type": "string", "minLength": 3 }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceRepository",
+        "sourceRelease",
+        "sourceCommit",
+        "localImageTag",
+        "imageWithDigest",
+        "immutablePinStatus"
+      ],
+      "properties": {
+        "sourceRepository": { "type": ["string", "null"] },
+        "sourceRelease": { "type": ["string", "null"] },
+        "sourceCommit": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "localImageTag": { "type": ["string", "null"] },
+        "imageWithDigest": {
+          "type": ["string", "null"],
+          "pattern": "^[^@]+@sha256:[0-9a-f]{64}$"
+        },
+        "immutablePinStatus": {
+          "enum": [
+            "exact-image-digest-approved",
+            "exact-local-build-digest-approved",
+            "HOLD-missing-exact-image-digest",
+            "HOLD-exact-source-runtime-image-digest-missing",
+            "HOLD-missing-exact-source-and-image-pin",
+            "HOLD-if-enabled-missing-exact-source-and-image-pin",
+            "optional-off-pin-not-approved"
+          ]
+        }
+      }
+    },
+    "startupStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order", "id", "requires", "readiness"],
+      "properties": {
+        "order": { "type": "integer", "minimum": 0 },
+        "id": { "type": "string", "minLength": 3 },
+        "requires": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "readiness": { "enum": ["HOLD", "not-exercised"] }
+      }
+    },
+    "basicOperation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "activated", "requires", "status"],
+      "properties": {
+        "mode": { "type": "string", "minLength": 5 },
+        "activated": { "type": "boolean" },
+        "requires": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "status": { "type": "string", "minLength": 8 }
+      }
+    },
+    "hold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "scope", "state", "ownerIssue", "evidenceIssues", "requirement"],
+      "properties": {
+        "id": { "type": "string", "minLength": 5 },
+        "scope": { "type": "string", "minLength": 5 },
+        "state": { "enum": ["HOLD", "HOLD-if-enabled", "PARTIAL", "RESOLVED"] },
+        "ownerIssue": { "type": "integer", "minimum": 1 },
+        "evidenceIssues": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "integer", "minimum": 1 }
+        },
+        "requirement": { "type": "string", "minLength": 40 }
+      }
+    }
+  }
+}

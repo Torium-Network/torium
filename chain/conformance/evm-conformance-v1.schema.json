@@ -1,0 +1,319 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/chain/evm-conformance-v1.schema.json",
+  "title": "Torium EVM conformance and deviation registry v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "registryVersion",
+    "status",
+    "ownerIssue",
+    "baseline",
+    "statePolicy",
+    "evidenceCatalog",
+    "capabilities",
+    "deviations",
+    "skips",
+    "sdkContract"
+  ],
+  "properties": {
+    "$schema": { "const": "./evm-conformance-v1.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "registryVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+-local\\.[0-9]+$"
+    },
+    "status": { "const": "local-development-contract" },
+    "ownerIssue": { "const": 107 },
+    "baseline": { "$ref": "#/$defs/baseline" },
+    "statePolicy": { "$ref": "#/$defs/statePolicy" },
+    "evidenceCatalog": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/evidence" }
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/capability" }
+    },
+    "deviations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/deviation" }
+    },
+    "skips": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/skip" }
+    },
+    "sdkContract": { "$ref": "#/$defs/sdkContract" }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "issueList": {
+      "type": "array",
+      "items": { "type": "integer", "minimum": 1 },
+      "uniqueItems": true
+    },
+    "nonEmptyIssueList": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "integer", "minimum": 1 },
+      "uniqueItems": true
+    },
+    "idList": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "documentationPaths": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^(\\./|\\.\\./)"
+      },
+      "uniqueItems": true
+    },
+    "state": {
+      "enum": ["supported", "partial", "stub", "unsupported"]
+    },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "schemaVersion",
+        "cosmosEvmRelease",
+        "cosmosEvmCommit",
+        "allowedStates"
+      ],
+      "properties": {
+        "path": { "const": "../poc/upstream-baseline/support-matrix.json" },
+        "schemaVersion": { "const": 1 },
+        "cosmosEvmRelease": { "const": "v0.7.0" },
+        "cosmosEvmCommit": {
+          "const": "f4ab9a3e3fbe353468327d5cacda94b33b41ed11"
+        },
+        "allowedStates": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "supported" },
+            { "const": "partial" },
+            { "const": "stub" },
+            { "const": "unsupported" }
+          ],
+          "items": false
+        }
+      }
+    },
+    "statePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["unknownState", "regression", "upgrade", "maturityOrder"],
+      "properties": {
+        "unknownState": { "const": "reject" },
+        "regression": { "const": "reject" },
+        "upgrade": { "const": "require-state-change-evidence" },
+        "maturityOrder": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "unsupported" },
+            { "const": "stub" },
+            { "const": "partial" },
+            { "const": "supported" }
+          ],
+          "items": false
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "path", "ownerIssues", "description"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^EVD-[A-Z0-9-]+$" },
+        "kind": {
+          "enum": ["baseline", "proof", "protocol-contract", "documentation"]
+        },
+        "path": { "type": "string", "pattern": "^\\.\\./" },
+        "ownerIssues": { "$ref": "#/$defs/nonEmptyIssueList" },
+        "description": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "stateChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rationale", "ownerIssues", "evidenceIds"],
+      "properties": {
+        "rationale": { "$ref": "#/$defs/nonEmptyString" },
+        "ownerIssues": { "$ref": "#/$defs/nonEmptyIssueList" },
+        "evidenceIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^EVD-[A-Z0-9-]+$" },
+          "uniqueItems": true
+        }
+      }
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "baselineState",
+        "targetState",
+        "lane",
+        "constraintAcknowledged",
+        "deviationIds",
+        "skipIds",
+        "evidenceIds",
+        "downstreamIssues",
+        "downstreamImpact",
+        "sdkBehavior"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "baselineState": { "$ref": "#/$defs/state" },
+        "targetState": { "$ref": "#/$defs/state" },
+        "lane": {
+          "enum": [
+            "required-live",
+            "required-static",
+            "preserved-downstream",
+            "scope-exclusion"
+          ]
+        },
+        "constraintAcknowledged": { "type": "boolean" },
+        "deviationIds": { "$ref": "#/$defs/idList" },
+        "skipIds": { "$ref": "#/$defs/idList" },
+        "evidenceIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^EVD-[A-Z0-9-]+$" },
+          "uniqueItems": true
+        },
+        "downstreamIssues": { "$ref": "#/$defs/issueList" },
+        "downstreamImpact": { "$ref": "#/$defs/nonEmptyString" },
+        "sdkBehavior": {
+          "enum": ["standard", "capability-detect", "reject", "not-applicable"]
+        },
+        "stateChange": { "$ref": "#/$defs/stateChange" }
+      }
+    },
+    "downstreamImpact": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "sdk": { "$ref": "#/$defs/nonEmptyString" },
+        "wallet": { "$ref": "#/$defs/nonEmptyString" },
+        "explorer": { "$ref": "#/$defs/nonEmptyString" },
+        "operator": { "$ref": "#/$defs/nonEmptyString" },
+        "protocol": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "deviation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "capabilityIds",
+        "summary",
+        "rationale",
+        "risk",
+        "ownerIssues",
+        "evidenceIds",
+        "documentationPaths",
+        "downstreamImpact",
+        "sdkRule"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^DEV-[0-9]{3}$" },
+        "capabilityIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "summary": { "$ref": "#/$defs/nonEmptyString" },
+        "rationale": { "$ref": "#/$defs/nonEmptyString" },
+        "risk": { "$ref": "#/$defs/nonEmptyString" },
+        "ownerIssues": { "$ref": "#/$defs/nonEmptyIssueList" },
+        "evidenceIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^EVD-[A-Z0-9-]+$" },
+          "uniqueItems": true
+        },
+        "documentationPaths": { "$ref": "#/$defs/documentationPaths" },
+        "downstreamImpact": { "$ref": "#/$defs/downstreamImpact" },
+        "sdkRule": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "skip": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "capabilityIds",
+        "scope",
+        "rationale",
+        "risk",
+        "ownerIssues",
+        "evidenceIds",
+        "documentationPaths",
+        "downstreamImpact",
+        "exitCriteria"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^SKIP-[0-9]{3}$" },
+        "capabilityIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "scope": { "$ref": "#/$defs/nonEmptyString" },
+        "rationale": { "$ref": "#/$defs/nonEmptyString" },
+        "risk": { "$ref": "#/$defs/nonEmptyString" },
+        "ownerIssues": { "$ref": "#/$defs/nonEmptyIssueList" },
+        "evidenceIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^EVD-[A-Z0-9-]+$" },
+          "uniqueItems": true
+        },
+        "documentationPaths": { "$ref": "#/$defs/documentationPaths" },
+        "downstreamImpact": { "$ref": "#/$defs/downstreamImpact" },
+        "exitCriteria": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "sdkContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maskingForbidden",
+        "unknownCapabilityBehavior",
+        "nonSupportedStateBehavior",
+        "evidenceRequiredForStateChange",
+        "consumerIssues"
+      ],
+      "properties": {
+        "maskingForbidden": { "const": true },
+        "unknownCapabilityBehavior": { "const": "reject" },
+        "nonSupportedStateBehavior": {
+          "const": "surface-capability-or-reject-operation"
+        },
+        "evidenceRequiredForStateChange": { "const": true },
+        "consumerIssues": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "integer", "minimum": 1 },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

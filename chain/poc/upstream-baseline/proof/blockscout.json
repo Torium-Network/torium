@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-14T18:27:18Z",
+  "blockscout": {
+    "release": "v11.2.2",
+    "commit": "731015d88d7e73623f2a3c097e241bc82b04ea7a"
+  },
+  "profile": {
+    "internalTransactionFetcherDisabled": true
+  },
+  "freshIndex": {
+    "apiStats": {
+      "average_block_time": 0.0,
+      "coin_image": null,
+      "coin_price": null,
+      "coin_price_change_percentage": null,
+      "gas_price_updated_at": "2026-07-14T18:25:57.491213Z",
+      "gas_prices": {
+        "slow": null,
+        "average": null,
+        "fast": null
+      },
+      "gas_prices_update_in": 32000,
+      "gas_used_today": "0",
+      "market_cap": "0",
+      "network_utilization_percentage": 0.0,
+      "secondary_coin_image": null,
+      "secondary_coin_price": null,
+      "static_gas_price": null,
+      "total_addresses": "0",
+      "total_blocks": "1353",
+      "total_gas_used": "0",
+      "total_transactions": "51",
+      "transactions_today": "0",
+      "tvl": null
+    },
+    "databaseBlocks": 1354,
+    "databaseTransactions": 51
+  },
+  "restart": {
+    "apiStats": {
+      "average_block_time": 5566.0,
+      "coin_image": null,
+      "coin_price": null,
+      "coin_price_change_percentage": null,
+      "gas_price_updated_at": "2026-07-14T18:26:16.080934Z",
+      "gas_prices": {
+        "slow": null,
+        "average": null,
+        "fast": null
+      },
+      "gas_prices_update_in": 32000,
+      "gas_used_today": null,
+      "market_cap": "0",
+      "network_utilization_percentage": 0.0,
+      "secondary_coin_image": null,
+      "secondary_coin_price": null,
+      "static_gas_price": null,
+      "total_addresses": "13",
+      "total_blocks": "1354",
+      "total_gas_used": "0",
+      "total_transactions": "51",
+      "transactions_today": "0",
+      "tvl": null
+    },
+    "databaseBlocks": 1354,
+    "databaseTransactions": 51,
+    "preserved": true
+  },
+  "controlledReindex": {
+    "block": 1349,
+    "markerCleared": true,
+    "beforeUpdatedAt": "2026-07-14 18:25:57.682234",
+    "afterUpdatedAt": "2026-07-14 18:27:17.468872"
+  },
+  "internalTransactions": {
+    "state": "unsupported",
+    "traceBlock": 1224,
+    "cosmosEvmTraceEntryKeys": ["result"],
+    "blockscoutRequiredEntryKeys": ["result", "txHash"],
+    "reason": "Cosmos EVM v0.7.0 trace-by-block entries omit txHash; Blockscout v11.2.2 raises FunctionClauseError in its geth trace extractor."
+  }
+}

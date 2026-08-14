@@ -1,0 +1,12 @@
+[
+  {
+    "at": "2026-07-29T16:09:36.352Z",
+    "decision": "stopped validator-1 and validator-2 (50% power; quorum lost)",
+    "reason": "scenario plan step for this canonical fault drill"
+  },
+  {
+    "at": "2026-07-29T16:09:51.804Z",
+    "decision": "restarted both validators; commits may resume only with quorum",
+    "reason": "scenario plan step for this canonical fault drill"
+  }
+]

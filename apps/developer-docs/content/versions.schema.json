@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/developer-docs-versions-v1.json",
+  "title": "Torium developer docs version compatibility manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "current", "versions"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "current": { "$ref": "#/$defs/versionId" },
+    "versions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/version" }
+    }
+  },
+  "$defs": {
+    "versionId": { "type": "string", "pattern": "^v[0-9]+$" },
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "version": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "status", "compatibility"],
+      "properties": {
+        "id": { "$ref": "#/$defs/versionId" },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "status": { "enum": ["unpublished", "active", "deprecated"] },
+        "compatibility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["chain", "sdk", "contracts"],
+          "properties": {
+            "chain": { "$ref": "#/$defs/chain" },
+            "sdk": { "$ref": "#/$defs/sdk" },
+            "contracts": { "$ref": "#/$defs/contracts" }
+          }
+        }
+      }
+    },
+    "chain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "manifestVersion", "environment", "evmChainId", "cosmosChainId"],
+      "properties": {
+        "source": { "$ref": "#/$defs/nonEmptyString" },
+        "manifestVersion": { "$ref": "#/$defs/nonEmptyString" },
+        "environment": { "$ref": "#/$defs/nonEmptyString" },
+        "evmChainId": { "type": "integer", "minimum": 1 },
+        "cosmosChainId": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "sdk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "package", "version", "status"],
+      "properties": {
+        "source": { "$ref": "#/$defs/nonEmptyString" },
+        "package": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" },
+        "status": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "contracts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "release", "status"],
+      "properties": {
+        "source": {
+          "anyOf": [
+            { "$ref": "#/$defs/nonEmptyString" },
+            { "type": "null" }
+          ]
+        },
+        "release": {
+          "anyOf": [
+            { "$ref": "#/$defs/nonEmptyString" },
+            { "type": "null" }
+          ]
+        },
+        "status": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    }
+  }
+}

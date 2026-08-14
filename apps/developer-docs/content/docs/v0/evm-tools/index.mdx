@@ -1,0 +1,68 @@
+---
+title: EVM Tools
+description: Connect MetaMask, Foundry, Hardhat and standard JSON-RPC tooling to Torium networks.
+docId: evm-tools
+version: v0
+status: foundation
+ownerIssue: 142
+sourceOfTruth: chain/config/identifiers.json
+sourceStatus: existing
+---
+
+Torium keeps standard EVM JSON-RPC semantics, so any tool that speaks to an EVM chain works
+unchanged. You only need the network parameters.
+
+## Network parameters
+
+| Parameter | Testnet | Localnet |
+| --- | --- | --- |
+| Network name | Torium Testnet | Torium Localnet |
+| RPC URL | `https://rpc.testnet.torium.network` | `http://127.0.0.1:8545` |
+| WebSocket | `wss://ws.testnet.torium.network` | `ws://127.0.0.1:8546` |
+| Chain ID | `1414484564` | `1414484556` |
+| Currency symbol | tTOR | tTOR |
+| Explorer | `https://explorer.testnet.torium.network` | — |
+
+HTTP on `127.0.0.1` is expected in local development only and is never a public transport
+recommendation.
+
+## MetaMask
+
+Add the network manually (Settings → Networks → Add network) with the parameters above, or let a
+dapp propose it via the standard `wallet_addEthereumChain` flow. Do not approve a Torium network
+whose chain ID differs from this table. Fund the account from the
+[faucet](https://faucet.testnet.torium.network) and send a transaction as on any EVM chain —
+type 0, 1 and 2 (EIP-1559) transactions are all supported.
+
+## Foundry
+
+```bash
+cast chain-id --rpc-url https://rpc.testnet.torium.network
+cast balance <address> --rpc-url https://rpc.testnet.torium.network
+forge create src/Counter.sol:Counter \
+  --rpc-url https://rpc.testnet.torium.network \
+  --private-key $TESTNET_DEPLOYER_KEY
+```
+
+Use a dedicated, disposable key for testnet deployments; tTOR is valueless, but key hygiene
+habits should match production.
+
+## Hardhat
+
+```ts
+// hardhat.config.ts
+const config = {
+  networks: {
+    toriumTestnet: {
+      url: "https://rpc.testnet.torium.network",
+      chainId: 1414484564,
+      accounts: [process.env.TESTNET_DEPLOYER_KEY ?? ""],
+    },
+  },
+};
+```
+
+`hardhat verify`-style source verification runs against the explorer's verifier; standard
+deployment, calls, event queries and gas estimation need no Torium-specific configuration.
+
+The [examples](/v0/examples) ship a complete Counter contract flow for both Hardhat and Foundry.

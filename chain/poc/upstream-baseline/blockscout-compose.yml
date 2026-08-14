@@ -1,0 +1,54 @@
+services:
+  database:
+    image: postgres:17-alpine@sha256:dc17045ccfd343b49600570ea734b9c4991cf1c3f3302e67df51e3b402dd55c4
+    environment:
+      POSTGRES_DB: blockscout
+      POSTGRES_PASSWORD: blockscout-poc-only
+      POSTGRES_USER: blockscout
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U blockscout -d blockscout"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    volumes:
+      - blockscout-data:/var/lib/postgresql/data
+
+  backend:
+    image: torium/blockscout-poc:v11.2.2
+    depends_on:
+      database:
+        condition: service_healthy
+    command:
+      - sh
+      - -c
+      - >-
+        bin/blockscout eval "Elixir.Explorer.ReleaseTasks.create_and_migrate()" &&
+        bin/blockscout start
+    environment:
+      BLOCKSCOUT_VERSION: v11.2.2
+      ACCOUNT_POOL_SIZE: "4"
+      CHAIN_ID: "262144"
+      COIN_NAME: Torium PoC
+      DATABASE_URL: ecto://blockscout:blockscout-poc-only@database:5432/blockscout
+      DISABLE_FILE_LOGGING: "true"
+      DISABLE_MARKET: "true"
+      DISABLE_WEBAPP: "true"
+      ECTO_SSL_MODE: disable
+      ETHEREUM_JSONRPC_GETH_ALLOW_EMPTY_TRACES: "true"
+      ETHEREUM_JSONRPC_GETH_TRACE_BY_BLOCK: "true"
+      ETHEREUM_JSONRPC_HTTP_URL: http://host.docker.internal:8545
+      ETHEREUM_JSONRPC_TRACE_URL: http://host.docker.internal:8545
+      ETHEREUM_JSONRPC_VARIANT: geth
+      ETHEREUM_JSONRPC_WS_URL: ws://host.docker.internal:8546/websocket
+      INDEXER_DISABLE_INTERNAL_TRANSACTIONS_FETCHER: "${BLOCKSCOUT_DISABLE_INTERNAL_TRANSACTIONS_FETCHER:-true}"
+      DATABASE_EVENT_POOL_SIZE: "2"
+      POOL_SIZE: "12"
+      POOL_SIZE_API: "6"
+      SECRET_KEY_BASE: torium-poc-only-not-for-production-0123456789abcdefghijklmnopqrstuvwxyz
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - "44000:4000"
+
+volumes:
+  blockscout-data:

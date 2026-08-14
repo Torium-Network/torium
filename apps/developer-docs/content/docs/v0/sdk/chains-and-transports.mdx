@@ -1,0 +1,65 @@
+---
+title: Chains and transports
+description: Select canonical Torium chain metadata and provide caller-owned HTTP, WebSocket, or EIP-1193 transports.
+docId: sdk-chains-transports
+version: v0
+status: foundation
+ownerIssue: 141
+sourceOfTruth: packages/torium-sdk/src/chains.ts
+sourceStatus: existing
+---
+
+Import canonical network identity from `@torium-network/sdk/chains`. Only localnet has default RPC
+URLs, and both are loopback-only:
+
+```ts
+import { toriumLocalnet } from "@torium-network/sdk/chains";
+import { createToriumPublicClient } from "@torium-network/sdk/clients";
+import { http } from "viem";
+
+const client = createToriumPublicClient({
+  chain: toriumLocalnet,
+  transport: http(),
+});
+```
+
+The local defaults are `http://127.0.0.1:8545` and `ws://127.0.0.1:8546`. Plain HTTP is expected for
+loopback development. It is not an acceptable public RPC transport.
+
+## Caller-owned endpoints
+
+Devnet, testnet and mainnet intentionally have no default endpoint. Supply an approved endpoint
+without mutating the canonical object:
+
+```ts
+import { toriumTestnet, withToriumRpcUrls } from "@torium-network/sdk/chains";
+
+const chain = withToriumRpcUrls(toriumTestnet, {
+  http: ["https://rpc.example.invalid"],
+  webSocket: ["wss://rpc.example.invalid/websocket"],
+});
+```
+
+The example domains are placeholders, not Torium services. Use viem's `http`, `webSocket`, `custom`
+or `fallback` transport to own global retry, timeout, batching and failover policy. Torium-specific
+helpers additionally accept an explicit per-action timeout and bounded read-only retry budget; these
+controls do not alter the transport. The SDK does not silently replace an endpoint and does not add
+or switch a wallet network.
+
+## Validate identity before use
+
+`validateToriumEndpoint` checks `eth_chainId`, `net_version`, syncing state, block height and optional
+fingerprint or compatibility probes. Use a fingerprint when two networks could share copied genesis
+metadata. Set `requireReady: true` for workflows that must reject a syncing endpoint.
+
+```ts
+const result = await client.getToriumNetworkStatus({
+  requireReady: true,
+  minimumBlockNumber: 1n,
+});
+
+console.log(result.observedChainId, result.blockNumber, result.peerCount);
+```
+
+Block heights, balances and fee values are `bigint`. Preserve each viem action's declared return
+type; for example, viem 2.55.2 returns `getTransactionCount` as a safe JavaScript `number`.

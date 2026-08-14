@@ -1,0 +1,112 @@
+---
+title: Errors, runtimes and troubleshooting
+description: Interpret endpoint failures, own retry policy, redact diagnostics and understand the verified build/runtime matrix.
+docId: sdk-errors-runtimes
+version: v0
+status: foundation
+ownerIssue: 141
+sourceOfTruth: packages/torium-sdk/src/errors.ts
+sourceStatus: existing
+---
+
+Torium endpoint checks, Torium-specific client actions and asynchronous preflight/submission/receipt
+wallet actions throw `ToriumSdkError` subclasses. Synchronous request normalization and client
+construction retain their native `TypeError`/`RangeError` validation contract. Branch on
+`error.code` or `error.category`, never message text. Direct viem actions deliberately preserve
+viem's native errors.
+
+```ts
+import { isToriumSdkError } from "@torium-network/sdk/errors";
+
+try {
+  await client.getToriumNetworkStatus({ requireReady: true });
+} catch (error) {
+  if (isToriumSdkError(error)) {
+    console.error(error.code, error.category, error.safeToRetry);
+  }
+}
+```
+
+The stable categories are `configuration`, `wrong-chain`, `transport`, `rate-limit`, `timeout`,
+`cancellation`, `rpc`, `simulation`, `revert`, `nonce`, `fee`, `funds`, `replacement`,
+`compatibility`, `contract`, and `unknown`. Endpoint validation retains its more precise historical
+codes, including `TORIUM_CHAIN_ID_MISMATCH`, `TORIUM_RPC_ABORTED`, and
+`TORIUM_RPC_RESPONSE_INVALID`, while sharing the same constructor exported from `./chains` and
+`./errors`.
+
+## Retry and redaction policy
+
+Torium actions default to one attempt. Idempotent Torium read helpers accept an explicit `retry`
+option capped at three total attempts; there is no automatic retry unless the caller opts in. A
+Torium action may also receive `signal` and a per-action `timeoutMs` from 1 through 300,000. The
+caller-selected viem transport remains the owner of global retry, timeout, batching, fallback and
+failover policy.
+
+Wallet signature rejection is a final user decision. A broadcast can reach the node even if its
+response is lost, so `sendToriumTransactionOnce` never retries and invokes the sender exactly once.
+Its failures always have `safeToRetry: false`. Read `safeToRetry` only as a statement about repeating
+that failed read; it is never permission to resubmit a transaction.
+
+```ts
+const status = await client.getToriumNetworkStatus({
+  timeoutMs: 5_000,
+  retry: { maxAttempts: 3, baseDelayMs: 150, maximumDelayMs: 2_000 },
+  requestId: "status-check-42",
+  diagnostics(event) {
+    observability.record(event);
+  },
+});
+```
+
+Diagnostic events are opt-in, non-blocking, and allowlist-only: phase, action/client identity,
+attempt, duration,
+chain ID, caller-supplied request ID, stable error code/category, RPC code, HTTP status and bounded
+retry delay. Hook promises are not awaited and hook failures are ignored, so telemetry cannot change
+action behavior. Events exclude
+URLs, headers, RPC parameters, calldata, account addresses, provider objects, signed payloads and
+upstream causes. Error causes preserve only a bounded name/code chain with redacted messages.
+
+## Runtime matrix
+
+| Runtime                       | v0 evidence                                                  | Guidance                                        |
+| ----------------------------- | ------------------------------------------------------------ | ----------------------------------------------- |
+| Node ESM/CommonJS             | full Node 22 verify; lightweight Node 24 ESM/CJS import gate | supported declared range |
+| Browser bundlers              | Vite ES2022 build, module graph and 115 KB gzip gate         | HTTP supported; browser-origin WS excluded      |
+| EIP-1193 providers            | deterministic chain-check and transaction-shape tests        | provider remains caller-owned                   |
+| WalletConnect-style providers | architectural compatibility only                             | no certified adapter yet                        |
+| React Native/Hermes           | Metro to Hermes bytecode, 1.25 MiB/1000-module gates         | bundling supported; live device execution is your app's responsibility |
+
+Browser and Hermes bundle source maps reject Node core/polyfill packages and Torium product-backend
+dependencies. The current measured browser bundle is about 96 KB gzip including viem; the current
+Hermes bytecode is about 1.07 MiB. These gates prove build compatibility, not a specific browser
+extension, mobile device, public RPC, or protected-storage implementation.
+
+React Native hosts own protected storage, account unlock and biometric policy, provider sessions,
+background locking and cleanup. The SDK accepts a caller-owned account/provider boundary and does not
+provide generic recovery-phrase or raw signing-material storage.
+
+The active localnet profile does not allow browser-origin WebSockets. Use HTTP reads or a
+server-side WebSocket client during local development.
+
+## Common failures
+
+- `TORIUM_WRONG_CHAIN`: stop and fix the selected chain or endpoint; never retry against the same
+  mismatch.
+- `TORIUM_RATE_LIMITED`: an idempotent read may honor the bounded retry delay; a broadcast must not
+  be repeated automatically.
+- `TORIUM_TIMEOUT`: the action deadline elapsed. A read may be repeatable; a broadcast result is
+  ambiguous and must be reconciled by transaction hash or account state.
+- `TORIUM_CANCELLED`: the caller aborted the action or the wallet rejected it; do not retry without a
+  new explicit user action.
+- `TORIUM_REVERTED`, `TORIUM_FUNDS_INSUFFICIENT`, `TORIUM_NONCE_INVALID`, or `TORIUM_FEE_INVALID`:
+  change the request or state before trying again.
+- `TORIUM_CHAIN_ID_MISMATCH`: the RPC is not the selected canonical chain; stop and fix the endpoint.
+- `TORIUM_RPC_SYNCING` or `TORIUM_RPC_NOT_READY`: wait for the node or choose a healthy endpoint.
+- `TORIUM_RPC_STALE`: the endpoint is below the caller's `minimumBlockNumber`; do not lower the gate
+  unless stale data is acceptable.
+- `TORIUM_NETWORK_FINGERPRINT_REQUIRED`: provide the expected fingerprint for a context that requires
+  clone resistance.
+- MetaMask warns about `HTTP` on `127.0.0.1`: expected for loopback localnet, never appropriate for a
+  public RPC.
+- MetaMask warns about a very small fee: this is a wallet risk prompt, not proof of failed execution;
+  review the request and only proceed with disposable localnet funds.

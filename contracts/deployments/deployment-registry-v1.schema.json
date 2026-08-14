@@ -1,0 +1,688 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/contracts/deployment-registry-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "registryVersion",
+    "generatedBy",
+    "environment",
+    "releaseStatus",
+    "chain",
+    "toolchain",
+    "entries"
+  ],
+  "properties": {
+    "$schema": { "const": "./deployment-registry-v1.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "registryVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "generatedBy": { "const": "contracts/scripts/generate-artifacts.mjs" },
+    "environment": { "const": "localnet" },
+    "releaseStatus": { "const": "local-only-valueless" },
+    "chain": { "$ref": "#/$defs/chain" },
+    "toolchain": { "$ref": "#/$defs/toolchain" },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/entry" }
+    }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^0x[0-9a-f]{64}$" },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "address": { "type": "string", "pattern": "^0x[0-9A-Fa-f]{40}$" },
+    "chain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cosmosChainId", "evmChainId", "genesisSha256"],
+      "properties": {
+        "cosmosChainId": { "const": "torium-localnet-1" },
+        "evmChainId": { "const": 1414484556 },
+        "genesisSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "toolchain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "foundryVersion",
+        "foundryImage",
+        "solidityVersion",
+        "solidityLongVersion",
+        "solidityImage",
+        "evmVersion",
+        "optimizerEnabled",
+        "optimizerRuns",
+        "viaIr",
+        "bytecodeHash",
+        "cborMetadata",
+        "openZeppelinVersion"
+      ],
+      "properties": {
+        "foundryVersion": { "const": "1.7.1" },
+        "foundryImage": {
+          "type": "string",
+          "pattern": "@sha256:[0-9a-f]{64}$"
+        },
+        "solidityVersion": { "const": "0.8.30" },
+        "solidityLongVersion": {
+          "const": "0.8.30+commit.73712a01"
+        },
+        "solidityImage": {
+          "type": "string",
+          "pattern": "@sha256:[0-9a-f]{64}$"
+        },
+        "evmVersion": { "const": "prague" },
+        "optimizerEnabled": { "const": true },
+        "optimizerRuns": { "const": 200 },
+        "viaIr": { "const": false },
+        "bytecodeHash": { "const": "none" },
+        "cborMetadata": { "const": false },
+        "openZeppelinVersion": { "const": "5.6.1" }
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "contractName",
+        "address",
+        "classification",
+        "status",
+        "implementationVersion",
+        "upgradeModel",
+        "artifactPath",
+        "artifactSha256",
+        "abiSha256",
+        "code",
+        "deployment",
+        "configuration",
+        "roles",
+        "verification"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "torium-native",
+            "torium-create2-factory",
+            "reward-distributor",
+            "attestation-registry"
+          ]
+        },
+        "contractName": {
+          "enum": [
+            "IToriumNative",
+            "ToriumCreate2Factory",
+            "ToriumRewardDistributor",
+            "ToriumAttestationRegistry"
+          ]
+        },
+        "address": {
+          "oneOf": [{ "$ref": "#/$defs/address" }, { "type": "null" }]
+        },
+        "classification": {
+          "enum": [
+            "protocol-precompile",
+            "post-genesis-create",
+            "post-genesis-deterministic"
+          ]
+        },
+        "status": { "enum": ["active", "planned"] },
+        "implementationVersion": { "type": "string", "minLength": 1 },
+        "upgradeModel": {
+          "enum": ["protocol-upgrade", "immutable-versioned-redeployment"]
+        },
+        "artifactPath": {
+          "type": "string",
+          "pattern": "^contracts/generated/abi/.+\\.json$"
+        },
+        "artifactSha256": { "$ref": "#/$defs/sha256" },
+        "abiSha256": { "$ref": "#/$defs/sha256" },
+        "code": {
+          "oneOf": [
+            { "$ref": "#/$defs/protocolCode" },
+            { "$ref": "#/$defs/evmCode" }
+          ]
+        },
+        "deployment": {
+          "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/createDeployment" }]
+        },
+        "configuration": {
+          "oneOf": [
+            { "$ref": "#/$defs/nativeConfiguration" },
+            { "$ref": "#/$defs/factoryConfiguration" },
+            { "$ref": "#/$defs/rewardConfiguration" },
+            { "$ref": "#/$defs/attestationConfiguration" }
+          ]
+        },
+        "roles": {
+          "oneOf": [{ "const": [] }, { "$ref": "#/$defs/rewardRoles" }]
+        },
+        "verification": {
+          "oneOf": [
+            { "$ref": "#/$defs/protocolVerification" },
+            { "$ref": "#/$defs/plannedVerification" },
+            { "$ref": "#/$defs/rewardVerification" },
+            { "$ref": "#/$defs/attestationVerification" }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "classification": { "const": "protocol-precompile" }
+            }
+          },
+          "then": {
+            "properties": {
+              "id": { "const": "torium-native" },
+              "contractName": { "const": "IToriumNative" },
+              "address": { "$ref": "#/$defs/address" },
+              "status": { "const": "active" },
+              "upgradeModel": { "const": "protocol-upgrade" },
+              "code": { "$ref": "#/$defs/protocolCode" },
+              "deployment": { "type": "null" },
+              "configuration": { "$ref": "#/$defs/nativeConfiguration" },
+              "verification": { "$ref": "#/$defs/protocolVerification" }
+            }
+          },
+          "else": {
+            "if": {
+              "properties": {
+                "classification": { "const": "post-genesis-create" }
+              }
+            },
+            "then": {
+              "properties": {
+                "id": { "const": "torium-create2-factory" },
+                "contractName": { "const": "ToriumCreate2Factory" },
+                "address": { "$ref": "#/$defs/address" },
+                "status": { "const": "planned" },
+                "upgradeModel": {
+                  "const": "immutable-versioned-redeployment"
+                },
+                "code": { "$ref": "#/$defs/evmCode" },
+                "deployment": { "$ref": "#/$defs/createDeployment" },
+                "configuration": {
+                  "$ref": "#/$defs/factoryConfiguration"
+                },
+                "roles": { "const": [] },
+                "verification": { "$ref": "#/$defs/plannedVerification" }
+              }
+            },
+            "else": {
+              "if": {
+                "properties": { "id": { "const": "reward-distributor" } }
+              },
+              "then": {
+                "properties": {
+                  "id": { "const": "reward-distributor" },
+                  "contractName": { "const": "ToriumRewardDistributor" },
+                  "address": { "type": "null" },
+                  "classification": {
+                    "const": "post-genesis-deterministic"
+                  },
+                  "status": { "const": "planned" },
+                  "upgradeModel": {
+                    "const": "immutable-versioned-redeployment"
+                  },
+                  "code": { "$ref": "#/$defs/evmCode" },
+                  "deployment": { "type": "null" },
+                  "configuration": {
+                    "$ref": "#/$defs/rewardConfiguration"
+                  },
+                  "roles": { "$ref": "#/$defs/rewardRoles" },
+                  "verification": { "$ref": "#/$defs/rewardVerification" }
+                }
+              },
+              "else": {
+                "properties": {
+                  "id": { "const": "attestation-registry" },
+                  "contractName": {
+                    "const": "ToriumAttestationRegistry"
+                  },
+                  "address": { "type": "null" },
+                  "classification": {
+                    "const": "post-genesis-deterministic"
+                  },
+                  "status": { "const": "planned" },
+                  "upgradeModel": {
+                    "const": "immutable-versioned-redeployment"
+                  },
+                  "code": { "$ref": "#/$defs/evmCode" },
+                  "deployment": { "type": "null" },
+                  "configuration": {
+                    "$ref": "#/$defs/attestationConfiguration"
+                  },
+                  "roles": { "const": [] },
+                  "verification": {
+                    "$ref": "#/$defs/attestationVerification"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "protocolCode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "interfaceSourceSha256"],
+      "properties": {
+        "kind": { "const": "protocol-precompile" },
+        "interfaceSourceSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "evmCode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "creationCodeKeccak256", "runtimeCodeKeccak256"],
+      "properties": {
+        "kind": { "const": "evm-bytecode" },
+        "creationCodeKeccak256": { "$ref": "#/$defs/hash" },
+        "runtimeCodeKeccak256": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "createDeployment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strategy",
+        "deployerAddress",
+        "deployerNonce",
+        "expectedAddress",
+        "transactionHash",
+        "broadcast"
+      ],
+      "properties": {
+        "strategy": { "const": "fixture-deployer-create-v1" },
+        "deployerAddress": { "$ref": "#/$defs/address" },
+        "deployerNonce": { "const": "0" },
+        "expectedAddress": { "$ref": "#/$defs/address" },
+        "transactionHash": { "type": "null" },
+        "broadcast": { "const": false }
+      }
+    },
+    "nativeConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["module", "denom", "decimals", "genesisStatePath"],
+      "properties": {
+        "module": { "const": "erc20" },
+        "denom": { "const": "atorium" },
+        "decimals": { "const": 18 },
+        "genesisStatePath": { "const": "app_state.erc20.native_precompiles" }
+      }
+    },
+    "factoryConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["constructorArguments", "constructorArgumentsAbi"],
+      "properties": {
+        "constructorArguments": { "const": [] },
+        "constructorArgumentsAbi": { "const": "0x" }
+      }
+    },
+    "rewardConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "constructorArguments",
+        "constructorArgumentsAbi",
+        "constructorSchema",
+        "fundingModel",
+        "publisherAllocationTrust",
+        "treasuryModel"
+      ],
+      "properties": {
+        "constructorArguments": { "type": "null" },
+        "constructorArgumentsAbi": { "type": "null" },
+        "constructorSchema": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "prefixItems": [
+            { "$ref": "#/$defs/adminDelayConstructorParameter" },
+            { "$ref": "#/$defs/adminConstructorParameter" },
+            { "$ref": "#/$defs/publisherConstructorParameter" },
+            { "$ref": "#/$defs/pauserConstructorParameter" },
+            { "$ref": "#/$defs/clawbackConstructorParameter" },
+            { "$ref": "#/$defs/treasuryConstructorParameter" },
+            { "$ref": "#/$defs/publicationDelayConstructorParameter" },
+            { "$ref": "#/$defs/clawbackDelayConstructorParameter" }
+          ],
+          "items": false
+        },
+        "fundingModel": {
+          "const": "exact-native-value-equals-merkle-sum-root"
+        },
+        "publisherAllocationTrust": {
+          "const": "trusted-off-chain-dataset"
+        },
+        "treasuryModel": {
+          "const": "fixed-constructor-address-delayed-expiry-clawback"
+        }
+      }
+    },
+    "attestationConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "constructorArguments",
+        "constructorArgumentsAbi",
+        "issuerAuthorization",
+        "canonicalHashAlgorithm",
+        "commitmentFieldOrder",
+        "identifierDomain",
+        "replayProtection",
+        "supersessionConstraint",
+        "storageModel",
+        "benchmarkPlan"
+      ],
+      "properties": {
+        "constructorArguments": { "const": [] },
+        "constructorArgumentsAbi": { "const": "0x" },
+        "issuerAuthorization": { "const": "permissionless-msg-sender" },
+        "canonicalHashAlgorithm": {
+          "const": "torium-attestation-canonical-bytes-v1"
+        },
+        "commitmentFieldOrder": {
+          "const": [
+            "schemaId",
+            "schemaVersion:uint32",
+            "subject",
+            "referenceHash",
+            "contentHash",
+            "metadataHash",
+            "metadataUriHash",
+            "supersedes"
+          ]
+        },
+        "identifierDomain": {
+          "const": "chain-id-registry-address-issuer-nonce-commitment"
+        },
+        "replayProtection": {
+          "const": "issuer-scoped-payload-excluding-supersedes-permanent"
+        },
+        "supersessionConstraint": {
+          "const": "same-issuer-schema-id-and-subject"
+        },
+        "storageModel": {
+          "const": "hashes-and-minimal-identifiers-only"
+        },
+        "benchmarkPlan": { "$ref": "#/$defs/attestationBenchmarkPlan" }
+      }
+    },
+    "attestationBenchmarkPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "command",
+        "stableCases",
+        "evidencePath",
+        "evidenceSha256"
+      ],
+      "properties": {
+        "status": {
+          "const": "committed-pinned-snapshot"
+        },
+        "command": { "const": "make -C contracts gas-snapshot-check" },
+        "stableCases": {
+          "const": ["testGasAttest()", "testGasSupersede()", "testGasRevoke()"]
+        },
+        "evidencePath": {
+          "const": "contracts/gas-snapshots/attestation-registry-v1.snapshot"
+        },
+        "evidenceSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "constructorParameter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["address", "uint48", "uint64"] }
+      }
+    },
+    "adminDelayConstructorParameter": {
+      "allOf": [
+        { "$ref": "#/$defs/constructorParameter" },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "const": "defaultAdminDelay_" },
+            "type": { "const": "uint48" }
+          }
+        }
+      ]
+    },
+    "adminConstructorParameter": {
+      "allOf": [
+        { "$ref": "#/$defs/constructorParameter" },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "const": "initialAdmin_" },
+            "type": { "const": "address" }
+          }
+        }
+      ]
+    },
+    "publisherConstructorParameter": {
+      "allOf": [
+        { "$ref": "#/$defs/constructorParameter" },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "const": "initialPublisher_" },
+            "type": { "const": "address" }
+          }
+        }
+      ]
+    },
+    "pauserConstructorParameter": {
+      "allOf": [
+        { "$ref": "#/$defs/constructorParameter" },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "const": "initialPauser_" },
+            "type": { "const": "address" }
+          }
+        }
+      ]
+    },
+    "clawbackConstructorParameter": {
+      "allOf": [
+        { "$ref": "#/$defs/constructorParameter" },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "const": "initialClawbackOperator_" },
+            "type": { "const": "address" }
+          }
+        }
+      ]
+    },
+    "treasuryConstructorParameter": {
+      "allOf": [
+        { "$ref": "#/$defs/constructorParameter" },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "const": "treasury_" },
+            "type": { "const": "address" }
+          }
+        }
+      ]
+    },
+    "publicationDelayConstructorParameter": {
+      "allOf": [
+        { "$ref": "#/$defs/constructorParameter" },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "const": "publicationDelay_" },
+            "type": { "const": "uint64" }
+          }
+        }
+      ]
+    },
+    "clawbackDelayConstructorParameter": {
+      "allOf": [
+        { "$ref": "#/$defs/constructorParameter" },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "const": "clawbackDelay_" },
+            "type": { "const": "uint64" }
+          }
+        }
+      ]
+    },
+    "rewardRoles": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "prefixItems": [
+        { "$ref": "#/$defs/rewardAdminRole" },
+        { "$ref": "#/$defs/rewardPublisherRole" },
+        { "$ref": "#/$defs/rewardPauserRole" },
+        { "$ref": "#/$defs/rewardClawbackRole" }
+      ],
+      "items": false
+    },
+    "rewardRole": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "assignment", "authority"],
+      "properties": {
+        "role": { "type": "string", "minLength": 1 },
+        "assignment": { "const": "unassigned" },
+        "authority": {
+          "enum": ["delayed-admin-transfer", "default-admin-managed"]
+        }
+      }
+    },
+    "rewardAdminRole": {
+      "allOf": [
+        { "$ref": "#/$defs/rewardRole" },
+        {
+          "type": "object",
+          "properties": {
+            "role": { "const": "DEFAULT_ADMIN_ROLE" },
+            "authority": { "const": "delayed-admin-transfer" }
+          }
+        }
+      ]
+    },
+    "rewardPublisherRole": {
+      "allOf": [
+        { "$ref": "#/$defs/rewardRole" },
+        {
+          "type": "object",
+          "properties": {
+            "role": { "const": "EPOCH_PUBLISHER_ROLE" },
+            "authority": { "const": "default-admin-managed" }
+          }
+        }
+      ]
+    },
+    "rewardPauserRole": {
+      "allOf": [
+        { "$ref": "#/$defs/rewardRole" },
+        {
+          "type": "object",
+          "properties": {
+            "role": { "const": "PAUSER_ROLE" },
+            "authority": { "const": "default-admin-managed" }
+          }
+        }
+      ]
+    },
+    "rewardClawbackRole": {
+      "allOf": [
+        { "$ref": "#/$defs/rewardRole" },
+        {
+          "type": "object",
+          "properties": {
+            "role": { "const": "CLAWBACK_ROLE" },
+            "authority": { "const": "default-admin-managed" }
+          }
+        }
+      ]
+    },
+    "protocolVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "observedInGenesis", "evidencePath"],
+      "properties": {
+        "kind": { "const": "genesis-and-call-conformance" },
+        "observedInGenesis": { "const": true },
+        "evidencePath": { "const": "chain/tests/e2e/run.sh" }
+      }
+    },
+    "plannedVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "observedOnChain"],
+      "properties": {
+        "kind": { "const": "planned-runtime-code-hash" },
+        "observedOnChain": { "const": false }
+      }
+    },
+    "rewardVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "observedOnChain", "deploymentEvidence"],
+      "properties": {
+        "kind": { "const": "artifact-and-static-tests-only" },
+        "observedOnChain": { "const": false },
+        "deploymentEvidence": { "type": "null" }
+      }
+    },
+    "attestationVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "observedOnChain",
+        "deploymentEvidence",
+        "benchmarkEvidence"
+      ],
+      "properties": {
+        "kind": { "const": "artifact-and-static-tests-only" },
+        "observedOnChain": { "const": false },
+        "deploymentEvidence": { "type": "null" },
+        "benchmarkEvidence": {
+          "$ref": "#/$defs/attestationBenchmarkEvidence"
+        }
+      }
+    },
+    "attestationBenchmarkEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "path", "sha256", "checkCommand"],
+      "properties": {
+        "kind": { "const": "foundry-gas-snapshot" },
+        "path": {
+          "const": "contracts/gas-snapshots/attestation-registry-v1.snapshot"
+        },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "checkCommand": {
+          "const": "make -C contracts gas-snapshot-check"
+        }
+      }
+    }
+  }
+}

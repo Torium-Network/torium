@@ -1,0 +1,188 @@
+{
+  "$schema": "./governance-v1.schema.json",
+  "schemaVersion": 1,
+  "contractVersion": "1.0.0-local.2",
+  "status": "ratified-local-only",
+  "updatedAt": "2026-07-15",
+  "protocol": {
+    "path": "./protocol-v1.json",
+    "version": "1.0.0-local.5"
+  },
+  "scope": {
+    "environment": "localnet",
+    "valueStatus": "valueless",
+    "publicActivationAllowed": false,
+    "publicActivationGateIssue": 127,
+    "toriumProductBackendIntegrated": false
+  },
+  "governance": {
+    "authority": "cosmos-gov-module-account",
+    "proposalSubmission": "permissionless-funded-transaction",
+    "proposalExecution": "passed-proposal-routed-as-governance-module-account",
+    "consensusAuthority": {
+      "genesisValue": "cosmos-gov-module-account",
+      "mutable": false,
+      "transferRejectedByApplication": true
+    },
+    "maxDepositPeriodSeconds": 30,
+    "votingPeriodSeconds": 20,
+    "expeditedVotingPeriodSeconds": 10,
+    "minDeposit": {
+      "denom": "atorium",
+      "amountBaseUnits": "10000000000000000000"
+    },
+    "expeditedMinDeposit": {
+      "denom": "atorium",
+      "amountBaseUnits": "50000000000000000000"
+    },
+    "quorum": "0.667000000000000000",
+    "threshold": "0.500000000000000000",
+    "expeditedThreshold": "0.667000000000000000",
+    "vetoThreshold": "0.334000000000000000",
+    "minInitialDepositRatio": "1.000000000000000000",
+    "minimumDepositRatio": "1.000000000000000000",
+    "proposalCancelRatio": "0.500000000000000000",
+    "proposalCancelDestination": "burn",
+    "burnDepositOnPrevoteFailure": true,
+    "burnDepositOnQuorumFailure": true,
+    "burnDepositOnVeto": true,
+    "fourEqualValidators": {
+      "totalVotingPower": 100,
+      "votesRequiredForQuorum": 3,
+      "twoValidatorVoteReachesQuorum": false,
+      "threeValidatorYesVotePasses": true
+    }
+  },
+  "authorities": [
+    { "module": "auth", "surface": "account-parameters", "authority": "cosmos-gov-module-account" },
+    { "module": "bank", "surface": "bank-parameters", "authority": "cosmos-gov-module-account" },
+    { "module": "consensus", "surface": "consensus-parameters", "authority": "cosmos-gov-module-account" },
+    { "module": "distribution", "surface": "distribution-parameters-and-community-pool-spend", "authority": "cosmos-gov-module-account" },
+    { "module": "staking", "surface": "staking-parameters", "authority": "cosmos-gov-module-account" },
+    { "module": "slashing", "surface": "slashing-parameters", "authority": "cosmos-gov-module-account" },
+    { "module": "upgrade", "surface": "software-upgrade-plan-and-cancellation", "authority": "cosmos-gov-module-account" },
+    { "module": "evm", "surface": "evm-parameters", "authority": "cosmos-gov-module-account" },
+    { "module": "erc20", "surface": "native-and-erc20-registration-parameters", "authority": "cosmos-gov-module-account" },
+    { "module": "feemarket", "surface": "base-fee-parameters", "authority": "cosmos-gov-module-account" }
+  ],
+  "contractAuthorities": {
+    "mutableSystemContractsDeployed": false,
+    "nativeFacade": {
+      "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "kind": "bank-backed-native-precompile",
+      "adminAuthority": "none",
+      "upgradeAuthority": "none-static-runtime-composition"
+    },
+    "governancePrecompile": {
+      "address": "0x0000000000000000000000000000000000000805",
+      "stateMutationAuthority": "underlying-module-message-authorization",
+      "privilegedBypassAllowed": false
+    },
+    "futureSystemContractRegistry": {
+      "status": "not-implemented",
+      "ownerIssue": 108
+    }
+  },
+  "authorizationRules": {
+    "directPrivilegedTransactionAllowed": false,
+    "undocumentedAdminKeyAllowed": false,
+    "offChainProposalExecutionAllowed": false,
+    "normalUpgradeRequiresPassedPlan": true,
+    "normalOperatorProcedureRequiresChecksumPreflight": true,
+    "onChainExecutableChecksumEnforced": false,
+    "failedUncommittedMigrationFixForwardMayUseNewReviewedChecksum": true,
+    "governancePrecompileMayBypassModuleAuthority": false,
+    "parameterChangesRequirePassedProposal": true,
+    "upgradeSchedulingAndCancellationRequirePassedProposal": true
+  },
+  "bootstrapAndTransition": {
+    "localControl": "one-developer-controls-four-publicly-reproducible-disposable-validator-fixtures",
+    "decentralizationClaimAllowed": false,
+    "futurePublicAuthority": "not-selected",
+    "requiredBeforePublicActivation": [
+      "independent-validator-operators-and-key-custody",
+      "public-governance-economics-review",
+      "multisig-or-validator-authority-transition-decision",
+      "security-review-and-upgrade-rehearsal",
+      "fresh-genesis-and-release-artifact-approval"
+    ]
+  },
+  "upgrade": {
+    "planName": "torium-local-v1",
+    "preUpgradeVersion": "0.1.0-local.1",
+    "postUpgradeVersion": "0.2.0-local.1",
+    "minimumSchedulingLeadBlocks": 10,
+    "minimumSchedulingLeadEnforcedAtProposalExecution": true,
+    "planInfoFormat": "torium-upgrade-info-v1-json",
+    "planInfoRequires": [
+      "schemaVersion",
+      "planName",
+      "targetVersion",
+      "binarySha256",
+      "protocolVersion",
+      "migrationSha256"
+    ],
+    "binaryProfiles": {
+      "pre": "no-handler-halts-and-writes-upgrade-info-at-plan-height",
+      "post": "named-handler-rejects-start-before-plan-height-and-applies-at-plan-height",
+      "failedRehearsal": "named-handler-returns-deterministic-error-without-committing-migration-state"
+    },
+    "migration": {
+      "runModuleMigrations": true,
+      "markerStoreAddedAtUpgrade": true,
+      "writeDeterministicMarker": true,
+      "markerStore": "toriumupgrade",
+      "markerSchemaVersion": 1,
+      "preserveNativeSupply": true,
+      "preserveAccountsBalancesContractsAndStaking": true
+    },
+    "artifactVerification": {
+      "checksumAlgorithm": "sha256",
+      "checksumVerifiedByHandler": false,
+      "checksumVerifiedByOperatorPreflight": true,
+      "checksumEnforcementScope": "operator-procedure-not-consensus",
+      "versionVerifiedByHandler": true,
+      "protocolVersionVerifiedByHandler": true,
+      "migrationChecksumVerifiedByHandler": true
+    },
+    "storeLoader": {
+      "source": "data/upgrade-info.json-written-by-pre-upgrade-binary",
+      "onlyAtNextHeight": true,
+      "unknownPlanRejected": true,
+      "addedStoreKeys": ["toriumupgrade"]
+    }
+  },
+  "failureAndRecovery": {
+    "rehearsedScenarios": [
+      "unauthorized-direct-privileged-message",
+      "consensus-authority-transfer-rejected",
+      "short-lead-upgrade-plan-failed",
+      "premature-post-upgrade-binary",
+      "old-binary-at-plan-height",
+      "wrong-binary-checksum",
+      "two-validator-no-quorum",
+      "partial-three-validator-upgrade",
+      "late-validator-catch-up",
+      "failed-migration-no-commit"
+    ],
+    "preHeightCancellation": "new-passed-governance-proposal-only",
+    "skipUpgradeHeightAllowedInStandardProfile": false,
+    "rollbackAfterCommittedUpgradeAllowed": false,
+    "failedMigrationRemediation": "fix-forward-new-checksummed-binary-at-same-uncommitted-height",
+    "localFixtureFallback": "restore-all-nodes-from-verified-pre-upgrade-recovery-or-reset-valueless-localnet",
+    "publicRollbackPolicy": "not-defined-public-launch-blocked"
+  },
+  "evidence": {
+    "suite": "chain/tests/governance-upgrade",
+    "postUpgradeRecoveryFixture": "post-upgrade",
+    "requiredBeforeAndAfter": [
+      "height-and-app-hash",
+      "native-total-supply",
+      "sample-account-balance",
+      "staking-validator-set",
+      "module-version-map",
+      "migration-marker",
+      "binary-version-and-sha256"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+services:
+  validator-0:
+    image: ${TORIUM_VALIDATOR_0_IMAGE:-toriumd:upgrade-pre}
+  validator-1:
+    image: ${TORIUM_VALIDATOR_1_IMAGE:-toriumd:upgrade-pre}
+  validator-2:
+    image: ${TORIUM_VALIDATOR_2_IMAGE:-toriumd:upgrade-pre}
+  validator-3:
+    image: ${TORIUM_VALIDATOR_3_IMAGE:-toriumd:upgrade-pre}
+  faucet:
+    image: ${TORIUM_VALIDATOR_0_IMAGE:-toriumd:upgrade-pre}

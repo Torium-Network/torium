@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-14T18:06:43.129Z",
+  "target": {
+    "rpcUrl": "http://127.0.0.1:8545",
+    "expectedChainId": 262144
+  },
+  "wallet": {
+    "name": "MetaMask",
+    "version": "13.39.2"
+  },
+  "checks": {
+    "onboarding": {
+      "importedUpstreamFixture": true
+    },
+    "networkConfiguration": {
+      "method": "wallet-ui"
+    },
+    "customNetwork": {
+      "chainId": "0x40000",
+      "selected": true
+    },
+    "account": {
+      "address": "0xc6fe5d33615a1c52c08018c47e8bc53646a0e101"
+    },
+    "signedTransfer": {
+      "hash": "0x272d1887e4573c0a5de3fe736023d43e42bfc0edd87c83f5e1eafe19950b40bd",
+      "status": "0x1",
+      "blockNumber": "1167",
+      "valueWei": "1"
+    }
+  }
+}

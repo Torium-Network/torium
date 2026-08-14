@@ -1,0 +1,36 @@
+{
+  "name": "developer-docs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "node scripts/generate-sdk-reference.mjs --check && fumadocs-mdx && node scripts/validate-docs.mjs && node scripts/check-snippets.mjs && node scripts/check-quality-thresholds.mjs && next build",
+    "start": "next start",
+    "generate:source": "fumadocs-mdx",
+    "generate:sdk-reference": "node scripts/generate-sdk-reference.mjs",
+    "check-types": "fumadocs-mdx && next typegen && tsc --noEmit",
+    "validate:content": "node scripts/generate-sdk-reference.mjs --check && node scripts/validate-docs.mjs && node scripts/check-snippets.mjs && node scripts/check-quality-thresholds.mjs",
+    "verify": "node scripts/generate-sdk-reference.mjs --check && node scripts/validate-docs.mjs && node scripts/check-snippets.mjs && node scripts/check-quality-thresholds.mjs && fumadocs-mdx && next typegen && tsc --noEmit && next build",
+    "test:live-snippets": "node scripts/run-live-snippets.mjs"
+  },
+  "dependencies": {
+    "fumadocs-core": "15.8.5",
+    "fumadocs-mdx": "14.2.7",
+    "fumadocs-ui": "15.8.5",
+    "lucide-react": "0.563.0",
+    "next": "15.5.20",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@torium-network/config": "workspace:*",
+    "ajv": "8.17.1",
+    "@tailwindcss/postcss": "4.1.18",
+    "@types/mdx": "2.0.14",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "4.1.18",
+    "typescript": "^5"
+  }
+}

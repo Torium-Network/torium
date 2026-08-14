@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-14T18:12:33.677Z",
+  "target": {
+    "rpcUrl": "http://127.0.0.1:8545",
+    "wsUrl": "ws://127.0.0.1:8546",
+    "container": "evmdnode0"
+  },
+  "beforeRestartBlock": "1201",
+  "lastPreRestartHead": "1202",
+  "connectionClosedOnRestart": true,
+  "rpcRecoveredAtBlock": "1203",
+  "firstPostRestartHead": "1204",
+  "httpBackfill": [
+    {
+      "number": "0x4b3",
+      "hash": "0x8ad9ef457bbd583fd8da35fabf016a14b7d04a4ff6962efc2e869eb18f3e9413"
+    },
+    {
+      "number": "0x4b4",
+      "hash": "0x968e007e6835745ccb0e7c531c6907b6af520c513047c86a076ffc6197835685"
+    }
+  ]
+}

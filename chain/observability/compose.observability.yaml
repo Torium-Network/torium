@@ -1,0 +1,38 @@
+# Local-only observability collectors for issue #115. Loopback publishing
+# only; no public ingress, no authentication surface, no external
+# notification routing. Start it alongside the canonical localnet with
+# chain/observability/run-scrape-evidence-v0.sh.
+name: torium-observability
+
+services:
+  prometheus:
+    image: prom/prometheus:v3.1.0@sha256:6559acbd5d770b15bb3c954629ce190ac3cbbdb2b7f1c30f0385c4e05104e218
+    restart: "no"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    # The image ships as nobody(65534); the tsdb tmpfs is owned to match so
+    # the collector never needs a writable host path or extra privileges.
+    user: "65534:65534"
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=2h
+      - --web.listen-address=0.0.0.0:9090
+      - --web.enable-lifecycle
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/alert-rules.yml:/etc/prometheus/alert-rules.yml:ro
+    tmpfs:
+      - /prometheus:rw,noexec,nosuid,size=256m,uid=65534,gid=65534
+    ports:
+      - "127.0.0.1:9490:9090"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "result": "passed",
+  "network": "canonical-four-validator-localnet",
+  "observedProfileVersion": "1.0.1",
+  "ratifiedProfileVersion": "1.0.1",
+  "chainId": 1414484556,
+  "blockTags": {
+    "blockLookup": ["latest", "pending", "safe", "finalized"],
+    "stateQueriesAccepted": ["latest", "pending", "finalized"],
+    "safeStateQueryErrorCode": -32602,
+    "pendingSemantics": "accepted-not-distinct-from-stable-latest",
+    "finalizedSemantics": "latest-committed-cometbft-state"
+  },
+  "errorCodes": {
+    "methodNotFound": -32601,
+    "invalidParams": -32602,
+    "invalidRequest": -32600,
+    "parseError": -32700
+  },
+  "batch": {
+    "acceptedRequests": 100,
+    "rejectedRequests": 101,
+    "rejectionCode": -32600
+  },
+  "debugTrace": {
+    "engineBaseline": "supported",
+    "defaultProfile": "disabled",
+    "disabledErrorCode": -32601,
+    "operatorProfile": "not-yet-defined"
+  },
+  "historicalState": {
+    "referenceBlock": "0x4",
+    "valueAtReferenceBeforeMutation": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "valueAtReferenceAfterMutation": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "latestValueAfterMutation": "0x0000000000000000000000000000000000000000000000000000000000000060",
+    "explicitHistoricalCallPreserved": true
+  },
+  "webSocket": {
+    "noOriginClient": "accepted",
+    "localhostBrowserOriginStatus": 403,
+    "loopbackBrowserOriginStatus": 403,
+    "untrustedBrowserOriginStatus": 403,
+    "subscriptions": ["newHeads", "logs", "newPendingTransactions"],
+    "socketClosedOnRestart": true,
+    "httpBackfillBlocks": 2,
+    "subscriptionResumed": true
+  }
+}

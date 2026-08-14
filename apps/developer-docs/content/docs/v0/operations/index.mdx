@@ -1,0 +1,77 @@
+---
+title: Operations
+description: Node roles, observability, backup and recovery, upgrades, and incident procedures.
+docId: operations
+version: v0
+status: foundation
+ownerIssue: 144
+sourceOfTruth: docs/operations/torium-node-role-topology-runbook.md
+sourceStatus: existing
+---
+
+Torium's operational procedures are reviewed repository runbooks tied to
+machine-readable contracts. This page maps them for operators. Everything is
+local-first: collectors and alerts are inactive baselines, no public snapshot
+or backup provider exists, and every public-deployment step is explicitly
+deferred until approved. Never paste private keys, mnemonics, signer state, or
+unredacted diagnostics anywhere — record public identifiers, heights,
+checksums, and redacted outcomes instead.
+
+## Node roles and topology
+
+`docs/operations/torium-node-role-topology-runbook.md` is the operator
+runbook for the validator, sentry, full/query, public EVM RPC, and private
+archive/indexer profiles defined in `chain/profiles/node-roles-v0.json`.
+It covers preflight, startup, inspection, failure, and capacity procedures;
+public v0 is EVM-only, and archive/explorer access can never widen the public
+RPC contract. Commands in the runbook name their target role, expected
+output, and stop condition.
+
+For day-to-day localnet control (start, per-node stop/restart, status,
+degraded-quorum reads), use `./chain/localnet/torium-localnet`; the
+[localnet quickstart](/v0/localnet/quickstart) is the entry point.
+
+## Observability, health, and alerts
+
+`docs/operations/torium-chain-observability-runbook.md` documents the v0
+metrics/log/alert contract (`chain/observability/observability-v0.json`) and
+the bounded local health exporter. Collectors and alert rules are defined but
+**inactive**; every alert in the contract names its owning procedure, and
+activation with five-role scrape evidence is part of the operator deployment checklist.
+
+## Backup, snapshots, state sync, and restore
+
+`docs/operations/torium-chain-recovery-runbook.md` operationalizes
+`chain/recovery/recovery-v0.json`: snapshot envelopes, state-sync trust
+requirements (pinned dual chain IDs, genesis hash, trusted height/hash, and a
+trusting period below the unbonding time), retention, and restore gates. The
+contract is production-shaped but fail-closed: no public provider is
+configured and **no operator recovery drill has passed yet**, so restore
+procedures must be treated as unexercised until the drill evidence lands.
+
+## Upgrades
+
+`docs/operations/torium-chain-governance-upgrades.md` is the executable
+local upgrade runbook for the governance/upgrade contract: proposal,
+checksum preflight (required for the normal operator procedure), halt
+height, binary swap, and forward-fix versus rollback decisions. Release
+checksums, signatures, and SBOM verification for public artifacts are release-pipeline
+scope and are deferred.
+
+## Resilience and performance
+
+`docs/operations/torium-chain-resilience-runbook.md` defines the
+validator-loss, partition, restart, and corruption scenario contract
+(fail-closed: no scenario may report `pass` without a runner), and
+`docs/operations/torium-chain-performance-baselines.md` documents the local
+performance foundation. The explorer stack runbook covers the inactive local
+Blockscout inventory.
+
+## Incident response
+
+Classify every event as an availability failure or a suspected compromise —
+uncertainty counts as suspected compromise, and availability pressure never
+overrides double-sign, revocation, or evidence-preservation rules. The
+[validator lifecycle page](/v0/validators) and the key-compromise runbook
+carry the concrete sequences; security reporting goes through the private
+advisory form described on the [security page](/v0/security).

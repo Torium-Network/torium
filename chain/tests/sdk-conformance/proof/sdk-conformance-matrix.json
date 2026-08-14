@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "suite": "torium-sdk-localnet-conformance-v0",
+  "ownerIssue": 137,
+  "source": "chain/tests/sdk-conformance/run.sh",
+  "network": "torium-localnet-1 (disposable, valueless)",
+  "consumption": "packed @torium-network/sdk tarball, not source aliases",
+  "capabilities": [
+    {
+      "id": "torium.attestations.issue-with-predicted-id",
+      "method": "eth_sendRawTransaction",
+      "status": "pass"
+    },
+    {
+      "id": "torium.attestations.replay-blocked",
+      "method": "eth_call",
+      "status": "pass"
+    },
+    {
+      "id": "torium.attestations.revoke",
+      "method": "eth_sendRawTransaction",
+      "status": "pass"
+    },
+    {
+      "id": "torium.attestations.supersede",
+      "method": "eth_sendRawTransaction",
+      "status": "pass"
+    },
+    {
+      "id": "torium.attestations.verify",
+      "method": "eth_call",
+      "status": "pass"
+    },
+    {
+      "id": "torium.chain.wrong-chain-guard",
+      "method": "eth_chainId",
+      "status": "pass"
+    },
+    {
+      "id": "torium.contracts.bytecode-verification",
+      "method": "eth_getCode",
+      "status": "pass"
+    },
+    {
+      "id": "torium.contracts.deploy",
+      "method": "eth_sendRawTransaction",
+      "status": "pass"
+    },
+    {
+      "id": "torium.contracts.deploy-with-constructor",
+      "method": "eth_sendRawTransaction",
+      "status": "pass"
+    },
+    {
+      "id": "torium.contracts.typed-read",
+      "method": "eth_call",
+      "status": "pass"
+    },
+    {
+      "id": "torium.contracts.wrong-deployment-guard",
+      "method": "eth_getCode",
+      "status": "pass"
+    },
+    {
+      "id": "torium.network.status",
+      "method": "torium_networkStatus",
+      "status": "pass"
+    },
+    {
+      "id": "torium.reads.fee-history",
+      "method": "eth_feeHistory",
+      "status": "pass"
+    },
+    {
+      "id": "torium.reads.raw-rpc-parity",
+      "method": "eth_call",
+      "status": "pass"
+    },
+    {
+      "id": "torium.rewards.claim",
+      "method": "eth_sendRawTransaction",
+      "status": "pass"
+    },
+    {
+      "id": "torium.rewards.claim-preflight",
+      "method": "eth_call",
+      "status": "pass"
+    },
+    {
+      "id": "torium.rewards.invalid-claim-reverts",
+      "method": "eth_call",
+      "status": "pass"
+    },
+    {
+      "id": "torium.rewards.publish-epoch",
+      "method": "eth_sendRawTransaction",
+      "status": "pass"
+    },
+    {
+      "id": "torium.subscriptions.http-log-backfill",
+      "method": "eth_getLogs",
+      "status": "pass"
+    },
+    {
+      "id": "torium.subscriptions.new-heads",
+      "method": "eth_subscribe",
+      "status": "pass"
+    },
+    {
+      "id": "torium.transactions.preflight-blockers",
+      "method": "eth_call",
+      "status": "pass"
+    },
+    {
+      "id": "torium.transactions.transfer-lifecycle",
+      "method": "eth_sendRawTransaction",
+      "status": "pass"
+    }
+  ]
+}

@@ -1,0 +1,644 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/protocol-v1.json",
+  "title": "Torium EVM L1 protocol v1 local development contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "protocolVersion",
+    "genesisFormatVersion",
+    "status",
+    "updatedAt",
+    "sources",
+    "networkProfiles",
+    "accounts",
+    "nativeAsset",
+    "consensus",
+    "validatorEconomics",
+    "fees",
+    "transactions",
+    "evm",
+    "modules",
+    "mempool",
+    "rpc",
+    "ports",
+    "compatibility",
+    "owners"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "protocolVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+    },
+    "genesisFormatVersion": { "type": "integer", "minimum": 1 },
+    "status": { "const": "local-development-contract" },
+    "updatedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "sources": { "type": "object" },
+    "networkProfiles": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": { "$ref": "#/$defs/networkProfile" }
+    },
+    "accounts": { "type": "object" },
+    "nativeAsset": { "$ref": "#/$defs/nativeAsset" },
+    "consensus": { "$ref": "#/$defs/consensus" },
+    "validatorEconomics": { "$ref": "#/$defs/validatorEconomics" },
+    "fees": { "$ref": "#/$defs/fees" },
+    "transactions": { "type": "object" },
+    "evm": { "type": "object" },
+    "modules": { "type": "object" },
+    "mempool": { "$ref": "#/$defs/mempool" },
+    "rpc": { "type": "object" },
+    "ports": { "type": "object" },
+    "compatibility": { "type": "object" },
+    "owners": { "type": "object" }
+  },
+  "$defs": {
+    "consensus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engine", "version", "targetBlockTimeMs", "finality", "block", "transaction"],
+      "properties": {
+        "engine": { "const": "CometBFT" },
+        "version": { "const": "v0.39.3" },
+        "targetBlockTimeMs": { "const": 2000 },
+        "finality": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "model",
+            "sdkDefaultConfirmationBlocks",
+            "ethereumBeaconFinalityEquivalent",
+            "jsonRpcFinalizedTag",
+            "jsonRpcSafeStateQueries",
+            "trustModelOwnerIssue"
+          ],
+          "properties": {
+            "model": { "const": "cometbft-commit-with-greater-than-two-thirds-voting-power" },
+            "sdkDefaultConfirmationBlocks": { "const": 1 },
+            "ethereumBeaconFinalityEquivalent": { "const": false },
+            "jsonRpcFinalizedTag": { "const": "latest-committed-cometbft-state" },
+            "jsonRpcSafeStateQueries": { "const": "unsupported-until-conformance-proves-otherwise" },
+            "trustModelOwnerIssue": { "const": 88 }
+          }
+        },
+        "block": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["maxBytes", "maxGas", "targetGas"],
+          "properties": {
+            "maxBytes": { "const": 5242880 },
+            "maxGas": { "const": 30000000 },
+            "targetGas": { "const": 15000000 }
+          }
+        },
+        "transaction": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["maxEvmEncodedBytes", "maxCosmosEncodedBytes", "maxGasWanted"],
+          "properties": {
+            "maxEvmEncodedBytes": { "const": 131072 },
+            "maxCosmosEncodedBytes": { "const": 262144 },
+            "maxGasWanted": { "const": 25000000 }
+          }
+        }
+      }
+    },
+    "fees": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "pricingModel",
+        "enabledAtHeight",
+        "initialBaseFeeBaseUnitsPerGas",
+        "minimumBaseFeeBaseUnitsPerGas",
+        "baseFeeChangeDenominator",
+        "elasticityMultiplier",
+        "minimumGasMultiplier",
+        "minimumPriorityFeeBaseUnitsPerGas",
+        "validatorMinimumGasPrice",
+        "feeCollectorDisposition",
+        "baseFeeBurned",
+        "ethereumBurnSemanticsClaimed",
+        "unusedGasRefunded",
+        "nativeSupplyChangedByFeeCollection",
+        "parameterChangeControl",
+        "publicProfile",
+        "economicsValidationOwnerIssue"
+      ],
+      "properties": {
+        "profile": { "const": "local-development-only" },
+        "pricingModel": { "const": "eip1559" },
+        "enabledAtHeight": { "const": 1 },
+        "initialBaseFeeBaseUnitsPerGas": { "const": "1000000000" },
+        "minimumBaseFeeBaseUnitsPerGas": { "const": "1000000000" },
+        "baseFeeChangeDenominator": { "const": 8 },
+        "elasticityMultiplier": { "const": 2 },
+        "minimumGasMultiplier": { "const": "0.5" },
+        "minimumPriorityFeeBaseUnitsPerGas": { "const": "1" },
+        "validatorMinimumGasPrice": { "const": "0atorium" },
+        "feeCollectorDisposition": { "const": "cosmos-fee-collector-then-distribution" },
+        "baseFeeBurned": { "const": false },
+        "ethereumBurnSemanticsClaimed": { "const": false },
+        "unusedGasRefunded": { "const": true },
+        "nativeSupplyChangedByFeeCollection": { "const": false },
+        "parameterChangeControl": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["consensusAuthority", "ownerIssue", "directOperatorMutationAllowed"],
+          "properties": {
+            "consensusAuthority": { "const": "cosmos-governance-module-account" },
+            "ownerIssue": { "const": 106 },
+            "directOperatorMutationAllowed": { "const": false }
+          }
+        },
+        "publicProfile": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "activationAllowed", "gateIssue", "requiredEvidenceIssues"],
+          "properties": {
+            "status": { "const": "not-defined-not-activatable" },
+            "activationAllowed": { "const": false },
+            "gateIssue": { "const": 127 },
+            "requiredEvidenceIssues": {
+              "type": "array",
+              "prefixItems": [{ "const": 118 }, { "const": 120 }],
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        },
+        "economicsValidationOwnerIssue": { "const": 105 }
+      }
+    },
+    "mempool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "cometBftType",
+        "minimumPriorityFeeBaseUnitsPerGas",
+        "priceLimitBaseUnitsPerGas",
+        "priceBumpPercent",
+        "accountExecutableSlots",
+        "globalExecutableSlots",
+        "accountQueuedSlots",
+        "globalQueuedSlots",
+        "queuedLifetimeSeconds",
+        "includedNonceCacheSize",
+        "pendingProposalTimeoutMs",
+        "checkTxTimeoutMs",
+        "insertQueueSize",
+        "transactionTrackerEnabled",
+        "cosmosPoolMaxTransactions",
+        "maximumEvmTransactionBytes",
+        "maximumCosmosTransactionBytes",
+        "cometReapMaxBytes",
+        "cometReapMaxGas",
+        "replacementRule",
+        "rpcAcceptanceGuaranteesRetention",
+        "networkWideReplacementGuaranteed",
+        "parameterChangeControl",
+        "abuseModel"
+      ],
+      "properties": {
+        "profile": { "const": "local-development-only" },
+        "cometBftType": { "const": "app" },
+        "minimumPriorityFeeBaseUnitsPerGas": { "const": 1 },
+        "priceLimitBaseUnitsPerGas": { "const": 1 },
+        "priceBumpPercent": { "const": 10 },
+        "accountExecutableSlots": { "const": 16 },
+        "globalExecutableSlots": { "const": 5120 },
+        "accountQueuedSlots": { "const": 64 },
+        "globalQueuedSlots": { "const": 1024 },
+        "queuedLifetimeSeconds": { "const": 10800 },
+        "includedNonceCacheSize": { "const": 4096 },
+        "pendingProposalTimeoutMs": { "const": 250 },
+        "checkTxTimeoutMs": { "const": 5000 },
+        "insertQueueSize": { "const": 5000 },
+        "transactionTrackerEnabled": { "const": false },
+        "cosmosPoolMaxTransactions": { "const": 1000 },
+        "maximumEvmTransactionBytes": { "const": 131072 },
+        "maximumCosmosTransactionBytes": { "const": 262144 },
+        "cometReapMaxBytes": { "const": 5242880 },
+        "cometReapMaxGas": { "const": 30000000 },
+        "replacementRule": { "const": "both-fee-cap-and-tip-cap-must-increase-by-at-least-price-bump" },
+        "rpcAcceptanceGuaranteesRetention": { "const": false },
+        "networkWideReplacementGuaranteed": { "const": false },
+        "parameterChangeControl": { "const": "versioned-coordinated-node-configuration-rollout" },
+        "abuseModel": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "underpricedTransactions",
+            "oversizedEvmTransactions",
+            "oversizedCosmosTransactions",
+            "oversizedRpcRequests",
+            "stateGrowthGasLowerBoundPerNewSlot",
+            "theoreticalNewSlotsAtTargetGas",
+            "theoreticalNewSlotsAtBlockGasLimit",
+            "modelExcludesTransactionCallAndColdAccessOverhead",
+            "sustainedStateGrowthBounded",
+            "publicCapacityClaimed",
+            "capacityEvidenceOwnerIssues"
+          ],
+          "properties": {
+            "underpricedTransactions": { "const": "rejected-before-proposal" },
+            "oversizedEvmTransactions": { "const": "rejected-above-131072-encoded-bytes" },
+            "oversizedCosmosTransactions": { "const": "rejected-above-262144-encoded-bytes" },
+            "oversizedRpcRequests": { "const": "rejected-above-5242880-body-bytes-or-100-batch-requests" },
+            "stateGrowthGasLowerBoundPerNewSlot": { "const": 20000 },
+            "theoreticalNewSlotsAtTargetGas": { "const": 750 },
+            "theoreticalNewSlotsAtBlockGasLimit": { "const": 1500 },
+            "modelExcludesTransactionCallAndColdAccessOverhead": { "const": true },
+            "sustainedStateGrowthBounded": { "const": false },
+            "publicCapacityClaimed": { "const": false },
+            "capacityEvidenceOwnerIssues": {
+              "type": "array",
+              "prefixItems": [{ "const": 118 }, { "const": 120 }],
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        }
+      }
+    },
+    "nativeAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseDenom",
+        "displayDenom",
+        "localDisplayDenom",
+        "decimals",
+        "powerReduction",
+        "oneDisplayUnitInBaseUnits",
+        "canonicalLedger",
+        "consumerSurfaces",
+        "issuance",
+        "burns",
+        "supplyAccounting",
+        "solidityInterface",
+        "localnetGenesisSupplyBaseUnits",
+        "localnetGenesisSupplyDisplay",
+        "publicGenesisSupply",
+        "validatorEconomicsOwnerIssues"
+      ],
+      "properties": {
+        "baseDenom": { "const": "atorium" },
+        "displayDenom": { "const": "TOR" },
+        "localDisplayDenom": { "const": "tTOR" },
+        "decimals": { "const": 18 },
+        "powerReduction": {
+          "const": "1000000000000000000"
+        },
+        "oneDisplayUnitInBaseUnits": {
+          "const": "1000000000000000000"
+        },
+        "canonicalLedger": {
+          "const": "cosmos-bank-balance-exposed-to-evm"
+        },
+        "consumerSurfaces": {
+          "type": "array",
+          "minItems": 9,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 3 }
+        },
+        "issuance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "model",
+            "mintModuleIncluded",
+            "inflationPerYear",
+            "postGenesisNativeMintingAllowed",
+            "applicationRestriction"
+          ],
+          "properties": {
+            "model": { "const": "genesis-capped-non-inflationary" },
+            "mintModuleIncluded": { "const": false },
+            "inflationPerYear": { "const": "0" },
+            "postGenesisNativeMintingAllowed": { "const": false },
+            "applicationRestriction": {
+              "const": "deny-atorium-in-x-bank-mint-coins"
+            }
+          }
+        },
+        "burns": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "allowed",
+            "policy",
+            "effect",
+            "visibility",
+            "silentOrReversibleBurnAllowed"
+          ],
+          "properties": {
+            "allowed": { "const": true },
+            "policy": {
+              "const": "protocol-authorized-module-paths-only"
+            },
+            "effect": {
+              "const": "permanently-reduce-x-bank-total-supply"
+            },
+            "visibility": {
+              "const": "committed-bank-burn-events-and-supply-query"
+            },
+            "silentOrReversibleBurnAllowed": { "const": false }
+          }
+        },
+        "supplyAccounting": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "totalSupplySource",
+            "balanceSource",
+            "baseUnits",
+            "reconciliationInvariant",
+            "representationConversionChangesSupply"
+          ],
+          "properties": {
+            "totalSupplySource": { "const": "x-bank-supply-atorium" },
+            "balanceSource": { "const": "x-bank-balance-atorium" },
+            "baseUnits": { "const": "unsigned-integer-atorium" },
+            "reconciliationInvariant": {
+              "const": "sum-bank-balances-equals-x-bank-total-supply"
+            },
+            "representationConversionChangesSupply": { "const": false }
+          }
+        },
+        "solidityInterface": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "address",
+            "contractOwner",
+            "duplicateWrappedSupply",
+            "nativeConversionAllowed",
+            "permissionlessRegistration",
+            "depositBehavior",
+            "withdrawBehavior"
+          ],
+          "properties": {
+            "kind": {
+              "const": "native-werc20-precompile-bank-backed-facade"
+            },
+            "address": {
+              "const": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
+            },
+            "contractOwner": { "const": "erc20-module" },
+            "duplicateWrappedSupply": { "const": false },
+            "nativeConversionAllowed": { "const": false },
+            "permissionlessRegistration": { "const": false },
+            "depositBehavior": {
+              "const": "returns-msg-value-to-caller-and-emits-compatibility-event"
+            },
+            "withdrawBehavior": {
+              "const": "validates-native-balance-and-emits-compatibility-event-without-transfer"
+            }
+          }
+        },
+        "localnetGenesisSupplyBaseUnits": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "localnetGenesisSupplyDisplay": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        },
+        "publicGenesisSupply": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "amountBaseUnits",
+            "allocation",
+            "approvalRequired",
+            "deploymentGateIssue"
+          ],
+          "properties": {
+            "status": { "const": "not-defined-not-publishable" },
+            "amountBaseUnits": { "type": "null" },
+            "allocation": { "const": "not-defined" },
+            "approvalRequired": { "const": true },
+            "deploymentGateIssue": { "const": 127 }
+          }
+        },
+        "validatorEconomicsOwnerIssues": {
+          "type": "array",
+          "prefixItems": [{ "const": 88 }, { "const": 100 }],
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    },
+    "validatorEconomics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "publicActivation",
+        "staking",
+        "commission",
+        "distribution",
+        "slashing",
+        "evidence",
+        "lifecycle",
+        "accounting"
+      ],
+      "properties": {
+        "status": { "const": "ratified-local-only" },
+        "publicActivation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["allowed", "gateIssue", "requiresFreshGenesisReview"],
+          "properties": {
+            "allowed": { "const": false },
+            "gateIssue": { "const": 127 },
+            "requiresFreshGenesisReview": { "const": true }
+          }
+        },
+        "staking": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "bondDenom",
+            "powerReduction",
+            "minimumSelfDelegationBaseUnits",
+            "maximumActiveValidators",
+            "maximumEntries",
+            "historicalEntries",
+            "unbondingTimeSeconds"
+          ],
+          "properties": {
+            "bondDenom": { "const": "atorium" },
+            "powerReduction": { "const": "1000000000000000000" },
+            "minimumSelfDelegationBaseUnits": { "const": "1000000000000000000" },
+            "maximumActiveValidators": { "const": 100 },
+            "maximumEntries": { "const": 7 },
+            "historicalEntries": { "const": 10000 },
+            "unbondingTimeSeconds": { "const": 1814400 }
+          }
+        },
+        "commission": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["minimumRate", "maximumRate", "maximumDailyChangeRate"],
+          "properties": {
+            "minimumRate": { "const": "0.05" },
+            "maximumRate": { "const": "0.20" },
+            "maximumDailyChangeRate": { "const": "0.01" }
+          }
+        },
+        "distribution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "funding",
+            "communityTax",
+            "withdrawAddressEnabled",
+            "nativeMintingAllowed"
+          ],
+          "properties": {
+            "funding": { "const": "transaction-fees-and-existing-bank-balances-only" },
+            "communityTax": { "const": "0.02" },
+            "withdrawAddressEnabled": { "const": true },
+            "nativeMintingAllowed": { "const": false }
+          }
+        },
+        "slashing": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "signedBlocksWindow",
+            "minimumSignedPerWindow",
+            "downtimeJailDurationSeconds",
+            "downtimeSlashFraction",
+            "doubleSignSlashFraction",
+            "doubleSignJail"
+          ],
+          "properties": {
+            "signedBlocksWindow": { "const": 100 },
+            "minimumSignedPerWindow": { "const": "0.50" },
+            "downtimeJailDurationSeconds": { "const": 600 },
+            "downtimeSlashFraction": { "const": "0.01" },
+            "doubleSignSlashFraction": { "const": "0.05" },
+            "doubleSignJail": { "const": "permanent-tombstone" }
+          }
+        },
+        "evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "acceptedMisbehavior",
+            "maximumAgeBlocks",
+            "maximumAgeDurationSeconds",
+            "maximumBytesPerBlock"
+          ],
+          "properties": {
+            "acceptedMisbehavior": {
+              "type": "array",
+              "prefixItems": [
+                { "const": "duplicate-vote" },
+                { "const": "light-client-attack" }
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "maximumAgeBlocks": { "const": 100000 },
+            "maximumAgeDurationSeconds": { "const": 172800 },
+            "maximumBytesPerBlock": { "const": 1048576 }
+          }
+        },
+        "lifecycle": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "validatorCreation",
+            "validatorRemoval",
+            "supportedOperations",
+            "querySurfaces",
+            "privilegedNativeMintRequired"
+          ],
+          "properties": {
+            "validatorCreation": { "const": "permissionless-on-chain-transaction-subject-to-policy" },
+            "validatorRemoval": { "const": "stake-driven-unbonding-no-admin-delete" },
+            "supportedOperations": {
+              "type": "array",
+              "minItems": 8,
+              "uniqueItems": true,
+              "items": { "type": "string", "minLength": 4 }
+            },
+            "querySurfaces": {
+              "type": "array",
+              "minItems": 5,
+              "uniqueItems": true,
+              "items": { "type": "string", "minLength": 3 }
+            },
+            "privilegedNativeMintRequired": { "const": false }
+          }
+        },
+        "accounting": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["baseUnit", "powerConversion", "delegationShareDust", "invariants"],
+          "properties": {
+            "baseUnit": { "const": "integer-atorium" },
+            "powerConversion": { "const": "floor-staked-atorium-divided-by-1e18" },
+            "delegationShareDust": { "const": "less-than-or-equal-to-one-base-unit-per-delegation-conversion" },
+            "invariants": {
+              "type": "array",
+              "minItems": 4,
+              "uniqueItems": true,
+              "items": { "type": "string", "minLength": 12 }
+            }
+          }
+        }
+      }
+    },
+    "networkProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "activation",
+        "cosmosChainId",
+        "evmChainId",
+        "evmChainIdHex",
+        "nativeSymbol",
+        "publicEndpointsAllowed"
+      ],
+      "properties": {
+        "environment": {
+          "enum": ["localnet", "devnet", "testnet", "mainnet"]
+        },
+        "activation": { "type": "string", "minLength": 1 },
+        "cosmosChainId": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+-[1-9][0-9]*$"
+        },
+        "evmChainId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "evmChainIdHex": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]+$"
+        },
+        "nativeSymbol": { "enum": ["TOR", "tTOR"] },
+        "publicEndpointsAllowed": { "const": false }
+      }
+    }
+  }
+}

@@ -1,0 +1,708 @@
+{
+  "$schema": "./trust-model-v1.schema.json",
+  "schemaVersion": 1,
+  "modelVersion": "1.0.0-local.5",
+  "status": "local-development-contract",
+  "updatedAt": "2026-07-15",
+  "protocol": {
+    "path": "./protocol-v1.json",
+    "version": "1.0.0-local.5",
+    "consensusEngine": "CometBFT",
+    "consensusVersion": "v0.39.3"
+  },
+  "sources": [
+    {
+      "name": "CometBFT consensus specification",
+      "version": "v0.39.3",
+      "commit": "49b82838fcca442b2445f76605c101609ed04130",
+      "url": "https://github.com/cometbft/cometbft/blob/v0.39.3/spec/consensus/consensus.md"
+    },
+    {
+      "name": "CometBFT evidence specification",
+      "version": "v0.39.3",
+      "commit": "49b82838fcca442b2445f76605c101609ed04130",
+      "url": "https://github.com/cometbft/cometbft/blob/v0.39.3/spec/consensus/evidence.md"
+    },
+    {
+      "name": "Cosmos SDK slashing module",
+      "version": "v0.54.3",
+      "commit": "046046a6731ddc00bca29193f5f0529d7017b3e3",
+      "url": "https://github.com/cosmos/cosmos-sdk/blob/v0.54.3/x/slashing/README.md"
+    },
+    {
+      "name": "Cosmos SDK evidence module",
+      "version": "v0.54.3",
+      "commit": "046046a6731ddc00bca29193f5f0529d7017b3e3",
+      "url": "https://github.com/cosmos/cosmos-sdk/blob/v0.54.3/x/evidence/README.md"
+    }
+  ],
+  "consensusAssumptions": {
+    "quorumRule": "strictly-more-than-two-thirds-total-voting-power",
+    "integerQuorumFormula": "floor(2*totalVotingPower/3)+1",
+    "safetyAssumption": "byzantine-voting-power-strictly-less-than-one-third",
+    "livenessAssumption": "strictly-more-than-two-thirds-timely-honest-and-mutually-reachable-voting-power",
+    "networkModel": "partial-synchrony-with-eventual-message-delivery-and-increasing-round-timeouts",
+    "validatorCountIsSecurityBoundary": false,
+    "votingPowerIsSecurityBoundary": true,
+    "oneThirdOrMoreCanHaltOrCensor": true,
+    "oneThirdOrMoreMayViolateSafety": true,
+    "evidenceIsBestEffortAfterAssumptionViolation": true
+  },
+  "livenessParameterOwners": [
+    {
+      "parameter": "consensus.timeout_propose",
+      "ownerIssues": [93, 118, 119],
+      "status": "unratified",
+      "localValue": "1s",
+      "localStatus": "active-local-unratified",
+      "ratificationIssues": [118, 119],
+      "rationale": "bounds the first proposal wait and must be load-tested against block propagation"
+    },
+    {
+      "parameter": "consensus.timeout_propose_delta",
+      "ownerIssues": [93, 118, 119],
+      "status": "unratified",
+      "localValue": "500ms",
+      "localStatus": "active-local-unratified",
+      "ratificationIssues": [118, 119],
+      "rationale": "increases proposal time across rounds so eventual synchrony can restore progress"
+    },
+    {
+      "parameter": "consensus.timeout_prevote",
+      "ownerIssues": [93, 118, 119],
+      "status": "unratified",
+      "localValue": "500ms",
+      "localStatus": "active-local-unratified",
+      "ratificationIssues": [118, 119],
+      "rationale": "bounds initial prevote collection without weakening the strict quorum rule"
+    },
+    {
+      "parameter": "consensus.timeout_prevote_delta",
+      "ownerIssues": [93, 118, 119],
+      "status": "unratified",
+      "localValue": "250ms",
+      "localStatus": "active-local-unratified",
+      "ratificationIssues": [118, 119],
+      "rationale": "allows later rounds to tolerate measured network delay"
+    },
+    {
+      "parameter": "consensus.timeout_precommit",
+      "ownerIssues": [93, 118, 119],
+      "status": "unratified",
+      "localValue": "500ms",
+      "localStatus": "active-local-unratified",
+      "ratificationIssues": [118, 119],
+      "rationale": "bounds initial precommit collection while preserving safe halt behavior"
+    },
+    {
+      "parameter": "consensus.timeout_precommit_delta",
+      "ownerIssues": [93, 118, 119],
+      "status": "unratified",
+      "localValue": "250ms",
+      "localStatus": "active-local-unratified",
+      "ratificationIssues": [118, 119],
+      "rationale": "allows later rounds to recover after transient precommit delay"
+    },
+    {
+      "parameter": "consensus.timeout_commit",
+      "ownerIssues": [93, 118, 119],
+      "status": "unratified",
+      "localValue": "2s",
+      "localStatus": "active-local-unratified",
+      "ratificationIssues": [118, 119],
+      "rationale": "controls the inter-block wait and must reconcile with the two-second target"
+    }
+  ],
+  "stages": [
+    {
+      "id": "localnet-authority",
+      "environment": "localnet",
+      "activation": "active-local-only",
+      "valueStatus": "valueless",
+      "validatorCount": 4,
+      "independentOperatorCount": 0,
+      "administrativeTrustDomains": 1,
+      "votingPower": [
+        {
+          "validator": "validator-0",
+          "operator": "local-developer",
+          "power": 25
+        },
+        {
+          "validator": "validator-1",
+          "operator": "local-developer",
+          "power": 25
+        },
+        {
+          "validator": "validator-2",
+          "operator": "local-developer",
+          "power": 25
+        },
+        {
+          "validator": "validator-3",
+          "operator": "local-developer",
+          "power": 25
+        }
+      ],
+      "totalVotingPower": 100,
+      "commitQuorumPower": 67,
+      "maximumGuaranteedUnavailablePower": 25,
+      "keyCustody": "deterministic-local-fixtures-for-valueless-development-only",
+      "decentralizationClaimAllowed": false,
+      "controls": {
+        "censor": {
+          "actors": ["local developer controlling RPC and all validator keys"],
+          "capability": "can reject ingress, omit transactions, or coordinate all proposers and voters"
+        },
+        "halt": {
+          "actors": ["local developer", "any unavailable two-validator set"],
+          "capability": "can stop more than one-third of voting power and halt commits"
+        },
+        "upgrade": {
+          "actors": ["local developer"],
+          "capability": "can replace all binaries or reset the valueless environment"
+        },
+        "rewrite": {
+          "actors": [
+            "local developer controlling all keys, state, and endpoint metadata"
+          ],
+          "capability": "can replace local history or genesis presented to clients; this is an administrative reset, not a valid same-genesis reorganization"
+        }
+      }
+    },
+    {
+      "id": "private-devnet-authority",
+      "environment": "devnet",
+      "activation": "reserved-private-inactive",
+      "valueStatus": "valueless-if-activated",
+      "validatorCount": 4,
+      "independentOperatorCount": 0,
+      "administrativeTrustDomains": 1,
+      "votingPower": [
+        {
+          "validator": "authority-0",
+          "operator": "torium-authority",
+          "power": 25
+        },
+        {
+          "validator": "authority-1",
+          "operator": "torium-authority",
+          "power": 25
+        },
+        {
+          "validator": "authority-2",
+          "operator": "torium-authority",
+          "power": 25
+        },
+        {
+          "validator": "authority-3",
+          "operator": "torium-authority",
+          "power": 25
+        }
+      ],
+      "totalVotingPower": 100,
+      "commitQuorumPower": 67,
+      "maximumGuaranteedUnavailablePower": 25,
+      "keyCustody": "separate-host-keys-required-before-activation-but-one-organizational-authority",
+      "decentralizationClaimAllowed": false,
+      "controls": {
+        "censor": {
+          "actors": [
+            "Torium authority controlling RPC and all validator operators"
+          ],
+          "capability": "can censor ingress or coordinate one-third-or-more voting power"
+        },
+        "halt": {
+          "actors": ["Torium authority", "shared infrastructure failure"],
+          "capability": "can make one-third-or-more voting power unavailable"
+        },
+        "upgrade": {
+          "actors": [
+            "Torium release authority plus cooperating validator operator"
+          ],
+          "capability": "can coordinate binary upgrades; on-chain authority remains blocked on issue 106"
+        },
+        "rewrite": {
+          "actors": [
+            "authority controlling keys, snapshots, and trusted endpoint metadata"
+          ],
+          "capability": "can present an unsafe restore or replacement genesis to dependent clients; clients must pin genesis and trusted hashes"
+        }
+      }
+    },
+    {
+      "id": "public-testnet-independent-readiness",
+      "environment": "testnet",
+      "activation": "reserved-public-inactive",
+      "valueStatus": "valueless-only",
+      "validatorCount": 7,
+      "independentOperatorCount": 7,
+      "administrativeTrustDomains": 7,
+      "votingPower": [
+        { "validator": "operator-0", "operator": "independent-0", "power": 15 },
+        { "validator": "operator-1", "operator": "independent-1", "power": 15 },
+        { "validator": "operator-2", "operator": "independent-2", "power": 14 },
+        { "validator": "operator-3", "operator": "independent-3", "power": 14 },
+        { "validator": "operator-4", "operator": "independent-4", "power": 14 },
+        { "validator": "operator-5", "operator": "independent-5", "power": 14 },
+        { "validator": "operator-6", "operator": "independent-6", "power": 14 }
+      ],
+      "totalVotingPower": 100,
+      "commitQuorumPower": 67,
+      "maximumGuaranteedUnavailablePower": 30,
+      "keyCustody": "one-consensus-key-per-independent-operator-with-no-shared-signing-authority",
+      "decentralizationClaimAllowed": false,
+      "readinessOnly": true,
+      "readinessGates": {
+        "minimumActiveValidators": 7,
+        "minimumIndependentOperators": 7,
+        "minimumInfrastructureDomains": 4,
+        "minimumRegions": 4,
+        "maximumSingleOperatorPower": 15,
+        "maximumSharedFailureDomainPower": 30,
+        "tolerateAnyTwoValidatorOutages": true,
+        "requiredOwnerIssues": [100, 106, 117, 119, 123, 124, 126]
+      },
+      "controls": {
+        "censor": {
+          "actors": [
+            "one-third-or-more voting-power coalition",
+            "RPC operator at ingress"
+          ],
+          "capability": "a one-third-or-more coalition can reject proposals containing selected transactions; an RPC operator can censor only its ingress surface"
+        },
+        "halt": {
+          "actors": [
+            "one-third-or-more voting-power coalition",
+            "shared failure domain above the readiness cap"
+          ],
+          "capability": "can prevent the strict greater-than-two-thirds commit quorum"
+        },
+        "upgrade": {
+          "actors": [
+            "ratified on-chain governance and validator operators running the scheduled binary"
+          ],
+          "capability": "only a versioned x/upgrade plan accepted under issue 106 may change public protocol state"
+        },
+        "rewrite": {
+          "actors": [
+            "one-third-or-more Byzantine voting power under a network partition",
+            "metadata or restore authority accepted by clients"
+          ],
+          "capability": "may create conflicting evidence or present replacement history after assumptions fail; no automatic same-chain rewrite recovery is promised"
+        }
+      }
+    },
+    {
+      "id": "mainnet-undefined",
+      "environment": "mainnet",
+      "activation": "reserved-public-inactive",
+      "valueStatus": "undefined-no-live-value-authorized",
+      "validatorCount": 0,
+      "independentOperatorCount": 0,
+      "administrativeTrustDomains": 0,
+      "votingPower": [],
+      "totalVotingPower": 0,
+      "commitQuorumPower": 0,
+      "maximumGuaranteedUnavailablePower": 0,
+      "keyCustody": "undefined",
+      "decentralizationClaimAllowed": false,
+      "readinessOnly": true,
+      "requiredOwnerIssues": [100, 104, 106, 117, 119, 123, 124, 126],
+      "controls": {
+        "censor": {
+          "actors": ["undefined"],
+          "capability": "not specified; launch blocked"
+        },
+        "halt": {
+          "actors": ["undefined"],
+          "capability": "not specified; launch blocked"
+        },
+        "upgrade": {
+          "actors": ["undefined"],
+          "capability": "not specified; launch blocked"
+        },
+        "rewrite": {
+          "actors": ["undefined"],
+          "capability": "not specified; launch blocked"
+        }
+      }
+    }
+  ],
+  "validatorLifecycle": {
+    "localRatification": {
+      "issue": 100,
+      "protocolVersion": "1.0.0-local.5",
+      "publicActivationAllowed": false,
+      "publicActivationGateIssue": 127
+    },
+    "bootstrap": {
+      "localnet": "four deterministic genesis validators with equal voting power",
+      "allocationOwnerIssue": 91,
+      "privateDevnet": "four authority validators on separate hosts before activation",
+      "publicTestnet": "minimum seven independently operated validators after every readiness gate passes"
+    },
+    "admission": {
+      "mechanism": "x/staking MsgCreateValidator plus self-delegation and bonded-set ranking",
+      "offChainAllowlistAllowed": false,
+      "silentGenesisFileMutationAllowed": false,
+      "independentOperatorPath": "publish requirements, create operator and consensus keys independently, submit on-chain validator transaction, and enter the bonded set only through protocol state"
+    },
+    "removal": {
+      "mechanisms": [
+        "voluntary unbonding",
+        "falling below the bonded-set voting-power rank",
+        "downtime jailing",
+        "equivocation slashing and tombstoning",
+        "versioned governance parameter change"
+      ],
+      "offChainDeletionAllowed": false,
+      "fundSeizureAllowed": false
+    },
+    "states": [
+      {
+        "id": "candidate",
+        "meaning": "validator record exists but is not in the active bonded set"
+      },
+      {
+        "id": "bonded",
+        "meaning": "active validator proposes and votes; stake is slashable"
+      },
+      {
+        "id": "unbonding",
+        "meaning": "exiting stake remains slashable for infractions during the evidence window"
+      },
+      {
+        "id": "unbonded",
+        "meaning": "not active and no longer earns validator rewards"
+      },
+      {
+        "id": "jailed-downtime",
+        "meaning": "temporarily removed after missed-signature threshold; may unjail only after the jail duration"
+      },
+      {
+        "id": "tombstoned",
+        "meaning": "permanently barred from unjailing after attributable consensus equivocation"
+      }
+    ],
+    "evidence": {
+      "duplicateVote": "CometBFT verifies and commits evidence; Cosmos x/evidence and x/slashing apply the configured penalty and tombstone",
+      "lightClientAttack": "CometBFT may report Byzantine validators; detection is best-effort after the less-than-one-third assumption fails",
+      "downtime": "x/slashing tracks missed signatures in a window, then slashes and temporarily jails without tombstoning",
+      "maxEvidenceAgeMustNotExceedUnbondingPeriod": true,
+      "lightClientTrustingPeriodMustBeLessThanUnbondingPeriod": true,
+      "automaticForkRepairPromised": false
+    },
+    "parameterOwners": [
+      {
+        "parameter": "staking.max_validators",
+        "ownerIssues": [100],
+        "status": "ratified-local-only",
+        "localValue": "100",
+        "rationale": "bounds active-set operation and state-transition cost"
+      },
+      {
+        "parameter": "staking.minimum_validator_stake",
+        "ownerIssues": [100],
+        "status": "ratified-local-only",
+        "localValue": "1000000000000000000atorium-self-delegation",
+        "rationale": "uses the 18-decimal PowerReduction and rejects validator creation below one whole voting-power unit"
+      },
+      {
+        "parameter": "staking.max_entries",
+        "ownerIssues": [100],
+        "status": "ratified-local-only",
+        "localValue": "7",
+        "rationale": "bounds simultaneous unbonding and redelegation queue entries per relationship"
+      },
+      {
+        "parameter": "staking.historical_entries",
+        "ownerIssues": [100, 116],
+        "status": "ratified-local-only",
+        "localValue": "10000",
+        "rationale": "retains historical validator information needed by staking and evidence-aware consumers"
+      },
+      {
+        "parameter": "staking.unbonding_time",
+        "ownerIssues": [100, 117],
+        "status": "ratified-local-only",
+        "localValue": "1814400s",
+        "rationale": "must exceed evidence and light-client trusting windows while remaining operable"
+      },
+      {
+        "parameter": "staking.min_commission_rate",
+        "ownerIssues": [100],
+        "status": "ratified-local-only",
+        "localValue": "0.05",
+        "rationale": "sets the protocol-wide minimum validator commission admitted by x/staking"
+      },
+      {
+        "parameter": "validator.maximum_commission_rate",
+        "ownerIssues": [100],
+        "status": "ratified-local-only",
+        "localValue": "0.20",
+        "rationale": "caps the maximum commission envelope declared when a validator is created"
+      },
+      {
+        "parameter": "validator.maximum_commission_change_rate",
+        "ownerIssues": [100],
+        "status": "ratified-local-only",
+        "localValue": "0.01-per-24h",
+        "rationale": "caps daily commission movement so delegators can observe economic changes"
+      },
+      {
+        "parameter": "distribution.community_tax",
+        "ownerIssues": [100, 105],
+        "status": "ratified-local-only",
+        "localValue": "0.02",
+        "rationale": "routes two percent of distributable fees to the community pool without minting TOR"
+      },
+      {
+        "parameter": "distribution.reward_source",
+        "ownerIssues": [100, 105],
+        "status": "ratified-local-only",
+        "localValue": "transaction-fees-and-existing-bank-balances-only",
+        "rationale": "prevents validator reward accounting from creating native TOR supply"
+      },
+      {
+        "parameter": "slashing.signed_blocks_window",
+        "ownerIssues": [100],
+        "status": "ratified-local-only",
+        "localValue": "100",
+        "rationale": "defines the availability observation horizon"
+      },
+      {
+        "parameter": "slashing.min_signed_per_window",
+        "ownerIssues": [100],
+        "status": "ratified-local-only",
+        "localValue": "0.50",
+        "rationale": "balances intermittent faults against liveness accountability"
+      },
+      {
+        "parameter": "slashing.downtime_jail_duration",
+        "ownerIssues": [100],
+        "status": "ratified-local-only",
+        "localValue": "600s",
+        "rationale": "requires operator intervention without permanent removal for availability faults"
+      },
+      {
+        "parameter": "slashing.slash_fraction_downtime",
+        "ownerIssues": [100],
+        "status": "ratified-local-only",
+        "localValue": "0.01",
+        "rationale": "penalizes availability faults proportionally"
+      },
+      {
+        "parameter": "slashing.slash_fraction_double_sign",
+        "ownerIssues": [100, 126],
+        "status": "ratified-local-only",
+        "localValue": "0.05-and-permanent-tombstone",
+        "rationale": "punishes attributable safety faults and must be security-reviewed"
+      },
+      {
+        "parameter": "evidence.max_age_num_blocks",
+        "ownerIssues": [100, 116],
+        "status": "ratified-local-only",
+        "localValue": "100000",
+        "rationale": "keeps evidence verifiable while historical data remains available"
+      },
+      {
+        "parameter": "evidence.max_age_duration",
+        "ownerIssues": [100, 116],
+        "status": "ratified-local-only",
+        "localValue": "172800s",
+        "rationale": "must not outlive slashable unbonding exposure"
+      },
+      {
+        "parameter": "evidence.max_bytes",
+        "ownerIssues": [100, 116],
+        "status": "ratified-local-only",
+        "localValue": "1048576",
+        "rationale": "bounds evidence bytes admitted into a block while preserving attributable fault handling"
+      },
+      {
+        "parameter": "light_client.trusting_period",
+        "ownerIssues": [116, 123],
+        "status": "unratified",
+        "rationale": "must remain below unbonding time so conflicting validators are still accountable"
+      },
+      {
+        "parameter": "governance.validator_parameter_authority",
+        "ownerIssues": [106],
+        "status": "ratified-local-only",
+        "localValue": "cosmos-gov-module-account-via-passed-proposal",
+        "rationale": "prevents an undocumented operator key from changing validator economics"
+      }
+    ]
+  },
+  "finalityContract": {
+    "commitMeaning": "strictly-more-than-two-thirds precommit voting power for a block under the current validator set",
+    "sdkDefaultConfirmationBlocks": 1,
+    "jsonRpcFinalizedTag": "latest-committed-cometbft-state",
+    "jsonRpcSafeStateQueries": "unsupported-until-conformance-proves-otherwise",
+    "explorerLabel": "CometBFT committed",
+    "ethereumBeaconFinalityClaimAllowed": false,
+    "probabilisticConfirmationClaimAllowed": false,
+    "boundedTransactionInclusionClaimAllowed": false,
+    "sameHeightConflictingCommitExpectedUnderAssumptions": false,
+    "clientTrustRequirements": [
+      "pin Cosmos chain ID and EIP-155 chain ID",
+      "pin or verify genesis hash for non-local networks",
+      "use trusted height and hash for state sync or light-client verification",
+      "treat replacement genesis or unsafe restore as a network discontinuity"
+    ]
+  },
+  "faultScenarios": [
+    {
+      "id": "local-one-validator-offline",
+      "testId": "chaos.consensus.local.one-validator-offline",
+      "stage": "localnet-authority",
+      "fault": "one 25-power validator is stopped",
+      "availablePower": 75,
+      "byzantinePower": 0,
+      "expectedLiveness": "continues-after-round-delay-if-the-offline-node-was-proposer",
+      "expectedSafety": "no-conflicting-committed-block",
+      "ownerIssues": [100, 119]
+    },
+    {
+      "id": "local-two-validators-offline",
+      "testId": "chaos.consensus.local.two-validators-offline",
+      "stage": "localnet-authority",
+      "fault": "two 25-power validators are stopped",
+      "availablePower": 50,
+      "byzantinePower": 0,
+      "expectedLiveness": "halts-without-commit-quorum",
+      "expectedSafety": "no-conflicting-committed-block",
+      "ownerIssues": [119]
+    },
+    {
+      "id": "local-three-one-partition",
+      "testId": "chaos.consensus.local.partition-three-one",
+      "stage": "localnet-authority",
+      "fault": "75-power partition is isolated from a 25-power validator",
+      "availablePower": 75,
+      "byzantinePower": 0,
+      "expectedLiveness": "75-power-side-continues-and-25-power-side-cannot-commit",
+      "expectedSafety": "isolated-validator-catches-up-without-state-edit",
+      "ownerIssues": [119]
+    },
+    {
+      "id": "local-two-two-partition",
+      "testId": "chaos.consensus.local.partition-two-two",
+      "stage": "localnet-authority",
+      "fault": "two 50-power partitions cannot communicate",
+      "availablePower": 50,
+      "byzantinePower": 0,
+      "expectedLiveness": "both-sides-halt",
+      "expectedSafety": "neither-side-commits-a-conflicting-block",
+      "ownerIssues": [119]
+    },
+    {
+      "id": "local-single-equivocation",
+      "testId": "chaos.consensus.local.single-validator-equivocation",
+      "stage": "localnet-authority",
+      "fault": "one 25-power validator signs conflicting votes",
+      "availablePower": 75,
+      "byzantinePower": 25,
+      "expectedLiveness": "honest-75-power-can-continue",
+      "expectedSafety": "no-conflicting-commit-and-evidence-is-delivered-for-slashing-and-tombstoning",
+      "ownerIssues": [100, 119]
+    },
+    {
+      "id": "local-unsafe-byzantine-threshold",
+      "testId": "chaos.consensus.local.assumption-violation-two-byzantine",
+      "stage": "localnet-authority",
+      "fault": "two validators representing 50 power act Byzantine",
+      "availablePower": 100,
+      "byzantinePower": 50,
+      "expectedLiveness": "not-guaranteed",
+      "expectedSafety": "not-guaranteed-assumption-violation-must-block-release",
+      "ownerIssues": [90, 119, 126]
+    },
+    {
+      "id": "local-all-validator-restart",
+      "testId": "chaos.consensus.local.full-stop-restart",
+      "stage": "localnet-authority",
+      "fault": "all validators stop and restart from persisted state",
+      "availablePower": 0,
+      "byzantinePower": 0,
+      "expectedLiveness": "halts-while-stopped-and-resumes-after-quorum-returns",
+      "expectedSafety": "same-genesis-and-application-hash-with-no-manual-state-edit",
+      "ownerIssues": [98, 119]
+    },
+    {
+      "id": "local-rpc-explorer-outage",
+      "testId": "chaos.dependencies.local.rpc-explorer-outage",
+      "stage": "localnet-authority",
+      "fault": "RPC, explorer, indexer, or metrics dependencies fail",
+      "availablePower": 100,
+      "byzantinePower": 0,
+      "expectedLiveness": "consensus-continues",
+      "expectedSafety": "dependency-recovery-backfills-from-canonical-chain",
+      "ownerIssues": [113, 115, 119]
+    },
+    {
+      "id": "local-validator-set-change",
+      "testId": "chaos.consensus.local.validator-set-change",
+      "stage": "localnet-authority",
+      "fault": "bonding, unbonding, jailing, or unjailing changes active voting power",
+      "availablePower": 67,
+      "byzantinePower": 0,
+      "expectedLiveness": "continues-when-new-set-retains-strict-quorum",
+      "expectedSafety": "validator-update-delay-and-historical-power-are-applied-deterministically",
+      "ownerIssues": [100, 119]
+    },
+    {
+      "id": "local-clock-and-network-delay",
+      "testId": "chaos.consensus.local.clock-drift-latency-packet-loss",
+      "stage": "localnet-authority",
+      "fault": "bounded clock drift, latency, and packet loss trigger extra rounds",
+      "availablePower": 100,
+      "byzantinePower": 0,
+      "expectedLiveness": "recovers-after-the-network-is-eventually-timely",
+      "expectedSafety": "no-conflicting-committed-block",
+      "ownerIssues": [119]
+    },
+    {
+      "id": "local-proposer-censorship",
+      "testId": "chaos.consensus.local.proposer-transaction-censorship",
+      "stage": "localnet-authority",
+      "fault": "one proposer omits a valid propagated transaction",
+      "availablePower": 100,
+      "byzantinePower": 25,
+      "expectedLiveness": "blocks-continue-but-no-bounded-transaction-inclusion-is-promised",
+      "expectedSafety": "honest-validators-reject-invalid-blocks-and-transaction-lifecycle-remains-observable",
+      "ownerIssues": [105, 119, 132]
+    }
+  ],
+  "publicMessaging": {
+    "allowedCurrentClaims": [
+      "Torium is being built as a sovereign EVM L1 on CometBFT",
+      "Torium has a four-validator local development topology",
+      "a local block commits with strictly more than two-thirds of configured voting power"
+    ],
+    "forbiddenUntilEvidenceAndLaunch": [
+      "Torium is decentralized",
+      "Torium is trustless",
+      "Torium history is immutable",
+      "Torium has Ethereum or beacon-chain finality",
+      "Torium is censorship resistant",
+      "Torium public testnet or mainnet is live",
+      "Torium has seven independent validators"
+    ],
+    "requiredQualifier": "current validation is local, valueless, authority-operated, and not a live public network"
+  },
+  "proofOfParticipation": {
+    "consensusInfluence": "none",
+    "validatorAdmissionInfluence": "none",
+    "votingPowerInfluence": "none",
+    "status": "explicitly-deferred",
+    "requirementsBeforeChange": [
+      "separate protocol design",
+      "Sybil and economic analysis",
+      "threat model update",
+      "independent security audit",
+      "versioned governance and upgrade plan"
+    ]
+  }
+}

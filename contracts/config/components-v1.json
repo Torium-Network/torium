@@ -1,0 +1,65 @@
+{
+  "$schema": "./components-v1.schema.json",
+  "schemaVersion": 1,
+  "decisionVersion": "1.0.0",
+  "genesisPredeployPolicy": {
+    "toriumAuthoredSolidityPredeploys": [],
+    "futureAdditionRequiresAdr": true,
+    "requiredEvidence": [
+      "deterministic-state-allocation",
+      "bytecode-and-storage-hash-fixtures",
+      "upgrade-and-migration-rules",
+      "evm-conformance-coverage"
+    ]
+  },
+  "components": [
+    {
+      "id": "upstream-evm-precompiles",
+      "classification": "protocol-precompile",
+      "status": "active",
+      "ownerIssue": 89,
+      "upgradeModel": "protocol-upgrade",
+      "genesisRequired": true
+    },
+    {
+      "id": "cosmos-evm-precompiles",
+      "classification": "protocol-precompile",
+      "status": "active",
+      "ownerIssue": 89,
+      "upgradeModel": "protocol-upgrade",
+      "genesisRequired": true
+    },
+    {
+      "id": "torium-native",
+      "classification": "protocol-precompile",
+      "status": "active",
+      "ownerIssue": 107,
+      "upgradeModel": "protocol-upgrade",
+      "genesisRequired": true
+    },
+    {
+      "id": "torium-create2-factory",
+      "classification": "post-genesis-deterministic",
+      "status": "planned",
+      "ownerIssue": 108,
+      "upgradeModel": "immutable-versioned-redeployment",
+      "genesisRequired": false
+    },
+    {
+      "id": "reward-distributor",
+      "classification": "post-genesis-deterministic",
+      "status": "planned",
+      "ownerIssue": 109,
+      "upgradeModel": "immutable-versioned-redeployment",
+      "genesisRequired": false
+    },
+    {
+      "id": "attestation-registry",
+      "classification": "post-genesis-deterministic",
+      "status": "planned",
+      "ownerIssue": 110,
+      "upgradeModel": "immutable-versioned-redeployment",
+      "genesisRequired": false
+    }
+  ]
+}

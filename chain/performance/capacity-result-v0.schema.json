@@ -1,0 +1,512 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/chain/capacity-result-v0.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "resultVersion",
+    "status",
+    "planVersion",
+    "provenance",
+    "run",
+    "cases",
+    "chainMetrics",
+    "rpcMetrics",
+    "resourceDeltas",
+    "stateGrowth",
+    "observations",
+    "artifacts",
+    "capacityClaims",
+    "limitations"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "resultVersion": { "const": "0.1.0" },
+    "status": {
+      "enum": ["complete-local", "partial-local", "synthetic-validation"]
+    },
+    "planVersion": {
+      "type": "string",
+      "pattern": "^0\\.1\\.0-local\\.[1-9][0-9]*$"
+    },
+    "provenance": { "$ref": "#/$defs/provenance" },
+    "run": { "$ref": "#/$defs/run" },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/case" }
+    },
+    "chainMetrics": { "$ref": "#/$defs/chainMetrics" },
+    "rpcMetrics": { "$ref": "#/$defs/rpcMetrics" },
+    "resourceDeltas": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/resourceDelta" }
+    },
+    "stateGrowth": { "$ref": "#/$defs/stateGrowth" },
+    "observations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bottlenecks", "failureCliffs", "regressionEvaluation"],
+      "properties": {
+        "bottlenecks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/observation" }
+        },
+        "failureCliffs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/observation" }
+        },
+        "regressionEvaluation": { "type": "null" }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "relativePath", "sha256", "containsSecrets"],
+        "properties": {
+          "kind": {
+            "enum": [
+              "raw-transaction-samples",
+              "raw-rpc-samples",
+              "resource-samples",
+              "runner",
+              "dataset",
+              "effective-config",
+              "genesis",
+              "environment",
+              "worktree-patch",
+              "log"
+            ]
+          },
+          "relativePath": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+          },
+          "sha256": { "$ref": "#/$defs/sha256" },
+          "containsSecrets": { "const": false }
+        }
+      }
+    },
+    "capacityClaims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "public",
+        "safeTps",
+        "safeRpcRequestsPerSecond",
+        "billOfMaterialsReady"
+      ],
+      "properties": {
+        "public": { "const": false },
+        "safeTps": { "type": "null" },
+        "safeRpcRequestsPerSecond": { "type": "null" },
+        "billOfMaterialsReady": { "const": false }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 4 }
+    }
+  },
+  "$defs": {
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gitCommit",
+        "dirtyWorktree",
+        "patchSha256",
+        "os",
+        "architecture",
+        "cpuModel",
+        "logicalCores",
+        "memoryBytes",
+        "containerRuntime",
+        "composeVersion",
+        "executionBackend",
+        "virtualization",
+        "vmAllocation",
+        "filesystem",
+        "statePath",
+        "toolchainSha256",
+        "runnerVersion",
+        "runnerSha256",
+        "binaryIdentity",
+        "binarySha256",
+        "genesisSha256",
+        "effectiveConfigSha256",
+        "datasetSha256",
+        "workload"
+      ],
+      "properties": {
+        "gitCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "dirtyWorktree": { "type": "boolean" },
+        "patchSha256": {
+          "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
+        },
+        "os": { "type": "string", "minLength": 1 },
+        "architecture": { "type": "string", "minLength": 1 },
+        "cpuModel": { "type": "string", "minLength": 1 },
+        "logicalCores": { "type": "integer", "minimum": 1 },
+        "memoryBytes": { "type": "integer", "minimum": 1 },
+        "containerRuntime": { "type": ["string", "null"], "minLength": 1 },
+        "composeVersion": { "type": ["string", "null"], "minLength": 1 },
+        "executionBackend": { "enum": ["container", "raw"] },
+        "virtualization": { "type": "string", "minLength": 1 },
+        "vmAllocation": {
+          "anyOf": [{ "$ref": "#/$defs/vmAllocation" }, { "type": "null" }]
+        },
+        "filesystem": { "type": "string", "minLength": 1 },
+        "statePath": { "type": "string", "minLength": 1 },
+        "toolchainSha256": { "$ref": "#/$defs/sha256" },
+        "runnerVersion": { "type": "string", "minLength": 1 },
+        "runnerSha256": { "$ref": "#/$defs/sha256" },
+        "binaryIdentity": { "type": "string", "minLength": 1 },
+        "binarySha256": { "$ref": "#/$defs/sha256" },
+        "genesisSha256": { "$ref": "#/$defs/sha256" },
+        "effectiveConfigSha256": { "$ref": "#/$defs/sha256" },
+        "datasetSha256": { "$ref": "#/$defs/sha256" },
+        "workload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "version",
+            "definitionSha256",
+            "seed",
+            "operationCount",
+            "concurrency",
+            "warmupCount",
+            "repetition"
+          ],
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "version": { "type": "integer", "minimum": 1 },
+            "definitionSha256": { "$ref": "#/$defs/sha256" },
+            "seed": { "type": "integer", "minimum": 0 },
+            "operationCount": { "type": "integer", "minimum": 1 },
+            "concurrency": { "type": "integer", "minimum": 1 },
+            "warmupCount": { "type": "integer", "minimum": 0 },
+            "repetition": { "type": "integer", "minimum": 1 }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "executionBackend": { "const": "raw" } },
+            "required": ["executionBackend"]
+          },
+          "then": {
+            "properties": {
+              "containerRuntime": { "type": "null" },
+              "composeVersion": { "type": "null" },
+              "vmAllocation": { "type": "null" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "executionBackend": { "const": "container" } },
+            "required": ["executionBackend"]
+          },
+          "then": {
+            "properties": {
+              "containerRuntime": { "type": "string", "minLength": 1 },
+              "composeVersion": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      ]
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "startedAt",
+        "endedAt",
+        "startHeight",
+        "endHeight",
+        "cosmosChainId",
+        "evmChainId",
+        "topology"
+      ],
+      "properties": {
+        "startedAt": { "type": "string", "format": "date-time" },
+        "endedAt": { "type": "string", "format": "date-time" },
+        "startHeight": { "type": "integer", "minimum": 1 },
+        "endHeight": { "type": "integer", "minimum": 1 },
+        "cosmosChainId": { "const": "torium-localnet-1" },
+        "evmChainId": { "const": 1414484556 },
+        "topology": {
+          "enum": [
+            "canonical-four-validator-combined-localnet",
+            "canonical-four-validator-localnet-plus-private-archive-indexer-behind-gateway"
+          ]
+        }
+      }
+    },
+    "case": {
+      "oneOf": [
+        { "$ref": "#/$defs/transactionCase" },
+        { "$ref": "#/$defs/rpcCase" }
+      ]
+    },
+    "transactionCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "caseType",
+        "caseId",
+        "workloadId",
+        "counts",
+        "elapsedMilliseconds",
+        "includedCommittedTps",
+        "successfulTps",
+        "latencyMilliseconds",
+        "gasUsed",
+        "limitations"
+      ],
+      "properties": {
+        "caseType": { "const": "transaction" },
+        "caseId": { "type": "string", "minLength": 1 },
+        "workloadId": { "type": "string", "minLength": 1 },
+        "counts": { "$ref": "#/$defs/counts" },
+        "elapsedMilliseconds": { "type": "number", "exclusiveMinimum": 0 },
+        "includedCommittedTps": { "type": "number", "minimum": 0 },
+        "successfulTps": { "type": "number", "minimum": 0 },
+        "latencyMilliseconds": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["acknowledgement", "inclusion", "receipt"],
+          "properties": {
+            "acknowledgement": { "$ref": "#/$defs/summary" },
+            "inclusion": { "$ref": "#/$defs/summary" },
+            "receipt": { "$ref": "#/$defs/summary" }
+          }
+        },
+        "gasUsed": { "$ref": "#/$defs/gas" },
+        "limitations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "rpcCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "caseType",
+        "caseId",
+        "workloadId",
+        "elapsedMilliseconds",
+        "httpRequestCount",
+        "jsonRpcCallCount",
+        "httpRequestsPerSecond",
+        "jsonRpcCallsPerSecond",
+        "latencyMilliseconds",
+        "limitations"
+      ],
+      "properties": {
+        "caseType": { "const": "rpc" },
+        "caseId": { "type": "string", "minLength": 1 },
+        "workloadId": { "enum": ["rpc-recent-read-mix", "archive-historical-read-mix"] },
+        "elapsedMilliseconds": { "type": "number", "exclusiveMinimum": 0 },
+        "httpRequestCount": { "type": "integer", "minimum": 0 },
+        "jsonRpcCallCount": { "type": "integer", "minimum": 0 },
+        "httpRequestsPerSecond": { "type": "number", "minimum": 0 },
+        "jsonRpcCallsPerSecond": { "type": "number", "minimum": 0 },
+        "latencyMilliseconds": { "$ref": "#/$defs/summary" },
+        "limitations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "chainMetrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "blockSampleCount",
+        "averageBlockGasUsed",
+        "maximumBlockGasUsed",
+        "targetGasUtilization",
+        "limitGasUtilization",
+        "commitIntervalMilliseconds",
+        "blockRangeContiguous",
+        "finalityModel",
+        "jsonRpcFinalizedTag",
+        "jsonRpcSafeStateQueries",
+        "rpcAcceptanceGuaranteesRetention"
+      ],
+      "properties": {
+        "blockSampleCount": { "type": "integer", "minimum": 0 },
+        "averageBlockGasUsed": { "type": ["number", "null"], "minimum": 0 },
+        "maximumBlockGasUsed": { "type": ["number", "null"], "minimum": 0 },
+        "targetGasUtilization": { "type": ["number", "null"], "minimum": 0 },
+        "limitGasUtilization": { "type": ["number", "null"], "minimum": 0 },
+        "commitIntervalMilliseconds": { "$ref": "#/$defs/summary" },
+        "blockRangeContiguous": { "type": "boolean" },
+        "finalityModel": { "const": "cometbft-committed-block" },
+        "jsonRpcFinalizedTag": { "const": "latest-committed-cometbft-state" },
+        "jsonRpcSafeStateQueries": {
+          "const": "unsupported-until-conformance-proves-otherwise"
+        },
+        "rpcAcceptanceGuaranteesRetention": { "const": false }
+      }
+    },
+    "rpcMetrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "httpRequestCount",
+        "httpSuccessCount",
+        "httpErrorCount",
+        "httpTimeoutCount",
+        "jsonRpcCallCount",
+        "callSuccessCount",
+        "callErrorCount",
+        "callTimeoutCount",
+        "batchCount",
+        "perMethodCounts",
+        "responseBytes",
+        "latencyMilliseconds"
+      ],
+      "properties": {
+        "httpRequestCount": { "type": "integer", "minimum": 0 },
+        "httpSuccessCount": { "type": "integer", "minimum": 0 },
+        "httpErrorCount": { "type": "integer", "minimum": 0 },
+        "httpTimeoutCount": { "type": "integer", "minimum": 0 },
+        "jsonRpcCallCount": { "type": "integer", "minimum": 0 },
+        "callSuccessCount": { "type": "integer", "minimum": 0 },
+        "callErrorCount": { "type": "integer", "minimum": 0 },
+        "callTimeoutCount": { "type": "integer", "minimum": 0 },
+        "batchCount": { "type": "integer", "minimum": 0 },
+        "perMethodCounts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["method", "count"],
+            "properties": {
+              "method": { "type": "string", "pattern": "^eth_" },
+              "count": { "type": "integer", "minimum": 1 }
+            }
+          }
+        },
+        "responseBytes": { "type": "integer", "minimum": 0 },
+        "latencyMilliseconds": { "$ref": "#/$defs/summary" }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sample",
+        "includedCommitted",
+        "committedSuccess",
+        "committedRevert",
+        "unexpectedRevert",
+        "submissionFailed",
+        "dropped"
+      ],
+      "properties": {
+        "sample": { "type": "integer", "minimum": 0 },
+        "includedCommitted": { "type": "integer", "minimum": 0 },
+        "committedSuccess": { "type": "integer", "minimum": 0 },
+        "committedRevert": { "type": "integer", "minimum": 0 },
+        "unexpectedRevert": { "type": "integer", "minimum": 0 },
+        "submissionFailed": { "type": "integer", "minimum": 0 },
+        "dropped": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sampleCount", "minimum", "p50", "p95", "maximum", "mean"],
+      "properties": {
+        "sampleCount": { "type": "integer", "minimum": 0 },
+        "minimum": { "type": ["number", "null"], "minimum": 0 },
+        "p50": { "type": ["number", "null"], "minimum": 0 },
+        "p95": { "type": ["number", "null"], "minimum": 0 },
+        "maximum": { "type": ["number", "null"], "minimum": 0 },
+        "mean": { "type": ["number", "null"], "minimum": 0 }
+      }
+    },
+    "gas": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sampleCount", "total", "mean"],
+      "properties": {
+        "sampleCount": { "type": "integer", "minimum": 0 },
+        "total": { "type": "integer", "minimum": 0 },
+        "mean": { "type": ["number", "null"], "minimum": 0 }
+      }
+    },
+    "resourceDelta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "component",
+        "cpuPercentage",
+        "rssBytes",
+        "networkRxBytes",
+        "networkTxBytes",
+        "blockReadBytes",
+        "blockWriteBytes",
+        "nodeHomeBytes"
+      ],
+      "properties": {
+        "component": { "type": "string" },
+        "cpuPercentage": { "type": ["number", "null"], "minimum": 0 },
+        "rssBytes": { "type": ["integer", "null"], "minimum": 0 },
+        "networkRxBytes": { "type": ["integer", "null"], "minimum": 0 },
+        "networkTxBytes": { "type": ["integer", "null"], "minimum": 0 },
+        "blockReadBytes": { "type": ["integer", "null"], "minimum": 0 },
+        "blockWriteBytes": { "type": ["integer", "null"], "minimum": 0 },
+        "nodeHomeBytes": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    },
+    "stateGrowth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nodeHomeBytesDelta",
+        "databaseBytesDelta",
+        "storageGrowthBytesPerDay",
+        "indexerLagBlocks",
+        "diskIops",
+        "diskIoLatencyMilliseconds"
+      ],
+      "properties": {
+        "nodeHomeBytesDelta": { "type": ["integer", "null"] },
+        "databaseBytesDelta": { "type": "null" },
+        "storageGrowthBytesPerDay": { "type": "null" },
+        "indexerLagBlocks": { "type": "null" },
+        "diskIops": { "type": "null" },
+        "diskIoLatencyMilliseconds": { "type": "null" }
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["component", "signal", "evidence", "severity"],
+      "properties": {
+        "component": { "type": "string", "minLength": 1 },
+        "signal": { "type": "string", "minLength": 1 },
+        "evidence": { "type": "string", "minLength": 1 },
+        "severity": { "enum": ["informational", "warning", "blocking"] }
+      }
+    },
+    "vmAllocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cpuCores", "memoryBytes", "diskBytes"],
+      "properties": {
+        "cpuCores": { "type": "integer", "minimum": 1 },
+        "memoryBytes": { "type": "integer", "minimum": 1 },
+        "diskBytes": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

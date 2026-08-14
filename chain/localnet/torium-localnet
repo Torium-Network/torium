@@ -1,0 +1,527 @@
+#!/bin/sh
+set -eu
+
+localnet_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+repo_root=$(CDPATH= cd -- "$localnet_dir/../.." && pwd)
+manifest="$localnet_dir/../genesis/localnet/manifest.json"
+health_script="$localnet_dir/scripts/health.mjs"
+faucet_script="$localnet_dir/scripts/faucet-request.mjs"
+active_backend_file="$localnet_dir/.state/active-backend"
+
+usage() {
+  cat <<'EOF'
+Torium valueless four-validator localnet
+
+Usage:
+  ./chain/localnet/torium-localnet <command> [options]
+
+Commands:
+  start       Prepare, start, and wait for validators, EVM RPC, and local faucet
+  stop        Stop the whole network or --node while preserving state
+  restart     Restart the whole network or --node and wait for readiness
+  status      Show quorum, height, EVM, endpoints, validators, and funded accounts
+  logs        Follow structured logs for the whole network or --node
+  reset       Stop and delete local data after an explicit replay-domain warning
+  snapshot    Stop selected state and create a checksummed recovery archive
+  restore     Stop the network and atomically restore a recovery archive
+  inspect     Inspect a stopped runtime or validate an archive without extraction
+  export      Stop one node and export canonical Cosmos application state JSON
+  foreground  Run with attached logs; Ctrl-C stops processes but preserves data
+  faucet      Fund an EVM address through the loopback-only valueless faucet
+
+Options:
+  --backend container|raw   Backend to use (default: remembered, then container)
+  --node validator-N        Select validator-0 through validator-3 where supported
+  --timeout SECONDS         Readiness timeout (default: 90)
+  --amount-base-units N     Faucet amount in atorium; default is 10 tTOR
+  --output PATH             Snapshot/archive or application-export output
+  --archive PATH            Recovery archive used by restore/inspect
+  --fixture NAME            custom|empty|funded|contracts-deployed|post-upgrade
+  --json                    Emit machine-readable status/readiness JSON
+  --yes                     Confirm destructive reset non-interactively
+  -h, --help                Show this help
+
+Environment:
+  TORIUM_LOCALNET_BACKEND   Default backend override
+  TORIUMD_BINARY            Native toriumd path for the raw backend
+  LOCALNET_BINARY           Native torium-localnet helper path for the raw backend
+  LOCALNET_STATE_BINARY     Native torium-localnet-state helper for raw recovery
+
+This network and its deterministic fixtures are public, disposable, and valueless.
+Never reuse its keys or replay domain on a public or valuable network.
+EOF
+}
+
+die() {
+  echo "Torium localnet: $*" >&2
+  exit 64
+}
+
+command=${1:-help}
+case "$command" in
+  -h|--help|help) usage; exit 0 ;;
+esac
+shift
+
+backend=${TORIUM_LOCALNET_BACKEND:-}
+node_name=""
+timeout_seconds=90
+json=false
+yes=false
+faucet_address=""
+faucet_amount=""
+output_path=""
+archive_path=""
+fixture_name=custom
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --backend)
+      [ "$#" -ge 2 ] || die "--backend requires container or raw"
+      backend=$2
+      shift 2
+      ;;
+    --node)
+      [ "$#" -ge 2 ] || die "--node requires validator-0 through validator-3"
+      node_name=$2
+      shift 2
+      ;;
+    --timeout)
+      [ "$#" -ge 2 ] || die "--timeout requires a positive integer"
+      timeout_seconds=$2
+      shift 2
+      ;;
+    --amount-base-units)
+      [ "$#" -ge 2 ] || die "--amount-base-units requires an unsigned base-10 integer"
+      faucet_amount=$2
+      shift 2
+      ;;
+    --output)
+      [ "$#" -ge 2 ] || die "--output requires a path"
+      output_path=$2
+      shift 2
+      ;;
+    --archive)
+      [ "$#" -ge 2 ] || die "--archive requires a .tar.gz path"
+      archive_path=$2
+      shift 2
+      ;;
+    --fixture)
+      [ "$#" -ge 2 ] || die "--fixture requires a fixture recipe name"
+      fixture_name=$2
+      shift 2
+      ;;
+    --json) json=true; shift ;;
+    --yes) yes=true; shift ;;
+    -h|--help) usage; exit 0 ;;
+    *)
+      if [ "$command" = faucet ] && [ -z "$faucet_address" ]; then
+        faucet_address=$1
+        shift
+      else
+        die "unknown option $1"
+      fi
+      ;;
+  esac
+done
+
+if [ -z "$backend" ] && [ -f "$active_backend_file" ]; then
+  backend=$(sed -n '1p' "$active_backend_file")
+fi
+backend=${backend:-container}
+case "$backend" in container|raw) ;; *) die "backend must be container or raw" ;; esac
+case "$node_name" in ""|validator-0|validator-1|validator-2|validator-3) ;; *) die "invalid node $node_name" ;; esac
+case "$timeout_seconds" in ""|*[!0-9]*) die "timeout must be a positive integer" ;; esac
+[ "$timeout_seconds" -gt 0 ] || die "timeout must be a positive integer"
+if [ "$command" != faucet ] && [ -n "$faucet_amount" ]; then
+  die "--amount-base-units is only valid with the faucet command"
+fi
+case "$fixture_name" in custom|empty|funded|contracts-deployed|post-upgrade) ;; *) die "invalid fixture $fixture_name" ;; esac
+
+command -v node >/dev/null 2>&1 || die "Node.js is required for readiness checks"
+command -v make >/dev/null 2>&1 || die "make is required"
+
+mkdir -p "$localnet_dir/.state" || die "cannot create local state root $localnet_dir/.state"
+[ -w "$localnet_dir/.state" ] || die "local state root is not writable: $localnet_dir/.state"
+state_root="$localnet_dir/.state/$backend"
+
+remember_backend() {
+  mkdir -p "$localnet_dir/.state"
+  printf '%s\n' "$backend" >"$active_backend_file"
+}
+
+make_target() {
+  target=$1
+  shift
+  make --no-print-directory -C "$localnet_dir" "$target" "$@"
+}
+
+make_node_target() {
+  target=$1
+  if [ -n "$node_name" ]; then
+    make_target "$target" "NODE=$node_name"
+  else
+    make_target "$target"
+  fi
+}
+
+make_health_target() {
+  if [ "$json" = true ]; then
+    make_target "$@" >&2
+  else
+    make_target "$@"
+  fi
+}
+
+make_node_health_target() {
+  target=$1
+  if [ "$json" = true ]; then
+    make_node_target "$target" >&2
+  else
+    make_node_target "$target"
+  fi
+}
+
+run_health() {
+  mode=$1
+  requirement=${2:-}
+  set -- node "$health_script" \
+    --root "$state_root" \
+    --manifest "$manifest" \
+    --profile "$backend" \
+    --timeout "$timeout_seconds"
+  if [ "$mode" = "wait" ]; then set -- "$@" --wait; fi
+  if [ "$json" = true ]; then set -- "$@" --json; fi
+  case "$requirement" in
+    all) set -- "$@" --require-all ;;
+    validator-*) set -- "$@" --require-node "$requirement" ;;
+  esac
+  if [ -n "$node_name" ] && [ "$mode" = "once" ]; then
+    set -- "$@" --only-node "$node_name"
+  fi
+  "$@"
+}
+
+wait_for_faucet() {
+  faucet_attempt=0
+  while [ "$faucet_attempt" -lt "$timeout_seconds" ]; do
+    if node "$faucet_script" --health --timeout 3 >/dev/null 2>&1; then return 0; fi
+    faucet_attempt=$((faucet_attempt + 1))
+    sleep 1
+  done
+  echo "Local faucet did not become ready within $timeout_seconds seconds." >&2
+  return 1
+}
+
+require_no_node() {
+  [ -z "$node_name" ] || die "$command does not accept --node"
+}
+
+normalize_new_output() {
+  requested=$1
+  case "$requested" in /*) ;; *) requested="$(pwd -P)/$requested" ;; esac
+  requested_directory=$(dirname "$requested")
+  mkdir -p "$requested_directory"
+  requested_directory=$(CDPATH= cd -- "$requested_directory" && pwd -P)
+  printf '%s/%s\n' "$requested_directory" "$(basename "$requested")"
+}
+
+normalize_existing_path() {
+  requested=$1
+  case "$requested" in /*) ;; *) requested="$(pwd -P)/$requested" ;; esac
+  requested_directory=$(CDPATH= cd -- "$(dirname "$requested")" && pwd -P) || die "archive directory does not exist"
+  printf '%s/%s\n' "$requested_directory" "$(basename "$requested")"
+}
+
+require_container_visible_path() {
+  [ "$backend" = container ] || return 0
+  case "$1" in "$repo_root"/*) ;; *) die "container recovery paths must be inside the repository: $repo_root" ;; esac
+}
+
+state_helper() {
+  if [ "$backend" = raw ]; then
+    state_binary=${LOCALNET_STATE_BINARY:-$localnet_dir/../app/build/torium-localnet-state}
+    [ -x "$state_binary" ] || die "build the raw recovery helper first with: make -C chain/app build"
+    "$state_binary" "$@"
+  else
+    (cd "$localnet_dir/../app" && ./scripts/run-in-toolchain.sh go run ./cmd/torium-localnet-state "$@")
+  fi
+}
+
+capture_binary_info() {
+  binary_info="$localnet_dir/.state/.toriumd-version-$$.json"
+  if [ "$backend" = container ]; then
+    command -v docker >/dev/null 2>&1 || die "Docker is required for the container backend"
+    TORIUM_UID=$(id -u) TORIUM_GID=$(id -g) \
+      docker compose --file "$localnet_dir/compose.yaml" run --rm --no-deps --entrypoint toriumd validator-0 version >"$binary_info"
+  else
+    [ -x "${TORIUMD_BINARY:-$localnet_dir/../app/build/toriumd}" ] || die "build toriumd first with: make -C chain/app build"
+    "${TORIUMD_BINARY:-$localnet_dir/../app/build/toriumd}" version >"$binary_info"
+  fi
+}
+
+cleanup_binary_info() {
+  if [ -n "${binary_info:-}" ]; then rm -f "$binary_info"; fi
+}
+
+chown_local_artifacts() {
+  if [ "$backend" = container ] && command -v docker >/dev/null 2>&1; then
+    docker run --rm \
+      -v "$localnet_dir/.state/container:/state" \
+      -v "$localnet_dir/.artifacts:/artifacts" \
+      alpine:3.23@sha256:fd791d74b68913cbb027c6546007b3f0d3bc45125f797758156952bc2d6daf40 \
+      chown -R "$(id -u):$(id -g)" /state /artifacts >/dev/null
+  fi
+}
+
+chown_snapshot_output() {
+  [ "$backend" = container ] || return 0
+  snapshot_directory=$(CDPATH= cd -- "$(dirname "$1")" && pwd)
+  snapshot_name=$(basename "$1")
+  docker run --rm -v "$snapshot_directory:/output" \
+    alpine:3.23@sha256:fd791d74b68913cbb027c6546007b3f0d3bc45125f797758156952bc2d6daf40 \
+    chown "$(id -u):$(id -g)" "/output/$snapshot_name" "/output/$snapshot_name.sha256" >/dev/null
+}
+
+case "$command" in
+  start)
+    require_no_node
+    if [ "$backend" = container ]; then
+      command -v docker >/dev/null 2>&1 || die "Docker is required for the container backend"
+      make_health_target up
+    else
+      make_health_target raw-start
+    fi
+    remember_backend
+    if ! run_health wait all; then
+      echo "Start failed readiness. Inspect: $0 logs --backend $backend" >&2
+      exit 1
+    fi
+    if [ "$backend" = container ]; then
+      wait_for_faucet
+    fi
+    ;;
+
+  stop)
+    [ "$json" = false ] || die "stop does not emit status JSON"
+    if [ "$backend" = container ]; then
+      make_node_target stop
+    else
+      make_node_target raw-stop
+    fi
+    remember_backend
+    if [ -n "$node_name" ]; then
+      echo "Stopped $node_name; local data and signer state preserved."
+    else
+      echo "Stopped Torium localnet; local data and signer state preserved."
+    fi
+    ;;
+
+  restart)
+    if [ "$backend" = container ]; then
+      make_node_health_target restart
+    else
+      make_node_health_target raw-restart
+    fi
+    remember_backend
+    requirement=${node_name:-all}
+    if ! run_health wait "$requirement"; then
+      echo "Restart failed readiness. Inspect: $0 logs --backend $backend${node_name:+ --node $node_name}" >&2
+      exit 1
+    fi
+    if [ "$backend" = container ] && { [ -z "$node_name" ] || [ "$node_name" = validator-0 ]; }; then
+      # Compose's dependency ordering applies to `up`, not `restart`. Restart
+      # the faucet only after validator-0 is healthy so a transient first RPC
+      # connection cannot leave the one-shot service exited.
+      make_health_target faucet-restart
+      wait_for_faucet
+    fi
+    ;;
+
+  status)
+    run_health once
+    ;;
+
+  faucet)
+    require_no_node
+    [ -n "$faucet_address" ] || die "faucet requires an exact 20-byte 0x-prefixed EVM address"
+    set -- node "$faucet_script" --address "$faucet_address" --timeout "$timeout_seconds"
+    if [ -n "$faucet_amount" ]; then set -- "$@" --amount-base-units "$faucet_amount"; fi
+    if [ "$json" = true ]; then set -- "$@" --json; fi
+    exec "$@"
+    ;;
+
+  logs)
+    [ "$json" = false ] || die "logs cannot be emitted as JSON"
+    if [ "$backend" = container ]; then
+      if [ -n "$node_name" ]; then
+        exec make --no-print-directory -C "$localnet_dir" logs "NODE=$node_name"
+      fi
+      exec make --no-print-directory -C "$localnet_dir" logs
+    else
+      if [ -n "$node_name" ]; then
+        exec make --no-print-directory -C "$localnet_dir" raw-logs "NODE=$node_name"
+      fi
+      exec make --no-print-directory -C "$localnet_dir" raw-logs
+    fi
+    ;;
+
+  reset)
+    [ "$json" = false ] || die "reset does not emit status JSON"
+    if [ -n "$node_name" ]; then
+      echo "WARNING: reset permanently deletes $node_name blocks, databases, keyring data, and signer state." >&2
+    else
+      echo "WARNING: reset permanently deletes all local blocks, databases, keyring data, and signer state." >&2
+    fi
+    echo "The same torium-localnet-1 / 0x544f524c replay domain and public fixture keys will be reused." >&2
+    if [ "$yes" != true ]; then
+      if [ ! -t 0 ]; then
+        die "non-interactive reset requires --yes"
+      fi
+      printf 'Type RESET to continue: ' >&2
+      read -r confirmation
+      [ "$confirmation" = RESET ] || die "reset cancelled"
+    fi
+    if [ "$backend" = container ]; then
+      if [ -n "$node_name" ]; then make_node_target reset-node; else make_target reset; fi
+    else
+      if [ -n "$node_name" ]; then make_node_target raw-reset-node; else make_target raw-reset; fi
+    fi
+    remember_backend
+    if [ -n "$node_name" ]; then
+      echo "Prepared clean $node_name state. Rejoin it with: $0 restart --backend $backend --node $node_name"
+    else
+      echo "Prepared a clean $backend runtime. Start it with: $0 start --backend $backend"
+    fi
+    ;;
+
+  snapshot)
+    [ "$json" = false ] || die "snapshot already emits JSON"
+    [ -z "$archive_path" ] || die "snapshot uses --output, not --archive"
+    if [ -z "$output_path" ]; then
+      mkdir -p "$localnet_dir/.artifacts"
+      output_path="$localnet_dir/.artifacts/$fixture_name-$(date -u +%Y%m%dT%H%M%SZ).tar.gz"
+    fi
+    output_path=$(normalize_new_output "$output_path")
+    require_container_visible_path "$output_path"
+    case "$output_path" in *.tar.gz) ;; *) die "snapshot output must end in .tar.gz" ;; esac
+    if [ "$backend" = container ]; then make_node_target stop >&2; else make_node_target raw-stop >&2; fi
+    capture_binary_info
+    trap cleanup_binary_info EXIT HUP INT TERM
+    set -- create --root "$state_root" --profile "$backend" --output "$output_path" --fixture "$fixture_name" --binary-info "$binary_info"
+    if [ -n "$node_name" ]; then set -- "$@" --node "$node_name"; fi
+    state_helper "$@"
+    cleanup_binary_info
+    trap - EXIT HUP INT TERM
+    chown_snapshot_output "$output_path"
+    chown_local_artifacts
+    remember_backend
+    ;;
+
+  restore)
+    require_no_node
+    [ "$json" = false ] || die "restore already emits JSON"
+    [ -n "$archive_path" ] || die "restore requires --archive FILE.tar.gz"
+    archive_path=$(normalize_existing_path "$archive_path")
+    require_container_visible_path "$archive_path"
+    if [ "$backend" = container ]; then make_target stop >&2; else make_target raw-stop >&2; fi
+    capture_binary_info
+    trap cleanup_binary_info EXIT HUP INT TERM
+    state_helper restore --root "$state_root" --profile "$backend" --archive "$archive_path" --binary-info "$binary_info"
+    cleanup_binary_info
+    trap - EXIT HUP INT TERM
+    chown_local_artifacts
+    remember_backend
+    ;;
+
+  inspect)
+    [ "$json" = false ] || die "inspect always emits JSON"
+    if [ -n "$archive_path" ]; then
+      archive_path=$(normalize_existing_path "$archive_path")
+      require_container_visible_path "$archive_path"
+      [ -z "$node_name" ] || die "archive inspection does not accept --node"
+      state_helper inspect --archive "$archive_path"
+    else
+      if [ -n "$node_name" ]; then
+        state_helper state --root "$state_root" --node "$node_name"
+      else
+        state_helper state --root "$state_root"
+      fi
+    fi
+    ;;
+
+  export)
+    [ "$json" = false ] || die "export writes canonical JSON to --output"
+    [ -z "$archive_path" ] || die "export does not accept --archive"
+    [ -n "$output_path" ] || die "export requires --output FILE.json"
+    output_path=$(normalize_new_output "$output_path")
+    if [ -e "$output_path" ] || [ -e "$output_path.sha256" ]; then
+      die "refusing to overwrite existing application export or checksum"
+    fi
+    export_node=${node_name:-validator-0}
+    output_directory=$(dirname "$output_path")
+    mkdir -p "$output_directory"
+    temporary_output="$output_path.tmp.$$"
+    if [ "$backend" = container ]; then
+      node_name=$export_node make_node_target stop
+      TORIUM_UID=$(id -u) TORIUM_GID=$(id -g) \
+        docker compose --file "$localnet_dir/compose.yaml" run --rm --no-deps --entrypoint toriumd "$export_node" \
+          export --home /var/lib/torium --log_level disabled >"$temporary_output"
+    else
+      node_name=$export_node make_node_target raw-stop
+      "${TORIUMD_BINARY:-$localnet_dir/../app/build/toriumd}" export \
+        --home "$state_root/$export_node" --output-document "$temporary_output"
+    fi
+    mv "$temporary_output" "$output_path"
+    if command -v shasum >/dev/null 2>&1; then
+      (cd "$output_directory" && shasum -a 256 "$(basename "$output_path")" >"$(basename "$output_path").sha256")
+    else
+      (cd "$output_directory" && sha256sum "$(basename "$output_path")" >"$(basename "$output_path").sha256")
+    fi
+    echo "Exported $export_node application state to $output_path (node remains stopped)."
+    remember_backend
+    ;;
+
+  foreground)
+    require_no_node
+    [ "$json" = false ] || die "foreground logs cannot be emitted as JSON"
+    remember_backend
+    cleanup_done=false
+    readiness_pid=""
+    cleanup_foreground() {
+      if [ "$cleanup_done" = true ]; then return; fi
+      cleanup_done=true
+      if [ -n "$readiness_pid" ]; then kill "$readiness_pid" 2>/dev/null || true; fi
+      if [ "$backend" = container ]; then
+        make_target down >/dev/null 2>&1 || true
+      else
+        make_target raw-stop >/dev/null 2>&1 || true
+      fi
+    }
+    trap cleanup_foreground EXIT
+    trap 'cleanup_foreground; exit 130' INT TERM HUP
+    if [ "$backend" = container ]; then
+      command -v docker >/dev/null 2>&1 || die "Docker is required for the container backend"
+      make_target prepare
+      make_target image
+      controller_pid=$$
+      (
+        if ! run_health wait all || ! wait_for_faucet; then
+          echo "Foreground startup failed readiness; stopping localnet." >&2
+          kill -TERM "$controller_pid"
+        fi
+      ) &
+      readiness_pid=$!
+      make_target foreground
+    else
+      make_target raw-start
+      run_health wait all
+      make_target raw-logs
+    fi
+    ;;
+
+  *)
+    usage >&2
+    die "unknown command $command"
+    ;;
+esac

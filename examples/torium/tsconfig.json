@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noEmit": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "verbatimModuleSyntax": true,
+    "types": ["node"]
+  },
+  "include": [
+    "browser/**/*.ts",
+    "node/**/*.ts",
+    "react-native/**/*.ts",
+    "shared/**/*.ts",
+    "solidity/hardhat/**/*.ts",
+    "test/**/*.ts"
+  ]
+}

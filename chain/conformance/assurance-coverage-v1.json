@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ownerIssue": 107,
+  "source": "../security/threat-model-v1.json",
+  "bindings": [
+    {
+      "riskId": "T003",
+      "invariantId": "INV001",
+      "status": "partial",
+      "evidenceIds": ["EVD-TORIUM-STATE-SUBSET", "EVD-TORIUM-FEES"],
+      "coveredHere": "Pinned state vectors and canonical multi-validator execution cover representative deterministic EVM transitions; prior #94 E2E owns validator app-hash equality.",
+      "remaining": "System-contract/precompile differential and fuzz determinism plus release-candidate repetition remain open.",
+      "remainingOwnerIssues": [111, 121, 126]
+    },
+    {
+      "riskId": "T013",
+      "invariantId": "INV012",
+      "status": "partial",
+      "evidenceIds": ["EVD-TORIUM-FEES", "EVD-MEMPOOL"],
+      "coveredHere": "Receiving-node 10% replacement, nonce-gap order, capacity boundaries, asynchronous acknowledgement, and committed receipt behavior are evidence-backed without a network-wide RBF claim.",
+      "remaining": "Public SDK lifecycle states, retry/timeout normalization, and partition/loss behavior remain open.",
+      "remainingOwnerIssues": [119, 132, 135]
+    },
+    {
+      "riskId": "T015",
+      "invariantId": "INV014",
+      "status": "partial",
+      "evidenceIds": ["EVD-TORIUM-STATE-SUBSET", "EVD-TORIUM-TOOLING"],
+      "coveredHere": "Representative precompile/state rollback and unmodified contract execution pass, but this issue does not claim arbitrary-call authorization or system-contract invariant completion.",
+      "remaining": "System-contract implementations, access controls, precompile authorization, arbitrary-call invariants, and audit evidence remain open.",
+      "remainingOwnerIssues": [108, 109, 110, 111, 126]
+    },
+    {
+      "riskId": "T021",
+      "invariantId": "INV020",
+      "status": "partial",
+      "evidenceIds": ["EVD-BASELINE-MATRIX", "EVD-TORIUM-STATE-SUBSET"],
+      "coveredHere": "Cosmos EVM, go-ethereum replacement, Ethereum fixtures, and client tool versions are pinned and executable.",
+      "remaining": "Current SBOM, advisory scan, upstream delta review, reproducible provenance, and critical-advisory runbook gates remain open.",
+      "remainingOwnerIssues": [111, 121, 122, 126]
+    }
+  ],
+  "releaseGate": {
+    "id": "G03",
+    "status": "partial",
+    "blocksPublicRelease": true,
+    "coveredHere": "Canonical local conformance covers EVM state vectors, RPC, fee/mempool behavior, tooling, transaction envelopes, replay domains, and existing multi-validator execution evidence.",
+    "remaining": "System-contract/precompile invariants, repeated release-candidate determinism, CI release gates, SBOM/advisory evidence, and audit-readiness remain mandatory.",
+    "remainingOwnerIssues": [108, 109, 110, 111, 121, 122, 126]
+  }
+}

@@ -1,0 +1,333 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/chain/resilience-result-v0.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "resultVersion",
+    "status",
+    "ownerIssue",
+    "planVersion",
+    "scenarioId",
+    "testId",
+    "executed",
+    "provenance",
+    "run",
+    "timeline",
+    "observations",
+    "assertions",
+    "recovery",
+    "contradictoryCommitAudit",
+    "operatorDecisions",
+    "artifacts",
+    "releaseBlocked",
+    "limitations"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "resultVersion": { "const": "0.1.0" },
+    "status": {
+      "enum": ["HOLD-not-executed", "pass", "fail", "unsafe", "invalid"]
+    },
+    "ownerIssue": { "const": 119 },
+    "planVersion": {
+      "type": "string",
+      "pattern": "^0\\.1\\.0-local\\.[1-9][0-9]*$"
+    },
+    "scenarioId": { "type": "string", "pattern": "^local-" },
+    "testId": { "type": "string", "pattern": "^chaos\\." },
+    "executed": { "type": "boolean" },
+    "provenance": { "$ref": "#/$defs/provenance" },
+    "run": { "$ref": "#/$defs/run" },
+    "timeline": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/timelineEvent" }
+    },
+    "observations": { "$ref": "#/$defs/observations" },
+    "assertions": { "$ref": "#/$defs/assertions" },
+    "recovery": { "$ref": "#/$defs/recovery" },
+    "contradictoryCommitAudit": { "$ref": "#/$defs/contradictoryCommitAudit" },
+    "operatorDecisions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/operatorDecision" }
+    },
+    "artifacts": { "type": "array", "items": { "$ref": "#/$defs/artifact" } },
+    "releaseBlocked": { "type": "boolean" },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 4 }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gitCommit",
+        "dirtyWorktree",
+        "patchSha256",
+        "toolchainSha256",
+        "binaryIdentity",
+        "binarySha256",
+        "genesisSha256",
+        "effectiveConfigSha256",
+        "hostIdentity",
+        "runnerIdentity",
+        "seed"
+      ],
+      "properties": {
+        "gitCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "dirtyWorktree": { "type": "boolean" },
+        "patchSha256": {
+          "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
+        },
+        "toolchainSha256": { "$ref": "#/$defs/sha256" },
+        "binaryIdentity": { "type": "string", "minLength": 1 },
+        "binarySha256": { "$ref": "#/$defs/sha256" },
+        "genesisSha256": { "$ref": "#/$defs/sha256" },
+        "effectiveConfigSha256": { "$ref": "#/$defs/sha256" },
+        "hostIdentity": { "type": "string", "minLength": 1 },
+        "runnerIdentity": { "type": "string", "minLength": 1 },
+        "seed": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "startedAt",
+        "endedAt",
+        "cosmosChainId",
+        "evmChainId",
+        "startHeight",
+        "endHeight",
+        "baselineBlockHash",
+        "baselineAppHash"
+      ],
+      "properties": {
+        "startedAt": {
+          "anyOf": [
+            { "type": "string", "format": "date-time" },
+            { "type": "null" }
+          ]
+        },
+        "endedAt": {
+          "anyOf": [
+            { "type": "string", "format": "date-time" },
+            { "type": "null" }
+          ]
+        },
+        "cosmosChainId": { "const": "torium-localnet-1" },
+        "evmChainId": { "const": 1414484556 },
+        "startHeight": { "type": ["integer", "null"], "minimum": 1 },
+        "endHeight": { "type": ["integer", "null"], "minimum": 1 },
+        "baselineBlockHash": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9A-F]{64}$"
+        },
+        "baselineAppHash": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9A-F]{64}$"
+        }
+      }
+    },
+    "timelineEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "at", "height", "note"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "baseline",
+            "change-applied",
+            "expected-behavior-observed",
+            "recovery-started",
+            "recovery-complete",
+            "aborted"
+          ]
+        },
+        "at": { "type": "string", "format": "date-time" },
+        "height": { "type": ["integer", "null"], "minimum": 1 },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "observations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nodes", "committedStates"],
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nodeObservation" }
+        },
+        "committedStates": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/committedState" }
+        }
+      }
+    },
+    "nodeObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nodeId",
+        "reachable",
+        "height",
+        "blockHash",
+        "appHash",
+        "validatorsHash"
+      ],
+      "properties": {
+        "nodeId": {
+          "enum": ["validator-0", "validator-1", "validator-2", "validator-3"]
+        },
+        "reachable": { "type": "boolean" },
+        "height": { "type": ["integer", "null"], "minimum": 1 },
+        "blockHash": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9A-F]{64}$"
+        },
+        "appHash": { "type": ["string", "null"], "pattern": "^[0-9A-F]{64}$" },
+        "validatorsHash": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9A-F]{64}$"
+        }
+      }
+    },
+    "committedState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "height",
+        "nodeId",
+        "blockHash",
+        "appHash",
+        "commitVotingPower"
+      ],
+      "properties": {
+        "height": { "type": "integer", "minimum": 1 },
+        "nodeId": {
+          "enum": ["validator-0", "validator-1", "validator-2", "validator-3"]
+        },
+        "blockHash": { "type": "string", "pattern": "^[0-9A-F]{64}$" },
+        "appHash": { "type": "string", "pattern": "^[0-9A-F]{64}$" },
+        "commitVotingPower": { "type": "integer", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "assertions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["liveness", "safety", "finality", "recovery"],
+      "properties": {
+        "liveness": { "$ref": "#/$defs/assertion" },
+        "safety": { "$ref": "#/$defs/assertion" },
+        "finality": { "$ref": "#/$defs/assertion" },
+        "recovery": { "$ref": "#/$defs/assertion" }
+      }
+    },
+    "assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expected", "observed", "passed"],
+      "properties": {
+        "expected": { "type": "string", "minLength": 1 },
+        "observed": { "type": ["string", "null"] },
+        "passed": { "type": ["boolean", "null"] }
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manualStateEdits",
+        "startedAt",
+        "completedAt",
+        "durationMilliseconds",
+        "canonicalHeight",
+        "canonicalAppHash"
+      ],
+      "properties": {
+        "manualStateEdits": { "type": "boolean" },
+        "startedAt": {
+          "anyOf": [
+            { "type": "string", "format": "date-time" },
+            { "type": "null" }
+          ]
+        },
+        "completedAt": {
+          "anyOf": [
+            { "type": "string", "format": "date-time" },
+            { "type": "null" }
+          ]
+        },
+        "durationMilliseconds": { "type": ["integer", "null"], "minimum": 0 },
+        "canonicalHeight": { "type": ["integer", "null"], "minimum": 1 },
+        "canonicalAppHash": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9A-F]{64}$"
+        }
+      }
+    },
+    "contradictoryCommitAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "overlappingHeightsChecked",
+        "contradictionObserved",
+        "contradictoryHeights",
+        "evidenceComplete"
+      ],
+      "properties": {
+        "overlappingHeightsChecked": { "type": "integer", "minimum": 0 },
+        "contradictionObserved": { "type": ["boolean", "null"] },
+        "contradictoryHeights": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "integer", "minimum": 1 }
+        },
+        "evidenceComplete": { "type": "boolean" }
+      }
+    },
+    "operatorDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["at", "decision", "reason"],
+      "properties": {
+        "at": { "type": "string", "format": "date-time" },
+        "decision": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "relativePath", "sha256", "containsSecrets"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "timeline",
+            "node-observations",
+            "commit-audit",
+            "logs",
+            "operator-decisions",
+            "worktree-patch",
+            "validator-set-change",
+            "equivocation-evidence",
+            "assumption-violation-evidence",
+            "proposer-censorship-evidence"
+          ]
+        },
+        "relativePath": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+        },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "containsSecrets": { "const": false }
+      }
+    }
+  }
+}

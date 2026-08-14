@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-14T18:13:03.204Z",
+  "target": {
+    "rpcUrl": "http://127.0.0.1:8545",
+    "peerRpcUrl": "http://127.0.0.1:8555",
+    "chainId": 262144,
+    "stoppedValidators": ["evmdnode2", "evmdnode3"]
+  },
+  "checks": {
+    "preflight": {
+      "initialBlock": "1209",
+      "freshBlock": "1210"
+    },
+    "consensusHalt": {
+      "before": "1210",
+      "afterSixSeconds": "1210",
+      "halted": true
+    },
+    "replacement": {
+      "nonce": 47,
+      "initial": {
+        "ok": true,
+        "result": "0xfd7f74ad56b80e854dc9b618531126564deae13918d85f5672879beac9ebdab4"
+      },
+      "underpriced": {
+        "ok": false,
+        "error": {
+          "code": -32000,
+          "message": "replacement transaction underpriced"
+        }
+      },
+      "higherFee": {
+        "ok": true,
+        "result": "0x32fa603c70046a7e8dc8db51ae7815b3ede0b7e0267be79f832914b7c9db0a07"
+      }
+    },
+    "nonceGap": {
+      "gapAccepted": true,
+      "parentAccepted": true,
+      "queuedBeforeParent": true,
+      "poolReadableAfterParent": true
+    },
+    "propagation": {
+      "status": "partial",
+      "peerPoolReadable": true,
+      "replacementSeenOnPeer": false,
+      "senderSeenOnPeer": true,
+      "peerTransactionAtNonce": null,
+      "peerSenderTransactions": [
+        {
+          "hash": "0x212de97e42ca39cab103b3ea1501cacb32f941604c29daf55b8821d2c423c299",
+          "nonce": "0x30",
+          "value": "0x4",
+          "maxFeePerGas": "0x77359400",
+          "maxPriorityFeePerGas": "0xbebc200"
+        },
+        {
+          "hash": "0xf7e97ea7378f034866675fc7d46b68509c8a857a160ef939209261046bc8d6ec",
+          "nonce": "0x31",
+          "value": "0x5",
+          "maxFeePerGas": "0x77359400",
+          "maxPriorityFeePerGas": "0xbebc200"
+        }
+      ]
+    },
+    "accountQueueLimit": {
+      "attempted": 70,
+      "accepted": 70,
+      "rejected": 0,
+      "retained": 64,
+      "evicted": 6,
+      "firstRejection": null
+    },
+    "inclusion": {
+      "replacementStatus": "0x1",
+      "firstGapStatus": "0x1",
+      "secondGapStatus": "0x1",
+      "originalAbsent": true
+    }
+  }
+}

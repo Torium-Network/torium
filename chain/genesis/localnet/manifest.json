@@ -1,0 +1,146 @@
+{
+  "generated_by": "go run ./cmd/torium-genesis",
+  "source": "chain/app/localnet/fixture.json plus toriumd module defaults",
+  "do_not_edit": true,
+  "schema_version": 1,
+  "warning": "VALUELESS LOCAL DEVELOPMENT NETWORK ONLY — NEVER REUSE THESE DETERMINISTIC FIXTURES",
+  "fixture_policy": "publicly reproducible and disposable local fixtures; never reuse on any public or valuable network",
+  "parameter_policy": "validator staking, distribution, slashing, and evidence values are explicit local protocol parameters; public activation remains separately gated",
+  "genesis_sha256": "86d77e6e1907e10e92217e1484cbf89e224b03bacdbf67f441b3307502a96808",
+  "genesis_time": "2026-07-14T00:00:00Z",
+  "cosmos_chain_id": "torium-localnet-1",
+  "evm_chain_id": 1414484556,
+  "native_asset": {
+    "base_denom": "atorium",
+    "display_denom": "tTOR",
+    "decimals": 18,
+    "total_supply_base_units": "1000000000000000000000000000",
+    "power_reduction": "1000000000000000000",
+    "canonical_ledger": "Cosmos bank balance exposed directly to the EVM and native Solidity facade",
+    "issuance_model": "genesis-capped-non-inflationary",
+    "post_genesis_native_mint_allowed": false,
+    "solidity_precompile_address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    "duplicate_wrapped_supply": false,
+    "value_status": "valueless-local-development-only"
+  },
+  "consensus": {
+    "max_block_bytes": 5242880,
+    "max_block_gas": 30000000,
+    "validator_count": 4,
+    "total_voting_power": 100,
+    "commit_quorum_power": 67
+  },
+  "validator_policy": {
+    "power_reduction": "1000000000000000000",
+    "minimum_self_delegation_base_units": "1000000000000000000",
+    "maximum_active_validators": 100,
+    "maximum_entries": 7,
+    "historical_entries": 10000,
+    "unbonding_time_seconds": 1814400,
+    "minimum_commission_rate": "0.050000000000000000",
+    "maximum_commission_rate": "0.200000000000000000",
+    "maximum_commission_change_rate": "0.010000000000000000",
+    "signed_blocks_window": 100,
+    "minimum_signed_per_window": "0.500000000000000000",
+    "downtime_jail_duration_seconds": 600,
+    "slash_fraction_downtime": "0.010000000000000000",
+    "slash_fraction_double_sign": "0.050000000000000000",
+    "distribution_community_tax": "0.020000000000000000",
+    "reward_funding": "transaction fees and existing bank balances only; no native mint",
+    "evidence_max_age_blocks": 100000,
+    "evidence_max_age_duration_seconds": 172800,
+    "evidence_max_bytes_per_block": 1048576
+  },
+  "validators": [
+    {
+      "name": "validator-0",
+      "account_number": 0,
+      "bech32_address": "torium1thhgqjh0q9lgm296v08mw5ac2gu4fv7vgwhsxh",
+      "evm_address": "0x5dee804AeF017E8DA8ba63Cfb753B8523954b3Cc",
+      "allocation_base_units": "1000000000000000000000",
+      "operator_address": "toriumvaloper1thhgqjh0q9lgm296v08mw5ac2gu4fv7vmz7dem",
+      "consensus_address": "toriumvalcons1ph84v2p7anq4dwhtr3zyvcggj3acpd5k3d6e4s",
+      "consensus_public_key_type": "ed25519",
+      "consensus_public_key_base64": "cCZxfry/Ng7C2MKDqC8hTgdTWje9RLKtbrChrxWSt0k=",
+      "self_delegation_base_units": "25000000000000000000",
+      "genesis_transaction_fee_base_units": "250000000000000",
+      "post_genesis_account_balance_base_units": "974999750000000000000",
+      "voting_power": 25
+    },
+    {
+      "name": "validator-1",
+      "account_number": 1,
+      "bech32_address": "torium1glfgjg6ncn0gjh64cye4vzasf7ctd7rqwkntj0",
+      "evm_address": "0x47D2892353C4DE895f55c133560Bb04fb0b6F860",
+      "allocation_base_units": "1000000000000000000000",
+      "operator_address": "toriumvaloper1glfgjg6ncn0gjh64cye4vzasf7ctd7rqa66kdr",
+      "consensus_address": "toriumvalcons1w7rf8g9knlhvpstkfjzrrw23lk4r8a9d5rwrf8",
+      "consensus_public_key_type": "ed25519",
+      "consensus_public_key_base64": "jEXQ3QHNlkiE1ejCOt2I53uhqCYMchlBytXb/5Ay2IE=",
+      "self_delegation_base_units": "25000000000000000000",
+      "genesis_transaction_fee_base_units": "250000000000000",
+      "post_genesis_account_balance_base_units": "974999750000000000000",
+      "voting_power": 25
+    },
+    {
+      "name": "validator-2",
+      "account_number": 2,
+      "bech32_address": "torium1uhx42a5kq7h87lyn34h740z9eaj260u6aesh8e",
+      "evm_address": "0xe5CD55769607AE7F7C938D6feAbC45CF64aD3f9a",
+      "allocation_base_units": "1000000000000000000000",
+      "operator_address": "toriumvaloper1uhx42a5kq7h87lyn34h740z9eaj260u6w4e2c4",
+      "consensus_address": "toriumvalcons17rtwtcwur37mz2y297eesa3c3zsxkapsazyatg",
+      "consensus_public_key_type": "ed25519",
+      "consensus_public_key_base64": "UpA90O7Jfz6mJxZgU8TVLqgJxavMQOBJ4LcHoIh8L/I=",
+      "self_delegation_base_units": "25000000000000000000",
+      "genesis_transaction_fee_base_units": "250000000000000",
+      "post_genesis_account_balance_base_units": "974999750000000000000",
+      "voting_power": 25
+    },
+    {
+      "name": "validator-3",
+      "account_number": 3,
+      "bech32_address": "torium1m923tmhz5mp2eeg6dyxwypwua4t262hqxj28ew",
+      "evm_address": "0xD95515eEe2A6C2acE51A690Ce205DceD56AD2Ae0",
+      "allocation_base_units": "1000000000000000000000",
+      "operator_address": "toriumvaloper1m923tmhz5mp2eeg6dyxwypwua4t262hq47r6xz",
+      "consensus_address": "toriumvalcons1haakkax45qy0a88q5gqgnaggkq47egcgr08k4g",
+      "consensus_public_key_type": "ed25519",
+      "consensus_public_key_base64": "Z84gzS0CVmmAy5XcPph1cY8VRgcdzTEWPSU1ZW2Uz2s=",
+      "self_delegation_base_units": "25000000000000000000",
+      "genesis_transaction_fee_base_units": "250000000000000",
+      "post_genesis_account_balance_base_units": "974999750000000000000",
+      "voting_power": 25
+    }
+  ],
+  "development_accounts": [
+    {
+      "name": "faucet",
+      "account_number": 4,
+      "bech32_address": "torium1qkh83x24lgvqgv6wwrr53ymrjkfvf7606dy2nn",
+      "evm_address": "0x05ae789955fa1804334e70C74893639592C4fB4f",
+      "allocation_base_units": "900000000000000000000000000"
+    },
+    {
+      "name": "deployer",
+      "account_number": 5,
+      "bech32_address": "torium1jxn3gn9f907ujz56srhvcvyrjk0djzlnu6e00n",
+      "evm_address": "0x91A7144cA92BfDc90a9A80Eecc3083959Ed90Bf3",
+      "allocation_base_units": "50000000000000000000000000"
+    },
+    {
+      "name": "sdk-user",
+      "account_number": 6,
+      "bech32_address": "torium1mvdzupdt07lgm8xjuxt2d8ct4f8x3xut9uxywe",
+      "evm_address": "0xDB1A2E05aB7FBE8d9cd2E196a69f0BAA4e689b8B",
+      "allocation_base_units": "25000000000000000000000000"
+    },
+    {
+      "name": "test-user",
+      "account_number": 7,
+      "bech32_address": "torium1v65qc5kc3yzkwfaq54duc2hp4fzwux25ta4tsz",
+      "evm_address": "0x66A80c52D889056727A0A55bCc2Ae1aa44eE1954",
+      "allocation_base_units": "24996000000000000000000000"
+    }
+  ]
+}

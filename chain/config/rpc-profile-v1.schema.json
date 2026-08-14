@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/rpc-profile-v1.json",
+  "title": "Torium local RPC and service endpoint profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "profileVersion",
+    "status",
+    "environment",
+    "ownerIssue",
+    "clientNode",
+    "exposure",
+    "nodes",
+    "ethereum",
+    "cosmos",
+    "comet",
+    "health",
+    "wallet",
+    "deferred"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "profileVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "status": { "const": "active-local-only" },
+    "environment": { "const": "localnet" },
+    "ownerIssue": { "const": 96 },
+    "clientNode": { "const": "validator-0" },
+    "exposure": {
+      "type": "object",
+      "required": [
+        "classification",
+        "hostPublishing",
+        "rawProcessBinding",
+        "containerBinding",
+        "publicEndpointsAllowed",
+        "tlsTermination",
+        "httpCors",
+        "rateLimit"
+      ]
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["name", "role", "clientServices"]
+      }
+    },
+    "ethereum": {
+      "type": "object",
+      "required": [
+        "httpUrl",
+        "webSocketUrl",
+        "chainId",
+        "chainIdHex",
+        "networkId",
+        "namespaces",
+        "requiredSmokeMethods",
+        "limits",
+        "safety",
+        "webSocket"
+      ]
+    },
+    "cosmos": {
+      "type": "object",
+      "required": [
+        "rest",
+        "grpc",
+        "stabilityContract",
+        "extensionContractOwnerIssue"
+      ]
+    },
+    "comet": {
+      "type": "object",
+      "required": [
+        "clientNodeUrl",
+        "diagnosticHostPorts",
+        "unsafeMethods",
+        "corsOrigins",
+        "pprofAddress",
+        "deprecatedGrpcAddress",
+        "publicUseAllowed"
+      ]
+    },
+    "health": {
+      "type": "object",
+      "required": ["schemaVersion", "states", "readyRequires", "reports"]
+    },
+    "wallet": {
+      "type": "object",
+      "required": [
+        "chainName",
+        "nativeCurrencyName",
+        "nativeCurrencySymbol",
+        "nativeCurrencyDecimals",
+        "rpcUrls",
+        "blockExplorerUrls",
+        "publishable"
+      ]
+    },
+    "deferred": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    }
+  }
+}

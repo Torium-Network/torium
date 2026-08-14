@@ -1,0 +1,96 @@
+---
+title: Contracts
+description: Local contract sources, protocol interfaces and deployment provenance boundaries.
+docId: contracts
+version: v0
+status: foundation
+ownerIssue: 142
+sourceOfTruth: apps/developer-docs/content/generated/contracts-localnet-foundation.json
+sourceStatus: generated
+---
+
+The v0 workspace can build and test Torium-authored Solidity locally, but it does not represent a
+public contract release or live deployment.
+
+This page is anchored to the checked generated foundation manifest. Its active native-precompile
+record and planned factory prediction are regenerated from the canonical contract artifacts; the
+manifest explicitly marks `publicDeployment: false`.
+
+## What exists
+
+- The native TOR Solidity facade is active protocol precompile behavior backed by the canonical
+  `x/bank` ledger. `IToriumNative` is its integration interface, not a deployable Torium ERC-20.
+- A permissionless, role-free CREATE2 factory has source and local tests as the deterministic
+  post-genesis deployment plan. It is not deployed by the workspace.
+- The native-TOR reward distributor has a generated ABI and bytecode identity. It remains an
+  addressless post-genesis plan with no assigned constructor values or role holders.
+- The permissionless attestation registry has a generated ABI and bytecode identity. It remains an
+  addressless post-genesis plan and has no owner, admin, allowlist or privileged role.
+- A versioned component decision and deployment-registry schema separate protocol state, planned
+  contracts and deployment provenance.
+
+## What remains planned
+
+The reward distributor authority/deployment, attestation registry deployment and deterministic
+factory deployment are post-genesis plans. Torium v0 contains no Torium-authored Solidity genesis
+predeploy. No public application-contract address, deployment transaction, signer or key is
+published here.
+
+Generated ABI and registry references are documented in the
+[deployment registry](/v0/contracts/registry) page, the
+[reward distributor](/v0/contracts/rewards) and
+[attestation registry](/v0/contracts/attestations) guides, and the
+[Foundry/Hardhat workflow](/v0/contracts/tooling). All of them consume canonical generated
+artifacts only. A predicted address or local fixture is still not deployment evidence, and the
+registry keeps every non-precompile entry `planned` with a `null` address until a reviewed
+broadcast deployment exists.
+
+## Reward funding and publisher trust
+
+The reward distributor uses Merkle-sum proofs. Each claim binds its epoch, index, recipient and
+amount, while every proof also reconstructs the aggregate root sum. Epoch publication requires the
+same amount of native TOR as that committed sum. This prevents a valid committed tree from being
+published with less funding than its aggregate claims.
+
+That proof does not decide who deserves a reward. The authorized publisher still chooses the input
+dataset and can omit a recipient, assign a wrong amount or allocate multiple funded indices to one
+account. Allocation policy and the reviewed offline fixture therefore remain an explicit publisher
+trust boundary. After expiry, only the fixed treasury can receive unclaimed epoch liability and only
+after the clawback delay.
+
+The generated foundation manifest represents this honestly: the reward entry is `planned`, its
+`address` and transaction are `null`, and all privileged assignments are unresolved.
+It also fingerprints the offline example fixture as a reference vector; that fixture is proof-format
+test data, not an allocation recommendation or a network deployment record.
+
+The full funding, publisher-allocation and treasury boundary is recorded in the
+[Merkle-sum reward distributor decision](https://github.com/Torium-Network/torium/blob/main/docs/decisions/2026-07-16-merkle-sum-reward-distributor.md).
+
+## Attestation hashing, privacy and non-claims
+
+The attestation registry is self-issued: the transaction sender is the issuer, without an owner or
+issuer allowlist. Records separately commit schema ID/version, subject, optional reference hash, content,
+metadata, metadata-URI and supersession hashes. Record IDs also bind chain, registry instance, issuer
+and issuer nonce. Same-issuer payload replay is permanently rejected even if only `supersedes`
+changes; separate issuers may independently attest to identical content. Copied pending calldata
+cannot impersonate another issuer because the sender address is part of both issuer scope and ID.
+
+`torium-attestation-canonical-bytes-v1` hashes the exact supplied bytes with Keccak-256. It performs
+no JSON/JCS, Unicode, whitespace or URI normalization. Visually equivalent text may therefore have
+different hashes. Consumers must preserve the original bytes and reproduce the checked offline
+vectors exactly.
+
+A hash is not anonymization or encryption. Predictable personal data remains vulnerable to
+dictionary attack, so sensitive payloads, personal information and plaintext metadata URIs must not
+be written on-chain. A record authenticates only the issuer address; it does not prove real-world
+identity, authorship, truth, fairness, availability or a legally recognized timestamp.
+
+The generated manifest marks the attestation implementation `planned` with `address: null`, no
+transaction and no roles. Its canonical vector is offline reference data, not deployment evidence.
+The committed Foundry gas snapshot is checksum-bound implementation evidence and can be reproduced
+with `make -C contracts gas-snapshot-check`; it is not a live-chain measurement or deployment claim.
+See [canonical hashing v1](https://github.com/Torium-Network/torium/blob/main/docs/architecture/torium-attestation-canonical-hashing-v1.md)
+and the [permissionless registry decision](https://github.com/Torium-Network/torium/blob/main/docs/decisions/2026-07-16-permissionless-attestation-registry.md).
+
+The repository contract boundary and local verification command are documented in
+[`contracts/README.md`](https://github.com/Torium-Network/torium/blob/main/contracts/README.md).

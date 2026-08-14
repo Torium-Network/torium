@@ -1,0 +1,20 @@
+---
+title: Releases
+description: Compatibility tuples, migration notes and deprecation windows.
+docId: releases
+version: v0
+status: foundation
+ownerIssue: 139
+sourceOfTruth: apps/developer-docs/content/versions.json
+sourceStatus: existing
+---
+
+Documentation versions pin a compatible chain manifest, SDK release and contract release. The
+current v0 tuple targets the public Torium Testnet. A new tuple requires a new manifest entry and
+explicit migration notes; `/docs/latest` is never a canonical link target.
+
+## Testnet resets
+
+The testnet may be halted, rolled back to a recent snapshot, or fully reset with a new genesis.
+Resets are announced on this page with the date, the reason, and the new genesis hash. After a
+reset, redeploy contracts and request fresh faucet funds; balances and state do not carry over.

@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-07-14T19:01:44Z",
+  "sources": {
+    "eip155": {
+      "repository": "https://github.com/ethereum-lists/chains",
+      "commit": "a04fd826d72b9108a2cf1e7b6a7f7e5f13ef6f62",
+      "aggregate": "https://chainid.network/chains_mini.json"
+    },
+    "npm": "https://registry.npmjs.org/",
+    "github": "https://api.github.com/",
+    "slip0173": {
+      "url": "https://github.com/satoshilabs/slips/blob/308f4c50275d1c553de7ec3b75e028c1a83e5e0c/slip-0173.md",
+      "commit": "308f4c50275d1c553de7ec3b75e028c1a83e5e0c"
+    },
+    "cosmosChainRegistry": {
+      "repository": "https://github.com/cosmos/chain-registry",
+      "commit": "4cf8c58b50dbe20474330cf2945f76a1c83ffb17"
+    },
+    "coinGecko": "https://api.coingecko.com/api/v3/coins/list?include_platform=false",
+    "coinMarketCap": "https://coinmarketcap.com/",
+    "dnsAndHttps": "Public DNS and HTTPS checks from the development host"
+  },
+  "checks": [
+    {
+      "id": "eip155-poc-262144",
+      "kind": "eip155-chain-id",
+      "identifier": "262144",
+      "checkedAt": "2026-07-14T19:01:44Z",
+      "source": "ethereum-lists/chains@a04fd826d72b9108a2cf1e7b6a7f7e5f13ef6f62",
+      "result": "collision",
+      "evidence": "Registered to MPCQ Mainnet (shortName mpcq).",
+      "owner": "chain-protocol-owner",
+      "followUp": "Keep 262144 as historical upstream-PoC metadata only; use the canonical localnet ID from identifiers.json."
+    },
+    {
+      "id": "eip155-mainnet-5525330",
+      "kind": "eip155-chain-id",
+      "identifier": "5525330",
+      "checkedAt": "2026-07-14T19:01:44Z",
+      "source": "ethereum-lists/chains@a04fd826d72b9108a2cf1e7b6a7f7e5f13ef6f62",
+      "result": "clear-at-check-time-unreserved",
+      "evidence": "No chain file, aggregate chain ID, Torium name, or torium shortName was present.",
+      "owner": "chain-protocol-owner",
+      "followUp": "Recheck immediately before an authenticated Chainlist PR; first merged PR owns the ID."
+    },
+    {
+      "id": "eip155-testnet-1414484564",
+      "kind": "eip155-chain-id",
+      "identifier": "1414484564",
+      "checkedAt": "2026-07-14T19:01:44Z",
+      "source": "ethereum-lists/chains@a04fd826d72b9108a2cf1e7b6a7f7e5f13ef6f62",
+      "result": "clear-at-check-time-unreserved",
+      "evidence": "No chain file or aggregate chain ID was present.",
+      "owner": "chain-protocol-owner",
+      "followUp": "Recheck and submit only when a public testnet RPC, explorer, and metadata are ready for registration."
+    },
+    {
+      "id": "eip155-localnet-1414484556",
+      "kind": "eip155-chain-id",
+      "identifier": "1414484556",
+      "checkedAt": "2026-07-14T19:01:44Z",
+      "source": "ethereum-lists/chains@a04fd826d72b9108a2cf1e7b6a7f7e5f13ef6f62",
+      "result": "clear-local-only",
+      "evidence": "No chain file or aggregate chain ID was present; localnet is not submitted to a public registry.",
+      "owner": "chain-protocol-owner",
+      "followUp": "Keep local-only and reject any public endpoint that reports this ID."
+    },
+    {
+      "id": "eip155-devnet-1414484548",
+      "kind": "eip155-chain-id",
+      "identifier": "1414484548",
+      "checkedAt": "2026-07-14T19:34:20Z",
+      "source": "ethereum-lists/chains@a04fd826d72b9108a2cf1e7b6a7f7e5f13ef6f62",
+      "result": "clear-local-only",
+      "evidence": "No chain file or aggregate chain ID was present; devnet remains private and is not submitted to a public registry.",
+      "owner": "chain-protocol-owner",
+      "followUp": "Keep private, require explicit environment selection, and reject any public endpoint that reports this ID."
+    },
+    {
+      "id": "npm-primary-package",
+      "kind": "npm-package",
+      "identifier": "@torium-network/sdk",
+      "checkedAt": "2026-08-14T00:00:00Z",
+      "source": "npmjs.com organization dashboard (authenticated owner)",
+      "result": "organization-owned-package-published",
+      "evidence": "The torium-network npm organization was created by the authenticated repository owner on 2026-08-14; @torium-network/sdk@0.1.0 was published the same day from the sdk-publish GitHub Actions workflow with a signed provenance attestation (shasum 4b2826606b42b87d02b5bb96f5a2330196ccdfba).",
+      "owner": "release-owner",
+      "followUp": "Enable MFA enforcement and add a second owner on the organization; configure the GitHub Actions trusted publisher for @torium-network/sdk immediately after the first 0.1.0 publish and revoke the bootstrap token."
+    },
+    {
+      "id": "npm-fallback-package",
+      "kind": "npm-package",
+      "identifier": "torium-evm-sdk",
+      "checkedAt": "2026-07-14T19:01:44Z",
+      "source": "registry.npmjs.org package endpoint",
+      "result": "package-not-found-unreserved",
+      "evidence": "Package endpoint returned HTTP 404.",
+      "owner": "release-owner",
+      "followUp": "Use only if the preferred organization scope cannot be obtained; recheck before any approved publish."
+    },
+    {
+      "id": "github-target-organization",
+      "kind": "github-organization",
+      "identifier": "torium-network",
+      "checkedAt": "2026-07-14T19:01:44Z",
+      "source": "GitHub REST API",
+      "result": "not-found-unreserved",
+      "evidence": "Organization and user lookups returned HTTP 404.",
+      "owner": "repository-owner",
+      "followUp": "Authorized owner creates the organization with MFA and two owners before any repository migration."
+    },
+    {
+      "id": "github-current-repository",
+      "kind": "github-repository",
+      "identifier": "Torium-Network/torium",
+      "checkedAt": "2026-07-14T19:01:44Z",
+      "source": "GitHub REST API",
+      "result": "owned-current-fallback",
+      "evidence": "Repository lookup returned HTTP 200.",
+      "owner": "repository-owner",
+      "followUp": "Keep the public product spelling Torium; any later migration requires redirects and package/docs coordination."
+    },
+    {
+      "id": "bech32-torium",
+      "kind": "bech32-prefix",
+      "identifier": "torium",
+      "checkedAt": "2026-07-14T19:01:44Z",
+      "source": "SLIP-0173@308f4c50275d1c553de7ec3b75e028c1a83e5e0c and cosmos/chain-registry@4cf8c58b50dbe20474330cf2945f76a1c83ffb17",
+      "result": "clear-at-check-time-unregistered",
+      "evidence": "No Torium name or torium prefix was found in either registry.",
+      "owner": "chain-protocol-owner",
+      "followUp": "Every derived Torium account/validator prefix must be tested; public registry submission waits for network metadata."
+    },
+    {
+      "id": "public-name-torium",
+      "kind": "public-network-name",
+      "identifier": "Torium",
+      "checkedAt": "2026-07-14T19:01:44Z",
+      "source": "Chainlist, Cosmos chain-registry, npm registry, GitHub API, and CoinGecko coin list",
+      "result": "no-exact-technical-registry-collision-at-check-time",
+      "evidence": "No exact Torium network, organization, package, or coin name was found in the checked technical registries.",
+      "owner": "brand-legal-owner",
+      "followUp": "This is not trademark clearance; complete brand/legal and launch-market review before public value, listings, or organization claims."
+    },
+    {
+      "id": "ticker-tor",
+      "kind": "native-ticker",
+      "identifier": "TOR",
+      "checkedAt": "2026-07-14T19:01:44Z",
+      "source": "CoinGecko coin list and CoinMarketCap search",
+      "result": "collision-accepted-prelaunch",
+      "evidence": "CoinGecko lists Tonoreum (TOR); CoinMarketCap also has Torcoin (TOR). Tickers are not globally exclusive.",
+      "owner": "brand-legal-owner",
+      "followUp": "Keep TOR as the working Torium symbol, disclose ambiguity, and require brand/legal/exchange review before public value or listing; TRIUM is the recorded fallback."
+    },
+    {
+      "id": "ticker-trium-fallback",
+      "kind": "native-ticker-fallback",
+      "identifier": "TRIUM",
+      "checkedAt": "2026-07-14T19:01:44Z",
+      "source": "CoinGecko coin list and CoinMarketCap web search",
+      "result": "no-exact-result-at-check-time-unreserved",
+      "evidence": "No exact TRIUM ticker result was found in the checked sources.",
+      "owner": "brand-legal-owner",
+      "followUp": "Fallback only; re-run registry, trademark, and exchange checks before adoption."
+    },
+    {
+      "id": "docs-canonical-path",
+      "kind": "documentation-route",
+      "identifier": "https://torium.network/docs",
+      "checkedAt": "2026-07-14T19:01:44Z",
+      "source": "HTTPS request and repository route search",
+      "result": "owned-domain-path-not-published",
+      "evidence": "torium.network returned HTTP 200, /docs returned HTTP 404, and no landing docs route exists.",
+      "owner": "docs-owner",
+      "followUp": "Reserve /docs in code and build it locally; publishing requires separate approval."
+    },
+    {
+      "id": "docs-redirect-host",
+      "kind": "documentation-host",
+      "identifier": "docs.torium.network",
+      "checkedAt": "2026-07-14T19:01:44Z",
+      "source": "Public DNS and HTTPS lookup",
+      "result": "owned-zone-host-not-configured",
+      "evidence": "The hostname had no DNS answer and HTTPS could not resolve.",
+      "owner": "docs-owner",
+      "followUp": "Keep it unconfigured until deployment approval, then use it only as a redirect or documented alias for /docs."
+    }
+  ]
+}

@@ -1,0 +1,1631 @@
+{
+  "$schema": "./threat-model-v1.schema.json",
+  "schemaVersion": 1,
+  "modelVersion": "1.0.0-local.5",
+  "status": "local-development-security-contract",
+  "updatedAt": "2026-07-15",
+  "scope": {
+    "included": [
+      "Torium chain binary and deterministic state transitions",
+      "validator, node, operator, governance, upgrade, faucet, deployer, and release keys",
+      "genesis supply, staking, fees, modules, precompiles, and system contracts",
+      "P2P, RPC, WebSocket, REST, gRPC, explorer, indexer, metrics, and support surfaces",
+      "snapshots, state sync, backups, restore, release, CI, SDK, docs, and local examples"
+    ],
+    "excluded": [
+      "Torium product backend and mobile integration",
+      "bridges, IBC runtime, Ethereum L2, and rollup settlement",
+      "live-value migration, TGE, exchange integration, and mainnet launch",
+      "infrastructure purchase or public deployment"
+    ],
+    "publicDeploymentAuthorized": false
+  },
+  "sources": {
+    "protocol": {
+      "path": "../config/protocol-v1.json",
+      "version": "1.0.0-local.5"
+    },
+    "trustModel": {
+      "path": "../config/trust-model-v1.json",
+      "version": "1.0.0-local.5"
+    },
+    "secretPolicy": {
+      "path": "./secret-policy.json",
+      "version": "1.0.0",
+      "scanner": "../scripts/scan-prohibited-secrets.mjs"
+    },
+    "upstreamSupport": "../poc/upstream-baseline/support-matrix.json"
+  },
+  "methodology": {
+    "riskScore": "likelihood-times-impact",
+    "likelihoodScale": {
+      "1": "rare",
+      "2": "unlikely",
+      "3": "possible",
+      "4": "likely",
+      "5": "expected-or-continuous"
+    },
+    "impactScale": {
+      "1": "negligible",
+      "2": "minor",
+      "3": "material-local-degradation",
+      "4": "major-loss-or-prolonged-outage",
+      "5": "consensus-safety-supply-key-or-release-compromise"
+    },
+    "severityThresholds": {
+      "critical": { "minimum": 20, "maximum": 25 },
+      "high": { "minimum": 12, "maximum": 19 },
+      "medium": { "minimum": 6, "maximum": 11 },
+      "low": { "minimum": 1, "maximum": 5 }
+    },
+    "reviewRule": "every high or critical risk requires prevention, detection, recovery, owners, tests, review triggers, and a blocking public-release gate"
+  },
+  "assets": [
+    {
+      "id": "A01",
+      "name": "validator consensus keys and signer state",
+      "properties": ["confidentiality", "non-equivocation", "availability"]
+    },
+    {
+      "id": "A02",
+      "name": "validator operator, governance, upgrade, faucet, and deployer keys",
+      "properties": ["confidentiality", "least-privilege", "accountability"]
+    },
+    {
+      "id": "A03",
+      "name": "genesis supply, allocations, chain IDs, and checksums",
+      "properties": ["integrity", "reproducibility", "replay-separation"]
+    },
+    {
+      "id": "A04",
+      "name": "consensus and application state",
+      "properties": ["determinism", "safety", "availability"]
+    },
+    {
+      "id": "A05",
+      "name": "governance parameters and upgrade plans",
+      "properties": ["authorization", "timelock", "auditability"]
+    },
+    {
+      "id": "A06",
+      "name": "snapshots, backups, state-sync trust anchors, and historical evidence",
+      "properties": ["integrity", "availability", "freshness"]
+    },
+    {
+      "id": "A07",
+      "name": "P2P, JSON-RPC, WebSocket, REST, gRPC, and operator endpoints",
+      "properties": ["availability", "authenticity", "bounded-resource-use"]
+    },
+    {
+      "id": "A08",
+      "name": "valueless tTOR faucet signer, balance, budgets, and queue",
+      "properties": ["least-privilege", "availability", "abuse-resistance"]
+    },
+    {
+      "id": "A09",
+      "name": "precompiles, system contracts, deployment registry, and emitted events",
+      "properties": ["authorization", "state-integrity", "event-authenticity"]
+    },
+    {
+      "id": "A10",
+      "name": "source, CI, dependencies, binaries, containers, SBOMs, signatures, and provenance",
+      "properties": ["integrity", "reproducibility", "authenticity"]
+    },
+    {
+      "id": "A11",
+      "name": "SDK chain metadata, transports, transaction lifecycle, and documentation",
+      "properties": [
+        "integrity",
+        "endpoint-authenticity",
+        "semantic-correctness"
+      ]
+    },
+    {
+      "id": "A12",
+      "name": "logs, traces, metrics, screenshots, fixtures, examples, and support bundles",
+      "properties": ["confidentiality", "redaction", "bounded-retention"]
+    },
+    {
+      "id": "A13",
+      "name": "explorer and indexer canonical views",
+      "properties": ["completeness", "freshness", "canonicality"]
+    },
+    {
+      "id": "A14",
+      "name": "native balances, staking power, fees, rewards, and accounting",
+      "properties": ["conservation", "precision", "authorization"]
+    }
+  ],
+  "actors": [
+    {
+      "id": "ACT01",
+      "name": "local Torium authority",
+      "trust": "controls all local validators and can reset valueless localnet"
+    },
+    {
+      "id": "ACT02",
+      "name": "future independent validator operator",
+      "trust": "trusted only for its own keys and declared voting power"
+    },
+    {
+      "id": "ACT03",
+      "name": "wallet, SDK, contract, and RPC user",
+      "trust": "untrusted input producer"
+    },
+    {
+      "id": "ACT04",
+      "name": "malicious validator coalition",
+      "trust": "Byzantine within or beyond the stated fault threshold"
+    },
+    {
+      "id": "ACT05",
+      "name": "external network attacker",
+      "trust": "untrusted; may scan, flood, partition, spoof, or exploit"
+    },
+    {
+      "id": "ACT06",
+      "name": "compromised operator or host",
+      "trust": "adversarial with stolen runtime access"
+    },
+    {
+      "id": "ACT07",
+      "name": "dependency, image, toolchain, or CI supply-chain attacker",
+      "trust": "may publish or substitute malicious inputs"
+    },
+    {
+      "id": "ACT08",
+      "name": "faucet, RPC, mempool, and resource abuser",
+      "trust": "automated and economically unconstrained on valueless networks"
+    },
+    {
+      "id": "ACT09",
+      "name": "malicious contract or precompile caller",
+      "trust": "arbitrary EVM and cross-module call sequences"
+    },
+    {
+      "id": "ACT10",
+      "name": "release, governance, or metadata maintainer",
+      "trust": "privileged only through reviewed, attributable workflows"
+    },
+    {
+      "id": "ACT11",
+      "name": "explorer, indexer, snapshot, and RPC operator",
+      "trust": "not a consensus authority; output requires verification"
+    }
+  ],
+  "boundaries": [
+    {
+      "id": "B01",
+      "name": "client to public RPC",
+      "controls": [
+        "TLS when public",
+        "chain-ID validation",
+        "body, batch, time, origin, and rate limits"
+      ],
+      "ownerIssues": [114, 120, 130, 135]
+    },
+    {
+      "id": "B02",
+      "name": "internet or sentry to validator P2P",
+      "controls": [
+        "sentry isolation",
+        "peer limits",
+        "address-book and eclipse monitoring"
+      ],
+      "ownerIssues": [114, 119, 120, 124]
+    },
+    {
+      "id": "B03",
+      "name": "validator node to consensus signer",
+      "controls": [
+        "separate key custody",
+        "last-sign state",
+        "no cloned signer",
+        "compromise runbook"
+      ],
+      "ownerIssues": [100, 117, 119]
+    },
+    {
+      "id": "B04",
+      "name": "CometBFT consensus to Cosmos application",
+      "controls": [
+        "deterministic ABCI execution",
+        "proposal validation",
+        "app-hash equality"
+      ],
+      "ownerIssues": [94, 107, 119, 121]
+    },
+    {
+      "id": "B05",
+      "name": "EVM to Cosmos modules through precompiles",
+      "controls": [
+        "explicit composition",
+        "authorization preservation",
+        "revert atomicity",
+        "fuzz and invariant tests"
+      ],
+      "ownerIssues": [94, 107, 111]
+    },
+    {
+      "id": "B06",
+      "name": "governance proposal to privileged state or binary upgrade",
+      "controls": [
+        "documented authority",
+        "versioned plan",
+        "simulation",
+        "upgrade rehearsal"
+      ],
+      "ownerIssues": [106, 119, 126]
+    },
+    {
+      "id": "B07",
+      "name": "source and dependencies to release artifacts",
+      "controls": [
+        "immutable pins",
+        "clean builders",
+        "checksums",
+        "SBOM",
+        "signatures",
+        "provenance"
+      ],
+      "ownerIssues": [121, 122, 126]
+    },
+    {
+      "id": "B08",
+      "name": "snapshot or state-sync provider to node state",
+      "controls": [
+        "trusted height and hash",
+        "checksums",
+        "independent verification",
+        "restore rehearsal"
+      ],
+      "ownerIssues": [98, 116, 119, 123]
+    },
+    {
+      "id": "B09",
+      "name": "canonical chain to explorer and indexer view",
+      "controls": [
+        "finalized-height tracking",
+        "reorg or reset detection",
+        "backfill reconciliation"
+      ],
+      "ownerIssues": [112, 113, 119, 131]
+    },
+    {
+      "id": "B10",
+      "name": "public faucet request to isolated signer and RPC",
+      "controls": [
+        "idempotency",
+        "budgets",
+        "rate and risk limits",
+        "bounded queue",
+        "hot-wallet cap"
+      ],
+      "ownerIssues": [97, 120, 125, 172]
+    },
+    {
+      "id": "B11",
+      "name": "standalone chain to existing Torium product",
+      "controls": [
+        "no imports",
+        "no auth or database dependency",
+        "no shared secrets",
+        "separate future adapter"
+      ],
+      "ownerIssues": [84, 94, 128]
+    },
+    {
+      "id": "B12",
+      "name": "operator state to logs, screenshots, and support bundles",
+      "controls": [
+        "redaction",
+        "secret scan",
+        "staging-directory gate",
+        "retention and access policy"
+      ],
+      "ownerIssues": [115, 120, 121, 126]
+    }
+  ],
+  "risks": [
+    {
+      "id": "T001",
+      "title": "validator consensus key theft, cloning, rollback, or double-sign",
+      "category": "keys-consensus",
+      "assetIds": ["A01", "A04", "A14"],
+      "actorIds": ["ACT04", "ACT06"],
+      "boundaryIds": ["B03"],
+      "likelihood": 4,
+      "impact": 5,
+      "severity": "critical",
+      "scenario": "a stolen or restored signer signs conflicting votes or loses last-sign state",
+      "prevention": [
+        "independent signer custody",
+        "single active signer",
+        "atomic last-sign state",
+        "no key in images, snapshots, or support bundles"
+      ],
+      "detection": [
+        "duplicate-vote evidence",
+        "unexpected signer fingerprint",
+        "missed-sign and equivocation alerts"
+      ],
+      "recovery": [
+        "stop signer",
+        "rotate infrastructure",
+        "preserve evidence",
+        "follow compromise and validator-state runbooks"
+      ],
+      "ownerIssues": [100, 117, 119, 126],
+      "releaseGate": true,
+      "mitigationStatus": "designed-pending-owner-tests",
+      "residualRisk": "validator compromise remains possible; public release is blocked until custody and recovery are exercised",
+      "reviewTriggers": [
+        "signer design change",
+        "key restore",
+        "new validator operator",
+        "equivocation"
+      ]
+    },
+    {
+      "id": "T002",
+      "title": "malicious validator censorship, quorum halt, partition, or conflicting commit",
+      "category": "consensus",
+      "assetIds": ["A04", "A07", "A14"],
+      "actorIds": ["ACT04", "ACT05"],
+      "boundaryIds": ["B02", "B04"],
+      "likelihood": 3,
+      "impact": 5,
+      "severity": "high",
+      "scenario": "one-third-or-more power withholds votes or partitions peers; Byzantine power violates the trust envelope",
+      "prevention": [
+        "power distribution caps",
+        "independent operators and failure domains",
+        "sentry topology",
+        "strict quorum"
+      ],
+      "detection": [
+        "round and vote telemetry",
+        "peer and partition alerts",
+        "conflicting-header checks"
+      ],
+      "recovery": [
+        "safe halt",
+        "evidence preservation",
+        "operator coordination without state edits",
+        "incident gate before restart"
+      ],
+      "ownerIssues": [88, 119, 124, 126],
+      "releaseGate": true,
+      "mitigationStatus": "trust-contract-defined-tests-pending",
+      "residualRisk": "CometBFT cannot guarantee safety after its Byzantine-power assumption fails",
+      "reviewTriggers": [
+        "validator power change",
+        "operator concentration",
+        "partition",
+        "conflicting header"
+      ]
+    },
+    {
+      "id": "T003",
+      "title": "nondeterministic app, EVM, precompile, or module execution splits consensus",
+      "category": "state-transition",
+      "assetIds": ["A04", "A09", "A14"],
+      "actorIds": ["ACT09", "ACT07"],
+      "boundaryIds": ["B04", "B05"],
+      "likelihood": 4,
+      "impact": 5,
+      "severity": "critical",
+      "scenario": "different validators compute different app hashes from the same committed input",
+      "prevention": [
+        "exact dependency pins",
+        "minimal module and precompile composition",
+        "deterministic APIs only",
+        "atomic reverts"
+      ],
+      "detection": [
+        "multi-validator app-hash assertions",
+        "differential EVM tests",
+        "fuzz and invariant suites"
+      ],
+      "recovery": [
+        "halt",
+        "preserve databases and inputs",
+        "root-cause and versioned upgrade or new genesis",
+        "never edit state manually"
+      ],
+      "ownerIssues": [94, 107, 111, 121, 126],
+      "releaseGate": true,
+      "mitigationStatus": "baseline-pinned-composition-tests-pending",
+      "residualRisk": "upstream or Torium composition bugs can still cause consensus failure",
+      "reviewTriggers": [
+        "module change",
+        "precompile change",
+        "EVM fork change",
+        "dependency upgrade",
+        "app-hash mismatch"
+      ]
+    },
+    {
+      "id": "T004",
+      "title": "genesis supply, allocation, denom, power, or identifier tampering",
+      "category": "genesis-economics",
+      "assetIds": ["A03", "A14"],
+      "actorIds": ["ACT06", "ACT10"],
+      "boundaryIds": ["B07"],
+      "likelihood": 3,
+      "impact": 5,
+      "severity": "high",
+      "scenario": "a modified genesis mints, reallocates, truncates voting power, or changes replay domains",
+      "prevention": [
+        "generated canonical genesis",
+        "supply and PowerReduction invariants",
+        "post-genesis native-denom mint restriction",
+        "normalized checksum",
+        "reviewed identifier manifest"
+      ],
+      "detection": [
+        "clean regeneration diff",
+        "checksum verification",
+        "supply and validator-power reconciliation",
+        "bank, EVM native, and Solidity facade conservation tests"
+      ],
+      "recovery": [
+        "reject before launch",
+        "allocate new public IDs after abandoned genesis",
+        "publish incident and replacement checksum"
+      ],
+      "ownerIssues": [91, 104, 121, 123, 126],
+      "releaseGate": true,
+      "mitigationStatus": "local-genesis-and-native-supply-controls-implemented-public-freeze-pending",
+      "residualRisk": "a trusted distribution channel can still present the wrong genesis unless clients pin checksums",
+      "reviewTriggers": [
+        "allocation change",
+        "denom or PowerReduction change",
+        "genesis reset",
+        "checksum mismatch"
+      ]
+    },
+    {
+      "id": "T005",
+      "title": "unauthorized governance, parameter mutation, privileged action, or binary upgrade",
+      "category": "governance-upgrades",
+      "assetIds": ["A02", "A05", "A14"],
+      "actorIds": ["ACT06", "ACT10", "ACT04"],
+      "boundaryIds": ["B06"],
+      "likelihood": 4,
+      "impact": 5,
+      "severity": "critical",
+      "scenario": "an undocumented key or proposal changes consensus, supply, fees, modules, contracts, or executable code",
+      "prevention": [
+        "explicit authority matrix",
+        "no hidden admin key",
+        "versioned proposal and handler",
+        "timelock and rehearsal"
+      ],
+      "detection": [
+        "proposal and parameter alerts",
+        "binary/version attestation",
+        "upgrade-height divergence checks"
+      ],
+      "recovery": [
+        "safe halt",
+        "reject unauthorized binary",
+        "incident governance process",
+        "audited corrective upgrade"
+      ],
+      "ownerIssues": [106, 119, 121, 126],
+      "releaseGate": true,
+      "mitigationStatus": "local-authority-and-upgrade-rehearsal-implemented-public-transition-pending",
+      "residualRisk": "legitimate governance can still approve harmful changes; social review remains required",
+      "reviewTriggers": [
+        "authority change",
+        "new privileged method",
+        "upgrade proposal",
+        "emergency control"
+      ]
+    },
+    {
+      "id": "T006",
+      "title": "source, dependency, builder, artifact, image, or provenance compromise",
+      "category": "supply-chain",
+      "assetIds": ["A10", "A04"],
+      "actorIds": ["ACT07", "ACT10"],
+      "boundaryIds": ["B07"],
+      "likelihood": 4,
+      "impact": 5,
+      "severity": "critical",
+      "scenario": "a malicious dependency or builder produces a binary different from reviewed source",
+      "prevention": [
+        "immutable versions and image digests",
+        "minimal builders",
+        "two-person release review",
+        "protected tags"
+      ],
+      "detection": [
+        "reproducible builds",
+        "SBOM and advisory scan",
+        "checksums, signatures, and provenance verification"
+      ],
+      "recovery": [
+        "revoke artifact",
+        "rotate release credentials",
+        "publish advisory",
+        "rebuild from clean pinned inputs"
+      ],
+      "ownerIssues": [121, 122, 126],
+      "releaseGate": true,
+      "mitigationStatus": "toolchain-pinned-release-pipeline-pending",
+      "residualRisk": "upstream signed releases and registries remain external trust dependencies",
+      "reviewTriggers": [
+        "dependency update",
+        "builder change",
+        "registry incident",
+        "checksum or reproducibility mismatch"
+      ]
+    },
+    {
+      "id": "T007",
+      "title": "secret, mnemonic, validator key, API token, or credential leaks into artifacts",
+      "category": "secrets",
+      "assetIds": ["A01", "A02", "A10", "A12"],
+      "actorIds": ["ACT06", "ACT07", "ACT10"],
+      "boundaryIds": ["B07", "B12"],
+      "likelihood": 4,
+      "impact": 4,
+      "severity": "high",
+      "scenario": "source, logs, images, fixtures, examples, containers, or support bundles expose credentials",
+      "prevention": [
+        "environment-only injection",
+        "no production keys in fixtures",
+        "redaction",
+        "scan staging before archive"
+      ],
+      "detection": [
+        "tracked-source and explicit-path secret gate",
+        "six-surface scanner self-test",
+        "CI and release scan"
+      ],
+      "recovery": [
+        "revoke and rotate",
+        "invalidate affected artifacts",
+        "remove cached copies",
+        "incident review"
+      ],
+      "ownerIssues": [120, 121, 126],
+      "releaseGate": true,
+      "mitigationStatus": "local-guard-implemented-ci-enforcement-pending",
+      "residualRisk": "pattern scanning cannot prove absence of every encoded or novel credential",
+      "reviewTriggers": [
+        "new credential format",
+        "support-bundle change",
+        "scanner bypass",
+        "secret finding"
+      ]
+    },
+    {
+      "id": "T008",
+      "title": "poisoned, stale, corrupted, or untrusted snapshot, backup, or state-sync input",
+      "category": "recovery-state",
+      "assetIds": ["A04", "A06"],
+      "actorIds": ["ACT06", "ACT11", "ACT05"],
+      "boundaryIds": ["B08"],
+      "likelihood": 3,
+      "impact": 5,
+      "severity": "high",
+      "scenario": "a node restores incorrect state or trusts an attacker-selected height and hash",
+      "prevention": [
+        "pinned genesis and trusted height/hash",
+        "checksums",
+        "multiple providers",
+        "evidence and unbonding alignment"
+      ],
+      "detection": [
+        "app-hash verification",
+        "independent RPC comparison",
+        "restore and state-sync drills"
+      ],
+      "recovery": [
+        "discard state",
+        "restore from verified source",
+        "preserve corrupt sample",
+        "rotate compromised trust metadata"
+      ],
+      "ownerIssues": [98, 116, 119, 123],
+      "releaseGate": true,
+      "mitigationStatus": "local-recovery-enforced-production-trust-workflows-pending",
+      "residualRisk": "local artifacts are self-checked but public clients still need an authentic initial trust anchor and operator policy from #116",
+      "reviewTriggers": [
+        "snapshot provider change",
+        "trusting-period change",
+        "restore mismatch",
+        "database corruption"
+      ]
+    },
+    {
+      "id": "T009",
+      "title": "replay across reset, environment, chain ID, account sequence, or signing domain",
+      "category": "replay-identifiers",
+      "assetIds": ["A03", "A11", "A14"],
+      "actorIds": ["ACT03", "ACT05"],
+      "boundaryIds": ["B01", "B08"],
+      "likelihood": 3,
+      "impact": 4,
+      "severity": "high",
+      "scenario": "an old signed transaction becomes valid after reset or a client signs for the wrong network",
+      "prevention": [
+        "EIP-155 and Cosmos chain IDs",
+        "sequence checks",
+        "new IDs after public reset",
+        "wallet network guards"
+      ],
+      "detection": [
+        "chain-ID handshake",
+        "reset markers",
+        "duplicate transaction and sequence telemetry"
+      ],
+      "recovery": [
+        "stop submissions",
+        "clear local artifacts",
+        "replace public replay domain",
+        "notify clients"
+      ],
+      "ownerIssues": [86, 98, 123, 130],
+      "releaseGate": true,
+      "mitigationStatus": "local-reset-guarded-public-replay-controls-pending",
+      "residualRisk": "deterministic valueless local resets deliberately reuse IDs and require explicit cleanup",
+      "reviewTriggers": [
+        "genesis reset",
+        "chain-ID change",
+        "wallet metadata change",
+        "replay report"
+      ]
+    },
+    {
+      "id": "T010",
+      "title": "RPC, WebSocket, REST, gRPC, debug, batch, log, or trace denial of service",
+      "category": "rpc-dos",
+      "assetIds": ["A07", "A04"],
+      "actorIds": ["ACT05", "ACT08"],
+      "boundaryIds": ["B01"],
+      "likelihood": 4,
+      "impact": 4,
+      "severity": "high",
+      "scenario": "expensive calls, broad logs, batches, subscriptions, traces, or bodies exhaust node resources",
+      "prevention": [
+        "separate public and operator profiles",
+        "caps, timeouts, quotas, origins, and reverse proxy",
+        "no public debug by default"
+      ],
+      "detection": [
+        "per-method latency and error metrics",
+        "resource and queue alerts",
+        "abuse logs without secrets"
+      ],
+      "recovery": [
+        "rate-limit or shed load",
+        "disable abusive namespace",
+        "isolate RPC from validators",
+        "scale approved profile"
+      ],
+      "ownerIssues": [114, 118, 120, 126],
+      "releaseGate": true,
+      "mitigationStatus": "role-contract-and-local-limits-defined-runtime-load-and-public-hardening-pending",
+      "residualRisk": "permissionless reads and transaction submission always expose a resource-cost surface",
+      "reviewTriggers": [
+        "new namespace",
+        "limit change",
+        "resource saturation",
+        "public endpoint proposal"
+      ]
+    },
+    {
+      "id": "T011",
+      "title": "P2P eclipse, peer poisoning, asymmetric partition, or validator address exposure",
+      "category": "p2p-network",
+      "assetIds": ["A04", "A07"],
+      "actorIds": ["ACT05", "ACT04"],
+      "boundaryIds": ["B02"],
+      "likelihood": 3,
+      "impact": 4,
+      "severity": "high",
+      "scenario": "an attacker monopolizes peers, isolates validators, or targets exposed consensus nodes",
+      "prevention": [
+        "sentries and private validator addresses",
+        "peer diversity",
+        "connection limits",
+        "failure-domain distribution"
+      ],
+      "detection": [
+        "peer diversity and churn metrics",
+        "height and round divergence",
+        "partition chaos tests"
+      ],
+      "recovery": [
+        "rotate peers and addresses",
+        "restore trusted connectivity",
+        "preserve network evidence",
+        "safe catch-up"
+      ],
+      "ownerIssues": [114, 119, 120, 124],
+      "releaseGate": true,
+      "mitigationStatus": "sentry-topology-contract-defined-local-isolation-and-chaos-pending",
+      "residualRisk": "a sufficiently powerful network adversary can delay or partition communication",
+      "reviewTriggers": [
+        "topology change",
+        "peer concentration",
+        "validator IP leak",
+        "partition alert"
+      ]
+    },
+    {
+      "id": "T012",
+      "title": "faucet abuse, budget exhaustion, queue flood, nonce contention, or signer compromise",
+      "category": "faucet",
+      "assetIds": ["A02", "A08", "A07"],
+      "actorIds": ["ACT08", "ACT06"],
+      "boundaryIds": ["B10"],
+      "likelihood": 4,
+      "impact": 4,
+      "severity": "high",
+      "scenario": "bots bypass simple rate limits or compromise a signer with excessive authority",
+      "prevention": [
+        "isolated capped hot wallet",
+        "no mint or validator authority",
+        "idempotency, layered limits, bounded queue, global budget"
+      ],
+      "detection": [
+        "denial and abuse metrics",
+        "balance and queue alerts",
+        "transaction outcome reconciliation"
+      ],
+      "recovery": [
+        "pause",
+        "drain and rotate signer",
+        "refill through reviewed procedure",
+        "reconcile pending nonces"
+      ],
+      "ownerIssues": [97, 120, 125, 172],
+      "releaseGate": true,
+      "mitigationStatus": "local-faucet-and-public-design-pending",
+      "residualRisk": "public valueless tokens remain attractive to automated abuse and address farms",
+      "reviewTriggers": [
+        "public faucet design",
+        "signer refill",
+        "abuse spike",
+        "nonce incident"
+      ]
+    },
+    {
+      "id": "T013",
+      "title": "nonce gaps, fee replacement, mempool eviction, propagation, or lifecycle misreporting",
+      "category": "transactions-mempool",
+      "assetIds": ["A07", "A11", "A14"],
+      "actorIds": ["ACT03", "ACT08"],
+      "boundaryIds": ["B01", "B04"],
+      "likelihood": 4,
+      "impact": 3,
+      "severity": "high",
+      "scenario": "RPC acceptance is mistaken for retention or network-wide replacement and clients lose transaction state",
+      "prevention": [
+        "no network-wide RBF promise",
+        "bounded local app pool and explicit timeouts",
+        "same-nonce replacement requires at least 10 percent more fee cap and tip cap at the receiving node",
+        "simulation",
+        "explicit lifecycle states and idempotency"
+      ],
+      "detection": [
+        "four-validator local replacement acceptance probe",
+        "mempool and receipt probes",
+        "nonce reconciliation",
+        "dropped, replaced, unknown, and halt diagnostics"
+      ],
+      "recovery": [
+        "resubmit under supported policy",
+        "reconcile account nonce",
+        "backfill receipts",
+        "surface uncertainty"
+      ],
+      "ownerIssues": [105, 107, 119, 132, 135],
+      "releaseGate": true,
+      "mitigationStatus": "local-receiving-node-replacement-policy-validated-client-lifecycle-and-public-evidence-pending",
+      "residualRisk": "distributed mempools cannot provide a single authoritative pending view",
+      "reviewTriggers": [
+        "mempool change",
+        "replacement policy change",
+        "stuck transaction",
+        "SDK lifecycle change"
+      ]
+    },
+    {
+      "id": "T014",
+      "title": "explorer or indexer serves incomplete, stale, spoofed, or noncanonical data",
+      "category": "indexing",
+      "assetIds": ["A13", "A11"],
+      "actorIds": ["ACT11", "ACT05"],
+      "boundaryIds": ["B09"],
+      "likelihood": 3,
+      "impact": 4,
+      "severity": "high",
+      "scenario": "users or SDKs trust an indexer view that missed logs, traces, resets, or canonical blocks",
+      "prevention": [
+        "indexer is not consensus authority",
+        "finalized-height cursor",
+        "checksummed deployment registry",
+        "direct RPC verification path"
+      ],
+      "detection": [
+        "reconciliation and backfill",
+        "height/hash comparison",
+        "lag and missing-event alerts"
+      ],
+      "recovery": [
+        "stop serving stale data",
+        "reindex from canonical chain",
+        "mark partial trace capability",
+        "publish incident"
+      ],
+      "ownerIssues": [112, 113, 119, 131],
+      "releaseGate": true,
+      "mitigationStatus": "local-blockscout-candidate-selected-base-proof-reused-public-and-recovery-gates-pending",
+      "residualRisk": "trace support is partial and indexed derived data can lag canonical state",
+      "reviewTriggers": [
+        "indexer change",
+        "reset",
+        "trace mismatch",
+        "reconciliation failure"
+      ]
+    },
+    {
+      "id": "T015",
+      "title": "system contract or precompile authorization, reentrancy, accounting, or spoofed-event failure",
+      "category": "contracts-precompiles",
+      "assetIds": ["A09", "A14", "A04"],
+      "actorIds": ["ACT09", "ACT03"],
+      "boundaryIds": ["B05"],
+      "likelihood": 4,
+      "impact": 5,
+      "severity": "critical",
+      "scenario": "crafted call sequences bypass access control, double-claim, corrupt accounting, or emit trusted-looking false events",
+      "prevention": [
+        "checks-effects-interactions",
+        "domain separation",
+        "replay protection",
+        "role minimization",
+        "atomic precompile state"
+      ],
+      "detection": [
+        "fuzz, invariant, differential, and malicious-token tests",
+        "event-to-state reconciliation",
+        "static analysis"
+      ],
+      "recovery": [
+        "pause only if explicitly designed",
+        "versioned replacement or upgrade",
+        "preserve exploit evidence",
+        "no silent state patch"
+      ],
+      "ownerIssues": [104, 108, 109, 110, 111, 126],
+      "releaseGate": true,
+      "mitigationStatus": "v0-contract-controls-and-tests-present-precompile-differential-and-external-review-pending",
+      "residualRisk": "permissionless composability creates call sequences not covered by examples",
+      "reviewTriggers": [
+        "contract change",
+        "precompile change",
+        "new token interaction",
+        "invariant failure",
+        "audit finding"
+      ]
+    },
+    {
+      "id": "T016",
+      "title": "deployment registry, ABI, address, bytecode, or environment metadata tampering",
+      "category": "contract-metadata",
+      "assetIds": ["A09", "A10", "A11"],
+      "actorIds": ["ACT10", "ACT07", "ACT11"],
+      "boundaryIds": ["B07", "B09"],
+      "likelihood": 3,
+      "impact": 5,
+      "severity": "high",
+      "scenario": "SDK or docs direct users to wrong code, address, ABI, chain, or deployment transaction",
+      "prevention": [
+        "deterministic deployment",
+        "runtime bytecode hash",
+        "checksummed environment registry",
+        "generated SDK types"
+      ],
+      "detection": [
+        "on-chain bytecode verification",
+        "registry regeneration diff",
+        "example execution against localnet"
+      ],
+      "recovery": [
+        "revoke metadata release",
+        "publish corrected registry",
+        "warn affected clients",
+        "rotate only through versioned deployment"
+      ],
+      "ownerIssues": [108, 121, 123, 134],
+      "releaseGate": true,
+      "mitigationStatus": "registry-design-pending",
+      "residualRisk": "clients that pin stale metadata remain vulnerable until upgraded",
+      "reviewTriggers": [
+        "deployment",
+        "ABI change",
+        "bytecode mismatch",
+        "environment activation"
+      ]
+    },
+    {
+      "id": "T017",
+      "title": "fee, gas, payload, state-growth, or transaction-spam economic denial of service",
+      "category": "fees-resources",
+      "assetIds": ["A04", "A07", "A14"],
+      "actorIds": ["ACT08", "ACT09"],
+      "boundaryIds": ["B01", "B04", "B05"],
+      "likelihood": 4,
+      "impact": 4,
+      "severity": "high",
+      "scenario": "cheap or pathological transactions saturate blocks, storage, execution, queries, or evidence capacity",
+      "prevention": [
+        "1 gwei EIP-1559 floor and 1 atorium per gas local EVM priority floor",
+        "30 million block gas with 15 million target and 25 million transaction and call cap",
+        "5 MiB block and RPC body, 128 KiB EVM transaction, 256 KiB Cosmos transaction, and 100-request batch caps",
+        "bounded application mempool slots, queues, lifetime, and Cosmos transaction count",
+        "bounded state interfaces"
+      ],
+      "detection": [
+        "four-validator local fee, payload, saturation, base-fee, and accounting acceptance suite",
+        "saturation and state-growth benchmarks",
+        "gas-to-resource profiling",
+        "mempool and base-fee alerts"
+      ],
+      "recovery": [
+        "load shedding",
+        "versioned fee or limit change",
+        "pruning and capacity runbook",
+        "never bypass consensus validation"
+      ],
+      "ownerIssues": [105, 118, 120],
+      "releaseGate": true,
+      "mitigationStatus": "local-fee-resource-policy-and-deterministic-saturation-validated-public-capacity-evidence-pending",
+      "residualRisk": "sustained state growth remains unbounded over time and local measurements do not establish public throughput or economic security",
+      "reviewTriggers": [
+        "fee change",
+        "new call surface",
+        "resource baseline change",
+        "spam event"
+      ]
+    },
+    {
+      "id": "T018",
+      "title": "18-decimal supply, staking power, reward, fee, or rounding invariant failure",
+      "category": "economic-precision",
+      "assetIds": ["A03", "A14", "A04"],
+      "actorIds": ["ACT03", "ACT09"],
+      "boundaryIds": ["B04", "B05"],
+      "likelihood": 3,
+      "impact": 5,
+      "severity": "high",
+      "scenario": "PowerReduction truncation, dust, repeated partial operations, or conversion errors alter balances or voting power",
+      "prevention": [
+        "10^18 canonical PowerReduction",
+        "minimum validator stake",
+        "integer base units",
+        "single native ledger",
+        "bank-backed native Solidity facade without representation conversion"
+      ],
+      "detection": [
+        "property and conservation invariants",
+        "boundary vectors",
+        "power, pool, reward, and fee reconciliation",
+        "native facade balance and total-supply reconciliation"
+      ],
+      "recovery": [
+        "block release",
+        "versioned migration with quantified dust",
+        "replay full invariant suite"
+      ],
+      "ownerIssues": [91, 100, 104, 105, 121],
+      "releaseGate": true,
+      "mitigationStatus": "local-native-ledger-staking-rewards-slashing-fee-and-lifecycle-invariants-tested-public-review-pending",
+      "residualRisk": "bounded base-unit share dust remains explicit; public economic-security review remains a release gate",
+      "reviewTriggers": [
+        "PowerReduction change",
+        "minimum stake change",
+        "reward or slash logic change",
+        "reconciliation mismatch"
+      ]
+    },
+    {
+      "id": "T019",
+      "title": "node or validator backup and recovery causes rollback, stale state, or evidence loss",
+      "category": "key-recovery",
+      "assetIds": ["A01", "A06", "A04"],
+      "actorIds": ["ACT06", "ACT10"],
+      "boundaryIds": ["B03", "B08"],
+      "likelihood": 3,
+      "impact": 5,
+      "severity": "high",
+      "scenario": "an operator restores a signer or database behind its last signed height or loses slashable evidence",
+      "prevention": [
+        "separate signer-state backup",
+        "monotonic restore checks",
+        "documented non-exportable keys",
+        "evidence retention"
+      ],
+      "detection": [
+        "height and signer-state comparison",
+        "restore drills",
+        "evidence-window monitoring"
+      ],
+      "recovery": [
+        "do not start stale signer",
+        "rebuild node state from trusted source",
+        "rotate compromised signer infrastructure",
+        "operator incident review"
+      ],
+      "ownerIssues": [117, 119, 123, 126],
+      "releaseGate": true,
+      "mitigationStatus": "runbooks-and-drills-pending",
+      "residualRisk": "human recovery error remains a material double-sign vector",
+      "reviewTriggers": [
+        "backup change",
+        "restore",
+        "key rotation",
+        "signer-state mismatch"
+      ]
+    },
+    {
+      "id": "T020",
+      "title": "host, container, node profile, debug interface, or runtime isolation compromise",
+      "category": "infrastructure",
+      "assetIds": ["A01", "A02", "A04", "A07", "A10"],
+      "actorIds": ["ACT05", "ACT06", "ACT07"],
+      "boundaryIds": ["B02", "B03", "B07"],
+      "likelihood": 3,
+      "impact": 5,
+      "severity": "high",
+      "scenario": "an exposed service or over-privileged container reaches keys, state, host, or validator network",
+      "prevention": [
+        "least-privilege profiles",
+        "read-only and non-root containers",
+        "network segmentation",
+        "no insecure unlock",
+        "patch policy"
+      ],
+      "detection": [
+        "runtime and file-integrity alerts",
+        "unexpected process and connection monitoring",
+        "hardening tests"
+      ],
+      "recovery": [
+        "isolate host",
+        "rotate affected credentials",
+        "restore verified state",
+        "rebuild from signed artifacts"
+      ],
+      "ownerIssues": [114, 120, 122, 124, 126],
+      "releaseGate": true,
+      "mitigationStatus": "least-privilege-role-contract-defined-runtime-hardening-pending",
+      "residualRisk": "kernel, cloud control-plane, and hardware compromise remain external dependencies",
+      "reviewTriggers": [
+        "base image change",
+        "new port",
+        "privilege change",
+        "host incident"
+      ]
+    },
+    {
+      "id": "T021",
+      "title": "known or novel upstream dependency vulnerability and abandoned maintenance line",
+      "category": "dependencies",
+      "assetIds": ["A04", "A09", "A10"],
+      "actorIds": ["ACT07", "ACT09"],
+      "boundaryIds": ["B05", "B07"],
+      "likelihood": 4,
+      "impact": 5,
+      "severity": "critical",
+      "scenario": "Cosmos EVM, CometBFT, Cosmos SDK, go-ethereum, compiler, or build dependency contains an exploitable flaw",
+      "prevention": [
+        "maintained exact pins",
+        "minimal upstream delta",
+        "advisory monitoring",
+        "fallback and upgrade policy"
+      ],
+      "detection": [
+        "SBOM advisory scan",
+        "upstream watch",
+        "conformance and differential tests",
+        "external audit"
+      ],
+      "recovery": [
+        "halt affected release",
+        "pin patched version",
+        "rehearse upgrade",
+        "publish advisory and compatibility impact"
+      ],
+      "ownerIssues": [89, 107, 111, 121, 122, 126],
+      "releaseGate": true,
+      "mitigationStatus": "baseline-reviewed-continuous-monitoring-pending",
+      "residualRisk": "pre-1.0 Cosmos EVM and its go-ethereum fork can introduce rapid compatibility and security change",
+      "reviewTriggers": [
+        "security advisory",
+        "new stable release",
+        "maintenance inactivity",
+        "fork delta growth"
+      ]
+    },
+    {
+      "id": "T022",
+      "title": "spoofed endpoint, wrong chain, inconsistent RPC semantics, or unsafe client fallback",
+      "category": "client-rpc",
+      "assetIds": ["A07", "A11", "A13"],
+      "actorIds": ["ACT05", "ACT11"],
+      "boundaryIds": ["B01", "B09"],
+      "likelihood": 4,
+      "impact": 4,
+      "severity": "high",
+      "scenario": "a client trusts an attacker RPC, wrong chain ID, unsupported safe/finalized behavior, or invented public fallback",
+      "prevention": [
+        "no public fallback",
+        "chain-ID and genesis validation",
+        "capability matrix",
+        "TLS and endpoint allowlists"
+      ],
+      "detection": [
+        "handshake and metadata mismatch",
+        "multi-endpoint comparison",
+        "normalized RPC diagnostics"
+      ],
+      "recovery": [
+        "disable endpoint",
+        "surface network mismatch",
+        "reconnect to approved provider",
+        "backfill canonical state"
+      ],
+      "ownerIssues": [130, 131, 132, 135],
+      "releaseGate": true,
+      "mitigationStatus": "identifiers-and-capabilities-defined-sdk-pending",
+      "residualRisk": "users may manually trust malicious custom-network metadata outside Torium control",
+      "reviewTriggers": [
+        "endpoint publication",
+        "RPC behavior change",
+        "TLS incident",
+        "SDK fallback change"
+      ]
+    },
+    {
+      "id": "T023",
+      "title": "logs, telemetry, screenshots, debug dumps, or support bundles leak secrets or sensitive topology",
+      "category": "observability-privacy",
+      "assetIds": ["A12", "A01", "A02", "A07"],
+      "actorIds": ["ACT06", "ACT10", "ACT05"],
+      "boundaryIds": ["B12"],
+      "likelihood": 4,
+      "impact": 4,
+      "severity": "high",
+      "scenario": "diagnostic artifacts contain keys, tokens, environment values, validator addresses, or exploitable host details",
+      "prevention": [
+        "structured allowlisted diagnostics",
+        "redaction",
+        "no raw environment dump",
+        "scan extracted staging before archive"
+      ],
+      "detection": [
+        "binary and text secret scan",
+        "support-bundle schema test",
+        "manual incident review"
+      ],
+      "recovery": [
+        "revoke exposed secrets",
+        "remove artifact",
+        "shorten retention",
+        "notify affected operators"
+      ],
+      "ownerIssues": [115, 120, 121, 126],
+      "releaseGate": true,
+      "mitigationStatus": "secret-gate-implemented-bundle-design-pending",
+      "residualRisk": "novel encodings, memory dumps, and human screenshots can evade pattern rules",
+      "reviewTriggers": [
+        "new log field",
+        "debug dump change",
+        "support bundle change",
+        "redaction failure"
+      ]
+    },
+    {
+      "id": "T024",
+      "title": "CI, branch, tag, reviewer, cache, or release credential bypass",
+      "category": "ci-governance",
+      "assetIds": ["A02", "A10"],
+      "actorIds": ["ACT07", "ACT10", "ACT06"],
+      "boundaryIds": ["B07"],
+      "likelihood": 3,
+      "impact": 5,
+      "severity": "high",
+      "scenario": "an attacker bypasses required checks/review or poisons cache and publishes trusted-looking output",
+      "prevention": [
+        "branch protection",
+        "CODEOWNERS and second security reviewer",
+        "least-privilege short-lived CI credentials",
+        "isolated release jobs"
+      ],
+      "detection": [
+        "provenance identity verification",
+        "audit log alerts",
+        "clean rebuild comparison",
+        "secret scan"
+      ],
+      "recovery": [
+        "revoke credentials and artifacts",
+        "lock releases",
+        "review audit logs",
+        "rebuild and re-sign"
+      ],
+      "ownerIssues": [84, 121, 122, 126],
+      "releaseGate": true,
+      "mitigationStatus": "process-defined-external-settings-and-ci-pending",
+      "residualRisk": "repository and CI provider administrator compromise remains an external trust risk",
+      "reviewTriggers": [
+        "workflow permission change",
+        "reviewer change",
+        "credential change",
+        "unexpected release"
+      ]
+    },
+    {
+      "id": "T025",
+      "title": "reward proof, attestation, role, domain, or event spoofing causes unauthorized contract state",
+      "category": "application-contracts",
+      "assetIds": ["A09", "A11", "A14"],
+      "actorIds": ["ACT09", "ACT10", "ACT03"],
+      "boundaryIds": ["B05", "B09"],
+      "likelihood": 3,
+      "impact": 5,
+      "severity": "high",
+      "scenario": "a proof is replayed or forged, an attestor role is misused, or an event is treated as truth without state verification",
+      "prevention": [
+        "chain and contract domain separation",
+        "claim nonce or bitmap",
+        "issuer-scoped sender identity and replay keys",
+        "state-based SDK reads"
+      ],
+      "detection": [
+        "fuzz and replay tests",
+        "root and claim reconciliation",
+        "role-change alerts",
+        "event-to-state verification"
+      ],
+      "recovery": [
+        "revoke role through documented authority",
+        "pause only if designed",
+        "versioned contract remediation",
+        "preserve proof evidence"
+      ],
+      "ownerIssues": [109, 110, 111, 134],
+      "releaseGate": true,
+      "mitigationStatus": "v0-reward-and-permissionless-attestation-controls-tested-external-review-pending",
+      "residualRisk": "reward publishers and permissionless issuers remain trusted for the statements and datasets they commit",
+      "reviewTriggers": [
+        "proof format change",
+        "attestor change",
+        "role change",
+        "replay or spoof report"
+      ]
+    }
+  ],
+  "invariants": [
+    {
+      "id": "INV001",
+      "statement": "all honest validators produce the same app hash from identical committed input",
+      "riskIds": ["T003", "T018"],
+      "testTypes": ["integration", "fuzz"],
+      "testIds": [
+        "integration.consensus.app-hash-equality",
+        "fuzz.state-transition.determinism"
+      ],
+      "ownerIssues": [94, 107, 121]
+    },
+    {
+      "id": "INV002",
+      "statement": "faults inside the trust threshold never produce conflicting committed blocks",
+      "riskIds": ["T001", "T002", "T011"],
+      "testTypes": ["chaos"],
+      "testIds": [
+        "chaos.consensus.local.one-validator-offline",
+        "chaos.consensus.local.two-validators-offline",
+        "chaos.consensus.local.partition-three-one",
+        "chaos.consensus.local.partition-two-two",
+        "chaos.consensus.local.single-validator-equivocation",
+        "chaos.consensus.local.assumption-violation-two-byzantine",
+        "chaos.consensus.local.validator-set-change"
+      ],
+      "ownerIssues": [100, 119]
+    },
+    {
+      "id": "INV003",
+      "statement": "genesis regeneration preserves checksum, total supply, denom, chain IDs, allocations, integer validator power, and one bank-backed native facade",
+      "riskIds": ["T004", "T009", "T018"],
+      "testTypes": ["integration"],
+      "testIds": [
+        "integration.genesis.reproducible-supply-power",
+        "integration.native-asset.bank-evm-solidity-conservation"
+      ],
+      "ownerIssues": [91, 104, 123]
+    },
+    {
+      "id": "INV004",
+      "statement": "only ratified governance authority and a versioned rehearsed plan can perform privileged upgrades",
+      "riskIds": ["T005"],
+      "testTypes": ["integration", "runbook"],
+      "testIds": [
+        "integration.upgrade.authority-and-handler",
+        "integration.upgrade.two-validator-no-quorum",
+        "integration.upgrade.premature-old-wrong-binary-halts",
+        "integration.upgrade.partial-three-validator-and-late-catchup",
+        "integration.upgrade.failed-migration-no-commit",
+        "runbook.upgrade.interrupted-recovery"
+      ],
+      "ownerIssues": [106, 119]
+    },
+    {
+      "id": "INV005",
+      "statement": "reviewed source and immutable inputs reproduce byte-identical signed release artifacts with SBOM and provenance",
+      "riskIds": ["T006", "T021", "T024"],
+      "testTypes": ["integration", "runbook"],
+      "testIds": [
+        "integration.release.reproducibility",
+        "runbook.release.credential-compromise"
+      ],
+      "ownerIssues": [121, 122, 126]
+    },
+    {
+      "id": "INV006",
+      "statement": "tracked source and every generated diagnostic staging directory pass a redacted six-surface secret scan before publication",
+      "riskIds": ["T007", "T023", "T024"],
+      "testTypes": ["integration", "runbook"],
+      "testIds": [
+        "integration.security.prohibited-secrets",
+        "runbook.security.secret-rotation"
+      ],
+      "ownerIssues": [120, 121, 126]
+    },
+    {
+      "id": "INV007",
+      "statement": "snapshot, backup, state-sync, and restart recovery preserve trusted genesis, height, hash, and app state without manual edits",
+      "riskIds": ["T008", "T019"],
+      "testTypes": ["integration", "chaos", "runbook"],
+      "testIds": [
+        "integration.recovery.snapshot-restore",
+        "integration.recovery.application-export",
+        "integration.recovery.per-node-catchup",
+        "integration.recovery.corrupt-input-rejected",
+        "chaos.consensus.local.full-stop-restart",
+        "runbook.recovery.corrupt-state"
+      ],
+      "ownerIssues": [98, 116, 117, 119, 123]
+    },
+    {
+      "id": "INV008",
+      "statement": "transactions cannot cross public replay domains and local reset reuse is explicit and artifact-clean",
+      "riskIds": ["T009", "T022"],
+      "testTypes": ["integration"],
+      "testIds": [
+        "integration.transactions.replay-domains",
+        "integration.recovery.bounded-local-reset"
+      ],
+      "ownerIssues": [98, 123, 130]
+    },
+    {
+      "id": "INV009",
+      "statement": "public RPC profiles expose only approved namespaces and remain bounded under adversarial method, body, batch, log, trace, and subscription load",
+      "riskIds": ["T010", "T022"],
+      "testTypes": ["integration", "fuzz"],
+      "testIds": [
+        "integration.rpc.profile-exposure",
+        "fuzz.rpc.request-bounds"
+      ],
+      "ownerIssues": [114, 118, 120]
+    },
+    {
+      "id": "INV010",
+      "statement": "peer loss and asymmetric partitions match the trust manifest and validators are not directly exposed by public RPC topology",
+      "riskIds": ["T002", "T011"],
+      "testTypes": ["chaos", "runbook"],
+      "testIds": [
+        "chaos.consensus.local.clock-drift-latency-packet-loss",
+        "runbook.p2p.eclipse-recovery"
+      ],
+      "ownerIssues": [114, 119, 124]
+    },
+    {
+      "id": "INV011",
+      "statement": "faucet replay, concurrency, address farming, queue pressure, RPC failure, and signer compromise cannot exceed configured budget or authority",
+      "riskIds": ["T012"],
+      "testTypes": ["integration", "fuzz", "runbook"],
+      "testIds": [
+        "integration.faucet.concurrent-budget",
+        "fuzz.faucet.idempotency-and-limits",
+        "runbook.faucet.signer-compromise"
+      ],
+      "ownerIssues": [97, 120, 125, 172]
+    },
+    {
+      "id": "INV012",
+      "statement": "transaction clients expose submitted, pending, committed, dropped, replaced, and unknown without promising retention, RBF, or bounded inclusion",
+      "riskIds": ["T013", "T017"],
+      "testTypes": ["integration", "chaos"],
+      "testIds": [
+        "integration.transactions.lifecycle",
+        "integration.transactions.local-replacement",
+        "chaos.consensus.local.proposer-transaction-censorship"
+      ],
+      "ownerIssues": [105, 107, 119, 132, 135]
+    },
+    {
+      "id": "INV013",
+      "statement": "explorer and indexer views reconcile canonical height, hash, logs, receipts, reset markers, and documented trace gaps",
+      "riskIds": ["T014", "T022"],
+      "testTypes": ["integration", "chaos"],
+      "testIds": [
+        "integration.explorer.canonical-reconciliation",
+        "chaos.dependencies.local.rpc-explorer-outage"
+      ],
+      "ownerIssues": [112, 113, 119, 131]
+    },
+    {
+      "id": "INV014",
+      "statement": "precompiles and system contracts preserve authorization, atomic revert, accounting, replay, and event-to-state invariants under arbitrary call sequences",
+      "riskIds": ["T003", "T015", "T025"],
+      "testTypes": ["fuzz", "integration"],
+      "testIds": [
+        "fuzz.contracts.system-invariants",
+        "integration.precompiles.atomic-authorization"
+      ],
+      "ownerIssues": [104, 107, 108, 109, 110, 111]
+    },
+    {
+      "id": "INV015",
+      "statement": "deployment registry chain ID, address, ABI, transaction, bytecode, and runtime code hash match the local chain and packed SDK",
+      "riskIds": ["T016"],
+      "testTypes": ["integration"],
+      "testIds": ["integration.contracts.deployment-registry"],
+      "ownerIssues": [108, 121, 123, 134]
+    },
+    {
+      "id": "INV016",
+      "statement": "fee, gas, payload, log, trace, and state-growth limits keep validators live at the ratified capacity envelope",
+      "riskIds": ["T010", "T017"],
+      "testTypes": ["integration", "fuzz", "chaos"],
+      "testIds": [
+        "integration.fees.local-policy-and-saturation",
+        "integration.performance.fee-saturation",
+        "fuzz.evm.resource-accounting",
+        "chaos.dependencies.local.rpc-overload"
+      ],
+      "ownerIssues": [105, 118, 119, 120]
+    },
+    {
+      "id": "INV017",
+      "statement": "18-decimal balances, shares, power, fees, rewards, commission, slashes, and dust reconcile across repeated boundary operations",
+      "riskIds": ["T018"],
+      "testTypes": ["fuzz", "integration"],
+      "testIds": [
+        "fuzz.staking.eighteen-decimal-conservation",
+        "integration.staking.power-and-rewards",
+        "integration.staking.validator-lifecycle",
+        "integration.slashing.downtime-jail-unjail",
+        "integration.evidence.double-sign-tombstone"
+      ],
+      "ownerIssues": [91, 100, 104]
+    },
+    {
+      "id": "INV018",
+      "statement": "key backup, restore, rotation, and compromise response never starts a stale cloned signer or loses accountability evidence",
+      "riskIds": ["T001", "T019"],
+      "testTypes": ["integration", "runbook"],
+      "testIds": [
+        "integration.keys.signer-state-monotonicity",
+        "runbook.keys.compromise-and-rotation"
+      ],
+      "ownerIssues": [117, 119, 126]
+    },
+    {
+      "id": "INV019",
+      "statement": "node, container, host, debug, observability, and support profiles enforce least privilege and emit no prohibited secret",
+      "riskIds": ["T020", "T023"],
+      "testTypes": ["integration", "runbook"],
+      "testIds": [
+        "integration.security.runtime-hardening",
+        "runbook.security.support-bundle"
+      ],
+      "ownerIssues": [114, 115, 120, 122]
+    },
+    {
+      "id": "INV020",
+      "statement": "every dependency and release candidate has a current SBOM, advisory result, upstream delta review, and tested upgrade or rejection decision",
+      "riskIds": ["T006", "T021"],
+      "testTypes": ["integration", "runbook"],
+      "testIds": [
+        "integration.security.sbom-advisories",
+        "runbook.dependencies.critical-advisory"
+      ],
+      "ownerIssues": [89, 107, 111, 121, 122, 126]
+    }
+  ],
+  "releaseGates": [
+    {
+      "id": "G01",
+      "rule": "no high or critical risk lacks prevention, detection, recovery, owners, tests, triggers, and explicit residual risk",
+      "ownerIssues": [90, 126],
+      "blocksPublicRelease": true
+    },
+    {
+      "id": "G02",
+      "rule": "tracked source, images, logs, fixtures, examples, containers, and extracted support-bundle staging pass prohibited-secret gates",
+      "ownerIssues": [120, 121, 126],
+      "blocksPublicRelease": true
+    },
+    {
+      "id": "G03",
+      "rule": "multi-validator deterministic app-hash, EVM, module, precompile, genesis, supply, power, and conformance tests pass",
+      "ownerIssues": [91, 94, 100, 104, 107, 111, 121],
+      "blocksPublicRelease": true
+    },
+    {
+      "id": "G04",
+      "rule": "all trust-model chaos scenarios pass and no tolerated fault produces a conflicting commit",
+      "ownerIssues": [119, 126],
+      "blocksPublicRelease": true
+    },
+    {
+      "id": "G05",
+      "rule": "system contracts complete fuzz, invariant, access-control, deployment-registry, and audit-readiness checks",
+      "ownerIssues": [108, 109, 110, 111, 126],
+      "blocksPublicRelease": true
+    },
+    {
+      "id": "G06",
+      "rule": "snapshot, state-sync, backup, key compromise, restore, and upgrade interruption runbooks are exercised",
+      "ownerIssues": [98, 106, 116, 117, 119, 123],
+      "blocksPublicRelease": true
+    },
+    {
+      "id": "G07",
+      "rule": "reproducible signed artifacts, checksums, SBOMs, provenance, protected release workflow, and second security reviewer are in place",
+      "ownerIssues": [84, 121, 122, 126],
+      "blocksPublicRelease": true
+    },
+    {
+      "id": "G08",
+      "rule": "public-testnet faucet signer isolation, budgets, abuse controls, monitoring, and emergency procedures pass locally",
+      "ownerIssues": [120, 125, 126, 172],
+      "blocksPublicRelease": true
+    },
+    {
+      "id": "G09",
+      "rule": "external audit and launch security review have no unresolved high or critical finding",
+      "ownerIssues": [126],
+      "blocksPublicRelease": true
+    },
+    {
+      "id": "G10",
+      "rule": "public deployment remains blocked until issue 127 receives explicit current approval after all prerequisites",
+      "ownerIssues": [127],
+      "blocksPublicRelease": true
+    }
+  ],
+  "reviewTriggers": [
+    "protocol, chain ID, denom, PowerReduction, module, precompile, fee, mempool, or finality change",
+    "validator, key custody, governance, upgrade, snapshot, state-sync, RPC, P2P, faucet, explorer, contract, CI, release, or support-bundle design change",
+    "new public endpoint, independent operator, infrastructure provider, artifact, package, or deployment environment",
+    "security advisory, audit finding, secret finding, app-hash mismatch, conflicting header, supply mismatch, exploit, sustained outage, or recovery failure",
+    "any proposal to integrate the existing Torium product backend or add PoP, IBC, bridge, L2, live value, or mainnet behavior"
+  ],
+  "riskAcceptance": {
+    "automaticAcceptanceAllowed": false,
+    "localDevelopmentRule": "documented residual risk may be exercised only with valueless loopback or isolated local infrastructure",
+    "publicRule": "high and critical risks remain public-release blockers until owner tests and issue 126 review pass",
+    "acceptanceAuthorityOwnerIssue": 126
+  }
+}

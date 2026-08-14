@@ -1,0 +1,191 @@
+{
+  "$schema": "./identifiers.schema.json",
+  "schemaVersion": 1,
+  "manifestVersion": "0.2.0",
+  "status": "prelaunch-locked",
+  "updatedAt": "2026-07-14",
+  "product": {
+    "publicName": "Torium"
+  },
+  "namespaces": {
+    "npm": {
+      "scope": "@torium-network",
+      "primaryPackage": "@torium-network/sdk",
+      "fallbackPackage": "torium-evm-sdk",
+      "reservationStatus": "organization-created",
+      "ownerAction": "The torium-network npm organization was created by the authenticated owner on 2026-08-14; MFA and a second owner are tracked in chain/config/identifier-availability.json."
+    },
+    "github": {
+      "currentRepository": "Torium-Network/torium",
+      "targetOrganization": "torium-network",
+      "preferredMonorepo": "torium-network/torium",
+      "splitRepositoryNames": {
+        "chain": "torium-chain",
+        "sdk": "torium-sdk",
+        "docs": "torium-docs"
+      },
+      "reservationStatus": "blocked-owner-action",
+      "ownerAction": "An authorized GitHub owner must create the torium-network organization with two owners and MFA before any repository migration; Torium-Network/torium remains the canonical repository until then."
+    },
+    "docs": {
+      "canonicalBasePath": "/docs",
+      "canonicalUrl": "https://torium.network/docs",
+      "reservedPaths": [
+        "/docs",
+        "/docs/getting-started",
+        "/docs/sdk",
+        "/docs/reference",
+        "/docs/contracts",
+        "/docs/node",
+        "/docs/security"
+      ],
+      "futureRedirectHost": "docs.torium.network",
+      "reservationStatus": "reserved-in-manifest-not-published"
+    }
+  },
+  "addressing": {
+    "evm": {
+      "accountFormat": "0x-prefixed-20-byte-hex",
+      "coinType": 60,
+      "defaultDerivationPath": "m/44'/60'/0'/0/0",
+      "canonicalRpcRepresentation": "hex"
+    },
+    "cosmos": {
+      "coinType": 60,
+      "bech32": {
+        "account": "torium",
+        "accountPublicKey": "toriumpub",
+        "validatorOperator": "toriumvaloper",
+        "validatorOperatorPublicKey": "toriumvaloperpub",
+        "validatorConsensus": "toriumvalcons",
+        "validatorConsensusPublicKey": "toriumvalconspub"
+      },
+      "mappingContractIssue": 86
+    }
+  },
+  "currency": {
+    "baseDenom": "atorium",
+    "decimals": 18,
+    "denomUnits": [
+      {
+        "denom": "atorium",
+        "exponent": 0
+      },
+      {
+        "denom": "TOR",
+        "exponent": 18
+      }
+    ],
+    "mainnet": {
+      "name": "Torium",
+      "symbol": "TOR",
+      "tickerStatus": "accepted-collision-risk",
+      "fallbackSymbol": "TRIUM"
+    },
+    "nonValueNetworks": {
+      "name": "Torium Test Token",
+      "symbol": "tTOR",
+      "hasMarketValue": false
+    }
+  },
+  "walletMetadata": {
+    "eip3085Source": "networks",
+    "localnetDefaults": {
+      "rpcUrls": ["http://127.0.0.1:8545"],
+      "webSocketUrls": ["ws://127.0.0.1:8546"],
+      "blockExplorerUrls": [],
+      "publishable": false
+    },
+    "publicEndpointStatus": "deferred-unpublished",
+    "blockExplorerStatus": "deferred",
+    "iconAssetStatus": "deferred"
+  },
+  "networks": [
+    {
+      "environment": "localnet",
+      "displayName": "Torium Localnet",
+      "public": false,
+      "nativeCurrencySymbol": "tTOR",
+      "evm": {
+        "chainId": 1414484556,
+        "chainIdHex": "0x544f524c",
+        "networkId": 1414484556,
+        "caip2": "eip155:1414484556",
+        "shortName": "torium-local",
+        "registryStatus": "local-only-not-registered"
+      },
+      "cosmos": {
+        "chainId": "torium-localnet-1"
+      }
+    },
+    {
+      "environment": "devnet",
+      "displayName": "Torium Devnet",
+      "public": false,
+      "nativeCurrencySymbol": "tTOR",
+      "evm": {
+        "chainId": 1414484548,
+        "chainIdHex": "0x544f5244",
+        "networkId": 1414484548,
+        "caip2": "eip155:1414484548",
+        "shortName": "torium-dev",
+        "registryStatus": "local-only-not-registered"
+      },
+      "cosmos": {
+        "chainId": "torium-devnet-1"
+      }
+    },
+    {
+      "environment": "testnet",
+      "displayName": "Torium Testnet",
+      "public": true,
+      "nativeCurrencySymbol": "tTOR",
+      "evm": {
+        "chainId": 1414484564,
+        "chainIdHex": "0x544f5254",
+        "networkId": 1414484564,
+        "caip2": "eip155:1414484564",
+        "shortName": "torium-testnet",
+        "registryStatus": "collision-checked-unreserved",
+        "collisionFallback": "If this ID is claimed before registration, select a new registry-clear ID, increment the manifest version, and rerun replay/wallet/genesis tests before any genesis is frozen; never reuse the conflicting ID."
+      },
+      "cosmos": {
+        "chainId": "torium-testnet-1"
+      }
+    },
+    {
+      "environment": "mainnet",
+      "displayName": "Torium",
+      "public": true,
+      "nativeCurrencySymbol": "TOR",
+      "evm": {
+        "chainId": 5525330,
+        "chainIdHex": "0x544f52",
+        "networkId": 5525330,
+        "caip2": "eip155:5525330",
+        "shortName": "torium",
+        "registryStatus": "collision-checked-unreserved",
+        "collisionFallback": "If this ID is claimed before registration, select a new registry-clear ID, increment the manifest version, and rerun replay/wallet/genesis tests before any genesis is frozen; never reuse the conflicting ID."
+      },
+      "cosmos": {
+        "chainId": "torium-1"
+      }
+    }
+  ],
+  "nonCanonicalFixtures": [
+    {
+      "name": "upstream-cosmos-evm-poc",
+      "evmChainId": 262144,
+      "cosmosChainId": "local-4221",
+      "reason": "The upstream PoC value collides with the registered MPCQ Mainnet chain and must not be copied into Torium network definitions."
+    }
+  ],
+  "consumerIssues": [86, 123, 130, 138],
+  "deferred": [
+    "public RPC and WebSocket URLs",
+    "explorer URLs",
+    "public EIP-155 registry submissions",
+    "npm or GitHub namespace creation",
+    "bridge and IBC identifiers"
+  ]
+}

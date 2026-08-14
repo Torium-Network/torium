@@ -1,0 +1,45 @@
+---
+title: Examples
+description: Runnable examples for transactions, reads, events and wallet connections.
+docId: examples
+version: v0
+status: foundation
+ownerIssue: 143
+sourceOfTruth: examples/torium
+sourceStatus: existing
+---
+
+The maintained examples use only public `@torium-network/sdk` entry points and default to Torium
+Localnet at `http://127.0.0.1:8545`. They reject a different chain ID before reads or writes and do
+not contain a public endpoint or reusable account material.
+
+## Available foundations
+
+| Example               | What it demonstrates                                                 | Current verification                                                               |
+| --------------------- | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Node CLI              | network status, balance, transfer and receipt lifecycle              | typecheck, static contract checks and localnet smoke runs                  |
+| Browser               | public HTTP reads plus an injected EIP-1193 wallet                   | Vite module/size audit plus deterministic provider mocks |
+| React Native boundary | host-owned account adapter, explicit review and one-shot send        | Metro-generated Hermes bytecode and module/size audit    |
+| Solidity              | generic Counter compile, deploy, write and read with Hardhat/Foundry | pinned compile/config and local deployment smoke                         |
+
+From the repository root, with the matching SDK workspace installed:
+
+```bash
+pnpm install --filter @torium-network/examples...
+pnpm --filter @torium-network/examples build
+pnpm --filter @torium-network/examples validate
+pnpm --filter @torium-network/examples node status
+```
+
+See the [example source and per-runtime READMEs](https://github.com/Torium-Network/torium/tree/main/examples/torium)
+for expected output, runtime configuration and cleanup.
+
+Write examples require a disposable funded localnet account supplied at runtime. SDK-backed writes
+perform a fresh preflight, require approval of its exact values, submit once, and report a timeout as
+unknown rather than automatically resubmitting. The Foundry script checks the numeric localnet chain
+ID before its explicit broadcast and verifies final contract state. The browser example never
+silently adds or switches wallet networks.
+
+Reward and attestation examples will be added from generated canonical bindings as the contract
+system reaches the testnet. No ABI,
+deployment address, public RPC, explorer or backend integration is invented here.

@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "contracts/scripts/generate-reward-fixture.mjs",
+  "treeFormat": {
+    "id": "torium-merkle-sum-v1",
+    "leafFields": [
+      "epochId",
+      "index",
+      "account",
+      "amount"
+    ],
+    "leafTypes": [
+      "uint256",
+      "uint256",
+      "address",
+      "uint256"
+    ],
+    "leafHash": "keccak256(abi.encode(uint256 epochId,uint256 index,address account,uint256 amount))",
+    "leafSum": "amount",
+    "leafOrdering": "hash-ascending",
+    "pairOrdering": "hash-ascending",
+    "parentFields": [
+      "leftHash",
+      "leftSum",
+      "rightHash",
+      "rightSum"
+    ],
+    "parentTypes": [
+      "bytes32",
+      "uint256",
+      "bytes32",
+      "uint256"
+    ],
+    "parentHash": "keccak256(abi.encode(bytes32 leftHash,uint256 leftSum,bytes32 rightHash,uint256 rightSum))",
+    "parentSum": "checked-leftSum-plus-rightSum",
+    "treeLayout": "complete-2n-minus-1"
+  },
+  "epochId": "7",
+  "merkleRoot": "0xd692683c8bbeeed46328190d8263258744761627c555877d81b617cac717a95c",
+  "rootSum": "3500000000000000025",
+  "claimCount": 3,
+  "claims": [
+    {
+      "index": "0",
+      "account": "0x1111111111111111111111111111111111111111",
+      "amount": "1000000000000000000",
+      "leafHash": "0xa48920c7976261834a2cf7dcf8945045e8f089e2d9ed522ba7468f3fa5a8881f",
+      "leafSum": "1000000000000000000",
+      "proof": [
+        {
+          "hash": "0x4a9e30c2669c4a278483611cdd6af7a0c1bf3a416254b9bee8b365c0e6dfa624",
+          "sum": "2500000000000000025"
+        }
+      ]
+    },
+    {
+      "index": "1",
+      "account": "0x2222222222222222222222222222222222222222",
+      "amount": "2500000000000000000",
+      "leafHash": "0x99a1dffd72ec81849444498e9f99d2233bb4710eb359ca5241396f1845b6d701",
+      "leafSum": "2500000000000000000",
+      "proof": [
+        {
+          "hash": "0x703a673afbe23f672316d13238ffd8bc23fb707552d26de870be37ca7e6ce80e",
+          "sum": "25"
+        },
+        {
+          "hash": "0xa48920c7976261834a2cf7dcf8945045e8f089e2d9ed522ba7468f3fa5a8881f",
+          "sum": "1000000000000000000"
+        }
+      ]
+    },
+    {
+      "index": "9",
+      "account": "0x3333333333333333333333333333333333333333",
+      "amount": "25",
+      "leafHash": "0x703a673afbe23f672316d13238ffd8bc23fb707552d26de870be37ca7e6ce80e",
+      "leafSum": "25",
+      "proof": [
+        {
+          "hash": "0x99a1dffd72ec81849444498e9f99d2233bb4710eb359ca5241396f1845b6d701",
+          "sum": "2500000000000000000"
+        },
+        {
+          "hash": "0xa48920c7976261834a2cf7dcf8945045e8f089e2d9ed522ba7468f3fa5a8881f",
+          "sum": "1000000000000000000"
+        }
+      ]
+    }
+  ],
+  "integrity": {
+    "algorithm": "sha256",
+    "inputSha256": "b64b73d45a4e2122475e61424d8f46a00857b3ed3b2d59e22f0bac8ea9ddc024",
+    "outputPayloadSha256": "86faf4d8e1fa898b22876b2f5d279ecaeef4cf817e4b633f416bd394cc21be7d",
+    "outputPayloadSerialization": "json-stringify-2-space-utf8-lf-v1",
+    "outputPayloadScope": "byte-exact generator serialization of all top-level fields except integrity"
+  }
+}

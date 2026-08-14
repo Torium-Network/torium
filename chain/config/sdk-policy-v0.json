@@ -1,0 +1,166 @@
+{
+  "$schema": "./sdk-policy-v0.schema.json",
+  "schemaVersion": 1,
+  "policyVersion": "0.1.0",
+  "status": "v0-published",
+  "package": {
+    "name": "@torium-network/sdk",
+    "sourcePath": "packages/torium-sdk",
+    "publishAccess": "public",
+    "reservationStatus": "organization-created",
+    "privateUntilApproved": false
+  },
+  "baseline": {
+    "viem": {
+      "testedVersion": "2.55.2",
+      "peerRange": ">=2.55.2 <3",
+      "checkedAt": "2026-07-15"
+    },
+    "typescript": {
+      "buildVersion": "5.9.3",
+      "consumerRange": ">=5.7 <7"
+    }
+  },
+  "runtimes": {
+    "node": {
+      "range": ">=22.23.1 <23 || >=24 <25",
+      "canonicalTestVersion": "22.23.1",
+      "candidateLtsMajors": [22, 24],
+      "supportStatus": "ci-esm-cjs-verified-issue-136"
+    },
+    "browser": {
+      "requirements": [
+        "ES2022",
+        "BigInt",
+        "fetch",
+        "EIP-1193-when-wallet-signing"
+      ],
+      "candidateTestEngines": ["chromium", "firefox", "webkit"],
+      "resolvedVersionsRecordedByIssue": 136,
+      "supportStatus": "vite-bundle-and-eip1193-mock-verified-issue-136"
+    },
+    "reactNative": {
+      "minimumVersion": "0.81.0",
+      "engine": "Hermes",
+      "nodePolyfillsAllowed": false,
+      "supportStatus": "metro-hermes-bytecode-verified-issue-136"
+    }
+  },
+  "modules": {
+    "format": "dual-esm-cjs",
+    "types": "declarations",
+    "sideEffects": false,
+    "treeShakingRequired": true,
+    "exports": [
+      ".",
+      "./chains",
+      "./clients",
+      "./wallet",
+      "./contracts",
+      "./errors",
+      "./utils",
+      "./experimental"
+    ],
+    "experimentalExport": "./experimental",
+    "generatedPath": "src/generated",
+    "generatedFilesEditable": false
+  },
+  "publicApi": {
+    "transportPolicy": "accept-standard-viem-and-eip1193",
+    "proprietaryTransportAllowed": false,
+    "defaultPublicRpcAllowed": false,
+    "localLoopbackDefaultsAllowed": true,
+    "clientFactories": ["createToriumPublicClient", "createToriumWalletClient"],
+    "boundaries": [
+      "chains",
+      "clients",
+      "wallet",
+      "contracts",
+      "errors",
+      "amount-and-address-utils"
+    ]
+  },
+  "accounts": {
+    "accepted": [
+      "viem-Account",
+      "EIP-1193-provider",
+      "caller-supplied-wallet-client"
+    ],
+    "rawSecretMaterialAcceptedAtAnyApiLevel": false,
+    "rawSecretMaterial": [
+      "private-key",
+      "mnemonic",
+      "seed",
+      "keystore",
+      "key-bytes"
+    ],
+    "keyGenerationAllowed": false,
+    "keyPersistenceAllowed": false,
+    "secretLoggingAllowed": false,
+    "signingOwner": "caller-wallet-or-explicit-viem-account"
+  },
+  "failures": {
+    "taxonomyVersion": 1,
+    "normalizedBoundaries": [
+      "endpoint-validation",
+      "torium-client-actions",
+      "torium-wallet-actions"
+    ],
+    "directViemActions": "preserve-viem-errors",
+    "defaultAttempts": 1,
+    "maximumIdempotentReadAttempts": 3,
+    "automaticRetryOperations": ["idempotent-read-explicit-opt-in"],
+    "safeBroadcastRetryConditions": [],
+    "broadcastMaxAttempts": 1,
+    "globalTimeoutOwner": "caller-viem-transport",
+    "sdkActionsSupportAbortSignal": true,
+    "sdkActionsSupportPerActionTimeout": true,
+    "diagnostics": "opt-in-allowlist",
+    "diagnosticCauseIncluded": false
+  },
+  "compatibility": {
+    "semverBefore1": {
+      "patch": "backward-compatible-fixes-only",
+      "minor": "stable-export-breaking-change-only-with-migration-note",
+      "experimental": "may-change-in-minor-with-changelog"
+    },
+    "semverAfter1": {
+      "breaking": "major-only",
+      "deprecationMinimumDays": 90,
+      "deprecationMinimumMinorReleases": 1
+    },
+    "v0SupportWindow": "latest-minor-only",
+    "stableSupportWindow": "current-major-and-previous-major-for-six-months",
+    "chainManifest": "exact-manifest-version-and-chain-id",
+    "contractIdentity": "environment-address-version-runtime-hash",
+    "unknownCompatibilityBehavior": "fail-closed",
+    "testGates": {
+      "chainSource": "chain/config/identifiers.json",
+      "contractRegistryPattern": "contracts/deployments/<environment>.json",
+      "apiSnapshotPattern": "packages/torium-sdk/api/<version>.api.md",
+      "implementationOwnerIssue": 129,
+      "runtimeMatrixOwnerIssue": 136,
+      "releaseComparisonOwnerIssue": 137
+    }
+  },
+  "budgets": {
+    "rootEntryGzipBytesExcludingViem": 15360,
+    "packedTarballBytes": 262144,
+    "browserExampleJavaScriptBytes": 360000,
+    "browserExampleGzipBytes": 115000,
+    "reactNativeHermesBytecodeBytes": 1310720,
+    "reactNativeSourceModules": 1000,
+    "generatedAbiExcludedFromRootEntry": true
+  },
+  "forbiddenCoreDependencies": [
+    "packages/backend",
+    "Clerk",
+    "PostgreSQL",
+    "Redis",
+    "BullMQ",
+    "Torium-product-HTTP-API",
+    "bridge",
+    "IBC"
+  ],
+  "consumerIssues": [129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 141, 143]
+}

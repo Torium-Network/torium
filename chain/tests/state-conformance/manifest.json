@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": 1,
+  "suite": "torium-state-conformance",
+  "fixtureBudgetBytes": 250000,
+  "requiredForks": ["Cancun", "Prague"],
+  "upstream": {
+    "repository": "https://github.com/ethereum/tests",
+    "tag": "v16.0",
+    "commit": "afed83bf2a097cba688a60246429f3a051fe03f6",
+    "license": {
+      "spdx": "MIT",
+      "upstreamPath": "LICENSE",
+      "localPath": "LICENSE.ethereum-tests",
+      "gitBlobSha1": "8433e6f87c909d20b61eb8e3c3c217e12cb7d71b",
+      "sha256": "c496a8b7ea33537e8e083a20b82b0ebc0191e3a04486a32329e0215a25b1dada",
+      "bytes": 1064
+    }
+  },
+  "engine": {
+    "importPath": "github.com/ethereum/go-ethereum",
+    "replacementPath": "github.com/cosmos/go-ethereum",
+    "replacementVersion": "v1.17.2-cosmos-0",
+    "cosmosEVMPath": "github.com/cosmos/evm",
+    "cosmosEVMVersion": "v0.7.0",
+    "databaseScheme": "hash",
+    "snapshotter": false,
+    "toriumEVMChainId": 1414484556,
+    "toriumNativeDenom": "atorium",
+    "toriumRequiredFork": "Prague"
+  },
+  "skipRegistry": "skips.json",
+  "fixtures": [
+    {
+      "id": "eip1153-revert-after-return",
+      "localPath": "fixtures/cancun/eip1153-revert-after-return.json",
+      "upstreamPath": "GeneralStateTests/Cancun/stEIP1153-transientStorage/10_revertUndoesStoreAfterReturn.json",
+      "gitBlobSha1": "37846f2f1e19da665f4992d35efb2fcc898df3fd",
+      "sha256": "063613b777c9f9d7a14ae010d9d64393a1937194aa4b0f617fa0091ca7d9b6a2",
+      "bytes": 6824,
+      "expectedTests": 1,
+      "expectedSubtests": 2,
+      "categories": [
+        "opcode:TLOAD",
+        "opcode:TSTORE",
+        "revert",
+        "transient-state"
+      ]
+    },
+    {
+      "id": "eip5656-mcopy-memory-hash",
+      "localPath": "fixtures/cancun/mcopy-memory-hash.json",
+      "upstreamPath": "GeneralStateTests/Cancun/stEIP5656-MCOPY/MCOPY_memory_hash.json",
+      "gitBlobSha1": "b3d574a6d4df9804eed45e22ecf19bb65b55f3fc",
+      "sha256": "dec1841f88f6d52833b8d3248461e3f0eb654081cc256740da119f9d5af43c28",
+      "bytes": 27212,
+      "expectedTests": 1,
+      "expectedSubtests": 12,
+      "categories": ["opcode:MCOPY", "memory", "state-root"]
+    },
+    {
+      "id": "precompile-bn256-add",
+      "localPath": "fixtures/precompiles/bn256-add.json",
+      "upstreamPath": "GeneralStateTests/stZeroKnowledge2/ecadd_0-0_0-0_21000_0.json",
+      "gitBlobSha1": "330cf3323b8529df65c7d029b8ada5d99caf11f4",
+      "sha256": "2944386432fd0ae44045b271a78fd69244c6178aa9344564b0b6d6eab4fa8e7e",
+      "bytes": 70558,
+      "expectedTests": 1,
+      "expectedSubtests": 8,
+      "categories": ["precompile:BN256_ADD", "gas", "state-root"]
+    },
+    {
+      "id": "precompile-bn256-pairing",
+      "localPath": "fixtures/precompiles/bn256-pairing.json",
+      "upstreamPath": "GeneralStateTests/stZeroKnowledge/ecpairing_empty_data.json",
+      "gitBlobSha1": "6a80661c8ffc17a450e7174d35e485c6bc6c4e6d",
+      "sha256": "0e7f77b4cfeec05f69ded107d58e3f640a2a9140dbb9de25aab3b70a8401259a",
+      "bytes": 70265,
+      "expectedTests": 1,
+      "expectedSubtests": 8,
+      "categories": ["precompile:BN256_PAIRING", "gas", "state-root"]
+    },
+    {
+      "id": "precompile-ecrecover",
+      "localPath": "fixtures/precompiles/ecrecover.json",
+      "upstreamPath": "GeneralStateTests/stPreCompiledContracts2/CallEcrecover0.json",
+      "gitBlobSha1": "d5ffd285911d2ebe8af4418f4bd897a6c63a3ea6",
+      "sha256": "cde2162473fa9006235e094f6ea427fba3e2c54e9d18a5aed52b7f8c0187e50d",
+      "bytes": 6730,
+      "expectedTests": 1,
+      "expectedSubtests": 2,
+      "categories": ["precompile:ECRECOVER", "call", "state-root"]
+    },
+    {
+      "id": "precompile-identity",
+      "localPath": "fixtures/precompiles/identity.json",
+      "upstreamPath": "GeneralStateTests/stPreCompiledContracts2/CallIdentity_3.json",
+      "gitBlobSha1": "640e50f8ae60658d43ab9e104d6ad2461c587f8f",
+      "sha256": "836a4448c2075361be37bd93172aede2569fa3c5bb40990041e5f2ab4400ce79",
+      "bytes": 5858,
+      "expectedTests": 1,
+      "expectedSubtests": 2,
+      "categories": ["precompile:IDENTITY", "call", "memory"]
+    },
+    {
+      "id": "precompile-modexp",
+      "localPath": "fixtures/precompiles/modexp.json",
+      "upstreamPath": "GeneralStateTests/stPreCompiledContracts2/modexpRandomInput.json",
+      "gitBlobSha1": "a8f1ac814d541248a13f518fad8a21fdf70305dc",
+      "sha256": "6ce9b7e870b504e6aea8ece6567941183af08bf8bd9952c6c26382101d3e57e6",
+      "bytes": 17135,
+      "expectedTests": 1,
+      "expectedSubtests": 12,
+      "categories": ["precompile:MODEXP", "gas", "state-root"]
+    },
+    {
+      "id": "precompile-ripemd160",
+      "localPath": "fixtures/precompiles/ripemd160.json",
+      "upstreamPath": "GeneralStateTests/stPreCompiledContracts2/CallRipemd160_1.json",
+      "gitBlobSha1": "1874d9497da0f181cf4158f5b959c25abeb1e0e3",
+      "sha256": "26c2cf4eec9ede7b214cc3ff13af8f7d845dc72e970392d1b56f09d75ea84d05",
+      "bytes": 5866,
+      "expectedTests": 1,
+      "expectedSubtests": 2,
+      "categories": ["precompile:RIPEMD160", "call", "state-root"]
+    },
+    {
+      "id": "precompile-sha256",
+      "localPath": "fixtures/precompiles/sha256.json",
+      "upstreamPath": "GeneralStateTests/stPreCompiledContracts2/CallSha256_1.json",
+      "gitBlobSha1": "972624bccb112d76397db0b067291afe644faff5",
+      "sha256": "2822bf3457a281673dfae039abd903272055922627a6001faee67aeb10ce5f17",
+      "bytes": 5908,
+      "expectedTests": 1,
+      "expectedSubtests": 2,
+      "categories": ["precompile:SHA256", "call", "state-root"]
+    },
+    {
+      "id": "state-add11",
+      "localPath": "fixtures/state/add11.json",
+      "upstreamPath": "GeneralStateTests/stExample/add11.json",
+      "gitBlobSha1": "8c82acd8c587e291349e0d829c426152ead0e5cd",
+      "sha256": "3b3fa9a19ffd0216258fef8e168452edb0f7a6b7fb9909de34c7fd62fde01121",
+      "bytes": 6465,
+      "expectedTests": 1,
+      "expectedSubtests": 2,
+      "categories": ["opcode:ADD", "opcode:SSTORE", "state-transition"]
+    },
+    {
+      "id": "state-create2-calldata",
+      "localPath": "fixtures/state/create2-calldata.json",
+      "upstreamPath": "GeneralStateTests/stCreateTest/CREATE2_CallData.json",
+      "gitBlobSha1": "90149a55d86055cfd078096e019d92cf59d7d908",
+      "sha256": "b6b9039fff5406091d10dff9d5af484dd3721cb838ed80f24f002d01fb00dc90",
+      "bytes": 6672,
+      "expectedTests": 1,
+      "expectedSubtests": 2,
+      "categories": ["opcode:CREATE2", "calldata", "contract-creation"]
+    },
+    {
+      "id": "state-log0-nonempty-memory",
+      "localPath": "fixtures/state/log0-nonempty-memory.json",
+      "upstreamPath": "GeneralStateTests/stLogTests/log0_nonEmptyMem.json",
+      "gitBlobSha1": "a360088a96683acc73cf9355c6ea87e4d994af42",
+      "sha256": "4bfa03b3639e142daec31b5e9c9dce7c61205f791ce99f3869142c48838bf423",
+      "bytes": 6920,
+      "expectedTests": 1,
+      "expectedSubtests": 2,
+      "categories": ["opcode:LOG0", "logs-root", "memory"]
+    },
+    {
+      "id": "state-revert-opcode",
+      "localPath": "fixtures/state/revert-opcode.json",
+      "upstreamPath": "GeneralStateTests/stRevertTest/RevertOpcode.json",
+      "gitBlobSha1": "1b205fc37e2f869fbf2cd6ce5f39a1b2017a66d1",
+      "sha256": "a6735bc9bf964128660db2cd94e6fe3de375ff4f3482769fe1152d2c24019676",
+      "bytes": 13555,
+      "expectedTests": 1,
+      "expectedSubtests": 8,
+      "categories": ["opcode:REVERT", "rollback", "state-root"]
+    }
+  ]
+}

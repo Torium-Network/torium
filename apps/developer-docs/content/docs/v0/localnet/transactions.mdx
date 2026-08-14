@@ -1,0 +1,81 @@
+---
+title: Transactions and receipts
+description: Fund an address through the loopback faucet and inspect the resulting EIP-1559 transaction and CometBFT finality.
+docId: localnet-transactions
+version: v0
+status: foundation
+ownerIssue: 140
+sourceOfTruth: chain/tests/e2e/README.md
+sourceStatus: existing
+---
+
+The local faucet submits a normal signed EIP-1559 transaction; it does not edit balances off-chain.
+Use only disposable local addresses. The following receiver address is public and has no secret in
+this guide:
+
+```bash
+RECIPIENT=0x1111111111111111111111111111111111111111
+./chain/localnet/torium-localnet faucet "$RECIPIENT" --json > /tmp/torium-faucet.json
+jq '{transactionHash, blockHash, blockNumber, amountBaseUnits, receiptStatus}' \
+  /tmp/torium-faucet.json
+```
+
+The default request sends 10 valueless tTOR. Delete the temporary response when finished. The faucet
+never accepts or returns a mnemonic, private key, keyring password or signed raw transaction.
+
+Inspect the same receipt through JSON-RPC without installing an EVM CLI:
+
+```bash
+TX_HASH=$(jq -r '.transactionHash' /tmp/torium-faucet.json)
+curl --fail --silent http://127.0.0.1:8545 \
+  -H 'content-type: application/json' \
+  --data "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"eth_getTransactionReceipt\",\"params\":[\"$TX_HASH\"]}" \
+  | jq '.result | {transactionHash, status, type, blockHash, blockNumber, gasUsed, effectiveGasPrice}'
+```
+
+`status: "0x1"` means EVM execution succeeded. The containing block is CometBFT committed; this is
+not Ethereum beacon-chain finality. Confirm that the latest committed block has reached the receipt
+height:
+
+```bash
+RECEIPT_BLOCK=$(curl --fail --silent http://127.0.0.1:8545 \
+  -H 'content-type: application/json' \
+  --data "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"eth_getTransactionReceipt\",\"params\":[\"$TX_HASH\"]}" \
+  | jq -r '.result.blockNumber')
+FINALIZED_BLOCK=$(curl --fail --silent http://127.0.0.1:8545 \
+  -H 'content-type: application/json' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"eth_getBlockByNumber","params":["finalized",false]}' \
+  | jq -r '.result.number')
+node -e '
+  const [receipt, finalized] = process.argv.slice(1).map(BigInt);
+  if (finalized < receipt) process.exit(1);
+  console.log(`CometBFT committed receipt=${receipt} finalized=${finalized}`);
+' "$RECEIPT_BLOCK" "$FINALIZED_BLOCK"
+```
+
+To prove a locally signed native transfer, contract deployment, receipt, fee, nonce, block and
+cross-validator finality from a clean Docker environment, run the existing bounded suite once:
+
+```bash
+make -C chain/tests/e2e test
+```
+
+This full suite additionally requires Git, Docker with Compose v2, `curl`, `jq`, `make`, and either
+`shasum` or `sha256sum`; it uses the digest-pinned Foundry image instead of requiring host `cast`.
+
+That suite derives its disposable signer inside the process and never prints or persists the key. It
+stops services on success or failure and writes secret-free diagnostics only on failure. Use the fast
+fixture check when runtime behavior has not changed:
+
+```bash
+make -C chain/tests/e2e check
+```
+
+Manual cast/viem signing walkthroughs live in the [examples](/v0/examples). No Blockscout or
+other explorer is part of the canonical localnet yet, so receipt verification uses JSON-RPC. Explorer
+verification remains blocked on the explorer/profile work rather than being presented as available.
+
+The maintained [executable examples](/v0/examples) now provide Node status, balance, transfer and
+receipt commands plus browser, mobile-boundary and Solidity foundations. Their runtime E2E remains
+intentionally consolidated in the release verification suite instead of repeating the full localnet suite for every docs
+change.

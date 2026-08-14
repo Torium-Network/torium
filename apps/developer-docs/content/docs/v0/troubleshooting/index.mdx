@@ -1,0 +1,41 @@
+---
+title: Troubleshooting
+description: Diagnosing local RPC, wallet, transaction and SDK integration failures.
+docId: troubleshooting
+version: v0
+status: foundation
+ownerIssue: 140
+sourceOfTruth: chain/localnet/README.md
+sourceStatus: existing
+---
+
+Start with the controller's structured status and the affected validator's logs:
+
+```bash
+./chain/localnet/torium-localnet status --json
+./chain/localnet/torium-localnet logs --node validator-0
+docker compose -f chain/localnet/compose.yaml ps
+```
+
+## Common symptoms
+
+| Symptom                                            | Meaning and action                                                                                       |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Docker daemon or Compose unavailable               | Start Docker Desktop/Engine and confirm `docker compose version`.                                        |
+| Repository mount denied on macOS                   | Allow the repository path in Docker Desktop file sharing, then retry.                                    |
+| Port 8545, 8546, 1317, 8080, 9090 or 26657 is busy | Stop the conflicting local process; do not change canonical ports silently.                              |
+| `degraded` with 75 power                           | One validator is unavailable but quorum remains. Inspect and restart that node.                          |
+| `unhealthy` with 50 power                          | Two validators cannot commit. Restore at least one without deleting signer state.                        |
+| EVM chain ID mismatch                              | The client points at another RPC or stale environment. Expected decimal `1414484556`.                    |
+| Faucet cooldown or amount rejection                | Respect the 1–25 tTOR request range, 30-second per-address cooldown and process-local quotas.            |
+| Receipt remains null                               | RPC acceptance is not inclusion. Inspect node health and query the hash again before resubmitting.       |
+| WebSocket disconnects after restart                | Reconnect and backfill missed blocks over HTTP; the server has no replay buffer.                         |
+| MetaMask shows HTTP warning                        | Expected for `127.0.0.1` localnet only; never use plain HTTP for a public RPC.                           |
+| MetaMask flags a tiny fee                          | Review chain, recipient, value and fee. The prompt is not by itself proof of a failed local transaction. |
+
+`stop` preserves data. Use `reset` only for an intentional replacement history, and never manually
+remove an individual validator database or `priv_validator_state.json`. For recovery archives,
+ownership drift and disk cleanup, follow `chain/localnet/RECOVERY.md`.
+
+The raw backend additionally requires Go 1.25.9, a C toolchain and built Torium binaries. Prefer the
+container backend unless native debugging is the reason for choosing raw processes.

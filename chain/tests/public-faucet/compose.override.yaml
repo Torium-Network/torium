@@ -1,0 +1,55 @@
+services:
+  public-faucet:
+    image: ${TORIUM_IMAGE:-toriumd:local}
+    user: "${TORIUM_UID:-10001}:${TORIUM_GID:-10001}"
+    restart: "no"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    entrypoint:
+      - torium-public-faucet
+    command:
+      - --contract
+      - /contract/public-faucet-service-v0.json
+      - --profile
+      - local-rehearsal
+      - --signer-key-file
+      - /keys/${PF_KEY_FILE:-signer.key}
+      - --data-dir
+      - /var/lib/torium-public-faucet
+      - --listen-address
+      - 0.0.0.0:8090
+      - --admin-listen-address
+      - 0.0.0.0:8091
+      - --rpc-url
+      - http://validator-0:8545
+      - --allow-container-bind
+    environment:
+      TORIUM_FAUCET_STATIC_CHALLENGE_TOKEN: ${PF_CHALLENGE_TOKEN:?}
+    volumes:
+      - ${PF_SUITE_DIR:?}/../../config/public-faucet-service-v0.json:/contract/public-faucet-service-v0.json:ro
+      - ${PF_SUITE_DIR:?}/.artifacts/keys:/keys:ro
+      - ${PF_SUITE_DIR:?}/.artifacts/state/${PF_STATE:-a}:/var/lib/torium-public-faucet
+    ports:
+      - "127.0.0.1:8090:8090"
+      - "127.0.0.1:8091:8091"
+    depends_on:
+      validator-0:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8091/metrics"]
+      interval: 5s
+      timeout: 3s
+      start_period: 10s
+      retries: 12
+    networks:
+      - consensus

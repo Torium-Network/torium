@@ -1,0 +1,15 @@
+{
+  "workloadId": "native-transfer-closed-loop",
+  "seed": 20260729,
+  "transferValueBaseUnits": "1000000000000",
+  "recipients": [
+    "0x92e7ec98f597d01019967c34c6e7dd128160d81b",
+    "0xaae891bb3e6d6093103f5ebadb2504f89c1820a7",
+    "0x81a7b1bdd21758d54c3179380e42ad64edaf7d4e",
+    "0xeca28327d4eaf9db385a3d3f5b29c3a9a97d90c9",
+    "0xc24e7be3c73b4d8a88fa31239a669198e4f89463",
+    "0x48623b3081dcca80c08bbc08a6717e6aeb53faf0",
+    "0x1a81e2a648ffa736640e30ea9591fd66e899ab04",
+    "0x89a5dc0840be7992ea3f7e628984d7344edd5277"
+  ]
+}

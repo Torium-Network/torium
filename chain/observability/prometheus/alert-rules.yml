@@ -1,0 +1,54 @@
+# Executable alert rules for the #115 catalogue entries whose conditions are
+# semantic (no unratified numeric threshold is invented here). Alerts whose
+# thresholds remain HOLD in observability-v0.json are deliberately absent.
+groups:
+  - name: torium-localnet
+    interval: 5s
+    rules:
+      # Catalogue: telemetry-target-down
+      - alert: TelemetryTargetDown
+        expr: up == 0
+        for: 15s
+        labels:
+          severity: critical
+          owner: torium-operations
+        annotations:
+          runbook: docs/operations/torium-chain-observability-runbook.md#readiness-and-liveness
+          summary: "a required scrape target is unavailable"
+
+      # Catalogue: commit-quorum-unavailable (threshold derived from the
+      # active validator set, not invented)
+      - alert: CommitQuorumUnavailable
+        expr: torium_localnet_consensus_ready == 0
+        for: 15s
+        labels:
+          severity: critical
+          owner: consensus-operations
+        annotations:
+          runbook: docs/operations/torium-chain-observability-runbook.md#validator-down
+          summary: "available voting power is below the manifest commit quorum"
+
+      # Catalogue: node-identity-or-chain-mismatch
+      - alert: NodeUnreachable
+        expr: torium_localnet_validator_reachable == 0
+        for: 15s
+        labels:
+          severity: critical
+          owner: chain-operations
+        annotations:
+          runbook: docs/operations/torium-chain-observability-runbook.md#validator-down
+          summary: "a validator stopped answering the health contract"
+
+      # Catalogue: chain-progress-stalled — the window stays unratified, so
+      # this rule fires only on an explicitly non-advancing height over the
+      # rule's own evaluation window and is labelled as provisional.
+      - alert: ChainProgressStalledProvisional
+        expr: increase(torium_localnet_consensus_height[1m]) == 0
+        for: 30s
+        labels:
+          severity: critical
+          owner: consensus-operations
+          threshold_status: HOLD-window-not-ratified
+        annotations:
+          runbook: docs/operations/torium-chain-observability-runbook.md#height-stalled
+          summary: "canonical consensus height did not advance in the provisional window"

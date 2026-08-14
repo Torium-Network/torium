@@ -1,0 +1,32 @@
+{
+  "$schema": "./versions.schema.json",
+  "schemaVersion": 1,
+  "current": "v0",
+  "versions": [
+    {
+      "id": "v0",
+      "label": "v0",
+      "status": "active",
+      "compatibility": {
+        "chain": {
+          "source": "chain/config/identifiers.json",
+          "manifestVersion": "0.2.0",
+          "environment": "testnet",
+          "evmChainId": 1414484564,
+          "cosmosChainId": "torium-testnet-1"
+        },
+        "sdk": {
+          "source": "packages/torium-sdk/package.json",
+          "package": "@torium-network/sdk",
+          "version": "0.1.0",
+          "status": "published"
+        },
+        "contracts": {
+          "source": "contracts/deployments/localnet.json",
+          "release": "0.1.0",
+          "status": "pre-deployment"
+        }
+      }
+    }
+  ]
+}

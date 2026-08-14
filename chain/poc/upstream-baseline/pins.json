@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "decisionDate": "2026-07-14",
+  "baseline": {
+    "repository": "https://github.com/cosmos/evm",
+    "release": "v0.7.0",
+    "commit": "f4ab9a3e3fbe353468327d5cacda94b33b41ed11",
+    "commitSignature": "verified",
+    "license": "Apache-2.0",
+    "go": "1.25.9",
+    "modules": {
+      "cosmosSdk": "v0.54.3",
+      "cometBft": "v0.39.3",
+      "goEthereumDeclared": "v1.16.8",
+      "goEthereumReplacement": "github.com/cosmos/go-ethereum v1.17.2-cosmos-0",
+      "ibcGo": "v11.0.0"
+    }
+  },
+  "localOverlay": {
+    "builderDockerfileSha256": "f7c6b13455b9589761b13801564301d8981a9a44645827a7da11f09eeb1278fa",
+    "probePackageLockSha256": "13a674cc6193730a001567cb37efc5ef0c6f309b1dbd19477fa52c760aff35e9",
+    "baseImages": {
+      "builder": "golang:1.25.9-alpine3.23@sha256:5caaf1cca9dc351e13deafbc3879fd4754801acba8653fa9540cea125d01a71f",
+      "runtime": "alpine:3.23@sha256:fd791d74b68913cbb027c6546007b3f0d3bc45125f797758156952bc2d6daf40"
+    },
+    "changes": [
+      "Use Go 1.25.9 because the v0.7.0 go.mod cannot build with the upstream reference image's Go 1.24 and GOTOOLCHAIN=local.",
+      "Change generated CometBFT mempool type from flood to app because Cosmos EVM v0.7.0 refuses to start with flood.",
+      "Optionally set consensus max_gas to 42000 only for the disposable fee-history saturation profile; the default reference profile remains unlimited."
+    ]
+  },
+  "compatibilityTools": {
+    "ethers": "6.17.0",
+    "viem": "2.55.2",
+    "hardhat": "3.9.1",
+    "foundry": {
+      "release": "v1.7.1",
+      "imageDigest": "sha256:8347b728d5d393dac1c018691b36f506d23b9dcd78341d40ea0fcb11c3a19cdd"
+    },
+    "metamask": {
+      "release": "13.39.2",
+      "chromeArchiveSha256": "34212dfb1f8a416cb00dd090caa391070c77e3f54299fbec65a2dbcca2fadeac"
+    },
+    "blockscout": {
+      "repository": "https://github.com/blockscout/blockscout",
+      "release": "v11.2.2",
+      "commit": "731015d88d7e73623f2a3c097e241bc82b04ea7a",
+      "tagSignature": "not-signed",
+      "license": "LicenseRef-Blockscout-1.0",
+      "databaseImage": "postgres:17-alpine@sha256:dc17045ccfd343b49600570ea734b9c4991cf1c3f3302e67df51e3b402dd55c4"
+    }
+  },
+  "alternativeReviewed": {
+    "name": "AvalancheGo",
+    "repository": "https://github.com/ava-labs/avalanchego",
+    "release": "v1.14.2",
+    "commit": "6e5acf909c7a16b991142d6b3979bac5699bdb68",
+    "commitSignature": "verified",
+    "license": "BSD-3-Clause",
+    "note": "The standalone subnet-evm repository is archived and LGPL-3.0; its code moved into AvalancheGo."
+  }
+}

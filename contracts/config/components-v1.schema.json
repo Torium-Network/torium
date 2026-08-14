@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/contracts/components-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "decisionVersion",
+    "genesisPredeployPolicy",
+    "components"
+  ],
+  "properties": {
+    "$schema": { "const": "./components-v1.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "decisionVersion": { "const": "1.0.0" },
+    "genesisPredeployPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "toriumAuthoredSolidityPredeploys",
+        "futureAdditionRequiresAdr",
+        "requiredEvidence"
+      ],
+      "properties": {
+        "toriumAuthoredSolidityPredeploys": { "const": [] },
+        "futureAdditionRequiresAdr": { "const": true },
+        "requiredEvidence": {
+          "const": [
+            "deterministic-state-allocation",
+            "bytecode-and-storage-hash-fixtures",
+            "upgrade-and-migration-rules",
+            "evm-conformance-coverage"
+          ]
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "prefixItems": [
+        {
+          "type": "object",
+          "allOf": [{ "$ref": "#/$defs/component" }],
+          "properties": {
+            "id": { "const": "upstream-evm-precompiles" },
+            "classification": { "const": "protocol-precompile" },
+            "status": { "const": "active" },
+            "ownerIssue": { "const": 89 },
+            "upgradeModel": { "const": "protocol-upgrade" },
+            "genesisRequired": { "const": true }
+          }
+        },
+        {
+          "type": "object",
+          "allOf": [{ "$ref": "#/$defs/component" }],
+          "properties": {
+            "id": { "const": "cosmos-evm-precompiles" },
+            "classification": { "const": "protocol-precompile" },
+            "status": { "const": "active" },
+            "ownerIssue": { "const": 89 },
+            "upgradeModel": { "const": "protocol-upgrade" },
+            "genesisRequired": { "const": true }
+          }
+        },
+        {
+          "type": "object",
+          "allOf": [{ "$ref": "#/$defs/component" }],
+          "properties": {
+            "id": { "const": "torium-native" },
+            "classification": { "const": "protocol-precompile" },
+            "status": { "const": "active" },
+            "ownerIssue": { "const": 107 },
+            "upgradeModel": { "const": "protocol-upgrade" },
+            "genesisRequired": { "const": true }
+          }
+        },
+        {
+          "type": "object",
+          "allOf": [{ "$ref": "#/$defs/component" }],
+          "properties": {
+            "id": { "const": "torium-create2-factory" },
+            "classification": { "const": "post-genesis-deterministic" },
+            "status": { "const": "planned" },
+            "ownerIssue": { "const": 108 },
+            "upgradeModel": {
+              "const": "immutable-versioned-redeployment"
+            },
+            "genesisRequired": { "const": false }
+          }
+        },
+        {
+          "type": "object",
+          "allOf": [{ "$ref": "#/$defs/component" }],
+          "properties": {
+            "id": { "const": "reward-distributor" },
+            "classification": { "const": "post-genesis-deterministic" },
+            "status": { "const": "planned" },
+            "ownerIssue": { "const": 109 },
+            "upgradeModel": {
+              "const": "immutable-versioned-redeployment"
+            },
+            "genesisRequired": { "const": false }
+          }
+        },
+        {
+          "type": "object",
+          "allOf": [{ "$ref": "#/$defs/component" }],
+          "properties": {
+            "id": { "const": "attestation-registry" },
+            "classification": { "const": "post-genesis-deterministic" },
+            "status": { "const": "planned" },
+            "ownerIssue": { "const": 110 },
+            "upgradeModel": {
+              "const": "immutable-versioned-redeployment"
+            },
+            "genesisRequired": { "const": false }
+          }
+        }
+      ],
+      "items": { "$ref": "#/$defs/component" }
+    }
+  },
+  "$defs": {
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "classification",
+        "status",
+        "ownerIssue",
+        "upgradeModel",
+        "genesisRequired"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "classification": {
+          "enum": ["protocol-precompile", "post-genesis-deterministic"]
+        },
+        "status": { "enum": ["active", "planned"] },
+        "ownerIssue": { "type": "integer", "minimum": 1 },
+        "upgradeModel": {
+          "enum": ["protocol-upgrade", "immutable-versioned-redeployment"]
+        },
+        "genesisRequired": { "type": "boolean" }
+      }
+    }
+  }
+}

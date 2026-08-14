@@ -1,0 +1,3338 @@
+---
+title: SDK API reference
+description: Generated public declarations and runtime exports for @torium-network/sdk@0.1.0.
+docId: sdk-api-reference
+version: v0
+status: foundation
+ownerIssue: 141
+sourceOfTruth: apps/developer-docs/content/generated/sdk-0.1.0.api.md
+sourceStatus: generated
+---
+
+> Generated from the package declaration report. Do not edit this page or its generated source by hand.
+> Run `pnpm --filter developer-docs generate:sdk-reference` after an approved SDK API change.
+
+The `./package.json` path is an intentional data export. The `./experimental` section is a
+public reserved subpath with no members in SDK 0.1.0.
+There are no deprecated or experimental runtime APIs in this release.
+
+## Public API report: @torium-network/sdk@0.1.0
+
+Policy version: `0.1.0`
+
+This file is generated and byte-compared during package validation. Review declaration changes before updating it.
+
+## `.`
+
+- Import types: `./dist/types/index.d.mts`
+- Require types: `./dist/types/index.d.cts`
+- Declaration SHA-256: `b94d60880294330138885af5bd38344d56d50fdd219bc88733da9285e4c38edc`
+- Runtime exports: `toriumSdkPolicyVersion`, `toriumSdkVersion`
+
+```ts
+/** Package version for diagnostics and compatibility reports. */
+export declare const toriumSdkVersion: "0.1.0";
+/** Machine-readable architecture policy implemented by this package line. */
+export declare const toriumSdkPolicyVersion: "0.1.0";
+```
+
+## `./chains`
+
+- Import types: `./dist/types/chains.d.mts`
+- Require types: `./dist/types/chains.d.cts`
+- Declaration SHA-256: `e04ab14cf999f5c5e9c40335e4374fbc573881d4abab7a2cdfa66f3f17a0bfb9`
+- Runtime exports: `ToriumEndpointValidationError`, `getToriumChain`, `toriumChains`, `toriumDevnet`, `toriumLocalnet`, `toriumMainnet`, `toriumTestnet`, `validateToriumEndpoint`, `withToriumRpcUrls`
+
+```ts
+import { type Client, type EIP1193Provider, type Hash } from "viem";
+export { ToriumEndpointValidationError, type ToriumEndpointValidationErrorCode, } from "./errors.js";
+export type ToriumEnvironment = "localnet" | "devnet" | "testnet" | "mainnet";
+export type ToriumHttpUrl = `http://${string}` | `https://${string}`;
+export type ToriumWebSocketUrl = `ws://${string}` | `wss://${string}`;
+export interface ToriumChainMetadata {
+    readonly manifestVersion: "0.2.0";
+    readonly environment: ToriumEnvironment;
+    readonly public: boolean;
+    readonly cosmosChainId: string;
+    readonly chainIdHex: `0x${string}`;
+    readonly networkId: number;
+    readonly caip2: `eip155:${number}`;
+    readonly baseDenom: "atorium";
+    readonly endpointStatus: "local-loopback" | "deferred-unpublished";
+    readonly blockExplorerStatus: "deferred";
+    readonly contractRegistryStatus: "deferred";
+    readonly rpcProfile?: {
+        readonly profileVersion: "1.0.1";
+        readonly maxBatchRequests: 100;
+        readonly subscriptions: readonly [
+            "newHeads",
+            "logs",
+            "newPendingTransactions"
+        ];
+        readonly serverReplaysMissedMessages: false;
+        readonly clientReconnectRequired: true;
+        readonly httpBackfillRequired: true;
+    };
+}
+export declare const toriumLocalnet: import("viem").Assign<import("viem").Assign<import("viem").Chain<undefined>, {
+    readonly id: 1414484556;
+    readonly name: "Torium Localnet";
+    readonly supportsTransactionReplacementDetection: false;
+    readonly nativeCurrency: {
+        readonly decimals: 18;
+        readonly name: "Torium Test Token";
+        readonly symbol: "tTOR";
+    };
+    readonly rpcUrls: {
+        readonly default: {
+            readonly http: readonly ["http://127.0.0.1:8545"];
+            readonly webSocket: readonly ["ws://127.0.0.1:8546"];
+        };
+    };
+    readonly testnet: true;
+    readonly extendSchema: {
+        readonly torium: ToriumChainMetadata;
+    };
+}>, {
+    readonly torium: {
+        readonly manifestVersion: "0.2.0";
+        readonly environment: "localnet";
+        readonly public: false;
+        readonly cosmosChainId: "torium-localnet-1";
+        readonly chainIdHex: "0x544f524c";
+        readonly networkId: 1414484556;
+        readonly caip2: "eip155:1414484556";
+        readonly baseDenom: "atorium";
+        readonly endpointStatus: "local-loopback";
+        readonly blockExplorerStatus: "deferred";
+        readonly contractRegistryStatus: "deferred";
+        readonly rpcProfile: {
+            readonly profileVersion: "1.0.1";
+            readonly maxBatchRequests: 100;
+            readonly subscriptions: readonly ["newHeads", "logs", "newPendingTransactions"];
+            readonly serverReplaysMissedMessages: false;
+            readonly clientReconnectRequired: true;
+            readonly httpBackfillRequired: true;
+        };
+    };
+}>;
+export declare const toriumDevnet: import("viem").Assign<import("viem").Assign<import("viem").Chain<undefined>, {
+    readonly id: 1414484548;
+    readonly name: "Torium Devnet";
+    readonly supportsTransactionReplacementDetection: false;
+    readonly nativeCurrency: {
+        readonly decimals: 18;
+        readonly name: "Torium Test Token";
+        readonly symbol: "tTOR";
+    };
+    readonly rpcUrls: {
+        readonly default: {
+            readonly http: readonly [];
+        };
+    };
+    readonly testnet: true;
+    readonly extendSchema: {
+        readonly torium: ToriumChainMetadata;
+    };
+}>, {
+    readonly torium: {
+        readonly manifestVersion: "0.2.0";
+        readonly environment: "devnet";
+        readonly public: false;
+        readonly cosmosChainId: "torium-devnet-1";
+        readonly chainIdHex: "0x544f5244";
+        readonly networkId: 1414484548;
+        readonly caip2: "eip155:1414484548";
+        readonly baseDenom: "atorium";
+        readonly endpointStatus: "deferred-unpublished";
+        readonly blockExplorerStatus: "deferred";
+        readonly contractRegistryStatus: "deferred";
+    };
+}>;
+export declare const toriumTestnet: import("viem").Assign<import("viem").Assign<import("viem").Chain<undefined>, {
+    readonly id: 1414484564;
+    readonly name: "Torium Testnet";
+    readonly supportsTransactionReplacementDetection: false;
+    readonly nativeCurrency: {
+        readonly decimals: 18;
+        readonly name: "Torium Test Token";
+        readonly symbol: "tTOR";
+    };
+    readonly rpcUrls: {
+        readonly default: {
+            readonly http: readonly [];
+        };
+    };
+    readonly testnet: true;
+    readonly extendSchema: {
+        readonly torium: ToriumChainMetadata;
+    };
+}>, {
+    readonly torium: {
+        readonly manifestVersion: "0.2.0";
+        readonly environment: "testnet";
+        readonly public: true;
+        readonly cosmosChainId: "torium-testnet-1";
+        readonly chainIdHex: "0x544f5254";
+        readonly networkId: 1414484564;
+        readonly caip2: "eip155:1414484564";
+        readonly baseDenom: "atorium";
+        readonly endpointStatus: "deferred-unpublished";
+        readonly blockExplorerStatus: "deferred";
+        readonly contractRegistryStatus: "deferred";
+    };
+}>;
+export declare const toriumMainnet: import("viem").Assign<import("viem").Assign<import("viem").Chain<undefined>, {
+    readonly id: 5525330;
+    readonly name: "Torium";
+    readonly supportsTransactionReplacementDetection: false;
+    readonly nativeCurrency: {
+        readonly decimals: 18;
+        readonly name: "Torium";
+        readonly symbol: "TOR";
+    };
+    readonly rpcUrls: {
+        readonly default: {
+            readonly http: readonly [];
+        };
+    };
+    readonly testnet: false;
+    readonly extendSchema: {
+        readonly torium: ToriumChainMetadata;
+    };
+}>, {
+    readonly torium: {
+        readonly manifestVersion: "0.2.0";
+        readonly environment: "mainnet";
+        readonly public: true;
+        readonly cosmosChainId: "torium-1";
+        readonly chainIdHex: "0x544f52";
+        readonly networkId: 5525330;
+        readonly caip2: "eip155:5525330";
+        readonly baseDenom: "atorium";
+        readonly endpointStatus: "deferred-unpublished";
+        readonly blockExplorerStatus: "deferred";
+        readonly contractRegistryStatus: "deferred";
+    };
+}>;
+export declare const toriumChains: {
+    readonly localnet: import("viem").Assign<import("viem").Assign<import("viem").Chain<undefined>, {
+        readonly id: 1414484556;
+        readonly name: "Torium Localnet";
+        readonly supportsTransactionReplacementDetection: false;
+        readonly nativeCurrency: {
+            readonly decimals: 18;
+            readonly name: "Torium Test Token";
+            readonly symbol: "tTOR";
+        };
+        readonly rpcUrls: {
+            readonly default: {
+                readonly http: readonly ["http://127.0.0.1:8545"];
+                readonly webSocket: readonly ["ws://127.0.0.1:8546"];
+            };
+        };
+        readonly testnet: true;
+        readonly extendSchema: {
+            readonly torium: ToriumChainMetadata;
+        };
+    }>, {
+        readonly torium: {
+            readonly manifestVersion: "0.2.0";
+            readonly environment: "localnet";
+            readonly public: false;
+            readonly cosmosChainId: "torium-localnet-1";
+            readonly chainIdHex: "0x544f524c";
+            readonly networkId: 1414484556;
+            readonly caip2: "eip155:1414484556";
+            readonly baseDenom: "atorium";
+            readonly endpointStatus: "local-loopback";
+            readonly blockExplorerStatus: "deferred";
+            readonly contractRegistryStatus: "deferred";
+            readonly rpcProfile: {
+                readonly profileVersion: "1.0.1";
+                readonly maxBatchRequests: 100;
+                readonly subscriptions: readonly ["newHeads", "logs", "newPendingTransactions"];
+                readonly serverReplaysMissedMessages: false;
+                readonly clientReconnectRequired: true;
+                readonly httpBackfillRequired: true;
+            };
+        };
+    }>;
+    readonly devnet: import("viem").Assign<import("viem").Assign<import("viem").Chain<undefined>, {
+        readonly id: 1414484548;
+        readonly name: "Torium Devnet";
+        readonly supportsTransactionReplacementDetection: false;
+        readonly nativeCurrency: {
+            readonly decimals: 18;
+            readonly name: "Torium Test Token";
+            readonly symbol: "tTOR";
+        };
+        readonly rpcUrls: {
+            readonly default: {
+                readonly http: readonly [];
+            };
+        };
+        readonly testnet: true;
+        readonly extendSchema: {
+            readonly torium: ToriumChainMetadata;
+        };
+    }>, {
+        readonly torium: {
+            readonly manifestVersion: "0.2.0";
+            readonly environment: "devnet";
+            readonly public: false;
+            readonly cosmosChainId: "torium-devnet-1";
+            readonly chainIdHex: "0x544f5244";
+            readonly networkId: 1414484548;
+            readonly caip2: "eip155:1414484548";
+            readonly baseDenom: "atorium";
+            readonly endpointStatus: "deferred-unpublished";
+            readonly blockExplorerStatus: "deferred";
+            readonly contractRegistryStatus: "deferred";
+        };
+    }>;
+    readonly testnet: import("viem").Assign<import("viem").Assign<import("viem").Chain<undefined>, {
+        readonly id: 1414484564;
+        readonly name: "Torium Testnet";
+        readonly supportsTransactionReplacementDetection: false;
+        readonly nativeCurrency: {
+            readonly decimals: 18;
+            readonly name: "Torium Test Token";
+            readonly symbol: "tTOR";
+        };
+        readonly rpcUrls: {
+            readonly default: {
+                readonly http: readonly [];
+            };
+        };
+        readonly testnet: true;
+        readonly extendSchema: {
+            readonly torium: ToriumChainMetadata;
+        };
+    }>, {
+        readonly torium: {
+            readonly manifestVersion: "0.2.0";
+            readonly environment: "testnet";
+            readonly public: true;
+            readonly cosmosChainId: "torium-testnet-1";
+            readonly chainIdHex: "0x544f5254";
+            readonly networkId: 1414484564;
+            readonly caip2: "eip155:1414484564";
+            readonly baseDenom: "atorium";
+            readonly endpointStatus: "deferred-unpublished";
+            readonly blockExplorerStatus: "deferred";
+            readonly contractRegistryStatus: "deferred";
+        };
+    }>;
+    readonly mainnet: import("viem").Assign<import("viem").Assign<import("viem").Chain<undefined>, {
+        readonly id: 5525330;
+        readonly name: "Torium";
+        readonly supportsTransactionReplacementDetection: false;
+        readonly nativeCurrency: {
+            readonly decimals: 18;
+            readonly name: "Torium";
+            readonly symbol: "TOR";
+        };
+        readonly rpcUrls: {
+            readonly default: {
+                readonly http: readonly [];
+            };
+        };
+        readonly testnet: false;
+        readonly extendSchema: {
+            readonly torium: ToriumChainMetadata;
+        };
+    }>, {
+        readonly torium: {
+            readonly manifestVersion: "0.2.0";
+            readonly environment: "mainnet";
+            readonly public: true;
+            readonly cosmosChainId: "torium-1";
+            readonly chainIdHex: "0x544f52";
+            readonly networkId: 5525330;
+            readonly caip2: "eip155:5525330";
+            readonly baseDenom: "atorium";
+            readonly endpointStatus: "deferred-unpublished";
+            readonly blockExplorerStatus: "deferred";
+            readonly contractRegistryStatus: "deferred";
+        };
+    }>;
+};
+export type ToriumChain = (typeof toriumChains)[ToriumEnvironment];
+export type ToriumClientChain = {
+    [TEnvironment in ToriumEnvironment]: Omit<(typeof toriumChains)[TEnvironment], "rpcUrls"> & {
+        readonly rpcUrls: {
+            readonly default: {
+                readonly http: readonly ToriumHttpUrl[];
+                readonly webSocket?: readonly ToriumWebSocketUrl[];
+            };
+        };
+    };
+}[ToriumEnvironment];
+export declare function getToriumChain<const TEnvironment extends ToriumEnvironment>(environment: TEnvironment): (typeof toriumChains)[TEnvironment];
+export interface ToriumRpcUrlOverrides {
+    readonly http: readonly [ToriumHttpUrl, ...ToriumHttpUrl[]];
+    readonly webSocket?: readonly [ToriumWebSocketUrl, ...ToriumWebSocketUrl[]];
+}
+export type ToriumChainWithRpcUrls<TChain extends ToriumChain, TOverrides extends ToriumRpcUrlOverrides> = Omit<TChain, "rpcUrls"> & {
+    readonly rpcUrls: {
+        readonly default: {
+            readonly http: TOverrides["http"];
+        } & (TOverrides extends {
+            readonly webSocket: infer TWebSocket extends readonly [
+                ToriumWebSocketUrl,
+                ...ToriumWebSocketUrl[]
+            ];
+        } ? {
+            readonly webSocket: TWebSocket;
+        } : {});
+    };
+};
+export declare function withToriumRpcUrls<const TChain extends ToriumChain, const TOverrides extends ToriumRpcUrlOverrides>(chain: TChain, overrides: TOverrides): ToriumChainWithRpcUrls<TChain, TOverrides>;
+export type ToriumEndpointRequester = Pick<EIP1193Provider, "request"> | Pick<Client, "request" | "chain">;
+export interface ToriumEndpointCompatibilityCheck {
+    readonly kind: "protocol" | "contract" | "capability";
+    readonly check: (requester: ToriumEndpointRequester) => Promise<boolean>;
+}
+export interface ValidateToriumEndpointOptions {
+    readonly chain: ToriumClientChain;
+    readonly requireReady?: boolean;
+    readonly expectedNetworkFingerprint?: Hash;
+    readonly minimumBlockNumber?: bigint;
+    readonly requireCompatibility?: boolean;
+    readonly compatibilityChecks?: readonly ToriumEndpointCompatibilityCheck[];
+    readonly signal?: AbortSignal;
+}
+export interface ToriumEndpointValidationResult {
+    readonly status: "ready" | "booting" | "syncing";
+    readonly environment: ToriumEnvironment;
+    readonly manifestVersion: "0.2.0";
+    readonly expectedChainId: number;
+    readonly observedChainId: number;
+    readonly expectedNetworkId: number;
+    readonly observedNetworkId: number;
+    readonly blockNumber: bigint;
+    readonly syncing: boolean;
+    readonly fingerprintStatus: "verified" | "unavailable-local";
+    readonly compatibilityStatus: "verified" | "not-requested";
+    readonly compatibilityChecks: number;
+}
+export declare function validateToriumEndpoint(requester: ToriumEndpointRequester, options: ValidateToriumEndpointOptions): Promise<ToriumEndpointValidationResult>;
+```
+
+## `./clients`
+
+- Import types: `./dist/types/clients.d.mts`
+- Require types: `./dist/types/clients.d.cts`
+- Declaration SHA-256: `fab43c3482b888ecee1bdbe53aa62b83f1d7a84712cb72af85d3dbed521285b9`
+- Runtime exports: `assertToriumFeeHistoryBlockCount`, `createToriumLogRanges`, `createToriumPublicClient`, `getToriumStateQueryCapability`, `toriumPublicActions`, `toriumReadCapabilities`
+
+```ts
+import { type Hash, type PublicClient, type PublicClientConfig, type RpcSchema, type Tokens, type Transport } from "viem";
+import { type ToriumClientChain, type ToriumEndpointValidationResult } from "./chains.js";
+import { type ToriumReadActionOptions } from "./errors.js";
+export type ToriumCapabilityState = "supported" | "partial" | "stub" | "unsupported";
+export declare const toriumReadCapabilities: Readonly<{
+    readonly schemaVersion: 1;
+    readonly baseline: {
+        readonly cosmosEvm: "v0.7.0";
+        readonly viem: "2.55.2";
+    };
+    readonly blockTags: {
+        readonly latest: {
+            readonly block: "supported";
+            readonly state: "supported";
+        };
+        readonly pending: {
+            readonly block: "partial";
+            readonly state: "partial";
+            readonly distinctStateViewProven: false;
+        };
+        readonly safe: {
+            readonly block: "partial";
+            readonly state: "unsupported";
+        };
+        readonly finalized: {
+            readonly block: "partial";
+            readonly state: "partial";
+            readonly meaning: "latest-committed-cometbft-state";
+        };
+    };
+    readonly finality: {
+        readonly defaultConfirmationBlocks: 1;
+        readonly label: "CometBFT committed";
+        readonly finalizedTagMeaning: "latest-committed-cometbft-state";
+        readonly beaconChainSemantics: false;
+        readonly probabilisticConfirmation: false;
+        readonly boundedInclusionClaim: false;
+        readonly replacementGenesisIsDiscontinuity: true;
+    };
+    readonly subscriptions: {
+        readonly newHeads: {
+            readonly baseline: "supported";
+            readonly activeLocalProfile: "supported";
+        };
+        readonly logs: {
+            readonly baseline: "supported";
+            readonly activeLocalProfile: "supported";
+        };
+        readonly pendingTransactions: {
+            readonly baseline: "supported";
+            readonly activeLocalProfile: "supported";
+        };
+        readonly browserWebSocket: "unsupported";
+        readonly serverReplay: false;
+        readonly reconnectOwner: "client";
+        readonly httpBackfillRequired: true;
+    };
+    readonly limits: {
+        readonly feeHistoryBlocks: 100;
+        readonly logBlockRange: 10000;
+        readonly logResults: 10000;
+        readonly ethCallGas: 25000000;
+        readonly ethCallTimeoutMilliseconds: 5000;
+    };
+    readonly cosmosExtension: {
+        readonly status: "stub";
+        readonly usable: false;
+    };
+}>;
+export type ToriumReadCapabilities = typeof toriumReadCapabilities;
+export type ToriumStateQueryBlockTag = "latest" | "pending" | "safe" | "finalized";
+export interface ToriumBlockRange {
+    readonly fromBlock: bigint;
+    readonly toBlock: bigint;
+}
+export interface GetToriumNetworkStatusOptions extends ToriumReadActionOptions {
+    readonly requireReady?: boolean;
+    readonly minimumBlockNumber?: bigint;
+    readonly expectedNetworkFingerprint?: Hash;
+}
+export interface ToriumNetworkStatus extends ToriumEndpointValidationResult {
+    readonly listening: boolean;
+    readonly peerCount: bigint;
+    readonly clientVersion: string;
+    readonly finality: ToriumReadCapabilities["finality"];
+}
+export interface ToriumPublicActions {
+    getToriumNetworkStatus(options?: GetToriumNetworkStatusOptions): Promise<ToriumNetworkStatus>;
+    getToriumReadCapabilities(): ToriumReadCapabilities;
+}
+export type ToriumPublicClientConfig<TTransport extends Transport, TChain extends ToriumClientChain, TRpcSchema extends RpcSchema | undefined = undefined, TTokens extends Tokens | undefined = undefined> = Omit<PublicClientConfig<TTransport, TChain, undefined, TRpcSchema, TTokens>, "chain"> & {
+    readonly chain: TChain;
+};
+export type ToriumPublicClient<TTransport extends Transport = Transport, TChain extends ToriumClientChain = ToriumClientChain, TRpcSchema extends RpcSchema | undefined = undefined, TTokens extends Tokens | undefined = undefined> = PublicClient<TTransport, TChain, undefined, TRpcSchema, TTokens> & ToriumPublicActions;
+export declare function toriumPublicActions<TTransport extends Transport, TChain extends ToriumClientChain>(client: PublicClient<TTransport, TChain>): {
+    getToriumNetworkStatus(options?: GetToriumNetworkStatusOptions): Promise<ToriumNetworkStatus>;
+    getToriumReadCapabilities(): ToriumReadCapabilities;
+};
+export declare function createToriumPublicClient<TTransport extends Transport, const TChain extends ToriumClientChain, TRpcSchema extends RpcSchema | undefined = undefined, const TTokens extends Tokens | undefined = undefined>(parameters: ToriumPublicClientConfig<TTransport, TChain, TRpcSchema, TTokens>): ToriumPublicClient<TTransport, TChain, TRpcSchema, TTokens>;
+export declare function getToriumStateQueryCapability(blockTag: ToriumStateQueryBlockTag): {
+    readonly state: ToriumCapabilityState;
+    readonly usableByStableHelper: boolean;
+    readonly meaning?: string;
+};
+export declare function createToriumLogRanges(parameters: ToriumBlockRange): readonly ToriumBlockRange[];
+export declare function assertToriumFeeHistoryBlockCount(blockCount: number): void;
+```
+
+## `./contracts`
+
+- Import types: `./dist/types/contracts.d.mts`
+- Require types: `./dist/types/contracts.d.cts`
+- Declaration SHA-256: `702d2757fd3465a8f8d2ee4c0d2aa7c4070cf7618962dde91f86dd43c8c753f2`
+- Runtime exports: `ToriumContractError`, `computeToriumAttestationCommitment`, `computeToriumAttestationId`, `computeToriumAttestationReplayKey`, `decodeToriumContractRevert`, `extractToriumRevertData`, `getToriumAttestation`, `getToriumAttestationStatus`, `getToriumRewardDistributorState`, `getToriumRewardEpoch`, `hashToriumAttestationUtf8`, `hashToriumRewardLeaf`, `hashToriumRewardNode`, `isToriumAttestationActive`, `isToriumRewardClaimed`, `preflightToriumAttestation`, `preflightToriumAttestationRevocation`, `preflightToriumRewardClaim`, `prepareToriumAttestation`, `prepareToriumAttestationRevocation`, `prepareToriumRewardClaim`, `prepareToriumRewardClawback`, `prepareToriumRewardEpochPublication`, `processToriumRewardProof`, `resolveToriumContractDeployment`, `simulateToriumContractRequest`, `toriumAttestationRegistryAbi`, `toriumAttestationStatuses`, `toriumContractAbis`, `toriumContractNames`, `toriumContractRegistryChainId`, `toriumCreate2FactoryAbi`, `toriumLocalnetContractRegistry`, `toriumNativeAbi`, `toriumRewardDistributorAbi`, `toriumRewardDistributorRoles`, `validateToriumAttestationPayload`, `verifyToriumAttestation`, `verifyToriumContractDeployment`
+
+```ts
+import { type Abi, type Address, type Hash, type Hex } from "viem";
+import { ToriumSdkError, type ToriumReadActionOptions } from "./errors.js";
+import type { ToriumTransactionRequest } from "./wallet.js";
+export { toriumAttestationRegistryAbi, toriumCreate2FactoryAbi, toriumNativeAbi, toriumRewardDistributorAbi, } from "./generated/contracts/abis.js";
+export { toriumLocalnetContractRegistry, type ToriumLocalnetContractRegistry, } from "./generated/contracts/deployments.js";
+export declare const toriumContractNames: readonly ["toriumNative", "toriumCreate2Factory", "toriumRewardDistributor", "toriumAttestationRegistry"];
+export type ToriumContractName = (typeof toriumContractNames)[number];
+export declare const toriumContractAbis: Readonly<{
+    readonly toriumNative: readonly [{
+        readonly stateMutability: "payable";
+        readonly type: "fallback";
+    }, {
+        readonly stateMutability: "payable";
+        readonly type: "receive";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "owner";
+            readonly type: "address";
+        }, {
+            readonly internalType: "address";
+            readonly name: "spender";
+            readonly type: "address";
+        }];
+        readonly name: "allowance";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "spender";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "value";
+            readonly type: "uint256";
+        }];
+        readonly name: "approve";
+        readonly outputs: readonly [{
+            readonly internalType: "bool";
+            readonly name: "";
+            readonly type: "bool";
+        }];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }];
+        readonly name: "balanceOf";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "decimals";
+        readonly outputs: readonly [{
+            readonly internalType: "uint8";
+            readonly name: "";
+            readonly type: "uint8";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "deposit";
+        readonly outputs: readonly [];
+        readonly stateMutability: "payable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "name";
+        readonly outputs: readonly [{
+            readonly internalType: "string";
+            readonly name: "";
+            readonly type: "string";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "symbol";
+        readonly outputs: readonly [{
+            readonly internalType: "string";
+            readonly name: "";
+            readonly type: "string";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "totalSupply";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "to";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "value";
+            readonly type: "uint256";
+        }];
+        readonly name: "transfer";
+        readonly outputs: readonly [{
+            readonly internalType: "bool";
+            readonly name: "";
+            readonly type: "bool";
+        }];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "from";
+            readonly type: "address";
+        }, {
+            readonly internalType: "address";
+            readonly name: "to";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "value";
+            readonly type: "uint256";
+        }];
+        readonly name: "transferFrom";
+        readonly outputs: readonly [{
+            readonly internalType: "bool";
+            readonly name: "";
+            readonly type: "bool";
+        }];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "value";
+            readonly type: "uint256";
+        }];
+        readonly name: "withdraw";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "owner";
+            readonly type: "address";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "spender";
+            readonly type: "address";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "value";
+            readonly type: "uint256";
+        }];
+        readonly name: "Approval";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "value";
+            readonly type: "uint256";
+        }];
+        readonly name: "Deposit";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "from";
+            readonly type: "address";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "to";
+            readonly type: "address";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "value";
+            readonly type: "uint256";
+        }];
+        readonly name: "Transfer";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "value";
+            readonly type: "uint256";
+        }];
+        readonly name: "Withdrawal";
+        readonly type: "event";
+    }];
+    readonly toriumCreate2Factory: readonly [{
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "salt";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "initCodeHash";
+            readonly type: "bytes32";
+        }];
+        readonly name: "computeAddress";
+        readonly outputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "salt";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes";
+            readonly name: "initCode";
+            readonly type: "bytes";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "expectedRuntimeCodeHash";
+            readonly type: "bytes32";
+        }];
+        readonly name: "deploy";
+        readonly outputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "deployment";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "payable";
+        readonly type: "function";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "deployment";
+            readonly type: "address";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "bytes32";
+            readonly name: "salt";
+            readonly type: "bytes32";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "bytes32";
+            readonly name: "initCodeHash";
+            readonly type: "bytes32";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "bytes32";
+            readonly name: "runtimeCodeHash";
+            readonly type: "bytes32";
+        }];
+        readonly name: "ContractDeployed";
+        readonly type: "event";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "expectedDeployment";
+            readonly type: "address";
+        }];
+        readonly name: "DeploymentFailed";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "EmptyInitCode";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "deployment";
+            readonly type: "address";
+        }];
+        readonly name: "EmptyRuntimeCode";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "deployment";
+            readonly type: "address";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "expectedRuntimeCodeHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "actualRuntimeCodeHash";
+            readonly type: "bytes32";
+        }];
+        readonly name: "ExistingRuntimeCodeMismatch";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "deployment";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "value";
+            readonly type: "uint256";
+        }];
+        readonly name: "UnexpectedValueForExistingDeployment";
+        readonly type: "error";
+    }];
+    readonly toriumRewardDistributor: readonly [{
+        readonly inputs: readonly [{
+            readonly internalType: "uint48";
+            readonly name: "defaultAdminDelay_";
+            readonly type: "uint48";
+        }, {
+            readonly internalType: "address";
+            readonly name: "initialAdmin_";
+            readonly type: "address";
+        }, {
+            readonly internalType: "address";
+            readonly name: "initialPublisher_";
+            readonly type: "address";
+        }, {
+            readonly internalType: "address";
+            readonly name: "initialPauser_";
+            readonly type: "address";
+        }, {
+            readonly internalType: "address";
+            readonly name: "initialClawbackOperator_";
+            readonly type: "address";
+        }, {
+            readonly internalType: "address payable";
+            readonly name: "treasury_";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "publicationDelay_";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "clawbackDelay_";
+            readonly type: "uint64";
+        }];
+        readonly stateMutability: "nonpayable";
+        readonly type: "constructor";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "CLAWBACK_ROLE";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "";
+            readonly type: "bytes32";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "DEFAULT_ADMIN_ROLE";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "";
+            readonly type: "bytes32";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "EPOCH_PUBLISHER_ROLE";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "";
+            readonly type: "bytes32";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "PAUSER_ROLE";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "";
+            readonly type: "bytes32";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "acceptDefaultAdminTransfer";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "newAdmin";
+            readonly type: "address";
+        }];
+        readonly name: "beginDefaultAdminTransfer";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "cancelDefaultAdminTransfer";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint48";
+            readonly name: "newDelay";
+            readonly type: "uint48";
+        }];
+        readonly name: "changeDefaultAdminDelay";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "epochId";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "index";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "address payable";
+            readonly name: "account";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "amount";
+            readonly type: "uint256";
+        }, {
+            readonly components: readonly [{
+                readonly internalType: "bytes32";
+                readonly name: "nodeHash";
+                readonly type: "bytes32";
+            }, {
+                readonly internalType: "uint256";
+                readonly name: "sum";
+                readonly type: "uint256";
+            }];
+            readonly internalType: "struct ToriumRewardDistributor.ProofNode[]";
+            readonly name: "proof";
+            readonly type: "tuple[]";
+        }];
+        readonly name: "claim";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "epochId";
+            readonly type: "uint256";
+        }];
+        readonly name: "clawback";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "amount";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "epochId";
+            readonly type: "uint256";
+        }];
+        readonly name: "clawbackAvailableAt";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "clawbackDelay";
+        readonly outputs: readonly [{
+            readonly internalType: "uint64";
+            readonly name: "";
+            readonly type: "uint64";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "defaultAdmin";
+        readonly outputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "defaultAdminDelay";
+        readonly outputs: readonly [{
+            readonly internalType: "uint48";
+            readonly name: "";
+            readonly type: "uint48";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "defaultAdminDelayIncreaseWait";
+        readonly outputs: readonly [{
+            readonly internalType: "uint48";
+            readonly name: "";
+            readonly type: "uint48";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "epochId";
+            readonly type: "uint256";
+        }];
+        readonly name: "epochs";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "rootHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "funded";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "claimStart";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "claimEnd";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "claimed";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "clawed";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "forcedSurplus";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "role";
+            readonly type: "bytes32";
+        }];
+        readonly name: "getRoleAdmin";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "";
+            readonly type: "bytes32";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "role";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }];
+        readonly name: "grantRole";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "role";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }];
+        readonly name: "hasRole";
+        readonly outputs: readonly [{
+            readonly internalType: "bool";
+            readonly name: "";
+            readonly type: "bool";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "firstHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "firstSum";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "secondHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "secondSum";
+            readonly type: "uint256";
+        }];
+        readonly name: "hashNode";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "parentHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "parentSum";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "pure";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "epochId";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "index";
+            readonly type: "uint256";
+        }];
+        readonly name: "isClaimed";
+        readonly outputs: readonly [{
+            readonly internalType: "bool";
+            readonly name: "";
+            readonly type: "bool";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "rootHash";
+            readonly type: "bytes32";
+        }];
+        readonly name: "isRootHashUsed";
+        readonly outputs: readonly [{
+            readonly internalType: "bool";
+            readonly name: "";
+            readonly type: "bool";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "epochId";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "index";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "amount";
+            readonly type: "uint256";
+        }];
+        readonly name: "leafHash";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "";
+            readonly type: "bytes32";
+        }];
+        readonly stateMutability: "pure";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "nextEpochId";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "owner";
+        readonly outputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "pause";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "paused";
+        readonly outputs: readonly [{
+            readonly internalType: "bool";
+            readonly name: "";
+            readonly type: "bool";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "pendingDefaultAdmin";
+        readonly outputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "newAdmin";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint48";
+            readonly name: "schedule";
+            readonly type: "uint48";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "pendingDefaultAdminDelay";
+        readonly outputs: readonly [{
+            readonly internalType: "uint48";
+            readonly name: "newDelay";
+            readonly type: "uint48";
+        }, {
+            readonly internalType: "uint48";
+            readonly name: "schedule";
+            readonly type: "uint48";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "epochId";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "index";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "amount";
+            readonly type: "uint256";
+        }, {
+            readonly components: readonly [{
+                readonly internalType: "bytes32";
+                readonly name: "nodeHash";
+                readonly type: "bytes32";
+            }, {
+                readonly internalType: "uint256";
+                readonly name: "sum";
+                readonly type: "uint256";
+            }];
+            readonly internalType: "struct ToriumRewardDistributor.ProofNode[]";
+            readonly name: "proof";
+            readonly type: "tuple[]";
+        }];
+        readonly name: "processProof";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "computedRootHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "computedRootSum";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "pure";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "publicationDelay";
+        readonly outputs: readonly [{
+            readonly internalType: "uint64";
+            readonly name: "";
+            readonly type: "uint64";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "epochId";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "rootHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "rootSum";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "claimStart";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "claimEnd";
+            readonly type: "uint64";
+        }];
+        readonly name: "publishEpoch";
+        readonly outputs: readonly [];
+        readonly stateMutability: "payable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "epochId";
+            readonly type: "uint256";
+        }];
+        readonly name: "remainingForEpoch";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "role";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }];
+        readonly name: "renounceRole";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "role";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }];
+        readonly name: "revokeRole";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "rollbackDefaultAdminDelay";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes4";
+            readonly name: "interfaceId";
+            readonly type: "bytes4";
+        }];
+        readonly name: "supportsInterface";
+        readonly outputs: readonly [{
+            readonly internalType: "bool";
+            readonly name: "";
+            readonly type: "bool";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "totalClaimed";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "totalClawed";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "totalFunded";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "totalOutstanding";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "treasury";
+        readonly outputs: readonly [{
+            readonly internalType: "address payable";
+            readonly name: "";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "unpause";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "uint256";
+            readonly name: "epochId";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "epochOutstanding";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "totalOutstanding";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "nativeBalance";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "forcedSurplus";
+            readonly type: "uint256";
+        }];
+        readonly name: "AccountingReconciled";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [];
+        readonly name: "DefaultAdminDelayChangeCanceled";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: false;
+            readonly internalType: "uint48";
+            readonly name: "newDelay";
+            readonly type: "uint48";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint48";
+            readonly name: "effectSchedule";
+            readonly type: "uint48";
+        }];
+        readonly name: "DefaultAdminDelayChangeScheduled";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [];
+        readonly name: "DefaultAdminTransferCanceled";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "newAdmin";
+            readonly type: "address";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint48";
+            readonly name: "acceptSchedule";
+            readonly type: "uint48";
+        }];
+        readonly name: "DefaultAdminTransferScheduled";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "uint256";
+            readonly name: "epochId";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "operator";
+            readonly type: "address";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "treasury";
+            readonly type: "address";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "amount";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "epochClawed";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "totalClawed";
+            readonly type: "uint256";
+        }];
+        readonly name: "EpochClawedBack";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "uint256";
+            readonly name: "epochId";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "bytes32";
+            readonly name: "rootHash";
+            readonly type: "bytes32";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "publisher";
+            readonly type: "address";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "funded";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint64";
+            readonly name: "claimStart";
+            readonly type: "uint64";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint64";
+            readonly name: "claimEnd";
+            readonly type: "uint64";
+        }];
+        readonly name: "EpochPublished";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: false;
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }];
+        readonly name: "Paused";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "uint256";
+            readonly name: "epochId";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "uint256";
+            readonly name: "index";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "amount";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "epochClaimed";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "totalClaimed";
+            readonly type: "uint256";
+        }];
+        readonly name: "RewardClaimed";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "bytes32";
+            readonly name: "role";
+            readonly type: "bytes32";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "bytes32";
+            readonly name: "previousAdminRole";
+            readonly type: "bytes32";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "bytes32";
+            readonly name: "newAdminRole";
+            readonly type: "bytes32";
+        }];
+        readonly name: "RoleAdminChanged";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "bytes32";
+            readonly name: "role";
+            readonly type: "bytes32";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "sender";
+            readonly type: "address";
+        }];
+        readonly name: "RoleGranted";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "bytes32";
+            readonly name: "role";
+            readonly type: "bytes32";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "sender";
+            readonly type: "address";
+        }];
+        readonly name: "RoleRevoked";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: false;
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }];
+        readonly name: "Unpaused";
+        readonly type: "event";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "AccessControlBadConfirmation";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint48";
+            readonly name: "schedule";
+            readonly type: "uint48";
+        }];
+        readonly name: "AccessControlEnforcedDefaultAdminDelay";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "AccessControlEnforcedDefaultAdminRules";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "defaultAdmin";
+            readonly type: "address";
+        }];
+        readonly name: "AccessControlInvalidDefaultAdmin";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "neededRole";
+            readonly type: "bytes32";
+        }];
+        readonly name: "AccessControlUnauthorizedAccount";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "nativeBalance";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "outstanding";
+            readonly type: "uint256";
+        }];
+        readonly name: "AccountingInsolvent";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "epochId";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "index";
+            readonly type: "uint256";
+        }];
+        readonly name: "ClaimAlreadyProcessed";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "claimStart";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "currentTime";
+            readonly type: "uint256";
+        }];
+        readonly name: "ClaimNotStarted";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "minimumStart";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "actualStart";
+            readonly type: "uint256";
+        }];
+        readonly name: "ClaimStartTooEarly";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "claimEnd";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "currentTime";
+            readonly type: "uint256";
+        }];
+        readonly name: "ClaimWindowClosed";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "availableAt";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "currentTime";
+            readonly type: "uint256";
+        }];
+        readonly name: "ClawbackNotReady";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "EnforcedPause";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "epochId";
+            readonly type: "uint256";
+        }];
+        readonly name: "EpochNotFound";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "ExpectedPause";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "funding";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "rootSum";
+            readonly type: "uint256";
+        }];
+        readonly name: "FundingDoesNotMatchRootSum";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "claimStart";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "claimEnd";
+            readonly type: "uint256";
+        }];
+        readonly name: "InvalidClaimWindow";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "computedRootHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "computedRootSum";
+            readonly type: "uint256";
+        }];
+        readonly name: "InvalidProof";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "proofIndex";
+            readonly type: "uint256";
+        }];
+        readonly name: "MalformedProof";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "recipient";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "amount";
+            readonly type: "uint256";
+        }];
+        readonly name: "NativeTransferFailed";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "epochId";
+            readonly type: "uint256";
+        }];
+        readonly name: "NothingToClawback";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "ReentrancyGuardReentrantCall";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "rootHash";
+            readonly type: "bytes32";
+        }];
+        readonly name: "RootHashAlreadyUsed";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint8";
+            readonly name: "bits";
+            readonly type: "uint8";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "value";
+            readonly type: "uint256";
+        }];
+        readonly name: "SafeCastOverflowedUintDowncast";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "expectedEpochId";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "actualEpochId";
+            readonly type: "uint256";
+        }];
+        readonly name: "UnexpectedEpochId";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "ZeroAddress";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "ZeroAmount";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "ZeroDelay";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "ZeroFunding";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "ZeroRootHash";
+        readonly type: "error";
+    }];
+    readonly toriumAttestationRegistry: readonly [{
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "schemaId";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "uint32";
+            readonly name: "schemaVersion";
+            readonly type: "uint32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "subject";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "referenceHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "contentHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "metadataHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "metadataUriHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "supersedes";
+            readonly type: "bytes32";
+        }];
+        readonly name: "attest";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "attestationId";
+            readonly type: "bytes32";
+        }];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "attestationCount";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "attestationId";
+            readonly type: "bytes32";
+        }];
+        readonly name: "commitmentOf";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "";
+            readonly type: "bytes32";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "issuer";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "issuerNonce";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "commitment";
+            readonly type: "bytes32";
+        }];
+        readonly name: "computeAttestationId";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "";
+            readonly type: "bytes32";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "schemaId";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "uint32";
+            readonly name: "schemaVersion";
+            readonly type: "uint32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "subject";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "referenceHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "contentHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "metadataHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "metadataUriHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "supersedes";
+            readonly type: "bytes32";
+        }];
+        readonly name: "computeCommitment";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "";
+            readonly type: "bytes32";
+        }];
+        readonly stateMutability: "pure";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "issuer";
+            readonly type: "address";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "schemaId";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "uint32";
+            readonly name: "schemaVersion";
+            readonly type: "uint32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "subject";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "referenceHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "contentHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "metadataHash";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "metadataUriHash";
+            readonly type: "bytes32";
+        }];
+        readonly name: "computeReplayKey";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "";
+            readonly type: "bytes32";
+        }];
+        readonly stateMutability: "pure";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "attestationId";
+            readonly type: "bytes32";
+        }];
+        readonly name: "getAttestation";
+        readonly outputs: readonly [{
+            readonly components: readonly [{
+                readonly internalType: "bytes32";
+                readonly name: "schemaId";
+                readonly type: "bytes32";
+            }, {
+                readonly internalType: "uint32";
+                readonly name: "schemaVersion";
+                readonly type: "uint32";
+            }, {
+                readonly internalType: "address";
+                readonly name: "issuer";
+                readonly type: "address";
+            }, {
+                readonly internalType: "uint256";
+                readonly name: "issuerNonce";
+                readonly type: "uint256";
+            }, {
+                readonly internalType: "bytes32";
+                readonly name: "subject";
+                readonly type: "bytes32";
+            }, {
+                readonly internalType: "bytes32";
+                readonly name: "referenceHash";
+                readonly type: "bytes32";
+            }, {
+                readonly internalType: "bytes32";
+                readonly name: "contentHash";
+                readonly type: "bytes32";
+            }, {
+                readonly internalType: "bytes32";
+                readonly name: "metadataHash";
+                readonly type: "bytes32";
+            }, {
+                readonly internalType: "bytes32";
+                readonly name: "metadataUriHash";
+                readonly type: "bytes32";
+            }, {
+                readonly internalType: "bytes32";
+                readonly name: "supersedes";
+                readonly type: "bytes32";
+            }, {
+                readonly internalType: "bytes32";
+                readonly name: "supersededBy";
+                readonly type: "bytes32";
+            }, {
+                readonly internalType: "uint64";
+                readonly name: "createdAt";
+                readonly type: "uint64";
+            }, {
+                readonly internalType: "uint64";
+                readonly name: "revokedAt";
+                readonly type: "uint64";
+            }, {
+                readonly internalType: "uint64";
+                readonly name: "supersededAt";
+                readonly type: "uint64";
+            }, {
+                readonly internalType: "bytes32";
+                readonly name: "revocationReasonHash";
+                readonly type: "bytes32";
+            }];
+            readonly internalType: "struct ToriumAttestationRegistry.Attestation";
+            readonly name: "";
+            readonly type: "tuple";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "attestationId";
+            readonly type: "bytes32";
+        }];
+        readonly name: "isActive";
+        readonly outputs: readonly [{
+            readonly internalType: "bool";
+            readonly name: "";
+            readonly type: "bool";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "issuer";
+            readonly type: "address";
+        }];
+        readonly name: "issuerNonces";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "latestNonce";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "attestationId";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "revocationReasonHash";
+            readonly type: "bytes32";
+        }];
+        readonly name: "revoke";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "attestationId";
+            readonly type: "bytes32";
+        }];
+        readonly name: "statusOf";
+        readonly outputs: readonly [{
+            readonly internalType: "enum ToriumAttestationRegistry.Status";
+            readonly name: "";
+            readonly type: "uint8";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "replayKey";
+            readonly type: "bytes32";
+        }];
+        readonly name: "usedPayloads";
+        readonly outputs: readonly [{
+            readonly internalType: "bool";
+            readonly name: "used";
+            readonly type: "bool";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "attestationId";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "address";
+            readonly name: "expectedIssuer";
+            readonly type: "address";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "expectedCommitment";
+            readonly type: "bytes32";
+        }];
+        readonly name: "verify";
+        readonly outputs: readonly [{
+            readonly internalType: "bool";
+            readonly name: "";
+            readonly type: "bool";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "bytes32";
+            readonly name: "attestationId";
+            readonly type: "bytes32";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "issuer";
+            readonly type: "address";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "bytes32";
+            readonly name: "schemaId";
+            readonly type: "bytes32";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "bytes32";
+            readonly name: "commitment";
+            readonly type: "bytes32";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "bytes32";
+            readonly name: "supersedes";
+            readonly type: "bytes32";
+        }];
+        readonly name: "AttestationIssued";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "bytes32";
+            readonly name: "attestationId";
+            readonly type: "bytes32";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "issuer";
+            readonly type: "address";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "bytes32";
+            readonly name: "revocationReasonHash";
+            readonly type: "bytes32";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint64";
+            readonly name: "revokedAt";
+            readonly type: "uint64";
+        }];
+        readonly name: "AttestationRevoked";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "bytes32";
+            readonly name: "supersededAttestationId";
+            readonly type: "bytes32";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "bytes32";
+            readonly name: "replacementAttestationId";
+            readonly type: "bytes32";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "issuer";
+            readonly type: "address";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint64";
+            readonly name: "supersededAt";
+            readonly type: "uint64";
+        }];
+        readonly name: "AttestationSuperseded";
+        readonly type: "event";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "attestationId";
+            readonly type: "bytes32";
+        }];
+        readonly name: "AttestationIdCollision";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "attestationId";
+            readonly type: "bytes32";
+        }];
+        readonly name: "AttestationNotFound";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "replayKey";
+            readonly type: "bytes32";
+        }];
+        readonly name: "DuplicatePayload";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "attestationId";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "enum ToriumAttestationRegistry.Status";
+            readonly name: "actualStatus";
+            readonly type: "uint8";
+        }];
+        readonly name: "InvalidAttestationStatus";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "expectedIssuer";
+            readonly type: "address";
+        }, {
+            readonly internalType: "address";
+            readonly name: "actualIssuer";
+            readonly type: "address";
+        }];
+        readonly name: "IssuerMismatch";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "expectedSchemaId";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "actualSchemaId";
+            readonly type: "bytes32";
+        }];
+        readonly name: "SchemaMismatch";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "expectedSubject";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes32";
+            readonly name: "actualSubject";
+            readonly type: "bytes32";
+        }];
+        readonly name: "SubjectMismatch";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "timestamp";
+            readonly type: "uint256";
+        }];
+        readonly name: "TimestampOverflow";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "ZeroContentHash";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "ZeroMetadataHash";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "ZeroMetadataUriHash";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "ZeroRevocationReasonHash";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "ZeroSchemaId";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "ZeroSchemaVersion";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "ZeroSubject";
+        readonly type: "error";
+    }];
+}>;
+/** EVM chain served by the generated default deployment registry. */
+export declare const toriumContractRegistryChainId: 1414484556;
+export type ToriumContractErrorCode = "TORIUM_CONTRACT_CONFIG_INVALID" | "TORIUM_CONTRACT_NOT_DEPLOYED" | "TORIUM_CONTRACT_CODE_MISSING" | "TORIUM_CONTRACT_CODE_MISMATCH" | "TORIUM_CONTRACT_VERSION_MISMATCH" | "TORIUM_CONTRACT_RESPONSE_INVALID" | "TORIUM_CONTRACT_REVERTED";
+export declare class ToriumContractError extends ToriumSdkError<ToriumContractErrorCode> {
+    readonly contractName?: ToriumContractName;
+    readonly address?: Address;
+    readonly errorName?: string;
+    readonly errorArgs?: readonly unknown[];
+    constructor(code: ToriumContractErrorCode, message: string, options?: {
+        readonly contractName?: ToriumContractName;
+        readonly address?: Address;
+        readonly errorName?: string;
+        readonly errorArgs?: readonly unknown[];
+        readonly cause?: unknown;
+        readonly operation?: string;
+        readonly method?: string;
+        readonly chainId?: number;
+        readonly requestId?: string;
+        readonly revertData?: Hex;
+        readonly revertReason?: string;
+        readonly issues?: readonly string[];
+    });
+    toJSON(): Record<string, unknown>;
+}
+export interface ToriumContractDeployment {
+    readonly contractName: ToriumContractName;
+    readonly address: Address;
+    readonly abi: Abi;
+    readonly implementationVersion: string;
+    readonly runtimeCodeKeccak256: Hash | null;
+}
+export interface ToriumContractDeploymentOverride {
+    readonly address: Address;
+    readonly implementationVersion?: string;
+    readonly runtimeCodeKeccak256?: Hash;
+}
+export interface ResolveToriumContractDeploymentOptions {
+    readonly deployment?: ToriumContractDeploymentOverride;
+    readonly expectedImplementationVersion?: string;
+}
+/**
+ * Resolves a contract deployment from the generated localnet registry, or from
+ * an explicit local deployment override. Registry entries without a broadcast
+ * address fail closed instead of inventing one.
+ */
+export declare function resolveToriumContractDeployment(contractName: ToriumContractName, options?: ResolveToriumContractDeploymentOptions): ToriumContractDeployment;
+export interface ToriumContractCodeClient {
+    getCode(parameters: {
+        readonly address: Address;
+    }): Promise<Hex | undefined>;
+}
+export interface ToriumContractCodeVerification {
+    readonly contractName: ToriumContractName;
+    readonly address: Address;
+    readonly implementationVersion: string;
+    readonly runtimeCodeKeccak256: Hash;
+}
+/**
+ * Confirms that the deployed runtime bytecode matches the deployment's pinned
+ * keccak-256 hash, so a wrong address or drifted implementation fails closed.
+ */
+export declare function verifyToriumContractDeployment(client: ToriumContractCodeClient, deployment: ToriumContractDeployment, options?: ToriumReadActionOptions): Promise<ToriumContractCodeVerification>;
+export interface DecodedToriumContractRevert {
+    readonly contractName: ToriumContractName;
+    readonly errorName: string;
+    readonly args: readonly unknown[];
+}
+/** Decodes custom-error revert data against a generated contract ABI. */
+export declare function decodeToriumContractRevert(contractName: ToriumContractName, revertData: Hex): DecodedToriumContractRevert | null;
+/** Walks an error cause chain and extracts raw revert data when present. */
+export declare function extractToriumRevertData(error: unknown): Hex | null;
+export interface ToriumContractCallClient {
+    call(parameters: {
+        readonly account?: Address;
+        readonly to: Address;
+        readonly data: Hex;
+        readonly value?: bigint;
+    }): Promise<unknown>;
+}
+/**
+ * Simulates a prepared contract transaction with `eth_call` and rethrows
+ * decoded custom-error reverts as typed contract errors. It never submits.
+ */
+export declare function simulateToriumContractRequest(client: ToriumContractCallClient, contractName: ToriumContractName, request: ToriumTransactionRequest, options?: ToriumReadActionOptions): Promise<void>;
+export interface ToriumContractReadClient {
+    readContract(parameters: {
+        readonly address: Address;
+        readonly abi: Abi;
+        readonly functionName: string;
+        readonly args?: readonly unknown[];
+    }): Promise<unknown>;
+}
+export declare const toriumRewardDistributorRoles: Readonly<{
+    readonly epochPublisher: `0x${string}`;
+    readonly pauser: `0x${string}`;
+    readonly clawback: `0x${string}`;
+}>;
+export interface ToriumRewardProofNode {
+    readonly nodeHash: Hash;
+    readonly sum: bigint;
+}
+export interface ToriumRewardClaimLeaf {
+    readonly epochId: bigint;
+    readonly index: bigint;
+    readonly account: Address;
+    readonly amount: bigint;
+}
+export interface ToriumRewardEpoch {
+    readonly epochId: bigint;
+    readonly rootHash: Hash;
+    readonly funded: bigint;
+    readonly claimStart: bigint;
+    readonly claimEnd: bigint;
+    readonly claimed: bigint;
+    readonly clawed: bigint;
+}
+export interface ToriumRewardDistributorState {
+    readonly nextEpochId: bigint;
+    readonly totalFunded: bigint;
+    readonly totalClaimed: bigint;
+    readonly totalClawed: bigint;
+    readonly treasury: Address;
+    readonly publicationDelay: bigint;
+    readonly clawbackDelay: bigint;
+    readonly paused: boolean;
+}
+/** Hashes one Merkle-sum leaf exactly as `ToriumRewardDistributor.leafHash`. */
+export declare function hashToriumRewardLeaf(leaf: ToriumRewardClaimLeaf): Hash;
+/** Combines two Merkle-sum nodes exactly as `ToriumRewardDistributor.hashNode`. */
+export declare function hashToriumRewardNode(first: ToriumRewardProofNode, second: ToriumRewardProofNode): ToriumRewardProofNode;
+export interface ToriumRewardProofResult {
+    readonly rootHash: Hash;
+    readonly rootSum: bigint;
+}
+/**
+ * Reconstructs the Merkle-sum root committed by a claim path, mirroring the
+ * on-chain `processProof`, including its malformed-node rejections.
+ */
+export declare function processToriumRewardProof(leaf: ToriumRewardClaimLeaf, proof: readonly ToriumRewardProofNode[]): ToriumRewardProofResult;
+export interface ToriumRewardDistributorReadParameters {
+    readonly deployment?: ToriumContractDeploymentOverride;
+}
+export declare function getToriumRewardDistributorState(client: ToriumContractReadClient, parameters?: ToriumRewardDistributorReadParameters, options?: ToriumReadActionOptions): Promise<ToriumRewardDistributorState>;
+export interface GetToriumRewardEpochParameters extends ToriumRewardDistributorReadParameters {
+    readonly epochId: bigint;
+}
+export declare function getToriumRewardEpoch(client: ToriumContractReadClient, parameters: GetToriumRewardEpochParameters, options?: ToriumReadActionOptions): Promise<ToriumRewardEpoch | null>;
+export interface IsToriumRewardClaimedParameters extends ToriumRewardDistributorReadParameters {
+    readonly epochId: bigint;
+    readonly index: bigint;
+}
+export declare function isToriumRewardClaimed(client: ToriumContractReadClient, parameters: IsToriumRewardClaimedParameters, options?: ToriumReadActionOptions): Promise<boolean>;
+export type ToriumRewardClaimBlocker = "epoch-not-found" | "distributor-paused" | "claim-not-started" | "claim-window-closed" | "already-claimed" | "malformed-proof" | "invalid-proof";
+export interface ToriumRewardClaimPreflight {
+    readonly canClaim: boolean;
+    readonly blockers: readonly ToriumRewardClaimBlocker[];
+    readonly epoch: ToriumRewardEpoch | null;
+    readonly currentTimestamp: bigint;
+    readonly computedRootHash: Hash | null;
+    readonly computedRootSum: bigint | null;
+}
+export interface ToriumRewardClaimPreflightClient extends ToriumContractReadClient {
+    getBlock(parameters: {
+        readonly blockTag: "latest";
+    }): Promise<{
+        readonly timestamp: bigint;
+    }>;
+}
+export interface PreflightToriumRewardClaimParameters extends ToriumRewardDistributorReadParameters {
+    readonly epochId: bigint;
+    readonly index: bigint;
+    readonly account: Address;
+    readonly amount: bigint;
+    readonly proof: readonly ToriumRewardProofNode[];
+}
+/**
+ * Rebuilds the claim's Merkle-sum root locally and checks epoch existence,
+ * claim window, pause state, and double-claim bits before any signature.
+ */
+export declare function preflightToriumRewardClaim(client: ToriumRewardClaimPreflightClient, parameters: PreflightToriumRewardClaimParameters, options?: ToriumReadActionOptions): Promise<ToriumRewardClaimPreflight>;
+export interface PrepareToriumRewardClaimParameters extends ToriumRewardDistributorReadParameters {
+    readonly sender: ToriumTransactionRequest["account"];
+    readonly epochId: bigint;
+    readonly index: bigint;
+    readonly account: Address;
+    readonly amount: bigint;
+    readonly proof: readonly ToriumRewardProofNode[];
+}
+/** Encodes a `claim` transaction request for the wallet preflight/send steps. */
+export declare function prepareToriumRewardClaim(parameters: PrepareToriumRewardClaimParameters): ToriumTransactionRequest;
+export interface PrepareToriumRewardEpochPublicationParameters extends ToriumRewardDistributorReadParameters {
+    readonly sender: ToriumTransactionRequest["account"];
+    readonly epochId: bigint;
+    readonly rootHash: Hash;
+    readonly rootSum: bigint;
+    readonly claimStart: bigint;
+    readonly claimEnd: bigint;
+}
+/**
+ * Encodes a `publishEpoch` request. The attached value equals the root sum
+ * because the contract requires exact publication funding.
+ */
+export declare function prepareToriumRewardEpochPublication(parameters: PrepareToriumRewardEpochPublicationParameters): ToriumTransactionRequest;
+export interface PrepareToriumRewardClawbackParameters extends ToriumRewardDistributorReadParameters {
+    readonly sender: ToriumTransactionRequest["account"];
+    readonly epochId: bigint;
+}
+/** Encodes a `clawback` request for the fixed-treasury expiry sweep. */
+export declare function prepareToriumRewardClawback(parameters: PrepareToriumRewardClawbackParameters): ToriumTransactionRequest;
+export declare const toriumAttestationStatuses: readonly ["missing", "active", "superseded", "revoked"];
+export type ToriumAttestationStatus = (typeof toriumAttestationStatuses)[number];
+export interface ToriumAttestationPayload {
+    readonly schemaId: Hash;
+    readonly schemaVersion: number;
+    readonly subject: Hash;
+    readonly referenceHash?: Hash;
+    readonly contentHash: Hash;
+    readonly metadataHash: Hash;
+    readonly metadataUriHash: Hash;
+}
+export interface ToriumAttestation {
+    readonly attestationId: Hash;
+    readonly status: ToriumAttestationStatus;
+    readonly schemaId: Hash;
+    readonly schemaVersion: number;
+    readonly issuer: Address;
+    readonly issuerNonce: bigint;
+    readonly subject: Hash;
+    readonly referenceHash: Hash;
+    readonly contentHash: Hash;
+    readonly metadataHash: Hash;
+    readonly metadataUriHash: Hash;
+    readonly supersedes: Hash;
+    readonly supersededBy: Hash;
+    readonly createdAt: bigint;
+    readonly revokedAt: bigint;
+    readonly supersededAt: bigint;
+    readonly revocationReasonHash: Hash;
+}
+/** Hashes exact UTF-8 bytes under the canonical-bytes-v1 attestation rule. */
+export declare function hashToriumAttestationUtf8(value: string): Hash;
+/**
+ * Validates payload fields exactly as the registry's `_validatePayload`, so
+ * client-side mistakes fail before any transaction is prepared.
+ */
+export declare function validateToriumAttestationPayload(payload: ToriumAttestationPayload): void;
+/** Mirrors `computeCommitment`, including the optional supersession edge. */
+export declare function computeToriumAttestationCommitment(payload: ToriumAttestationPayload, supersedes?: Hash): Hash;
+/** Mirrors `computeReplayKey`; supersession is intentionally excluded. */
+export declare function computeToriumAttestationReplayKey(issuer: Address, payload: ToriumAttestationPayload): Hash;
+export interface ComputeToriumAttestationIdParameters {
+    readonly chainId: bigint | number;
+    readonly registry: Address;
+    readonly issuer: Address;
+    readonly issuerNonce: bigint;
+    readonly commitment: Hash;
+}
+/** Mirrors the domain-separated `computeAttestationId` derivation. */
+export declare function computeToriumAttestationId(parameters: ComputeToriumAttestationIdParameters): Hash;
+export interface ToriumAttestationReadParameters {
+    readonly deployment?: ToriumContractDeploymentOverride;
+}
+export interface GetToriumAttestationParameters extends ToriumAttestationReadParameters {
+    readonly attestationId: Hash;
+}
+export declare function getToriumAttestationStatus(client: ToriumContractReadClient, parameters: GetToriumAttestationParameters, options?: ToriumReadActionOptions): Promise<ToriumAttestationStatus>;
+export declare function isToriumAttestationActive(client: ToriumContractReadClient, parameters: GetToriumAttestationParameters, options?: ToriumReadActionOptions): Promise<boolean>;
+export declare function getToriumAttestation(client: ToriumContractReadClient, parameters: GetToriumAttestationParameters, options?: ToriumReadActionOptions): Promise<ToriumAttestation | null>;
+export interface VerifyToriumAttestationParameters extends ToriumAttestationReadParameters {
+    readonly attestationId: Hash;
+    readonly expectedIssuer: Address;
+    readonly expectedCommitment: Hash;
+}
+/** Runs the on-chain `verify` check for an active, matching commitment. */
+export declare function verifyToriumAttestation(client: ToriumContractReadClient, parameters: VerifyToriumAttestationParameters, options?: ToriumReadActionOptions): Promise<boolean>;
+export type ToriumAttestationBlocker = "duplicate-payload" | "supersedes-not-found" | "supersedes-not-active" | "supersedes-issuer-mismatch" | "supersedes-schema-mismatch" | "supersedes-subject-mismatch";
+export interface ToriumAttestationPreflight {
+    readonly canAttest: boolean;
+    readonly blockers: readonly ToriumAttestationBlocker[];
+    readonly replayKey: Hash;
+    readonly predictedIssuerNonce: bigint;
+    readonly predictedCommitment: Hash;
+    readonly predictedAttestationId: Hash;
+}
+export interface ToriumAttestationPreflightClient extends ToriumContractReadClient {
+    getChainId(): Promise<number>;
+}
+export interface PreflightToriumAttestationParameters extends ToriumAttestationReadParameters {
+    readonly issuer: Address;
+    readonly payload: ToriumAttestationPayload;
+    readonly supersedes?: Hash;
+}
+/**
+ * Predicts the attestation identity and checks replay and supersession rules
+ * before any transaction is prepared or signed.
+ */
+export declare function preflightToriumAttestation(client: ToriumAttestationPreflightClient, parameters: PreflightToriumAttestationParameters, options?: ToriumReadActionOptions): Promise<ToriumAttestationPreflight>;
+export type ToriumAttestationRevocationBlocker = "attestation-not-found" | "attestation-not-active" | "issuer-mismatch";
+export interface ToriumAttestationRevocationPreflight {
+    readonly canRevoke: boolean;
+    readonly blockers: readonly ToriumAttestationRevocationBlocker[];
+    readonly status: ToriumAttestationStatus;
+}
+export interface PreflightToriumAttestationRevocationParameters extends ToriumAttestationReadParameters {
+    readonly attestationId: Hash;
+    readonly issuer: Address;
+}
+export declare function preflightToriumAttestationRevocation(client: ToriumContractReadClient, parameters: PreflightToriumAttestationRevocationParameters, options?: ToriumReadActionOptions): Promise<ToriumAttestationRevocationPreflight>;
+export interface PrepareToriumAttestationParameters extends ToriumAttestationReadParameters {
+    readonly sender: ToriumTransactionRequest["account"];
+    readonly payload: ToriumAttestationPayload;
+    readonly supersedes?: Hash;
+}
+/** Encodes an `attest` request; the sender is always the issuer on-chain. */
+export declare function prepareToriumAttestation(parameters: PrepareToriumAttestationParameters): ToriumTransactionRequest;
+export interface PrepareToriumAttestationRevocationParameters extends ToriumAttestationReadParameters {
+    readonly sender: ToriumTransactionRequest["account"];
+    readonly attestationId: Hash;
+    readonly revocationReasonHash: Hash;
+}
+/** Encodes a `revoke` request; only the original issuer can execute it. */
+export declare function prepareToriumAttestationRevocation(parameters: PrepareToriumAttestationRevocationParameters): ToriumTransactionRequest;
+```
+
+## `./errors`
+
+- Import types: `./dist/types/errors.d.mts`
+- Require types: `./dist/types/errors.d.cts`
+- Declaration SHA-256: `f65850cc031741648d25cdb509304f534326f46508f1a315daf36bb05c9835e3`
+- Runtime exports: `ToriumEndpointValidationError`, `ToriumSdkError`, `isToriumSdkError`, `normalizeToriumError`, `toriumErrorCategories`
+
+```ts
+export declare const toriumErrorCategories: readonly ["configuration", "wrong-chain", "transport", "rate-limit", "timeout", "cancellation", "rpc", "simulation", "revert", "nonce", "fee", "funds", "replacement", "compatibility", "contract", "unknown"];
+export type ToriumSdkErrorCategory = (typeof toriumErrorCategories)[number];
+export type ToriumSdkErrorCode = "TORIUM_CONFIG_INVALID" | "TORIUM_WRONG_CHAIN" | "TORIUM_TRANSPORT_FAILED" | "TORIUM_RATE_LIMITED" | "TORIUM_TIMEOUT" | "TORIUM_CANCELLED" | "TORIUM_RPC_FAILED" | "TORIUM_SIMULATION_FAILED" | "TORIUM_REVERTED" | "TORIUM_NONCE_INVALID" | "TORIUM_FEE_INVALID" | "TORIUM_FUNDS_INSUFFICIENT" | "TORIUM_REPLACEMENT_FAILED" | "TORIUM_COMPATIBILITY_FAILED" | "TORIUM_CONTRACT_FAILED" | "TORIUM_UNKNOWN_FAILED";
+export type ToriumEndpointValidationErrorCode = "TORIUM_ENDPOINT_CONFIG_INVALID" | "TORIUM_CHAIN_ID_MISMATCH" | "TORIUM_NETWORK_ID_MISMATCH" | "TORIUM_NETWORK_FINGERPRINT_REQUIRED" | "TORIUM_NETWORK_FINGERPRINT_MISMATCH" | "TORIUM_ENDPOINT_INCOMPATIBLE" | "TORIUM_RPC_ABORTED" | "TORIUM_RPC_REQUEST_FAILED" | "TORIUM_RPC_RESPONSE_INVALID" | "TORIUM_RPC_SYNCING" | "TORIUM_RPC_NOT_READY" | "TORIUM_RPC_STALE";
+export type ToriumErrorCode = ToriumSdkErrorCode | ToriumEndpointValidationErrorCode;
+export type ToriumClientKind = "endpoint" | "public" | "wallet" | "contract";
+export type ToriumOperationKind = "read" | "write" | "broadcast";
+export interface ToriumErrorContext {
+    readonly operation: string;
+    readonly kind: ToriumOperationKind;
+    readonly clientKind?: ToriumClientKind;
+    readonly method?: string;
+    readonly chainId?: number;
+    readonly requestId?: string;
+    readonly fallbackCategory?: ToriumSdkErrorCategory;
+}
+export interface ToriumErrorCause {
+    readonly name: string;
+    readonly message: string;
+    readonly code?: string | number;
+    readonly cause?: ToriumErrorCause;
+}
+export interface ToriumSdkErrorOptions<TCode extends string = ToriumErrorCode> extends Partial<ToriumErrorContext> {
+    readonly code: TCode;
+    readonly category: ToriumSdkErrorCategory;
+    readonly message?: string;
+    readonly cause?: unknown;
+    readonly retryable?: boolean;
+    readonly safeToRetry?: boolean;
+    readonly rpcCode?: number;
+    readonly httpStatus?: number;
+    readonly retryAfterMs?: number;
+    readonly revertData?: `0x${string}`;
+    readonly revertReason?: string;
+    readonly issues?: readonly string[];
+}
+export declare class ToriumSdkError<TCode extends string = ToriumErrorCode> extends Error {
+    readonly code: TCode;
+    readonly category: ToriumSdkErrorCategory;
+    readonly operation?: string;
+    readonly kind?: ToriumOperationKind;
+    readonly clientKind?: ToriumClientKind;
+    readonly method?: string;
+    readonly chainId?: number;
+    readonly requestId?: string;
+    readonly retryable: boolean;
+    readonly safeToRetry: boolean;
+    readonly rpcCode?: number;
+    readonly httpStatus?: number;
+    readonly retryAfterMs?: number;
+    readonly revertData?: `0x${string}`;
+    readonly revertReason?: string;
+    readonly issues?: readonly string[];
+    readonly cause?: ToriumErrorCause;
+    constructor(options: ToriumSdkErrorOptions<TCode>);
+    toJSON(): Record<string, unknown>;
+}
+export declare class ToriumEndpointValidationError extends ToriumSdkError<ToriumEndpointValidationErrorCode> {
+    readonly expected?: string | number;
+    readonly actual?: string | number;
+    constructor(code: ToriumEndpointValidationErrorCode, message: string, options?: {
+        readonly expected?: string | number;
+        readonly actual?: string | number;
+        readonly cause?: unknown;
+        readonly method?: string;
+        readonly operation?: string;
+        readonly clientKind?: ToriumClientKind;
+        readonly chainId?: number;
+        readonly requestId?: string;
+        readonly category?: ToriumSdkErrorCategory;
+        readonly retryable?: boolean;
+        readonly rpcCode?: number;
+        readonly httpStatus?: number;
+        readonly retryAfterMs?: number;
+    });
+    toJSON(): Record<string, unknown>;
+}
+export interface ToriumReadRetryOptions {
+    /** Total attempts including the first call. Defaults to one and is capped at three. */
+    readonly maxAttempts?: number;
+    readonly baseDelayMs?: number;
+    readonly maximumDelayMs?: number;
+    /** Fraction from 0 through 1. Defaults to 0.2. */
+    readonly jitterRatio?: number;
+}
+export interface ToriumDiagnosticEvent {
+    readonly schemaVersion: 1;
+    readonly sdkVersion: "0.1.0";
+    readonly policyVersion: "0.1.0";
+    readonly phase: "start" | "retry" | "success" | "failure";
+    readonly clientKind: ToriumClientKind;
+    readonly operation: string;
+    readonly method?: string;
+    readonly chainId?: number;
+    readonly requestId?: string;
+    readonly attempt: number;
+    readonly durationMs: number;
+    readonly code?: string;
+    readonly category?: ToriumSdkErrorCategory;
+    readonly retryable?: boolean;
+    readonly rpcCode?: number;
+    readonly httpStatus?: number;
+    readonly retryAfterMs?: number;
+}
+export type ToriumDiagnosticHook = (event: ToriumDiagnosticEvent) => void | Promise<void>;
+export interface ToriumActionOptions {
+    readonly signal?: AbortSignal;
+    readonly timeoutMs?: number;
+    readonly requestId?: string;
+    readonly diagnostics?: ToriumDiagnosticHook;
+}
+export interface ToriumReadActionOptions extends ToriumActionOptions {
+    readonly retry?: ToriumReadRetryOptions;
+}
+export declare function isToriumSdkError(error: unknown): error is ToriumSdkError;
+export declare function normalizeToriumError(error: unknown, context: ToriumErrorContext): ToriumSdkError;
+```
+
+## `./experimental`
+
+- Import types: `./dist/types/experimental.d.mts`
+- Require types: `./dist/types/experimental.d.cts`
+- Declaration SHA-256: `8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881`
+- Runtime exports: none
+
+```ts
+export {};
+```
+
+## `./utils`
+
+- Import types: `./dist/types/utils.d.mts`
+- Require types: `./dist/types/utils.d.cts`
+- Declaration SHA-256: `7710d35c1787e280a8e26f2e5c12a1807f604f34c8473262d69597a0318479ad`
+- Runtime exports: `assertToriumChainId`, `assertToriumUint256`, `atoriumPerDisplayUnit`, `formatToriumAmount`, `formatToriumBaseUnits`, `getToriumChainById`, `getToriumNativeCurrency`, `isToriumAccountAddress`, `isToriumChainId`, `isToriumEvmAddress`, `isToriumHash`, `isToriumHexData`, `normalizeToriumBlockReference`, `normalizeToriumEvmAddress`, `normalizeToriumHash`, `normalizeToriumHexData`, `parseToriumAmount`, `parseToriumBaseUnits`, `parseToriumJson`, `stringifyToriumJson`, `toriumBaseDenom`, `toriumBech32AddressToEvm`, `toriumEvmAddressToBech32`, `toriumMaxUint256`, `toriumNativeCurrencies`, `toriumNativeDecimals`
+
+```ts
+import { type Address, type Hash, type Hex } from "viem";
+import { toriumChains, type ToriumChain, type ToriumEnvironment } from "./chains.js";
+/** Number of fractional decimal places used by native TOR and valueless tTOR. */
+export declare const toriumNativeDecimals: 18;
+/** Canonical base denomination used by the chain ledger. */
+export declare const toriumBaseDenom: "atorium";
+/** Number of atorium base units in one TOR or tTOR display unit. */
+export declare const atoriumPerDisplayUnit = 1000000000000000000n;
+/** Largest amount accepted by EVM-native SDK helpers. */
+export declare const toriumMaxUint256: bigint;
+/** Environment-specific native currency metadata without RPC endpoint claims. */
+export declare const toriumNativeCurrencies: Readonly<{
+    readonly localnet: Readonly<{
+        environment: "localnet";
+        name: "Torium Test Token";
+        symbol: "tTOR";
+        decimals: 18;
+        baseDenom: "atorium";
+        valueStatus: "valueless-test-token";
+    }>;
+    readonly devnet: Readonly<{
+        environment: "devnet";
+        name: "Torium Test Token";
+        symbol: "tTOR";
+        decimals: 18;
+        baseDenom: "atorium";
+        valueStatus: "valueless-test-token";
+    }>;
+    readonly testnet: Readonly<{
+        environment: "testnet";
+        name: "Torium Test Token";
+        symbol: "tTOR";
+        decimals: 18;
+        baseDenom: "atorium";
+        valueStatus: "valueless-test-token";
+    }>;
+    readonly mainnet: Readonly<{
+        environment: "mainnet";
+        name: "Torium";
+        symbol: "TOR";
+        decimals: 18;
+        baseDenom: "atorium";
+        valueStatus: "inactive-prelaunch-no-value-claim";
+    }>;
+}>;
+export type ToriumNativeCurrency = (typeof toriumNativeCurrencies)[ToriumEnvironment];
+export type ToriumDisplaySymbol = "TOR" | "tTOR";
+export type ToriumAccountAddress = `torium1${string}`;
+export type ToriumChainId = (typeof toriumChains)[ToriumEnvironment]["id"];
+/** Returns immutable native-currency metadata for a canonical environment. */
+export declare function getToriumNativeCurrency<const TEnvironment extends ToriumEnvironment>(environment: TEnvironment): (typeof toriumNativeCurrencies)[TEnvironment];
+/** Parses a locale-neutral TOR/tTOR decimal into unsigned atorium base units. */
+export declare function parseToriumAmount(value: string): bigint;
+/** Formats unsigned atorium base units as a locale-neutral TOR/tTOR decimal. */
+export declare function formatToriumAmount(value: bigint): string;
+/** Parses an unsigned base-10 atorium integer without floating-point conversion. */
+export declare function parseToriumBaseUnits(value: string): bigint;
+/** Formats unsigned atorium base units as a canonical base-10 integer. */
+export declare function formatToriumBaseUnits(value: bigint): string;
+/** Validates the unsigned EVM uint256 range used by native amounts and uint256 fields. */
+export declare function assertToriumUint256(value: bigint): bigint;
+/** Returns an EIP-55 checksummed 20-byte EVM account address. */
+export declare function normalizeToriumEvmAddress(value: string): Address;
+/** Returns whether a string is a valid EVM address accepted by the normalizer. */
+export declare function isToriumEvmAddress(value: unknown): value is Address;
+/** Converts an EVM account address to the `torium` Bech32 account representation. */
+export declare function toriumEvmAddressToBech32(value: string): ToriumAccountAddress;
+/** Validates a Torium account HRP/checksum/length and returns an EIP-55 address. */
+export declare function toriumBech32AddressToEvm(value: string): Address;
+/** Returns whether a value is a canonical Torium Bech32 account address. */
+export declare function isToriumAccountAddress(value: unknown): value is ToriumAccountAddress;
+/** Returns a normalized 32-byte transaction, block or state hash. */
+export declare function normalizeToriumHash(value: string): Hash;
+/** Returns whether a value is an exact 32-byte EVM hash. */
+export declare function isToriumHash(value: unknown): value is Hash;
+/** Returns normalized, byte-aligned EVM hex data, including empty `0x`. */
+export declare function normalizeToriumHexData(value: string): Hex;
+/** Returns whether a value is byte-aligned 0x-prefixed EVM data. */
+export declare function isToriumHexData(value: unknown): value is Hex;
+/** Returns whether a value is one of the four canonical Torium EIP-155 IDs. */
+export declare function isToriumChainId(value: unknown): value is ToriumChainId;
+/** Validates and returns one of the four canonical Torium EIP-155 IDs. */
+export declare function assertToriumChainId(value: unknown): ToriumChainId;
+/** Returns the canonical chain definition for a validated EIP-155 ID. */
+export declare function getToriumChainById(value: unknown): ToriumChain;
+export type ToriumBlockTag = "earliest" | "latest" | "pending" | "safe" | "finalized";
+export type ToriumBlockReference = bigint | Hash | ToriumBlockTag;
+/**
+ * Validates block-reference syntax only. Runtime support remains capability-dependent:
+ * Torium `safe` state is unsupported and `pending` state is partial in SDK 0.1.0.
+ */
+export declare function normalizeToriumBlockReference(value: bigint | string): ToriumBlockReference;
+/**
+ * Serializes bigint fields in JSON-compatible data with an explicit tagged envelope.
+ * This is not an authenticity, schema-validation, or diagnostic-redaction layer.
+ */
+export declare function stringifyToriumJson(value: unknown, space?: number): string;
+/**
+ * Restores tagged bigint fields. Untrusted JSON can imitate the tag and must be
+ * validated by the caller; other JavaScript types retain ordinary JSON semantics.
+ */
+export declare function parseToriumJson<T = unknown>(value: string): T;
+```
+
+## `./wallet`
+
+- Import types: `./dist/types/wallet.d.mts`
+- Require types: `./dist/types/wallet.d.cts`
+- Declaration SHA-256: `c1f6cc04c408244eb53c5cc17d4a3c8b84d8ec935afdce8e2e375d3da69a4b42`
+- Runtime exports: `createToriumWalletClient`, `normalizeToriumTransactionRequest`, `preflightToriumTransaction`, `sendToriumTransactionOnce`, `toriumMaxEncodedTransactionBytes`, `toriumMaxTransactionGas`, `toriumMinimumBaseFeePerGas`, `toriumMinimumPriorityFeePerGas`, `toriumTransactionCapabilities`, `waitForToriumTransaction`
+
+```ts
+import { type AccessList, type Account, type Address, type Hash, type Hex, type ParseAccount, type RpcSchema, type Tokens, type TransactionReceipt, type Transport, type WalletClient, type WalletClientConfig } from "viem";
+import { type ToriumClientChain } from "./chains.js";
+import { type ToriumActionOptions, type ToriumReadActionOptions } from "./errors.js";
+export declare const toriumMaxTransactionGas = 25000000n;
+export declare const toriumMaxEncodedTransactionBytes = 131072;
+export declare const toriumMinimumBaseFeePerGas = 1000000000n;
+export declare const toriumMinimumPriorityFeePerGas = 1n;
+/** Runtime transaction claims proven for the current local-only chain baseline. */
+export declare const toriumTransactionCapabilities: Readonly<{
+    readonly schemaVersion: 1;
+    readonly scope: "sdk-0.1-stable-helper";
+    readonly baseline: {
+        readonly cosmosEvm: "v0.7.0";
+        readonly viem: "2.55.2";
+    };
+    readonly envelopes: {
+        readonly viemWallet: {
+            readonly legacy: "supported";
+            readonly eip2930: "supported";
+            readonly eip1559: "supported";
+        };
+        readonly stableHelper: {
+            readonly eip1559: "supported";
+            readonly eip4844: "unsupported";
+            readonly eip7702: "unsupported";
+        };
+        readonly customToriumEnvelope: false;
+    };
+    readonly submission: {
+        readonly rpcHashIsAcknowledgementOnly: true;
+        readonly retentionGuaranteed: false;
+        readonly boundedInclusion: false;
+        readonly automaticWriteRetry: false;
+    };
+    readonly nonce: {
+        readonly pendingState: "partial";
+        readonly conflictPreflight: "best-effort";
+    };
+    readonly fees: {
+        readonly pricingModel: "eip1559";
+        readonly minimumBaseFeePerGas: 1000000000n;
+        readonly minimumPriorityFeePerGas: 1n;
+    };
+    readonly replacement: {
+        readonly state: "partial";
+        readonly detectionDefault: false;
+        readonly activeLocalProfile: {
+            readonly minimumFeeCapBumpPercent: 10;
+            readonly minimumTipCapBumpPercent: 10;
+            readonly scope: "receiving-node-only";
+        };
+        readonly historicalBaseline: {
+            readonly rejectedBumpPercent: 5;
+            readonly acceptedBumpPercent: 100;
+        };
+        readonly networkPropagationGuaranteed: false;
+    };
+    readonly cancellation: {
+        readonly state: "unsupported";
+    };
+    readonly finality: {
+        readonly defaultConfirmationBlocks: 1;
+        readonly label: "CometBFT committed";
+        readonly beaconChainSemantics: false;
+    };
+}>;
+export type ToriumTransactionCapabilities = typeof toriumTransactionCapabilities;
+export type ToriumWalletClientConfig<TTransport extends Transport, TChain extends ToriumClientChain, TAccountOrAddress extends Account | Address | undefined = Account | Address | undefined, TRpcSchema extends RpcSchema | undefined = undefined, TTokens extends Tokens | undefined = Tokens | undefined> = Omit<WalletClientConfig<TTransport, TChain, TAccountOrAddress, TRpcSchema, TTokens>, "chain"> & {
+    readonly chain: TChain;
+};
+export type ToriumWalletClient<TTransport extends Transport = Transport, TChain extends ToriumClientChain = ToriumClientChain, TAccountOrAddress extends Account | Address | undefined = Account | Address | undefined, TRpcSchema extends RpcSchema | undefined = undefined, TTokens extends Tokens | undefined = Tokens | undefined> = WalletClient<TTransport, TChain, ParseAccount<TAccountOrAddress>, TRpcSchema, TTokens>;
+/** Creates a viem wallet client that is statically bound to a Torium chain. */
+export declare function createToriumWalletClient<TTransport extends Transport, const TChain extends ToriumClientChain, TAccountOrAddress extends Account | Address | undefined = undefined, TRpcSchema extends RpcSchema | undefined = undefined, const TTokens extends Tokens | undefined = undefined>(parameters: ToriumWalletClientConfig<TTransport, TChain, TAccountOrAddress, TRpcSchema, TTokens>): ToriumWalletClient<TTransport, TChain, TAccountOrAddress, TRpcSchema, TTokens>;
+export interface ToriumTransactionRequest {
+    readonly account: Account | Address;
+    readonly to?: Address | null;
+    readonly data?: Hex;
+    readonly value?: bigint;
+    readonly gas?: bigint;
+    readonly nonce?: number;
+    readonly maxFeePerGas?: bigint;
+    readonly maxPriorityFeePerGas?: bigint;
+    readonly type?: "eip1559";
+    readonly accessList?: AccessList;
+}
+export interface NormalizedToriumTransactionRequest extends ToriumTransactionRequest {
+    readonly account: Account | Address;
+}
+export type ToriumPreflightBlocker = "gas-below-estimate" | "insufficient-funds" | "nonce-mismatch";
+export interface ToriumTransactionPreflight {
+    readonly chainId: number;
+    readonly account: Address;
+    readonly to: Address | null;
+    readonly data: Hex;
+    readonly value: bigint;
+    readonly accessList: AccessList;
+    readonly type: "eip1559";
+    readonly gasEstimate: bigint;
+    readonly gasLimit: bigint;
+    readonly maxFeePerGas: bigint;
+    readonly maxPriorityFeePerGas: bigint;
+    readonly maximumCost: bigint;
+    readonly balance: bigint;
+    readonly pendingNonce: number;
+    readonly requestedNonce: number;
+    readonly encodedTransactionBytes: number;
+    readonly canSubmit: boolean;
+    readonly blockers: readonly ToriumPreflightBlocker[];
+}
+export interface ToriumPreflightClient {
+    readonly chain: ToriumClientChain;
+    getChainId(): Promise<number>;
+    call(parameters: ToriumTransactionRequest): Promise<unknown>;
+    estimateGas(parameters: ToriumTransactionRequest): Promise<bigint>;
+    estimateFeesPerGas(parameters: {
+        readonly type: "eip1559";
+    }): Promise<{
+        readonly maxFeePerGas: bigint;
+        readonly maxPriorityFeePerGas: bigint;
+    }>;
+    getBalance(parameters: {
+        readonly address: Address;
+        readonly blockTag: "pending";
+    }): Promise<bigint>;
+    getTransactionCount(parameters: {
+        readonly address: Address;
+        readonly blockTag: "pending";
+    }): Promise<number>;
+}
+export type ToriumPreflightOptions = ToriumReadActionOptions;
+/**
+ * Validates standard transaction fields, simulates execution and calculates a
+ * conservative maximum cost. It never requests a signature or submits a write.
+ */
+export declare function preflightToriumTransaction(client: ToriumPreflightClient, request: ToriumTransactionRequest, options?: ToriumPreflightOptions): Promise<ToriumTransactionPreflight>;
+export interface ToriumTransactionSender {
+    readonly chain: ToriumClientChain;
+    sendTransaction(parameters: NormalizedToriumTransactionRequest & {
+        readonly chain: ToriumClientChain;
+    }): Promise<Hash>;
+}
+export interface ToriumSubmissionAcknowledgement {
+    readonly hash: Hash;
+    readonly status: "acknowledged";
+    readonly retentionGuaranteed: false;
+    readonly inclusionGuaranteed: false;
+}
+export interface SendToriumTransactionOptions extends ToriumActionOptions {
+    /** Called with the fresh final preflight immediately before signing. */
+    readonly authorize: (preflight: ToriumTransactionPreflight) => boolean | Promise<boolean>;
+}
+/** Submits exactly once and reports RPC acknowledgement without retry claims. */
+export declare function sendToriumTransactionOnce(client: ToriumTransactionSender, preflightClient: ToriumPreflightClient, request: ToriumTransactionRequest, options: SendToriumTransactionOptions): Promise<ToriumSubmissionAcknowledgement>;
+export interface WaitForToriumTransactionOptions extends ToriumActionOptions {
+    readonly hash: Hash;
+    readonly confirmations?: number;
+    readonly timeout?: number;
+}
+export interface ToriumReceiptClient {
+    waitForTransactionReceipt(parameters: {
+        readonly hash: Hash;
+        readonly confirmations: number;
+        readonly timeout: number;
+        readonly checkReplacement: false;
+    }): Promise<TransactionReceipt>;
+}
+export type ToriumTransactionLifecycle = {
+    readonly status: "committed";
+    readonly hash: Hash;
+    readonly receipt: TransactionReceipt;
+    readonly finality: "CometBFT committed";
+} | {
+    readonly status: "reverted";
+    readonly hash: Hash;
+    readonly receipt: TransactionReceipt;
+    readonly finality: "CometBFT committed";
+} | {
+    readonly status: "unknown";
+    readonly hash: Hash;
+    readonly reason: "timeout";
+    readonly safeToAutomaticallyResubmit: false;
+};
+/** Waits for one CometBFT commit without claiming replacement detection. */
+export declare function waitForToriumTransaction(client: ToriumReceiptClient, options: WaitForToriumTransactionOptions): Promise<ToriumTransactionLifecycle>;
+/** Normalizes and validates the stable standard-EVM request subset. */
+export declare function normalizeToriumTransactionRequest(request: ToriumTransactionRequest): NormalizedToriumTransactionRequest;
+```

@@ -1,0 +1,633 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/chain/recovery-v0.schema.json",
+  "title": "Torium operator recovery v0 contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "recoveryVersion",
+    "status",
+    "ownerIssue",
+    "publicLaunchAllowed",
+    "scope",
+    "sources",
+    "securityInvariants",
+    "developerEnvelopeCompatibility",
+    "roleStoragePolicies",
+    "pruningAcceptance",
+    "stateSync",
+    "snapshots",
+    "backupScopes",
+    "retention",
+    "accessControl",
+    "encryption",
+    "restoreVerification",
+    "recoveryObjectives",
+    "holds"
+  ],
+  "properties": {
+    "$schema": { "const": "./recovery-v0.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "recoveryVersion": {
+      "type": "string",
+      "pattern": "^0\\.1\\.0-local\\.[1-9][0-9]*$"
+    },
+    "status": { "const": "defined-production-shape-local-only-not-activated" },
+    "ownerIssue": { "const": 116 },
+    "publicLaunchAllowed": { "const": false },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "liveDeployment",
+        "toriumBackendIntegration",
+        "toriumBackendTrustAuthority",
+        "bridge",
+        "layer2"
+      ],
+      "properties": {
+        "environment": { "const": "local-development-only" },
+        "liveDeployment": { "const": false },
+        "toriumBackendIntegration": { "const": false },
+        "toriumBackendTrustAuthority": { "const": false },
+        "bridge": { "const": false },
+        "layer2": { "const": false }
+      }
+    },
+    "sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identifiers",
+        "trustModel",
+        "threatModel",
+        "nodeRoles",
+        "developerRecovery",
+        "keyLifecycle"
+      ],
+      "properties": {
+        "identifiers": { "$ref": "#/$defs/versionedPath" },
+        "trustModel": { "$ref": "#/$defs/modelPath" },
+        "threatModel": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "modelVersion",
+            "riskIds",
+            "invariantIds",
+            "releaseGateIds"
+          ],
+          "properties": {
+            "path": { "$ref": "#/$defs/path" },
+            "modelVersion": { "$ref": "#/$defs/version" },
+            "riskIds": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+            "invariantIds": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+            "releaseGateIds": { "$ref": "#/$defs/nonEmptyUniqueStrings" }
+          }
+        },
+        "nodeRoles": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "profileVersion", "ownerIssue"],
+          "properties": {
+            "path": { "$ref": "#/$defs/path" },
+            "profileVersion": { "$ref": "#/$defs/version" },
+            "ownerIssue": { "const": 114 }
+          }
+        },
+        "developerRecovery": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "typesPath",
+            "statePath",
+            "versionPath",
+            "guidePath",
+            "format",
+            "ownerIssue"
+          ],
+          "properties": {
+            "typesPath": { "$ref": "#/$defs/path" },
+            "statePath": { "$ref": "#/$defs/path" },
+            "versionPath": { "$ref": "#/$defs/path" },
+            "guidePath": { "$ref": "#/$defs/path" },
+            "format": { "const": "torium-localnet-recovery-v1" },
+            "ownerIssue": { "const": 98 }
+          }
+        },
+        "keyLifecycle": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["guidePath", "ownerIssue"],
+          "properties": {
+            "guidePath": { "$ref": "#/$defs/path" },
+            "ownerIssue": { "const": 117 }
+          }
+        }
+      }
+    },
+    "securityInvariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chainIsAuthority",
+        "explorerDatabaseAuthority",
+        "checksumProvidesAuthenticity",
+        "singleProviderMayDefineTrustAnchor",
+        "hotMultiDatabaseCopyAllowed",
+        "genericRestoreMayOverwriteSignerState",
+        "staleOrClonedSignerMustFailClosed",
+        "unknownMeansZero",
+        "stateSyncImpliesArchiveHistory"
+      ],
+      "properties": {
+        "chainIsAuthority": { "const": true },
+        "explorerDatabaseAuthority": { "const": "derived-rebuildable-index" },
+        "checksumProvidesAuthenticity": { "const": false },
+        "singleProviderMayDefineTrustAnchor": { "const": false },
+        "hotMultiDatabaseCopyAllowed": { "const": false },
+        "genericRestoreMayOverwriteSignerState": { "const": false },
+        "staleOrClonedSignerMustFailClosed": { "const": true },
+        "unknownMeansZero": { "const": false },
+        "stateSyncImpliesArchiveHistory": { "const": false }
+      }
+    },
+    "developerEnvelopeCompatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "productionPayloadReuseAllowed",
+        "productionTrustReuseAllowed",
+        "migrationDrillExecuted",
+        "reusableFields",
+        "forbiddenPromotions"
+      ],
+      "properties": {
+        "status": {
+          "const": "shared-field-contract-only-not-production-backup"
+        },
+        "productionPayloadReuseAllowed": { "const": false },
+        "productionTrustReuseAllowed": { "const": false },
+        "migrationDrillExecuted": { "const": false },
+        "reusableFields": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["chain", "binary", "node", "file"],
+          "properties": {
+            "chain": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+            "binary": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+            "node": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+            "file": { "$ref": "#/$defs/nonEmptyUniqueStrings" }
+          }
+        },
+        "forbiddenPromotions": { "$ref": "#/$defs/nonEmptyUniqueStrings" }
+      }
+    },
+    "roleStoragePolicies": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": { "$ref": "#/$defs/roleStoragePolicy" }
+    },
+    "pruningAcceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effectiveConfigEvidence",
+        "storageGrowthMeasured",
+        "rpcBoundaryQueriesProven",
+        "sdkBoundaryQueriesProven",
+        "explorerBoundaryQueriesProven",
+        "historicalEvidenceWindowPreserved",
+        "stateSyncAvailabilityPreserved",
+        "zeroPlaceholderMayActivateConfig"
+      ],
+      "properties": {
+        "effectiveConfigEvidence": { "const": false },
+        "storageGrowthMeasured": { "const": false },
+        "rpcBoundaryQueriesProven": { "const": false },
+        "sdkBoundaryQueriesProven": { "const": false },
+        "explorerBoundaryQueriesProven": { "const": false },
+        "historicalEvidenceWindowPreserved": { "const": false },
+        "stateSyncAvailabilityPreserved": { "const": false },
+        "zeroPlaceholderMayActivateConfig": { "const": false }
+      }
+    },
+    "stateSync": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "status",
+        "rpcServers",
+        "snapshotServers",
+        "minimumIndependentProviders",
+        "trustHeight",
+        "trustHash",
+        "expectedAppHash",
+        "trustPeriodSeconds",
+        "trustLevel",
+        "metadataPublisher",
+        "trustPeriodParameterStatus",
+        "mustBeLessThanUnbondingSeconds",
+        "newNodeSyncProven",
+        "expiredTrustFailsClosedProven",
+        "mismatchFailsClosedProven"
+      ],
+      "properties": {
+        "enabled": { "const": false },
+        "status": { "const": "hold-unconfigured-untrusted" },
+        "rpcServers": { "type": "array", "maxItems": 0 },
+        "snapshotServers": { "type": "array", "maxItems": 0 },
+        "minimumIndependentProviders": { "const": 2 },
+        "trustHeight": { "type": "null" },
+        "trustHash": { "type": "null" },
+        "expectedAppHash": { "type": "null" },
+        "trustPeriodSeconds": { "type": "null" },
+        "trustLevel": { "type": "null" },
+        "metadataPublisher": { "type": "null" },
+        "trustPeriodParameterStatus": { "const": "unratified" },
+        "mustBeLessThanUnbondingSeconds": { "const": 1814400 },
+        "newNodeSyncProven": { "const": false },
+        "expiredTrustFailsClosedProven": { "const": false },
+        "mismatchFailsClosedProven": { "const": false }
+      }
+    },
+    "snapshots": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["developerRuntimeEnvelope", "operatorApplicationSnapshot"],
+      "properties": {
+        "developerRuntimeEnvelope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "format",
+            "status",
+            "signed",
+            "encrypted",
+            "mayContainValuelessFixtureKeys",
+            "publicPublicationAllowed",
+            "operatorRestoreAllowed"
+          ],
+          "properties": {
+            "format": { "const": "torium-localnet-recovery-v1" },
+            "status": { "const": "proven-local-developer-only" },
+            "signed": { "const": false },
+            "encrypted": { "const": false },
+            "mayContainValuelessFixtureKeys": { "const": true },
+            "publicPublicationAllowed": { "const": false },
+            "operatorRestoreAllowed": { "const": false }
+          }
+        },
+        "operatorApplicationSnapshot": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "format",
+            "enabled",
+            "status",
+            "captureMode",
+            "providerIds",
+            "publicationEndpoints",
+            "signatureAlgorithm",
+            "signatureKeyId",
+            "encryptionProfile",
+            "requiredMetadata",
+            "signerKeyOrStatePayloadAllowed",
+            "heightAppHashSemantics",
+            "restoreProven",
+            "publicationProven"
+          ],
+          "properties": {
+            "format": { "const": "torium-operator-application-snapshot-v0" },
+            "enabled": { "const": false },
+            "status": {
+              "const": "hold-no-signed-publication-or-restore-drill"
+            },
+            "captureMode": { "type": "null" },
+            "providerIds": { "type": "array", "maxItems": 0 },
+            "publicationEndpoints": { "type": "array", "maxItems": 0 },
+            "signatureAlgorithm": { "type": "null" },
+            "signatureKeyId": { "type": "null" },
+            "encryptionProfile": { "type": "null" },
+            "requiredMetadata": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+            "signerKeyOrStatePayloadAllowed": { "const": false },
+            "heightAppHashSemantics": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["latestAnchor", "historicalAnchor"],
+              "properties": {
+                "latestAnchor": { "type": "string", "minLength": 40 },
+                "historicalAnchor": { "type": "string", "minLength": 40 }
+              }
+            },
+            "restoreProven": { "const": false },
+            "publicationProven": { "const": false }
+          }
+        }
+      }
+    },
+    "backupScopes": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": { "$ref": "#/$defs/backupScope" }
+    },
+    "retention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "automaticDeletionEnabled",
+        "localSnapshotKeepRecentIsProductionPolicy",
+        "classes",
+        "retentionCount",
+        "retentionDays",
+        "immutabilityDays",
+        "deletionMode",
+        "status"
+      ],
+      "properties": {
+        "automaticDeletionEnabled": { "const": false },
+        "localSnapshotKeepRecentIsProductionPolicy": { "const": false },
+        "classes": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+        "retentionCount": { "type": "null" },
+        "retentionDays": { "type": "null" },
+        "immutabilityDays": { "type": "null" },
+        "deletionMode": { "type": "null" },
+        "status": { "const": "hold-unmeasured-policy-unratified" }
+      }
+    },
+    "accessControl": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "publicRead",
+        "publicWrite",
+        "principals",
+        "twoPersonActions",
+        "auditLogDestination",
+        "breakGlassProcedure",
+        "reviewIntervalDays"
+      ],
+      "properties": {
+        "status": { "const": "hold-no-operator-identities-or-provider" },
+        "publicRead": { "const": false },
+        "publicWrite": { "const": false },
+        "principals": { "type": "array", "maxItems": 0 },
+        "twoPersonActions": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+        "auditLogDestination": { "type": "null" },
+        "breakGlassProcedure": { "type": "null" },
+        "reviewIntervalDays": { "type": "null" }
+      }
+    },
+    "encryption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "atRestRequired",
+        "inTransitRequired",
+        "clientSideBeforeUploadRequired",
+        "algorithm",
+        "keyProvider",
+        "keyId",
+        "rotationDays",
+        "recoveryShares"
+      ],
+      "properties": {
+        "status": { "const": "hold-no-kms-or-key-custody-selected" },
+        "atRestRequired": { "const": true },
+        "inTransitRequired": { "const": true },
+        "clientSideBeforeUploadRequired": { "const": true },
+        "algorithm": { "type": "null" },
+        "keyProvider": { "type": "null" },
+        "keyId": { "type": "null" },
+        "rotationDays": { "type": "null" },
+        "recoveryShares": { "type": "null" }
+      }
+    },
+    "restoreVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "operatorDrillsExecuted",
+        "localDeveloperEvidenceOnly",
+        "failClosedChecks",
+        "requiredDrills"
+      ],
+      "properties": {
+        "status": { "const": "contract-defined-runtime-unproven" },
+        "operatorDrillsExecuted": { "const": false },
+        "localDeveloperEvidenceOnly": { "const": true },
+        "failClosedChecks": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+        "requiredDrills": { "$ref": "#/$defs/nonEmptyUniqueStrings" }
+      }
+    },
+    "recoveryObjectives": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "measurementOwners",
+        "objectives",
+        "rpoSeconds",
+        "rtoSeconds",
+        "restoreThroughputBytesPerSecond",
+        "storageGrowthBytesPerDay",
+        "lastDrillAt",
+        "evidencePath"
+      ],
+      "properties": {
+        "status": { "const": "hold-unmeasured-no-objective-claimed" },
+        "measurementOwners": {
+          "type": "array",
+          "prefixItems": [{ "const": 118 }, { "const": 119 }],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "objectives": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+        "rpoSeconds": { "type": "null" },
+        "rtoSeconds": { "type": "null" },
+        "restoreThroughputBytesPerSecond": { "type": "null" },
+        "storageGrowthBytesPerDay": { "type": "null" },
+        "lastDrillAt": { "type": "null" },
+        "evidencePath": { "type": "null" }
+      }
+    },
+    "holds": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "items": { "$ref": "#/$defs/hold" }
+    }
+  },
+  "$defs": {
+    "path": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._/-]*$",
+      "maxLength": 256
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-local\\.[0-9]+)?$"
+    },
+    "versionedPath": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "manifestVersion"],
+      "properties": {
+        "path": { "$ref": "#/$defs/path" },
+        "manifestVersion": { "$ref": "#/$defs/version" }
+      }
+    },
+    "modelPath": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "modelVersion"],
+      "properties": {
+        "path": { "$ref": "#/$defs/path" },
+        "modelVersion": { "$ref": "#/$defs/version" }
+      }
+    },
+    "nonEmptyUniqueStrings": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 160 }
+    },
+    "roleStoragePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "storagePolicyRef",
+        "pruningStrategy",
+        "keepRecent",
+        "interval",
+        "minRetainBlocks",
+        "txIndex",
+        "indexEvents",
+        "targetFromGenesis",
+        "queryWindowBlocks",
+        "queryWindowStatus",
+        "snapshotInterval",
+        "snapshotKeepRecent",
+        "discardAbciResponses",
+        "activated",
+        "evidenceComplete",
+        "status"
+      ],
+      "properties": {
+        "role": {
+          "enum": [
+            "validator",
+            "sentry",
+            "full",
+            "public-rpc",
+            "private-archive-indexer"
+          ]
+        },
+        "storagePolicyRef": {
+          "enum": ["consensus-minimal-v0", "query-v0", "archive-indexer-v0"]
+        },
+        "pruningStrategy": { "enum": ["default", "nothing"] },
+        "keepRecent": { "const": 0 },
+        "interval": { "const": 0 },
+        "minRetainBlocks": { "const": 0 },
+        "txIndex": { "enum": ["null", "kv"] },
+        "indexEvents": { "type": "array", "maxItems": 0 },
+        "targetFromGenesis": { "type": "boolean" },
+        "queryWindowBlocks": { "type": "null" },
+        "queryWindowStatus": { "enum": ["unproven", "proven-full-history-from-genesis"] },
+        "snapshotInterval": { "const": 0 },
+        "snapshotKeepRecent": { "const": 2 },
+        "discardAbciResponses": { "const": false },
+        "activated": { "type": "boolean" },
+        "evidenceComplete": { "type": "boolean" },
+        "status": { "enum": ["hold-unmeasured-not-runtime-activated", "runtime-activated-recovery-objective-unmeasured"] }
+      }
+    },
+    "backupScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "ownerIssue",
+        "sourceIdentities",
+        "authority",
+        "includes",
+        "excludes",
+        "rebuildAllowed",
+        "schedule",
+        "destination",
+        "verification",
+        "status"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]+$" },
+        "ownerIssue": { "type": "integer", "minimum": 1 },
+        "sourceIdentities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "validator",
+              "sentry",
+              "full",
+              "public-rpc",
+              "private-archive-indexer",
+              "blockscout-postgresql",
+              "operator-configuration"
+            ]
+          }
+        },
+        "authority": {
+          "enum": [
+            "rebuildable-chain-copy",
+            "derived-rebuildable-index",
+            "reviewed-configuration-copy",
+            "double-sign-safety-state"
+          ]
+        },
+        "includes": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+        "excludes": { "$ref": "#/$defs/nonEmptyUniqueStrings" },
+        "rebuildAllowed": { "type": "boolean" },
+        "schedule": { "type": "null" },
+        "destination": { "type": "null" },
+        "verification": { "type": "string", "minLength": 20 },
+        "status": {
+          "enum": [
+            "hold-no-operator-storage-selected",
+            "hold-explorer-inactive",
+            "hold-owned-by-issue-117"
+          ]
+        }
+      }
+    },
+    "hold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "ownerIssue", "evidenceIssues", "requirement"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]+$" },
+        "ownerIssue": { "type": "integer", "minimum": 1 },
+        "evidenceIssues": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "integer", "minimum": 1 }
+        },
+        "requirement": { "type": "string", "minLength": 60, "maxLength": 320 }
+      }
+    }
+  }
+}

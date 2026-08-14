@@ -1,0 +1,300 @@
+{
+  "$schema": "./performance-v0.schema.json",
+  "schemaVersion": 1,
+  "performanceVersion": "0.1.0-local.2",
+  "status": "executed-local-baselines",
+  "ownerIssue": 118,
+  "scope": {
+    "environment": "local-development-only",
+    "activeTopology": "canonical-four-validator-combined-localnet",
+    "publicLaunchAllowed": false,
+    "publicCapacityClaimed": false,
+    "vpsSizingAllowed": false,
+    "roleComparisonProven": false,
+    "toriumBackendIntegrationInScope": false,
+    "bridgeInScope": false,
+    "l2InScope": false,
+    "deploymentInScope": false
+  },
+  "sources": {
+    "identifiers": {
+      "path": "chain/config/identifiers.json",
+      "version": "0.2.0"
+    },
+    "protocol": {
+      "path": "chain/config/protocol-v1.json",
+      "version": "1.0.0-local.5"
+    },
+    "rpcProfile": {
+      "path": "chain/config/rpc-profile-v1.json",
+      "version": "1.0.1"
+    },
+    "runtimeConfig": {
+      "path": "chain/app/localnet/runtime_config.go",
+      "version": "canonical-go-runtime-config"
+    },
+    "nodeRoles": {
+      "path": "chain/profiles/node-roles-v0.json",
+      "version": "0.1.0-local.2"
+    },
+    "observability": {
+      "path": "chain/observability/observability-v0.json",
+      "version": "0.1.0-local.4"
+    },
+    "recovery": {
+      "path": "chain/recovery/recovery-v0.json",
+      "version": "0.1.0-local.1"
+    },
+    "explorerSelection": {
+      "path": "chain/explorer/selection-v1.json",
+      "version": "1.0.0-local.3"
+    },
+    "explorerStack": {
+      "path": "chain/explorer/stack-v0.json",
+      "version": "0.1.0-local.7"
+    },
+    "toolchain": {
+      "path": "chain/toolchain.json",
+      "version": "pinned-by-content-hash"
+    }
+  },
+  "knownProtocolLimits": {
+    "maximumBlockBytes": 5242880,
+    "maximumBlockGas": 30000000,
+    "targetBlockGas": 15000000,
+    "accountExecutableSlots": 16,
+    "maximumEvmTransactionBytes": 131072,
+    "rpcBatchRequests": 100,
+    "rpcMaximumOpenConnections": 256,
+    "rpcBatchResponseBytes": 25000000,
+    "status": "configured-functional-limits-not-capacity-evidence"
+  },
+  "activeWorkloads": [
+    {
+      "id": "native-transfer-closed-loop",
+      "version": 1,
+      "status": "executed-local-baseline",
+      "scenario": "steady-local-smoke",
+      "operationCount": 8,
+      "concurrency": 1,
+      "measures": [
+        "submission-to-receipt-latency",
+        "committed-throughput",
+        "outcome-counts"
+      ]
+    },
+    {
+      "id": "native-transfer-bounded-burst",
+      "version": 1,
+      "status": "executed-local-baseline",
+      "scenario": "bounded-local-burst",
+      "operationCount": 16,
+      "concurrency": 8,
+      "measures": [
+        "submission-to-receipt-latency",
+        "committed-throughput",
+        "outcome-counts"
+      ]
+    },
+    {
+      "id": "rpc-recent-read-mix",
+      "version": 1,
+      "status": "executed-local-baseline",
+      "scenario": "recent-state-local-smoke",
+      "concurrency": 1,
+      "measures": [
+        "rpc-latency",
+        "rpc-outcome-counts",
+        "response-bytes"
+      ],
+      "methods": [
+        "eth_getBlockByNumber",
+        "eth_getBalance",
+        "eth_getTransactionReceipt",
+        "eth_getLogs",
+        "eth_feeHistory"
+      ],
+      "httpRequestCount": 6,
+      "jsonRpcCallCount": 105,
+      "batchCount": 1,
+      "exactBatchSize": 100
+    },
+    {
+      "id": "archive-historical-read-mix",
+      "version": 1,
+      "status": "defined-not-executed",
+      "scenario": "archive-historical-local-smoke",
+      "concurrency": 1,
+      "measures": [
+        "rpc-latency",
+        "rpc-outcome-counts",
+        "response-bytes",
+        "latency-by-history-depth"
+      ],
+      "methods": [
+        "eth_getBlockByNumber",
+        "eth_getBalance",
+        "eth_getTransactionCount",
+        "eth_getStorageAt",
+        "eth_getLogs"
+      ],
+      "endpoint": "archive-rpc-gateway",
+      "historicalDepthFractions": [0, 0.25, 0.5, 0.75, 1],
+      "httpRequestCount": 6,
+      "jsonRpcCallCount": 105,
+      "batchCount": 1,
+      "exactBatchSize": 100
+    }
+  ],
+  "deferredWorkloads": [
+    {
+      "id": "contract-deployment-and-calls",
+      "status": "HOLD-not-measured-v0",
+      "reason": "requires-versioned-contract-dataset"
+    },
+    {
+      "id": "storage-write-and-log-growth",
+      "status": "HOLD-not-measured-v0",
+      "reason": "requires-state-growth-dataset-and-gas-to-byte-model"
+    },
+    {
+      "id": "expected-revert-mix",
+      "status": "HOLD-not-measured-v0",
+      "reason": "requires-versioned-contract-dataset"
+    },
+    {
+      "id": "websocket-subscription-fanout",
+      "status": "HOLD-not-measured-v0",
+      "reason": "requires-pinned-connection-driver"
+    },
+    {
+      "id": "large-state-soak",
+      "status": "HOLD-not-measured-v0",
+      "reason": "requires-versioned-large-state-dataset"
+    },
+    {
+      "id": "saturation-and-failure-cliff-sweep",
+      "status": "HOLD-not-measured-v0",
+      "reason": "deferred-to-dedicated-controlled-run"
+    },
+    {
+      "id": "node-catch-up-and-indexer-lag",
+      "status": "HOLD-not-measured-v0",
+      "reason": "role-separated-nodes-and-explorer-are-not-active"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "steady-local-smoke",
+      "status": "defined-not-executed",
+      "durationSeconds": null,
+      "repetitions": 1
+    },
+    {
+      "id": "bounded-local-burst",
+      "status": "defined-not-executed",
+      "durationSeconds": null,
+      "repetitions": 1
+    },
+    {
+      "id": "recent-state-local-smoke",
+      "status": "defined-not-executed",
+      "durationSeconds": null,
+      "repetitions": 1
+    },
+    {
+      "id": "archive-historical-local-smoke",
+      "status": "defined-not-executed",
+      "durationSeconds": null,
+      "repetitions": 1
+    },
+    {
+      "id": "saturation",
+      "status": "HOLD-not-measured-v0",
+      "durationSeconds": null,
+      "repetitions": null
+    },
+    {
+      "id": "large-state",
+      "status": "HOLD-not-measured-v0",
+      "durationSeconds": null,
+      "repetitions": null
+    },
+    {
+      "id": "catch-up",
+      "status": "HOLD-not-measured-v0",
+      "durationSeconds": null,
+      "repetitions": null
+    }
+  ],
+  "measurementContract": {
+    "latencyStatistics": [
+      "minimum",
+      "p50",
+      "p95",
+      "maximum",
+      "mean"
+    ],
+    "formalConfidenceClaimed": false,
+    "p99Claimed": false,
+    "outcomes": [
+      "success",
+      "expected-revert",
+      "unexpected-revert",
+      "submission-failed",
+      "dropped"
+    ],
+    "inclusionRecordedSeparately": true,
+    "latencyStages": [
+      "submission-to-acknowledgement",
+      "submission-to-inclusion",
+      "submission-to-receipt"
+    ],
+    "resourceSignals": [
+      "container-cpu",
+      "container-rss",
+      "container-network-rx-tx",
+      "container-block-io",
+      "node-home-byte-delta"
+    ],
+    "resourceNonClaims": [
+      "disk-iops",
+      "disk-io-latency",
+      "database-growth",
+      "indexer-lag"
+    ],
+    "requiredProvenance": [
+      "git",
+      "host",
+      "container-runtime",
+      "toolchain",
+      "binary",
+      "genesis",
+      "effective-config",
+      "workload"
+    ]
+  },
+  "regressionPolicy": {
+    "status": "HOLD-no-stable-runner-or-baseline",
+    "blockingCiEnabled": false,
+    "scheduledBenchmarkEnabled": false,
+    "thresholds": null
+  },
+  "capacityClaims": {
+    "safeTps": null,
+    "safeRpcRequestsPerSecond": null,
+    "validatorSizing": null,
+    "rpcSizing": null,
+    "archiveSizing": null,
+    "explorerSizing": null,
+    "billOfMaterialsReady": false
+  },
+  "holds": [
+    "No runtime benchmark result is committed by this v0 foundation.",
+    "Validator and client traffic share the current combined localnet topology, so role isolation is unproven.",
+    "Validator, RPC, archive, explorer and VPS sizing comparisons remain unmeasured.",
+    "Configured gas, mempool and RPC limits are not justified as capacity limits.",
+    "A stable dedicated runner and repeated comparable baselines are required before regression thresholds.",
+    "No public endpoint, remote host, production system or Torium backend may be targeted."
+  ]
+}

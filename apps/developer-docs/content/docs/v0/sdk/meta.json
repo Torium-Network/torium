@@ -1,0 +1,13 @@
+{
+  "title": "TypeScript SDK",
+  "pages": [
+    "index",
+    "installation",
+    "chains-and-transports",
+    "public-client",
+    "wallets-and-transactions",
+    "errors-and-runtimes",
+    "viem-and-ethers",
+    "api-reference"
+  ]
+}

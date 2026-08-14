@@ -1,0 +1,182 @@
+{
+  "$schema": "./rpc-profile-v1.schema.json",
+  "schemaVersion": 1,
+  "profileVersion": "1.0.1",
+  "status": "active-local-only",
+  "environment": "localnet",
+  "ownerIssue": 96,
+  "clientNode": "validator-0",
+  "exposure": {
+    "classification": "valueless-local-development-only",
+    "hostPublishing": "loopback-only",
+    "rawProcessBinding": "loopback-only",
+    "containerBinding": "all-interfaces-inside-isolated-compose-network",
+    "publicEndpointsAllowed": false,
+    "tlsTermination": "not-applicable-local-loopback",
+    "httpCors": {
+      "implementation": "cosmos-evm-upstream-default-all-origins",
+      "unsafeCorsFlag": false,
+      "safeOnlyBecauseHostPublishingIsLoopback": true,
+      "publicUseAllowed": false,
+      "publicPolicyOwnerIssue": 114
+    },
+    "rateLimit": {
+      "implementation": "none-local-loopback",
+      "reason": "The valueless local profile is reachable only by the workstation. Any public profile must add an authenticated or rate-limited reverse-proxy boundary.",
+      "publicBoundaryRequired": true,
+      "publicPolicyOwnerIssue": 114
+    }
+  },
+  "nodes": [
+    {
+      "name": "validator-0",
+      "role": "consensus-and-client",
+      "clientServices": [
+        "ethereum-json-rpc-http",
+        "ethereum-json-rpc-websocket",
+        "cosmos-rest",
+        "cosmos-grpc",
+        "comet-rpc-diagnostic"
+      ]
+    },
+    {
+      "name": "validator-1",
+      "role": "consensus-only",
+      "clientServices": ["comet-rpc-diagnostic"]
+    },
+    {
+      "name": "validator-2",
+      "role": "consensus-only",
+      "clientServices": ["comet-rpc-diagnostic"]
+    },
+    {
+      "name": "validator-3",
+      "role": "consensus-only",
+      "clientServices": ["comet-rpc-diagnostic"]
+    }
+  ],
+  "ethereum": {
+    "httpUrl": "http://127.0.0.1:8545",
+    "webSocketUrl": "ws://127.0.0.1:8546",
+    "chainId": 1414484556,
+    "chainIdHex": "0x544f524c",
+    "networkId": 1414484556,
+    "namespaces": {
+      "enabled": ["eth", "net", "web3"],
+      "operatorOnlyNotEnabled": ["debug", "txpool"],
+      "disabled": ["miner", "personal"]
+    },
+    "requiredSmokeMethods": [
+      "web3_clientVersion",
+      "net_version",
+      "net_listening",
+      "net_peerCount",
+      "eth_chainId",
+      "eth_blockNumber",
+      "eth_syncing",
+      "eth_gasPrice",
+      "eth_getBalance",
+      "eth_getBlockByNumber",
+      "eth_getLogs",
+      "eth_feeHistory"
+    ],
+    "limits": {
+      "ethCallGas": 25000000,
+      "ethCallTimeoutMilliseconds": 5000,
+      "feeHistoryBlocks": 100,
+      "getLogsResults": 10000,
+      "getLogsBlockRange": 10000,
+      "httpBodyBytes": 5242880,
+      "batchRequests": 100,
+      "batchResponseBytes": 25000000,
+      "maxOpenConnections": 256,
+      "httpReadWriteTimeoutMilliseconds": 30000,
+      "httpIdleTimeoutMilliseconds": 120000
+    },
+    "safety": {
+      "allowInsecureUnlock": false,
+      "allowUnprotectedTransactions": false,
+      "profiling": false,
+      "customIndexer": false,
+      "tracer": "",
+      "preimageRecording": false
+    },
+    "webSocket": {
+      "allowedOrigins": ["127.0.0.1", "localhost"],
+      "wildcardOriginAllowed": false,
+      "browserOriginSupportedByLocalProfile": false,
+      "subscriptions": ["newHeads", "logs", "newPendingTransactions"],
+      "serverReplaysMissedMessages": false,
+      "clientReconnectRequired": true,
+      "httpBackfillRequired": true
+    }
+  },
+  "cosmos": {
+    "rest": {
+      "url": "http://127.0.0.1:1317",
+      "unsafeCors": false,
+      "swagger": false,
+      "maxOpenConnections": 256,
+      "maxRequestBodyBytes": 1000000,
+      "readTimeoutSeconds": 10,
+      "writeTimeoutSeconds": 10
+    },
+    "grpc": {
+      "address": "127.0.0.1:9090",
+      "grpcWebEnabled": false,
+      "maxReceiveBytes": 10485760,
+      "maxSendBytes": 33554432
+    },
+    "stabilityContract": "upstream-local-development-surface-not-a-torium-extension-contract",
+    "extensionContractOwnerIssue": 131
+  },
+  "comet": {
+    "clientNodeUrl": "http://127.0.0.1:26657",
+    "diagnosticHostPorts": [26657, 26757, 26857, 26957],
+    "unsafeMethods": false,
+    "corsOrigins": [],
+    "pprofAddress": "",
+    "deprecatedGrpcAddress": "",
+    "publicUseAllowed": false
+  },
+  "health": {
+    "schemaVersion": 2,
+    "states": ["booting", "syncing", "ready", "degraded", "unhealthy"],
+    "readyRequires": [
+      "matching-cosmos-chain-id",
+      "matching-reachable-node-identities",
+      "commit-quorum-ready",
+      "matching-evm-chain-id",
+      "evm-not-syncing",
+      "positive-consensus-and-evm-heights",
+      "version-visible"
+    ],
+    "reports": [
+      "application-version",
+      "comet-version",
+      "cosmos-chain-id",
+      "evm-chain-id",
+      "peer-count",
+      "sync-state",
+      "consensus-height",
+      "evm-height"
+    ]
+  },
+  "wallet": {
+    "chainName": "Torium Localnet",
+    "nativeCurrencyName": "Torium Test Token",
+    "nativeCurrencySymbol": "tTOR",
+    "nativeCurrencyDecimals": 18,
+    "rpcUrls": ["http://127.0.0.1:8545"],
+    "blockExplorerUrls": [],
+    "publishable": false
+  },
+  "deferred": [
+    "public RPC, REST, gRPC and WebSocket endpoints",
+    "runtime activation and effective conformance of isolated node-role profiles (#114)",
+    "public TLS, reverse-proxy, rate-limit and browser-origin enforcement (#114/#120)",
+    "Torium-specific Cosmos REST/gRPC stability contract (#131)",
+    "broad Ethereum semantic conformance (#107)",
+    "private archive/indexer history runtime (#114); #112 requires zero debug trace methods in v0"
+  ]
+}

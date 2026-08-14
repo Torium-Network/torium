@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "result": "passed",
+  "generatedAt": "2026-07-15T14:42:48Z",
+  "network": {
+    "cosmosChainId": "torium-localnet-1",
+    "evmChainId": 1414484556,
+    "profile": "canonical-four-validator-localnet"
+  },
+  "checks": {
+    "transactionEnvelopes": {
+      "receiptTypes": ["0x0", "0x1", "0x2"],
+      "eoaEstimateGas": "21000",
+      "simulation": "passed",
+      "senderFeeAndValueReconciled": true
+    },
+    "replayProtection": {
+      "canonicalChainId": "1414484556",
+      "wrongChainId": "1414484557",
+      "wrongChainRejected": true,
+      "wrongChainError": {
+        "code": -32000,
+        "message": "incorrect chain-id; expected 1414484556, got 1414484557"
+      },
+      "unprotectedRejected": true,
+      "unprotectedError": {
+        "code": -32000,
+        "message": "only replay-protected (EIP-155) transactions allowed over RPC"
+      },
+      "canonicalNonceAfterRejections": "3"
+    },
+    "unsupportedEnvelopes": {
+      "blobType": 3,
+      "blobRpcAcknowledgedBeforeCheckTx": false,
+      "blobRetainedOrProposed": false,
+      "blobError": {
+        "code": -32000,
+        "message": "transaction type not supported: received type 3"
+      },
+      "setCodeType": 4,
+      "setCodeRpcAcknowledgedBeforeCheckTx": true,
+      "setCodeRetainedOrProposed": false,
+      "setCodeError": null,
+      "antePolicyUnitTest": "chain/app/ante_test.go"
+    },
+    "feeAdmission": {
+      "belowBaseFeeRetainedOrProposed": false,
+      "rpcAcknowledgementIsRetentionPromise": false
+    },
+    "replacement": {
+      "scope": "receiving-node-only",
+      "configuredPercent": 10,
+      "ninePercentRejected": true,
+      "tenPercentAccepted": true,
+      "pendingNonceAfterReplacement": "4"
+    },
+    "nonceGap": {
+      "gapNonce": 6,
+      "committedNonceWhileHalted": "4",
+      "pendingNonceUsedAsExecutionEligibility": false,
+      "fillAndGapCommittedInNonceOrder": true
+    },
+    "capacity": {
+      "accountExecutableSlots": 16,
+      "globalExecutableSlots": 5120,
+      "accountQueuedSlots": 64,
+      "globalQueuedSlots": 1024,
+      "liveBoundaryStatus": "not-observable-from-default-profile"
+    },
+    "saturation": {
+      "blockNumber": "25",
+      "gasUsed": "30000000",
+      "targetGas": 15000000,
+      "maxGas": 30000000,
+      "gasUsedRatio": 1,
+      "baseFeeRaisedNextBlock": true,
+      "oversizedTransactionRejected": true
+    },
+    "feeHistory": {
+      "cap": 100,
+      "blocksReturnedAtCap": 100,
+      "requestAboveCapRejected": true,
+      "requestAboveCapCode": -32000,
+      "saturatedBlockBaseFeePerGas": ["0x3b9aca00", "0x430e2340"]
+    },
+    "accounting": {
+      "nativeSupplyBefore": "1000000000000000000000000000",
+      "nativeSupplyAfter": "1000000000000000000000000000",
+      "baseFeeFloorRespected": true
+    }
+  }
+}

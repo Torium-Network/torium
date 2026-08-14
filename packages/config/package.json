@@ -1,0 +1,8 @@
+{
+  "name": "@torium-network/config",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "check-types": "node -e \"JSON.parse(require('fs').readFileSync('tsconfig.base.json', 'utf8'))\""
+  }
+}

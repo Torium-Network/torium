@@ -1,0 +1,143 @@
+[
+  {
+    "at": "2026-07-29T22:17:32.024Z",
+    "containers": [
+      {
+        "name": "torium-localnet-validator-0-1",
+        "cpuPercentage": 0.47,
+        "rssBytes": 254384538,
+        "networkRxBytes": 35300000,
+        "networkTxBytes": 44500000,
+        "blockReadBytes": 569000,
+        "blockWriteBytes": 0
+      },
+      {
+        "name": "torium-localnet-validator-1-1",
+        "cpuPercentage": 0.55,
+        "rssBytes": 208037478,
+        "networkRxBytes": 24900000,
+        "networkTxBytes": 25500000,
+        "blockReadBytes": 0,
+        "blockWriteBytes": 0
+      },
+      {
+        "name": "torium-localnet-validator-2-1",
+        "cpuPercentage": 1.99,
+        "rssBytes": 224395264,
+        "networkRxBytes": 27200000,
+        "networkTxBytes": 27800000,
+        "blockReadBytes": 291000,
+        "blockWriteBytes": 0
+      },
+      {
+        "name": "torium-localnet-validator-3-1",
+        "cpuPercentage": 0.43,
+        "rssBytes": 215901798,
+        "networkRxBytes": 27200000,
+        "networkTxBytes": 27700000,
+        "blockReadBytes": 86000,
+        "blockWriteBytes": 0
+      }
+    ],
+    "homes": {
+      "validator-0": 30011392,
+      "validator-1": 26062848,
+      "validator-2": 30011392,
+      "validator-3": 30011392
+    }
+  },
+  {
+    "at": "2026-07-29T22:17:34.072Z",
+    "containers": [
+      {
+        "name": "torium-localnet-validator-0-1",
+        "cpuPercentage": 3.52,
+        "rssBytes": 254384538,
+        "networkRxBytes": 35400000,
+        "networkTxBytes": 44600000,
+        "blockReadBytes": 569000,
+        "blockWriteBytes": 0
+      },
+      {
+        "name": "torium-localnet-validator-1-1",
+        "cpuPercentage": 3.84,
+        "rssBytes": 207827763,
+        "networkRxBytes": 24900000,
+        "networkTxBytes": 25600000,
+        "blockReadBytes": 0,
+        "blockWriteBytes": 0
+      },
+      {
+        "name": "torium-localnet-validator-2-1",
+        "cpuPercentage": 3.3,
+        "rssBytes": 224395264,
+        "networkRxBytes": 27300000,
+        "networkTxBytes": 27800000,
+        "blockReadBytes": 291000,
+        "blockWriteBytes": 0
+      },
+      {
+        "name": "torium-localnet-validator-3-1",
+        "cpuPercentage": 3.28,
+        "rssBytes": 215692083,
+        "networkRxBytes": 27300000,
+        "networkTxBytes": 27700000,
+        "blockReadBytes": 86000,
+        "blockWriteBytes": 0
+      }
+    ],
+    "homes": {
+      "validator-0": 30011392,
+      "validator-1": 26062848,
+      "validator-2": 30011392,
+      "validator-3": 30011392
+    }
+  },
+  {
+    "at": "2026-07-29T22:17:36.098Z",
+    "containers": [
+      {
+        "name": "torium-localnet-validator-0-1",
+        "cpuPercentage": 2.85,
+        "rssBytes": 254384538,
+        "networkRxBytes": 35400000,
+        "networkTxBytes": 44700000,
+        "blockReadBytes": 569000,
+        "blockWriteBytes": 0
+      },
+      {
+        "name": "torium-localnet-validator-1-1",
+        "cpuPercentage": 2.96,
+        "rssBytes": 208037478,
+        "networkRxBytes": 25000000,
+        "networkTxBytes": 25600000,
+        "blockReadBytes": 0,
+        "blockWriteBytes": 0
+      },
+      {
+        "name": "torium-localnet-validator-2-1",
+        "cpuPercentage": 2.94,
+        "rssBytes": 224500122,
+        "networkRxBytes": 27300000,
+        "networkTxBytes": 27800000,
+        "blockReadBytes": 291000,
+        "blockWriteBytes": 0
+      },
+      {
+        "name": "torium-localnet-validator-3-1",
+        "cpuPercentage": 2.93,
+        "rssBytes": 216006656,
+        "networkRxBytes": 27300000,
+        "networkTxBytes": 27800000,
+        "blockReadBytes": 86000,
+        "blockWriteBytes": 0
+      }
+    ],
+    "homes": {
+      "validator-0": 30011392,
+      "validator-1": 26062848,
+      "validator-2": 30011392,
+      "validator-3": 30011392
+    }
+  }
+]

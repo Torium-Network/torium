@@ -1,0 +1,232 @@
+[app.toml]
+minimum-gas-prices = "0atorium"
+query-gas-limit = "0"
+pruning = "default"
+pruning-keep-recent = "0"
+pruning-interval = "0"
+halt-height = 0
+halt-time = 0
+min-retain-blocks = 0
+inter-block-cache = true
+index-events = []
+iavl-cache-size = 781250
+iavl-disable-fastnode = false
+app-db-backend = ""
+[telemetry]
+service-name = ""
+enabled = false
+enable-hostname = false
+enable-hostname-label = false
+enable-service-label = false
+prometheus-retention-time = 0
+global-labels = [
+]
+metrics-sink = ""
+statsd-addr = ""
+datadog-hostname = ""
+[api]
+enable = true
+swagger = false
+address = "tcp://0.0.0.0:1317"
+max-open-connections = 256
+rpc-read-timeout = 10
+rpc-write-timeout = 10
+rpc-max-body-bytes = 1000000
+enabled-unsafe-cors = false
+[grpc]
+enable = true
+address = "0.0.0.0:9090"
+max-recv-msg-size = "10485760"
+max-send-msg-size = "33554432"
+historical-grpc-address-block-range = "{}"
+[grpc-web]
+enable = false
+[state-sync]
+snapshot-interval = 0
+snapshot-keep-recent = 2
+[streaming]
+[streaming.abci]
+keys = []
+plugin = ""
+stop-node-on-err = true
+[mempool]
+max-txs = 1000
+[evm]
+tracer = ""
+max-tx-gas-wanted = 25000000
+cache-preimage = false
+evm-chain-id = 1414484556
+min-tip = 1
+geth-metrics-address = "127.0.0.1:8100"
+[evm.mempool]
+price-limit = 1
+price-bump = 10
+account-slots = 16
+global-slots = 5120
+account-queue = 64
+global-queue = 1024
+lifetime = "3h0m0s"
+included-nonce-cache-size = 4096
+pending-tx-proposal-timeout = "250ms"
+check-tx-timeout = "5s"
+insert-queue-size = "5000"
+enable-tx-tracker = false
+[json-rpc]
+enable = true
+address = "0.0.0.0:8545"
+ws-address = "0.0.0.0:8546"
+ws-origins = ["127.0.0.1", "localhost"]
+api = "eth,net,web3"
+gas-cap = 25000000
+allow-insecure-unlock = false
+evm-timeout = "5s"
+txfee-cap = 1
+filter-timeout = "5m0s"
+filter-cleanup-interval = "30s"
+feehistory-cap = 100
+logs-cap = 10000
+block-range-cap = 10000
+http-timeout = "30s"
+http-idle-timeout = "2m0s"
+http-body-limit = 5242880
+allow-unprotected-txs = false
+max-open-connections = 256
+enable-indexer = false
+metrics-address = "0.0.0.0:6065"
+batch-request-limit = 100
+batch-response-max-size = 25000000
+enable-profiling = false
+[tls]
+certificate-path = ""
+key-path = ""
+[config.toml]
+version = "0.39.0"
+proxy_app = "tcp://127.0.0.1:26658"
+moniker = "validator-0"
+db_backend = "goleveldb"
+db_dir = "data"
+log_level = "info"
+log_format = "json"
+genesis_file = "config/genesis.json"
+priv_validator_key_file = "config/priv_validator_key.json"
+priv_validator_state_file = "data/priv_validator_state.json"
+priv_validator_laddr = ""
+node_key_file = "config/node_key.json"
+abci = "socket"
+filter_peers = false
+[rpc]
+laddr = "tcp://0.0.0.0:26657"
+cors_allowed_origins = []
+cors_allowed_methods = ["HEAD", "GET", "POST", ]
+cors_allowed_headers = ["Origin", "Accept", "Content-Type", "X-Requested-With", "X-Server-Time", ]
+grpc_laddr = ""
+grpc_max_open_connections = 900
+unsafe = false
+max_open_connections = 900
+max_subscription_clients = 100
+max_subscriptions_per_client = 5
+experimental_subscription_buffer_size = 200
+experimental_websocket_write_buffer_size = 200
+experimental_close_on_slow_client = false
+timeout_broadcast_tx_commit = "10s"
+max_request_batch_size = 10
+max_body_bytes = 1000000
+max_header_bytes = 1048576
+tls_cert_file = ""
+tls_key_file = ""
+pprof_laddr = ""
+[p2p]
+laddr = "tcp://0.0.0.0:26656"
+external_address = ""
+seeds = ""
+persistent_peers = "c29c233949a5210fd4c354b9898f5db2b384d78b@validator-1:26656,e87373b524a997f0f43d14c56dad12ee6e5fc44b@validator-2:26656,2f12bce882858924833ed89d620b8095b7328149@validator-3:26656"
+addr_book_file = "config/addrbook.json"
+addr_book_strict = false
+max_num_inbound_peers = 40
+max_num_outbound_peers = 10
+unconditional_peer_ids = ""
+persistent_peers_max_dial_period = "0s"
+flush_throttle_timeout = "10ms"
+max_packet_msg_payload_size = 1024
+send_rate = 5120000
+recv_rate = 5120000
+pex = false
+seed_mode = false
+private_peer_ids = ""
+allow_duplicate_ip = true
+handshake_timeout = "20s"
+dial_timeout = "3s"
+[p2p.libp2p]
+enabled = false
+[p2p.libp2p.scaler]
+min_workers = 4
+max_workers = 32
+threshold_latency = "100ms"
+[[p2p.libp2p.scaler.overrides]]
+reactor = "MEMPOOL"
+min_workers = 8
+max_workers = 512
+threshold_latency = "500ms"
+[p2p.libp2p.limits]
+mode = "default"
+max_peers = 0
+max_peer_streams = 0
+[mempool]
+type = "app"
+recheck = true
+recheck_timeout = "1s"
+broadcast = true
+wal_dir = ""
+size = 5000
+max_txs_bytes = 1073741824
+cache_size = 10000
+keep-invalid-txs-in-cache = false
+max_tx_bytes = 262144
+max_batch_bytes = 0
+experimental_max_gossip_connections_to_persistent_peers = 0
+experimental_max_gossip_connections_to_non_persistent_peers = 0
+seen_cache_size = 100000
+reap_max_bytes = 5242880
+reap_max_gas = 30000000
+reap_interval = "500ms"
+check_tx_retry_delay = "5s"
+[statesync]
+enable = false
+rpc_servers = ""
+trust_height = 0
+trust_hash = ""
+trust_period = "168h0m0s"
+discovery_time = "15s"
+temp_dir = ""
+chunk_request_timeout = "10s"
+chunk_fetchers = "4"
+max_snapshot_chunks = 100000
+[blocksync]
+version = "v0"
+adaptive_sync = false
+[consensus]
+wal_file = "data/cs.wal/wal"
+timeout_propose = "1s"
+timeout_propose_delta = "500ms"
+timeout_prevote = "500ms"
+timeout_prevote_delta = "250ms"
+timeout_precommit = "500ms"
+timeout_precommit_delta = "250ms"
+timeout_commit = "2s"
+double_sign_check_height = 0
+skip_timeout_commit = false
+create_empty_blocks = true
+create_empty_blocks_interval = "0s"
+peer_gossip_sleep_duration = "100ms"
+peer_query_maj23_sleep_duration = "2s"
+block_time_tolerance = "1m0s"
+[storage]
+discard_abci_responses = false
+[tx_index]
+indexer = "kv"
+psql-conn = ""
+[instrumentation]
+prometheus = true
+prometheus_listen_addr = "0.0.0.0:26660"
+max_open_connections = 3
+namespace = "cometbft"

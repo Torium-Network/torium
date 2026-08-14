@@ -1,0 +1,30 @@
+[profile.default]
+src = "src"
+test = "test"
+script = "script"
+out = "out"
+cache_path = "cache"
+libs = ["node_modules"]
+solc_version = "0.8.30"
+auto_detect_solc = false
+evm_version = "prague"
+optimizer = true
+optimizer_runs = 200
+via_ir = false
+bytecode_hash = "none"
+cbor_metadata = false
+ffi = false
+
+[lint]
+severity = ["high", "med"]
+
+# Audit evidence must not silently inherit Foundry defaults. These bounded
+# values keep local and CI fuzz/invariant runs reproducible and inexpensive.
+[fuzz]
+runs = 256
+seed = "0x746f7269756d2d636f6e74726163742d6173737572616e63652d7630"
+
+[invariant]
+runs = 256
+depth = 500
+fail_on_revert = false

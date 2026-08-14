@@ -1,0 +1,387 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/chain/network-artifacts-v0.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "bundleVersion",
+    "status",
+    "ownerIssue",
+    "generatedBy",
+    "scope",
+    "sources",
+    "environments",
+    "compatibility",
+    "changePolicy",
+    "releaseReadiness",
+    "holds"
+  ],
+  "properties": {
+    "$schema": { "const": "./network-artifacts-v0.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "bundleVersion": { "const": "0.1.0-local.1" },
+    "status": { "const": "generated-localnet-only-public-artifacts-hold" },
+    "ownerIssue": { "const": 123 },
+    "generatedBy": {
+      "const": "node chain/releases/generate-network-artifacts-v0.mjs --write"
+    },
+    "scope": { "$ref": "#/$defs/scope" },
+    "sources": {
+      "type": "object",
+      "minProperties": 10,
+      "additionalProperties": { "$ref": "#/$defs/source" }
+    },
+    "environments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["localnet", "devnet", "testnet", "mainnet"],
+      "properties": {
+        "localnet": { "$ref": "#/$defs/localEnvironment" },
+        "devnet": { "$ref": "#/$defs/reservedEnvironment" },
+        "testnet": { "$ref": "#/$defs/reservedEnvironment" },
+        "mainnet": { "$ref": "#/$defs/reservedEnvironment" }
+      }
+    },
+    "compatibility": { "$ref": "#/$defs/compatibility" },
+    "changePolicy": { "$ref": "#/$defs/changePolicy" },
+    "releaseReadiness": { "$ref": "#/$defs/releaseReadiness" },
+    "holds": {
+      "type": "array",
+      "minItems": 8,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 16 }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment",
+        "valueStatus",
+        "publicPublicationAllowed",
+        "liveDeploymentAllowed",
+        "backendIntegrationInScope",
+        "bridgeInScope",
+        "l2InScope"
+      ],
+      "properties": {
+        "environment": { "const": "local-development-only" },
+        "valueStatus": { "const": "valueless" },
+        "publicPublicationAllowed": { "const": false },
+        "liveDeploymentAllowed": { "const": false },
+        "backendIntegrationInScope": { "const": false },
+        "bridgeInScope": { "const": false },
+        "l2InScope": { "const": false }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "version", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 3 },
+        "version": { "type": "string", "minLength": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "identifiers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "displayName",
+        "cosmosChainId",
+        "evmChainId",
+        "evmChainIdHex",
+        "networkId",
+        "caip2",
+        "shortName",
+        "nativeCurrencySymbol",
+        "registryStatus"
+      ],
+      "properties": {
+        "displayName": { "type": "string", "minLength": 1 },
+        "cosmosChainId": { "type": "string", "minLength": 3 },
+        "evmChainId": { "type": "integer", "minimum": 1 },
+        "evmChainIdHex": { "type": "string", "pattern": "^0x[0-9a-fA-F]+$" },
+        "networkId": { "type": "integer", "minimum": 1 },
+        "caip2": { "type": "string", "pattern": "^eip155:[1-9][0-9]*$" },
+        "shortName": { "type": "string", "minLength": 3 },
+        "nativeCurrencySymbol": { "enum": ["tTOR", "TOR"] },
+        "registryStatus": { "type": "string", "minLength": 8 }
+      }
+    },
+    "endpoints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rpcUrls", "webSocketUrls", "blockExplorerUrls", "publishable"],
+      "properties": {
+        "rpcUrls": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "webSocketUrls": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "blockExplorerUrls": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "publishable": { "const": false }
+      }
+    },
+    "peerDiscovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "seeds", "persistentPeers", "published", "privatePeerDataAllowed"],
+      "properties": {
+        "status": { "const": "HOLD-unpublished" },
+        "seeds": { "type": "array", "maxItems": 0 },
+        "persistentPeers": { "type": "array", "maxItems": 0 },
+        "published": { "const": false },
+        "privatePeerDataAllowed": { "const": false }
+      }
+    },
+    "wallet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eip3085", "iconAsset", "iconStatus"],
+      "properties": {
+        "eip3085": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["chainId", "chainName", "nativeCurrency", "rpcUrls", "blockExplorerUrls"],
+          "properties": {
+            "chainId": { "type": "string", "pattern": "^0x[0-9a-fA-F]+$" },
+            "chainName": { "type": "string", "minLength": 1 },
+            "nativeCurrency": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["name", "symbol", "decimals"],
+              "properties": {
+                "name": { "const": "Torium Test Token" },
+                "symbol": { "const": "tTOR" },
+                "decimals": { "const": 18 }
+              }
+            },
+            "rpcUrls": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+            "blockExplorerUrls": { "type": "array", "maxItems": 0 }
+          }
+        },
+        "iconAsset": { "type": "null" },
+        "iconStatus": { "const": "HOLD-not-selected" }
+      }
+    },
+    "genesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "canonicalHashAlgorithm", "signature"],
+      "properties": {
+        "path": { "const": "chain/genesis/localnet/genesis.json" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "canonicalHashAlgorithm": { "const": "sha256" },
+        "signature": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "algorithm", "keyId", "value", "requiredForPublicArtifact"],
+          "properties": {
+            "status": { "const": "HOLD-unsigned-local-only" },
+            "algorithm": { "type": "null" },
+            "keyId": { "type": "null" },
+            "value": { "type": "null" },
+            "requiredForPublicArtifact": { "const": true }
+          }
+        }
+      }
+    },
+    "stateSync": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "enabled",
+        "rpcServers",
+        "snapshotServers",
+        "trustHeight",
+        "trustHash",
+        "trustPeriodSeconds",
+        "mustBeLessThanUnbondingSeconds"
+      ],
+      "properties": {
+        "status": { "const": "HOLD-unconfigured-untrusted" },
+        "enabled": { "const": false },
+        "rpcServers": { "type": "array", "maxItems": 0 },
+        "snapshotServers": { "type": "array", "maxItems": 0 },
+        "trustHeight": { "type": "null" },
+        "trustHash": { "type": "null" },
+        "trustPeriodSeconds": { "type": "null" },
+        "mustBeLessThanUnbondingSeconds": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format", "status", "signed", "publicPublicationAllowed", "operatorRestoreAllowed"],
+      "properties": {
+        "format": { "const": "torium-localnet-recovery-v1" },
+        "status": { "const": "proven-local-developer-only" },
+        "signed": { "const": false },
+        "publicPublicationAllowed": { "const": false },
+        "operatorRestoreAllowed": { "const": false }
+      }
+    },
+    "localEnvironment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "public", "identifiers", "nativeCurrency", "genesis", "endpoints", "wallet", "peerDiscovery", "stateSync", "snapshot"],
+      "properties": {
+        "status": { "const": "active-valueless-local-development" },
+        "public": { "const": false },
+        "identifiers": { "$ref": "#/$defs/identifiers" },
+        "nativeCurrency": { "$ref": "#/$defs/nativeCurrency" },
+        "genesis": { "$ref": "#/$defs/genesis" },
+        "endpoints": { "$ref": "#/$defs/endpoints" },
+        "wallet": { "$ref": "#/$defs/wallet" },
+        "peerDiscovery": { "$ref": "#/$defs/peerDiscovery" },
+        "stateSync": { "$ref": "#/$defs/stateSync" },
+        "snapshot": { "$ref": "#/$defs/snapshot" }
+      }
+    },
+    "reservedEnvironment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "public", "identifiers", "nativeCurrency", "genesis", "endpoints", "wallet", "peerDiscovery", "stateSync", "snapshot"],
+      "properties": {
+        "status": { "const": "reserved-unpublished-no-genesis" },
+        "public": { "type": "boolean" },
+        "identifiers": { "$ref": "#/$defs/identifiers" },
+        "nativeCurrency": { "$ref": "#/$defs/nativeCurrency" },
+        "genesis": { "type": "null" },
+        "endpoints": { "$ref": "#/$defs/endpoints" },
+        "wallet": { "type": "null" },
+        "peerDiscovery": { "$ref": "#/$defs/peerDiscovery" },
+        "stateSync": { "$ref": "#/$defs/stateSync" },
+        "snapshot": { "type": "null" }
+      }
+    },
+    "nativeCurrency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "symbol", "baseDenom", "decimals", "valueStatus"],
+      "properties": {
+        "name": { "enum": ["Torium Test Token", "Torium"] },
+        "symbol": { "enum": ["tTOR", "TOR"] },
+        "baseDenom": { "const": "atorium" },
+        "decimals": { "const": 18 },
+        "valueStatus": {
+          "enum": ["valueless-non-market-network", "not-launched-no-value-claim"]
+        }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "status"],
+      "properties": {
+        "version": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "minLength": 4 }
+      }
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimumNodeVersion", "minimumNodeVersionStatus", "protocolVersion", "sdk", "contracts", "explorer", "nodeRoles", "recovery", "upgrade", "localnetFormatRehearsal"],
+      "properties": {
+        "minimumNodeVersion": { "type": "null" },
+        "minimumNodeVersionStatus": { "const": "HOLD-not-ratified" },
+        "protocolVersion": { "type": "string", "minLength": 1 },
+        "sdk": { "$ref": "#/$defs/component" },
+        "contracts": { "$ref": "#/$defs/component" },
+        "explorer": { "$ref": "#/$defs/component" },
+        "nodeRoles": { "$ref": "#/$defs/component" },
+        "recovery": { "$ref": "#/$defs/component" },
+        "upgrade": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["governanceContractVersion", "planName", "preUpgradeVersion", "postUpgradeVersion", "operatorChecksumPreflightRequired"],
+          "properties": {
+            "governanceContractVersion": { "type": "string" },
+            "planName": { "type": "string" },
+            "preUpgradeVersion": { "type": "string" },
+            "postUpgradeVersion": { "type": "string" },
+            "operatorChecksumPreflightRequired": { "const": true }
+          }
+        },
+        "localnetFormatRehearsal": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "bundleGenerated", "bundleValidated", "chainStartRehearsedFromBundle"],
+          "properties": {
+            "status": { "const": "metadata-generated-chain-start-HOLD" },
+            "bundleGenerated": { "const": true },
+            "bundleValidated": { "const": true },
+            "chainStartRehearsedFromBundle": { "const": false }
+          }
+        }
+      }
+    },
+    "changePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currentBundle", "publicGenesisReplacement", "identifierAvailability", "privateData"],
+      "properties": {
+        "currentBundle": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requiresRestart", "requiresMigration", "networkDiscontinuity", "note"],
+          "properties": {
+            "requiresRestart": { "const": false },
+            "requiresMigration": { "const": false },
+            "networkDiscontinuity": { "const": false },
+            "note": { "const": "metadata packaging only; canonical localnet inputs are unchanged" }
+          }
+        },
+        "publicGenesisReplacement": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requiresNewCosmosChainId", "requiresNewEvmChainId", "requiresBundleVersionIncrement", "networkDiscontinuityRequired"],
+          "properties": {
+            "requiresNewCosmosChainId": { "const": true },
+            "requiresNewEvmChainId": { "const": true },
+            "requiresBundleVersionIncrement": { "const": true },
+            "networkDiscontinuityRequired": { "const": true }
+          }
+        },
+        "identifierAvailability": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["evidencePath", "datedEvidenceOnly", "recheckBeforePublication"],
+          "properties": {
+            "evidencePath": { "const": "chain/config/identifier-availability.json" },
+            "datedEvidenceOnly": { "const": true },
+            "recheckBeforePublication": { "const": true }
+          }
+        },
+        "privateData": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["peerIdsAllowed", "privateIpsAllowed", "keysAllowed", "signerStateAllowed"],
+          "properties": {
+            "peerIdsAllowed": { "const": false },
+            "privateIpsAllowed": { "const": false },
+            "keysAllowed": { "const": false },
+            "signerStateAllowed": { "const": false }
+          }
+        }
+      }
+    },
+    "releaseReadiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ready", "status", "checksumsComplete", "signatureComplete", "publicMetadataComplete", "localnetChainStartRehearsalComplete"],
+      "properties": {
+        "ready": { "const": false },
+        "status": { "const": "HOLD-local-bundle-only" },
+        "checksumsComplete": { "const": true },
+        "signatureComplete": { "const": false },
+        "publicMetadataComplete": { "const": false },
+        "localnetChainStartRehearsalComplete": { "const": false }
+      }
+    }
+  }
+}

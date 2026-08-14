@@ -1,0 +1,77 @@
+# Explorer UI overlay for issue #113's frontend pin. An OVERLAY, not a
+# replacement: the backend-only stack keeps working, and the UI is added only
+# when its compatibility is being verified or exercised.
+#
+#   docker compose \
+#     --file chain/explorer/compose.explorer.yaml \
+#     --file chain/explorer/compose.frontend.yaml \
+#     up --detach frontend
+#
+# Upstream does NOT declare a compatible frontend version for backend v11.2.2:
+# blockscout/blockscout's own docker-compose pins
+# `ghcr.io/blockscout/frontend:${FRONTEND_DOCKER_TAG:-latest}` and its
+# common-frontend.env carries no version variable at all. The compatibility
+# ceiling therefore cannot be inherited from upstream and has to be established
+# here, which is what chain/explorer/run-frontend-evidence-v0.sh does.
+#
+# Pinned by immutable digest, resolved from ghcr.io/blockscout/frontend:v2.3.0:
+#   org.opencontainers.image.version  = v2.3.0
+#   org.opencontainers.image.revision = e1111ee2f89af699e53f441340f5149ec153f6f3
+#   org.opencontainers.image.source   = https://github.com/blockscout/frontend
+name: torium-explorer
+
+services:
+  frontend:
+    image: ghcr.io/blockscout/frontend@sha256:a8520de41d06772d0185e4737076d71629ebba3863fd07fece906544839ba321
+    restart: "no"
+    depends_on:
+      backend:
+        condition: service_started
+    environment:
+      # The UI reaches the backend through the host loopback publication the
+      # stack contract already reserves for it; no new host surface is opened.
+      NEXT_PUBLIC_API_HOST: 127.0.0.1:44000
+      NEXT_PUBLIC_API_PROTOCOL: http
+      NEXT_PUBLIC_API_BASE_PATH: /
+      NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL: ws
+      NEXT_PUBLIC_APP_HOST: 127.0.0.1
+      NEXT_PUBLIC_APP_PORT: "44001"
+      NEXT_PUBLIC_APP_PROTOCOL: http
+      # Network identity comes from chain/config/identifiers.json: this is a
+      # non-value network, so the symbol is tTOR and never the mainnet ticker.
+      NEXT_PUBLIC_NETWORK_NAME: Torium Localnet
+      NEXT_PUBLIC_NETWORK_SHORT_NAME: Torium Localnet
+      NEXT_PUBLIC_NETWORK_ID: "1414484556"
+      NEXT_PUBLIC_NETWORK_CURRENCY_NAME: Torium Test Token
+      NEXT_PUBLIC_NETWORK_CURRENCY_SYMBOL: tTOR
+      NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS: "18"
+      NEXT_PUBLIC_NETWORK_RPC_URL: http://127.0.0.1:8545
+      NEXT_PUBLIC_IS_TESTNET: "true"
+      NEXT_PUBLIC_HOMEPAGE_CHARTS: "[]"
+      # Every optional third-party surface stays off: this stack must not reach
+      # a public endpoint, a market data provider, or a wallet relay.
+      #
+      # NOTE: v2.3.0 runs a start-up "congruity check" that FAILS the container
+      # if it is given a NEXT_PUBLIC_* variable for which no build-time
+      # placeholder exists. NEXT_PUBLIC_METADATA_APP_API_HOST is such a
+      # variable in this build, so it must be absent rather than empty.
+      #
+      # v2.3.0 then VALIDATES the value of every variable it does recognize, so
+      # an empty string is not a neutral "off" for one typed as a hash or a URL:
+      # NEXT_PUBLIC_GRAPHIQL_TRANSACTION must match /^(?:0x)?[\da-fA-F]+$/, so it
+      # is omitted rather than blanked. Both behaviours are why this pin needs
+      # local compatibility verification instead of an inherited version claim.
+      NEXT_PUBLIC_STATS_API_HOST: ""
+      NEXT_PUBLIC_VISUALIZE_API_HOST: ""
+      NEXT_PUBLIC_CONTRACT_INFO_API_HOST: ""
+      NEXT_PUBLIC_NAME_SERVICE_API_HOST: ""
+      NEXT_PUBLIC_ADMIN_SERVICE_API_HOST: ""
+      NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: ""
+      FAVICON_MASTER_URL: ""
+    ports:
+      - "127.0.0.1:44001:3000"
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"

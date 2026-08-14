@@ -1,0 +1,32 @@
+[
+  {
+    "at": "2026-07-29T16:09:08.520Z",
+    "kind": "baseline",
+    "height": 194,
+    "note": "all four validators reachable at the baseline committed height"
+  },
+  {
+    "at": "2026-07-29T16:09:09.143Z",
+    "kind": "change-applied",
+    "height": 194,
+    "note": "fault injected per the scenario module"
+  },
+  {
+    "at": "2026-07-29T16:09:20.459Z",
+    "kind": "expected-behavior-observed",
+    "height": 199,
+    "note": "expected liveness/finality behavior observed under the fault"
+  },
+  {
+    "at": "2026-07-29T16:09:20.459Z",
+    "kind": "recovery-started",
+    "height": 199,
+    "note": "operator recovery action started"
+  },
+  {
+    "at": "2026-07-29T16:09:27.789Z",
+    "kind": "recovery-complete",
+    "height": 202,
+    "note": "every validator reached the canonical recovery height"
+  }
+]

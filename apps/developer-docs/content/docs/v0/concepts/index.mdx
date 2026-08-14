@@ -1,0 +1,66 @@
+---
+title: Concepts
+description: Architecture, finality, account and fee concepts for Torium.
+docId: concepts
+version: v0
+status: foundation
+ownerIssue: 140
+sourceOfTruth: docs/architecture/torium-evm-l1-protocol-v1.md
+sourceStatus: existing
+---
+
+Torium is being built as a sovereign EVM-compatible layer-1 blockchain. It is not an Ethereum L2,
+rollup or sidecar for the Torium product backend. The local chain runs its own Cosmos SDK state
+machine and CometBFT consensus while exposing Ethereum JSON-RPC and EVM execution.
+
+Only a valueless local development network is active. Devnet, public testnet and mainnet identifiers
+are reserved but inactive; there is no public RPC, explorer, bridge or production validator set.
+
+## Execution and consensus
+
+Native balances and value transfers use a single canonical Cosmos bank-backed ledger; contract code
+and storage remain EVM state. CometBFT commits a block after strictly more than two-thirds of current
+voting power precommits it. Under the stated fault assumptions, this is deterministic commit finality
+rather than Ethereum beacon-chain finality or a probabilistic confirmation model.
+
+For SDKs and explorers, one committed block is the local default and the JSON-RPC `finalized` tag
+means the latest CometBFT-committed state. RPC acceptance is not a promise of inclusion, and there is
+no bounded inclusion-time guarantee.
+
+## Current trust model
+
+Localnet has four validators with voting power `25/25/25/25`, all controlled by one developer
+authority. Quorum is 67 of 100. The chain continues with one validator unavailable (75 available)
+and safely halts with two unavailable (50 available).
+
+Four processes do not make this environment decentralized. The same developer can stop validators,
+replace binaries, reset genesis and control the exposed RPC. Localnet proves application and
+consensus behavior only; it does not prove independent operation, economic security, censorship
+resistance or production resilience.
+
+## Accounts and the native asset
+
+An EVM `0x...` address and a `torium1...` account address encode the same 20 account bytes. They are
+two client representations of one account, not two balances.
+
+- base denomination: `atorium`;
+- display denomination: `tTOR` on valueless networks and `TOR` on a future mainnet;
+- decimals: 18;
+- `1 tTOR = 1 TOR = 10^18 atorium` as a unit conversion; local tTOR has no market value.
+
+The local protocol is genesis-capped and non-inflationary. Transaction fees and existing balances
+may be redistributed through staking and distribution; no post-genesis native mint is enabled.
+
+## Transactions, gas and blocks
+
+Torium localnet accepts legacy, access-list and EIP-1559 transactions. Blob transactions are
+unsupported because Torium has no Ethereum blob/data-availability layer. The local block gas limit
+is 30,000,000 with a 15,000,000 target; a single transaction is capped at 25,000,000 gas. These are
+local-development parameters, not throughput or public fee-market claims.
+
+The active modules include EVM, bank, staking, distribution, slashing, evidence, governance and
+upgrade. IBC and IBC transfer are explicitly excluded from the current protocol; future bridges are
+outside v0.
+
+Continue with the [four-validator localnet quickstart](/v0/localnet/quickstart) or inspect the
+[canonical local network reference](/v0/localnet/reference).

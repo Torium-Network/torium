@@ -1,0 +1,498 @@
+{
+  "schemaVersion": 1,
+  "resultVersion": "0.1.0",
+  "status": "unsafe",
+  "ownerIssue": 119,
+  "planVersion": "0.1.0-local.1",
+  "scenarioId": "local-unsafe-byzantine-threshold",
+  "testId": "chaos.consensus.local.assumption-violation-two-byzantine",
+  "executed": true,
+  "provenance": {
+    "gitCommit": "c81cb1ca4f0f17fe461b03a2c2f1fd07288e1693",
+    "dirtyWorktree": false,
+    "patchSha256": null,
+    "toolchainSha256": "7429c9d76ac7ea3a9ebec540a53690872e929e8fdd9359631b8b37c2f6879cc8",
+    "binaryIdentity": "toriumd (toriumd:local)",
+    "binarySha256": "cf3a0da5f899ac5dbf819252d8b8c87758d94ce040f2182701bc1207c7636343",
+    "genesisSha256": "86d77e6e1907e10e92217e1484cbf89e224b03bacdbf67f441b3307502a96808",
+    "effectiveConfigSha256": "ea5dbd49d14ac134f4405f57d4a071f4740948c158ef26830856dcb632b1bb17",
+    "hostIdentity": "Darwin 25.3.0 arm64 (15 cores)",
+    "runnerIdentity": "chain/resilience/run-scenario-v0.mjs@0.1.0",
+    "seed": 20260729
+  },
+  "run": {
+    "startedAt": "2026-07-29T20:25:54.683Z",
+    "endedAt": "2026-07-29T20:26:16.726Z",
+    "cosmosChainId": "torium-localnet-1",
+    "evmChainId": 1414484556,
+    "startHeight": 3,
+    "endHeight": 13,
+    "baselineBlockHash": "8F0F242257B2CB6FF234E975FEB13F1C825A68C4B2A5EE885BEB23D7B5F44D08",
+    "baselineAppHash": "CC8E7904746C3C7C49E4F25179EB661A6019E9112412EB956A86BEE21EA9C836"
+  },
+  "timeline": [
+    {
+      "at": "2026-07-29T20:25:54.687Z",
+      "kind": "baseline",
+      "height": 3,
+      "note": "all four validators reachable at the baseline committed height"
+    },
+    {
+      "at": "2026-07-29T20:25:58.670Z",
+      "kind": "change-applied",
+      "height": 3,
+      "note": "fault injected per the scenario module"
+    },
+    {
+      "at": "2026-07-29T20:26:10.714Z",
+      "kind": "expected-behavior-observed",
+      "height": 10,
+      "note": "expected liveness/finality behavior observed under the fault"
+    },
+    {
+      "at": "2026-07-29T20:26:10.715Z",
+      "kind": "recovery-started",
+      "height": 10,
+      "note": "operator recovery action started"
+    },
+    {
+      "at": "2026-07-29T20:26:16.690Z",
+      "kind": "recovery-complete",
+      "height": 13,
+      "note": "every validator reached the canonical recovery height"
+    }
+  ],
+  "observations": {
+    "nodes": [
+      {
+        "nodeId": "validator-0",
+        "reachable": true,
+        "height": 13,
+        "blockHash": "92532A3FCB56027AD90D73958AD788B143ED16F79AB50262097AAAD4BE4D6CD8",
+        "appHash": "2169D9D1E72421C50115C34FEC323D06A8CCE51D55C40C4F5A9DF74873A56306",
+        "validatorsHash": "2AC6C4FE2D19F322D9C5C4AE5F2CAA325FCBAA0141011C1EBDCBD06DF3157335"
+      },
+      {
+        "nodeId": "validator-1",
+        "reachable": true,
+        "height": 13,
+        "blockHash": "92532A3FCB56027AD90D73958AD788B143ED16F79AB50262097AAAD4BE4D6CD8",
+        "appHash": "2169D9D1E72421C50115C34FEC323D06A8CCE51D55C40C4F5A9DF74873A56306",
+        "validatorsHash": "2AC6C4FE2D19F322D9C5C4AE5F2CAA325FCBAA0141011C1EBDCBD06DF3157335"
+      },
+      {
+        "nodeId": "validator-2",
+        "reachable": true,
+        "height": 13,
+        "blockHash": "92532A3FCB56027AD90D73958AD788B143ED16F79AB50262097AAAD4BE4D6CD8",
+        "appHash": "2169D9D1E72421C50115C34FEC323D06A8CCE51D55C40C4F5A9DF74873A56306",
+        "validatorsHash": "2AC6C4FE2D19F322D9C5C4AE5F2CAA325FCBAA0141011C1EBDCBD06DF3157335"
+      },
+      {
+        "nodeId": "validator-3",
+        "reachable": true,
+        "height": 13,
+        "blockHash": "92532A3FCB56027AD90D73958AD788B143ED16F79AB50262097AAAD4BE4D6CD8",
+        "appHash": "2169D9D1E72421C50115C34FEC323D06A8CCE51D55C40C4F5A9DF74873A56306",
+        "validatorsHash": "2AC6C4FE2D19F322D9C5C4AE5F2CAA325FCBAA0141011C1EBDCBD06DF3157335"
+      }
+    ],
+    "committedStates": [
+      {
+        "nodeId": "validator-0",
+        "height": 3,
+        "blockHash": "8F0F242257B2CB6FF234E975FEB13F1C825A68C4B2A5EE885BEB23D7B5F44D08",
+        "appHash": "CC8E7904746C3C7C49E4F25179EB661A6019E9112412EB956A86BEE21EA9C836",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 3,
+        "blockHash": "8F0F242257B2CB6FF234E975FEB13F1C825A68C4B2A5EE885BEB23D7B5F44D08",
+        "appHash": "CC8E7904746C3C7C49E4F25179EB661A6019E9112412EB956A86BEE21EA9C836",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 3,
+        "blockHash": "8F0F242257B2CB6FF234E975FEB13F1C825A68C4B2A5EE885BEB23D7B5F44D08",
+        "appHash": "CC8E7904746C3C7C49E4F25179EB661A6019E9112412EB956A86BEE21EA9C836",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 3,
+        "blockHash": "8F0F242257B2CB6FF234E975FEB13F1C825A68C4B2A5EE885BEB23D7B5F44D08",
+        "appHash": "CC8E7904746C3C7C49E4F25179EB661A6019E9112412EB956A86BEE21EA9C836",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 4,
+        "blockHash": "C5B2C3EC779476B0D43C5E27C12965BC3C3F3FC211AD3EAF3D3DAE6039C9D468",
+        "appHash": "A0C48467A9D0474612A57E72436FE558A83EFECE53D944E8522783443581E520",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 4,
+        "blockHash": "C5B2C3EC779476B0D43C5E27C12965BC3C3F3FC211AD3EAF3D3DAE6039C9D468",
+        "appHash": "A0C48467A9D0474612A57E72436FE558A83EFECE53D944E8522783443581E520",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 4,
+        "blockHash": "C5B2C3EC779476B0D43C5E27C12965BC3C3F3FC211AD3EAF3D3DAE6039C9D468",
+        "appHash": "A0C48467A9D0474612A57E72436FE558A83EFECE53D944E8522783443581E520",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 4,
+        "blockHash": "C5B2C3EC779476B0D43C5E27C12965BC3C3F3FC211AD3EAF3D3DAE6039C9D468",
+        "appHash": "A0C48467A9D0474612A57E72436FE558A83EFECE53D944E8522783443581E520",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 5,
+        "blockHash": "E8FB4DA968851B81D68B903FE9DF51055FF50015FAD68B76317E31116CD54030",
+        "appHash": "24A6BF78C8893DEEE56E02DA53881C72E97B4BD70D92A727EEDC035F922DF5E1",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 5,
+        "blockHash": "E8FB4DA968851B81D68B903FE9DF51055FF50015FAD68B76317E31116CD54030",
+        "appHash": "24A6BF78C8893DEEE56E02DA53881C72E97B4BD70D92A727EEDC035F922DF5E1",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 5,
+        "blockHash": "E8FB4DA968851B81D68B903FE9DF51055FF50015FAD68B76317E31116CD54030",
+        "appHash": "24A6BF78C8893DEEE56E02DA53881C72E97B4BD70D92A727EEDC035F922DF5E1",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 5,
+        "blockHash": "E8FB4DA968851B81D68B903FE9DF51055FF50015FAD68B76317E31116CD54030",
+        "appHash": "24A6BF78C8893DEEE56E02DA53881C72E97B4BD70D92A727EEDC035F922DF5E1",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 6,
+        "blockHash": "7DB85553EB484E7042E02BCA83B612E91C4ACC464A1FA68322C3E0834BFD22BA",
+        "appHash": "FE60BA7D878C85A24D7877F71A1D7548B4DD3446538F5FB0EA0A8A7439BB2577",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 6,
+        "blockHash": "7DB85553EB484E7042E02BCA83B612E91C4ACC464A1FA68322C3E0834BFD22BA",
+        "appHash": "FE60BA7D878C85A24D7877F71A1D7548B4DD3446538F5FB0EA0A8A7439BB2577",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 6,
+        "blockHash": "7DB85553EB484E7042E02BCA83B612E91C4ACC464A1FA68322C3E0834BFD22BA",
+        "appHash": "FE60BA7D878C85A24D7877F71A1D7548B4DD3446538F5FB0EA0A8A7439BB2577",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 6,
+        "blockHash": "7DB85553EB484E7042E02BCA83B612E91C4ACC464A1FA68322C3E0834BFD22BA",
+        "appHash": "FE60BA7D878C85A24D7877F71A1D7548B4DD3446538F5FB0EA0A8A7439BB2577",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 7,
+        "blockHash": "520889569E71C852FA0F383205DFFF0E3BAE88FD5F9AAC9E01BE7181E2CD27F2",
+        "appHash": "2FF573EB58BC8707180BC65F246BD3F4CB51A72B2A822C8D7FB67CC042AB99A6",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 7,
+        "blockHash": "520889569E71C852FA0F383205DFFF0E3BAE88FD5F9AAC9E01BE7181E2CD27F2",
+        "appHash": "2FF573EB58BC8707180BC65F246BD3F4CB51A72B2A822C8D7FB67CC042AB99A6",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 7,
+        "blockHash": "520889569E71C852FA0F383205DFFF0E3BAE88FD5F9AAC9E01BE7181E2CD27F2",
+        "appHash": "2FF573EB58BC8707180BC65F246BD3F4CB51A72B2A822C8D7FB67CC042AB99A6",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 7,
+        "blockHash": "520889569E71C852FA0F383205DFFF0E3BAE88FD5F9AAC9E01BE7181E2CD27F2",
+        "appHash": "2FF573EB58BC8707180BC65F246BD3F4CB51A72B2A822C8D7FB67CC042AB99A6",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 8,
+        "blockHash": "D0420835F6FAB16CB24DE9D44D73072EE6AE79422FAC1327539077B5AB190B93",
+        "appHash": "93EB7ECB580F16307F1ED1A05820249579BA7B96277C95D123D0C7DA486B59E1",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 8,
+        "blockHash": "D0420835F6FAB16CB24DE9D44D73072EE6AE79422FAC1327539077B5AB190B93",
+        "appHash": "93EB7ECB580F16307F1ED1A05820249579BA7B96277C95D123D0C7DA486B59E1",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 8,
+        "blockHash": "D0420835F6FAB16CB24DE9D44D73072EE6AE79422FAC1327539077B5AB190B93",
+        "appHash": "93EB7ECB580F16307F1ED1A05820249579BA7B96277C95D123D0C7DA486B59E1",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 8,
+        "blockHash": "D0420835F6FAB16CB24DE9D44D73072EE6AE79422FAC1327539077B5AB190B93",
+        "appHash": "93EB7ECB580F16307F1ED1A05820249579BA7B96277C95D123D0C7DA486B59E1",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 9,
+        "blockHash": "A578F4D6A456FB7BF55329E7FF4A6F7C23039FBD3569BD332CA580E30780F43A",
+        "appHash": "88AA240C2BBBBED84A4AF0CBFEA139598ED8F4610EE4FBAAC70489FB4D08339F",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 9,
+        "blockHash": "A578F4D6A456FB7BF55329E7FF4A6F7C23039FBD3569BD332CA580E30780F43A",
+        "appHash": "88AA240C2BBBBED84A4AF0CBFEA139598ED8F4610EE4FBAAC70489FB4D08339F",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 9,
+        "blockHash": "A578F4D6A456FB7BF55329E7FF4A6F7C23039FBD3569BD332CA580E30780F43A",
+        "appHash": "88AA240C2BBBBED84A4AF0CBFEA139598ED8F4610EE4FBAAC70489FB4D08339F",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 9,
+        "blockHash": "A578F4D6A456FB7BF55329E7FF4A6F7C23039FBD3569BD332CA580E30780F43A",
+        "appHash": "88AA240C2BBBBED84A4AF0CBFEA139598ED8F4610EE4FBAAC70489FB4D08339F",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 10,
+        "blockHash": "3EC3CAF2AAC0CE8A929652E602E04521E083B0BE6F22C6CA0137EE9BF106C2F7",
+        "appHash": "3A15EFDD71723B5AA22B331B48027AC2CC1ED539F998E4E742C5B8EC772A0646",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 10,
+        "blockHash": "3EC3CAF2AAC0CE8A929652E602E04521E083B0BE6F22C6CA0137EE9BF106C2F7",
+        "appHash": "3A15EFDD71723B5AA22B331B48027AC2CC1ED539F998E4E742C5B8EC772A0646",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 10,
+        "blockHash": "3EC3CAF2AAC0CE8A929652E602E04521E083B0BE6F22C6CA0137EE9BF106C2F7",
+        "appHash": "3A15EFDD71723B5AA22B331B48027AC2CC1ED539F998E4E742C5B8EC772A0646",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 10,
+        "blockHash": "3EC3CAF2AAC0CE8A929652E602E04521E083B0BE6F22C6CA0137EE9BF106C2F7",
+        "appHash": "3A15EFDD71723B5AA22B331B48027AC2CC1ED539F998E4E742C5B8EC772A0646",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 11,
+        "blockHash": "7AF2B65DDB3C355EEAB276AA7923BBC7C13860DCD98DD21A40C551DF43649235",
+        "appHash": "1841C54C55915622A8BEC9AEB42AEB1471C339E4929FDAB4CC5ED52B035B33EB",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 11,
+        "blockHash": "7AF2B65DDB3C355EEAB276AA7923BBC7C13860DCD98DD21A40C551DF43649235",
+        "appHash": "1841C54C55915622A8BEC9AEB42AEB1471C339E4929FDAB4CC5ED52B035B33EB",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 11,
+        "blockHash": "7AF2B65DDB3C355EEAB276AA7923BBC7C13860DCD98DD21A40C551DF43649235",
+        "appHash": "1841C54C55915622A8BEC9AEB42AEB1471C339E4929FDAB4CC5ED52B035B33EB",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 11,
+        "blockHash": "7AF2B65DDB3C355EEAB276AA7923BBC7C13860DCD98DD21A40C551DF43649235",
+        "appHash": "1841C54C55915622A8BEC9AEB42AEB1471C339E4929FDAB4CC5ED52B035B33EB",
+        "commitVotingPower": 75
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 12,
+        "blockHash": "530EF1A010797F38D10FD8041D81A67A1B7D35FDE372C9E3D3596CEB2E793C54",
+        "appHash": "3338F36380AD977464E84455C62B8B307E24E638409C8B6FBC07A880826BC04D",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 12,
+        "blockHash": "530EF1A010797F38D10FD8041D81A67A1B7D35FDE372C9E3D3596CEB2E793C54",
+        "appHash": "3338F36380AD977464E84455C62B8B307E24E638409C8B6FBC07A880826BC04D",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 12,
+        "blockHash": "530EF1A010797F38D10FD8041D81A67A1B7D35FDE372C9E3D3596CEB2E793C54",
+        "appHash": "3338F36380AD977464E84455C62B8B307E24E638409C8B6FBC07A880826BC04D",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 12,
+        "blockHash": "530EF1A010797F38D10FD8041D81A67A1B7D35FDE372C9E3D3596CEB2E793C54",
+        "appHash": "3338F36380AD977464E84455C62B8B307E24E638409C8B6FBC07A880826BC04D",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-0",
+        "height": 13,
+        "blockHash": "92532A3FCB56027AD90D73958AD788B143ED16F79AB50262097AAAD4BE4D6CD8",
+        "appHash": "2169D9D1E72421C50115C34FEC323D06A8CCE51D55C40C4F5A9DF74873A56306",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-1",
+        "height": 13,
+        "blockHash": "92532A3FCB56027AD90D73958AD788B143ED16F79AB50262097AAAD4BE4D6CD8",
+        "appHash": "2169D9D1E72421C50115C34FEC323D06A8CCE51D55C40C4F5A9DF74873A56306",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-2",
+        "height": 13,
+        "blockHash": "92532A3FCB56027AD90D73958AD788B143ED16F79AB50262097AAAD4BE4D6CD8",
+        "appHash": "2169D9D1E72421C50115C34FEC323D06A8CCE51D55C40C4F5A9DF74873A56306",
+        "commitVotingPower": 100
+      },
+      {
+        "nodeId": "validator-3",
+        "height": 13,
+        "blockHash": "92532A3FCB56027AD90D73958AD788B143ED16F79AB50262097AAAD4BE4D6CD8",
+        "appHash": "2169D9D1E72421C50115C34FEC323D06A8CCE51D55C40C4F5A9DF74873A56306",
+        "commitVotingPower": 100
+      }
+    ]
+  },
+  "assertions": {
+    "liveness": {
+      "expected": "not-guaranteed",
+      "observed": "no liveness guarantee applies outside the trust envelope; the observed head advanced to 10 during the experiment",
+      "passed": true
+    },
+    "safety": {
+      "expected": "not-guaranteed-assumption-violation-must-block-release",
+      "observed": "no conflicting committed block was observed at any audited height",
+      "passed": true
+    },
+    "finality": {
+      "expected": "no-finality-guarantee-outside-trust-envelope",
+      "observed": "no finality guarantee applies at 50% byzantine power; the audit below records what was actually committed",
+      "passed": true
+    },
+    "recovery": {
+      "expected": "stop-experiment-preserve-evidence-and-block-release-readiness",
+      "observed": "the experiment was stopped, evidence preserved, and release readiness stays blocked for the out-of-envelope condition",
+      "passed": true
+    }
+  },
+  "recovery": {
+    "manualStateEdits": false,
+    "startedAt": "2026-07-29T20:26:10.715Z",
+    "completedAt": "2026-07-29T20:26:16.690Z",
+    "durationMilliseconds": 5975,
+    "canonicalHeight": 13,
+    "canonicalAppHash": "2169D9D1E72421C50115C34FEC323D06A8CCE51D55C40C4F5A9DF74873A56306"
+  },
+  "contradictoryCommitAudit": {
+    "overlappingHeightsChecked": 11,
+    "contradictionObserved": false,
+    "contradictoryHeights": [],
+    "evidenceComplete": true
+  },
+  "operatorDecisions": [
+    {
+      "at": "2026-07-29T20:25:58.670Z",
+      "decision": "started duplicate signers for validator-2 and validator-3 (50% of voting power), deliberately violating the documented <1/3 byzantine trust assumption",
+      "reason": "scenario plan step for this canonical fault drill"
+    },
+    {
+      "at": "2026-07-29T20:26:11.832Z",
+      "decision": "stopped the experiment, removed both duplicate signers, and preserved all committed evidence; this outcome blocks release readiness by design",
+      "reason": "scenario plan step for this canonical fault drill"
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "timeline",
+      "relativePath": "chain/resilience/results/artifacts/local-unsafe-byzantine-threshold/timeline.json",
+      "sha256": "5baf97e0d2d510fc24b81ed8f87a649e780fada4f8c87ee9d65cbda01511f98a",
+      "containsSecrets": false
+    },
+    {
+      "kind": "node-observations",
+      "relativePath": "chain/resilience/results/artifacts/local-unsafe-byzantine-threshold/node-observations.json",
+      "sha256": "99e5e14b9ce4402887c0288f1c8ad68443dce8c5118aa59cfa09fb5c1415ff9b",
+      "containsSecrets": false
+    },
+    {
+      "kind": "commit-audit",
+      "relativePath": "chain/resilience/results/artifacts/local-unsafe-byzantine-threshold/commit-audit.json",
+      "sha256": "090312ae878676b0da6bda54091aa92ecf68b9daff7bffa1a3c4ab0350c431a9",
+      "containsSecrets": false
+    },
+    {
+      "kind": "operator-decisions",
+      "relativePath": "chain/resilience/results/artifacts/local-unsafe-byzantine-threshold/operator-decisions.json",
+      "sha256": "a5f5cc9a7b0a67a82069adebfddaa9096df1cbd24e9f54f786567fbcb032b803",
+      "containsSecrets": false
+    },
+    {
+      "kind": "assumption-violation-evidence",
+      "relativePath": "chain/resilience/results/artifacts/local-unsafe-byzantine-threshold/assumption-violation-evidence.json",
+      "sha256": "d10992d60f3900efd409356ccc784c4e661bd3c3fa001621fe1d5f1649078659",
+      "containsSecrets": false
+    }
+  ],
+  "releaseBlocked": true,
+  "limitations": [
+    "local four-validator Compose topology; container stop/start and Docker network partitions are the fault surface",
+    "commit audit reads each validator's post-recovery view of every audited height over CometBFT RPC",
+    "equivocation is produced by running duplicate signers for two validators (50% power), deliberately outside the documented <1/3 byzantine trust envelope",
+    "this experiment blocks release readiness by design; its outcome is a boundary demonstration, not a defect report"
+  ]
+}

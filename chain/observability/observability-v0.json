@@ -1,0 +1,868 @@
+{
+  "$schema": "./observability-v0.schema.json",
+  "schemaVersion": 1,
+  "observabilityVersion": "0.1.0-local.4",
+  "status": "partially-activated-local-only",
+  "ownerIssue": 115,
+  "sources": {
+    "identifiers": {
+      "path": "chain/config/identifiers.json",
+      "manifestVersion": "0.2.0"
+    },
+    "protocol": {
+      "path": "chain/config/protocol-v1.json",
+      "protocolVersion": "1.0.0-local.5"
+    },
+    "rpcProfile": {
+      "path": "chain/config/rpc-profile-v1.json",
+      "profileVersion": "1.0.1",
+      "healthSchemaVersion": 2
+    },
+    "nodeRoles": {
+      "path": "chain/profiles/node-roles-v0.json",
+      "profileVersion": "0.1.0-local.2",
+      "ownerIssue": 114
+    },
+    "explorerStack": {
+      "path": "chain/explorer/stack-v0.json",
+      "stackVersion": "0.1.0-local.7",
+      "ownerIssue": 113
+    }
+  },
+  "constraints": {
+    "environment": "local-development-only",
+    "activated": false,
+    "collectorOrDashboardRuntimeConfigIncluded": false,
+    "healthExporterArtifactIncluded": true,
+    "localContainerLogRotationConfigured": true,
+    "liveDeploymentAllowed": false,
+    "publicOperationAllowed": false,
+    "publicTelemetryAllowed": false,
+    "telemetryIsReadinessAuthority": false,
+    "chainRpcAuthority": "authoritative",
+    "explorerDatabaseAuthority": "derived-rebuildable-index",
+    "toriumBackendIntegrationInScope": false,
+    "toriumBackendAuthorityAllowed": false,
+    "numericCapacityOrSloClaimAllowed": false
+  },
+  "healthContract": {
+    "schemaVersion": 2,
+    "states": [
+      "booting",
+      "syncing",
+      "ready",
+      "degraded",
+      "unhealthy"
+    ],
+    "readyRequires": [
+      "matching-cosmos-chain-id",
+      "matching-reachable-node-identities",
+      "commit-quorum-ready",
+      "matching-evm-chain-id",
+      "evm-not-syncing",
+      "positive-consensus-and-evm-heights",
+      "version-visible"
+    ],
+    "reports": [
+      "application-version",
+      "comet-version",
+      "cosmos-chain-id",
+      "evm-chain-id",
+      "peer-count",
+      "sync-state",
+      "consensus-height",
+      "evm-height"
+    ],
+    "currentImplementation": "chain/localnet/scripts/health.mjs",
+    "currentEvidence": "poll-based-active-four-validator-localnet",
+    "roleSeparatedEvidence": false,
+    "exporterActivated": false,
+    "readyFromOpenPortAllowed": false
+  },
+  "telemetryNetwork": {
+    "id": "torium-observability",
+    "status": "defined-inactive-target",
+    "collectorIdentity": "local-prometheus",
+    "collectorActivated": false,
+    "members": [
+      "local-prometheus",
+      "validator",
+      "sentry",
+      "full",
+      "public-rpc",
+      "private-archive-indexer",
+      "archive-rpc-gateway",
+      "blockscout-backend-api",
+      "blockscout-indexer",
+      "postgresql",
+      "redis"
+    ],
+    "scrapeInitiator": "collector-only",
+    "targetsMayInitiateConnections": false,
+    "hostPublish": null,
+    "publicIngressConfigured": false,
+    "credentialsDefined": false,
+    "networkIsolationProven": false
+  },
+  "labelPolicy": {
+    "allowedLabels": [
+      "environment",
+      "chain_id",
+      "role",
+      "instance",
+      "profile_version",
+      "component",
+      "surface",
+      "method_group",
+      "result_class",
+      "profile",
+      "node",
+      "state",
+      "kind"
+    ],
+    "boundedValueSources": {
+      "environment": [
+        "localnet"
+      ],
+      "chain_id": [
+        "torium-localnet-1",
+        "eip155:1414484556"
+      ],
+      "role": [
+        "validator",
+        "sentry",
+        "full",
+        "public-rpc",
+        "private-archive-indexer"
+      ],
+      "instance": [
+        "validator-0",
+        "validator-1",
+        "validator-2",
+        "validator-3",
+        "sentry-0",
+        "full-0",
+        "public-rpc-0",
+        "private-archive-indexer-0",
+        "archive-rpc-gateway-0",
+        "blockscout-backend-api-0",
+        "blockscout-indexer-0",
+        "postgresql-0",
+        "redis-0"
+      ],
+      "profile_version": [
+        "rpc:1.0.0",
+        "roles:0.1.0-local.1",
+        "explorer:0.1.0-local.1",
+        "observability:0.1.0-local.1"
+      ],
+      "profile": [
+        "container",
+        "raw"
+      ],
+      "node": [
+        "validator-0",
+        "validator-1",
+        "validator-2",
+        "validator-3"
+      ],
+      "state": [
+        "booting",
+        "syncing",
+        "ready",
+        "degraded",
+        "unhealthy"
+      ],
+      "kind": [
+        "available",
+        "required",
+        "total"
+      ],
+      "component": [
+        "toriumd",
+        "archive-rpc-gateway",
+        "blockscout-backend-api",
+        "blockscout-indexer",
+        "postgresql",
+        "redis"
+      ],
+      "surface": [
+        "health",
+        "consensus",
+        "p2p",
+        "evm-rpc",
+        "cosmos-api",
+        "gateway",
+        "indexer",
+        "storage",
+        "process"
+      ],
+      "method_group": [
+        "chain-read",
+        "state-read",
+        "logs-read",
+        "transaction-submit",
+        "subscription",
+        "diagnostic"
+      ],
+      "result_class": [
+        "success",
+        "client-error",
+        "server-error",
+        "timeout",
+        "rejected"
+      ]
+    },
+    "forbiddenLabels": [
+      "account_address",
+      "validator_address",
+      "transaction_hash",
+      "block_hash",
+      "node_id",
+      "peer_id",
+      "peer_ip",
+      "rpc_url",
+      "request_path",
+      "request_id",
+      "query_string",
+      "raw_rpc_method",
+      "raw_error",
+      "error_message",
+      "user_id",
+      "wallet_address"
+    ],
+    "unboundedUserControlledLabelAllowed": false,
+    "rawRpcMethodLabelAllowed": false,
+    "seriesBudget": null,
+    "seriesBudgetStatus": "HOLD-not-measured"
+  },
+  "metricTargets": [
+    {
+      "id": "localnet-health-v2",
+      "owner": "torium-localnet-controller",
+      "targetKinds": [
+        "active-localnet"
+      ],
+      "source": "health-exporter-over-poll-contract",
+      "protocol": "prometheus",
+      "port": 9468,
+      "path": "/metrics",
+      "currentStatus": "activated-local-loopback-scrape-proven",
+      "activated": true,
+      "runtimeEvidenceComplete": true,
+      "requiredSignals": [
+        "chain-identity",
+        "node-identity",
+        "quorum-power",
+        "sync-state",
+        "consensus-height",
+        "evm-height",
+        "peer-count",
+        "block-progress"
+      ]
+    },
+    {
+      "id": "comet-consensus-metrics",
+      "owner": "cometbft",
+      "targetKinds": [
+        "validator",
+        "sentry",
+        "full",
+        "public-rpc",
+        "private-archive-indexer"
+      ],
+      "source": "native-prometheus",
+      "protocol": "prometheus",
+      "port": 26660,
+      "path": null,
+      "currentStatus": "activated-local-loopback-scrape-proven",
+      "activated": true,
+      "runtimeEvidenceComplete": true,
+      "requiredSignals": [
+        "latest-block-height",
+        "consensus-round",
+        "validator-power",
+        "missed-or-late-votes",
+        "peer-count",
+        "mempool-size",
+        "block-processing-latency"
+      ]
+    },
+    {
+      "id": "cosmos-evm-json-rpc-metrics",
+      "owner": "cosmos-evm-json-rpc",
+      "targetKinds": [
+        "full",
+        "public-rpc",
+        "private-archive-indexer"
+      ],
+      "source": "native-prometheus-candidate",
+      "protocol": "prometheus",
+      "port": 6065,
+      "path": null,
+      "currentStatus": "activated-local-loopback-scrape-proven",
+      "activated": true,
+      "runtimeEvidenceComplete": true,
+      "requiredSignals": [
+        "request-rate-by-method-group",
+        "latency-by-method-group",
+        "result-class-rate",
+        "timeouts",
+        "rejections",
+        "open-connections",
+        "websocket-sessions"
+      ]
+    },
+    {
+      "id": "cosmos-evm-geth-metrics",
+      "owner": "cosmos-evm-runtime",
+      "targetKinds": [
+        "validator",
+        "full",
+        "public-rpc",
+        "private-archive-indexer"
+      ],
+      "source": "native-prometheus-candidate",
+      "protocol": "prometheus",
+      "port": 8100,
+      "path": null,
+      "currentStatus": "HOLD-loopback-address-configured-scrape-contract-unproven",
+      "activated": false,
+      "runtimeEvidenceComplete": false,
+      "requiredSignals": [
+        "evm-execution-latency",
+        "state-commit-latency",
+        "mempool-depth",
+        "base-fee",
+        "gas-used-ratio",
+        "database-read-write-latency"
+      ]
+    },
+    {
+      "id": "role-process-resource-metrics",
+      "owner": "torium-operations",
+      "targetKinds": [
+        "validator",
+        "sentry",
+        "full",
+        "public-rpc",
+        "private-archive-indexer",
+        "archive-rpc-gateway"
+      ],
+      "source": "process-or-container-exporter-target",
+      "protocol": "prometheus",
+      "port": null,
+      "path": null,
+      "currentStatus": "HOLD-exporter-and-pin-not-selected",
+      "activated": false,
+      "runtimeEvidenceComplete": false,
+      "requiredSignals": [
+        "cpu",
+        "rss-memory",
+        "disk-used-and-free",
+        "disk-growth",
+        "iops-and-io-latency",
+        "network-io",
+        "open-files",
+        "open-connections"
+      ]
+    },
+    {
+      "id": "archive-gateway-metrics",
+      "owner": "archive-rpc-gateway",
+      "targetKinds": [
+        "archive-rpc-gateway"
+      ],
+      "source": "gateway-instrumentation-target",
+      "protocol": "prometheus",
+      "port": 38545,
+      "path": "/metrics",
+      "currentStatus": "activated-local-loopback-scrape-proven",
+      "activated": true,
+      "runtimeEvidenceComplete": true,
+      "requiredSignals": [
+        "allowed-request-rate",
+        "denied-request-rate",
+        "upstream-errors",
+        "upstream-latency",
+        "active-websockets",
+        "policy-version"
+      ]
+    },
+    {
+      "id": "explorer-indexer-metrics",
+      "owner": "blockscout-indexer",
+      "targetKinds": [
+        "blockscout-backend-api",
+        "blockscout-indexer",
+        "postgresql",
+        "redis"
+      ],
+      "source": "explorer-stack-instrumentation-target",
+      "protocol": "prometheus",
+      "port": null,
+      "path": null,
+      "currentStatus": "HOLD-native-exporter-covers-indexing-signals-only-database-and-reconciliation-signals-unsourced",
+      "activated": false,
+      "runtimeEvidenceComplete": false,
+      "requiredSignals": [
+        "canonical-height",
+        "indexed-height",
+        "index-lag",
+        "canonical-hash-mismatch",
+        "missing-receipts-or-logs",
+        "database-size-and-growth",
+        "database-connections",
+        "queue-depth"
+      ]
+    }
+  ],
+  "logging": {
+    "format": "json-lines",
+    "currentSurfaces": [
+      {
+        "id": "container-toriumd",
+        "destination": "container-stdout-stderr",
+        "status": "active-json-bounded-container-rotation-no-central-collector"
+      },
+      {
+        "id": "raw-toriumd",
+        "destination": "role-home/data/toriumd.log",
+        "status": "active-json-unbounded-file"
+      },
+      {
+        "id": "local-faucet",
+        "destination": "container-stdout",
+        "status": "active-json-bounded-container-rotation-no-central-collector"
+      }
+    ],
+    "requiredFields": [
+      "timestamp",
+      "level",
+      "message",
+      "environment",
+      "component",
+      "role",
+      "instance",
+      "chain_id",
+      "profile_version",
+      "event_class"
+    ],
+    "eventClasses": [
+      "startup",
+      "shutdown",
+      "readiness-change",
+      "consensus",
+      "p2p",
+      "rpc-access",
+      "policy-denial",
+      "storage",
+      "indexer",
+      "operator-action"
+    ],
+    "redaction": {
+      "defaultAction": "drop-or-fixed-token",
+      "prohibitedFields": [
+        "private_key",
+        "mnemonic",
+        "seed_phrase",
+        "password",
+        "authorization",
+        "cookie",
+        "api_key",
+        "raw_transaction",
+        "request_body",
+        "query_string",
+        "validator_private_address",
+        "peer_private_address"
+      ],
+      "hashingSensitiveValuesAllowed": false,
+      "rawPayloadLoggingAllowed": false,
+      "secretScannerRequired": true,
+      "runtimeRedactionEvidenceComplete": false
+    },
+    "rotation": {
+      "container": {
+        "driver": "json-file",
+        "maxSize": "10m",
+        "maxFiles": 3,
+        "status": "configured-not-runtime-proven"
+      },
+      "raw": {
+        "maxFileBytes": null,
+        "maxFiles": null,
+        "maxAgeHours": null,
+        "compression": null,
+        "status": "HOLD-not-defined-or-proven"
+      }
+    },
+    "centralCollector": {
+      "selected": false,
+      "artifactPin": null,
+      "activated": false,
+      "status": "HOLD-not-selected"
+    },
+    "publicLogAccessAllowed": false,
+    "toriumBackendLogSinkAllowed": false
+  },
+  "alerts": [
+    {
+      "id": "telemetry-target-down",
+      "severity": "critical",
+      "owner": "torium-operations",
+      "signals": [
+        "scrape-target-up"
+      ],
+      "condition": "a required scrape target is unavailable",
+      "threshold": null,
+      "thresholdStatus": "semantic-no-numeric-threshold",
+      "activated": true,
+      "runtimeEvidenceComplete": true,
+      "runbook": "docs/operations/torium-chain-observability-runbook.md#readiness-and-liveness"
+    },
+    {
+      "id": "chain-progress-stalled",
+      "severity": "critical",
+      "owner": "consensus-operations",
+      "signals": [
+        "consensus-height",
+        "block-progress"
+      ],
+      "condition": "canonical consensus height does not advance for the ratified window",
+      "threshold": null,
+      "thresholdStatus": "HOLD-window-not-ratified",
+      "activated": true,
+      "runtimeEvidenceComplete": false,
+      "runbook": "docs/operations/torium-chain-observability-runbook.md#height-stalled"
+    },
+    {
+      "id": "commit-quorum-unavailable",
+      "severity": "critical",
+      "owner": "consensus-operations",
+      "signals": [
+        "available-voting-power",
+        "commit-quorum-power"
+      ],
+      "condition": "available voting power is below the manifest commit quorum",
+      "threshold": null,
+      "thresholdStatus": "derived-from-active-validator-set",
+      "activated": true,
+      "runtimeEvidenceComplete": false,
+      "runbook": "docs/operations/torium-chain-observability-runbook.md#validator-down"
+    },
+    {
+      "id": "node-identity-or-chain-mismatch",
+      "severity": "critical",
+      "owner": "chain-operations",
+      "signals": [
+        "node-identity",
+        "cosmos-chain-id",
+        "evm-chain-id"
+      ],
+      "condition": "observed node identity or chain ID differs from the expected manifest",
+      "threshold": null,
+      "thresholdStatus": "semantic-no-numeric-threshold",
+      "activated": true,
+      "runtimeEvidenceComplete": false,
+      "runbook": "docs/operations/torium-chain-observability-runbook.md#validator-down"
+    },
+    {
+      "id": "peer-isolation-or-partition",
+      "severity": "critical",
+      "owner": "p2p-operations",
+      "signals": [
+        "peer-count",
+        "peer-diversity",
+        "consensus-round"
+      ],
+      "condition": "role peer requirements or diversity contract are not met",
+      "threshold": null,
+      "thresholdStatus": "HOLD-role-thresholds-and-diversity-not-ratified",
+      "activated": false,
+      "runtimeEvidenceComplete": false,
+      "runbook": "docs/operations/torium-chain-observability-runbook.md#peer-loss"
+    },
+    {
+      "id": "consensus-evm-height-divergence",
+      "severity": "warning",
+      "owner": "chain-operations",
+      "signals": [
+        "consensus-height",
+        "evm-height"
+      ],
+      "condition": "consensus and EVM heights diverge beyond the ratified tolerance",
+      "threshold": null,
+      "thresholdStatus": "HOLD-tolerance-not-ratified",
+      "activated": false,
+      "runtimeEvidenceComplete": false,
+      "runbook": "docs/operations/torium-chain-observability-runbook.md#height-stalled"
+    },
+    {
+      "id": "rpc-errors-latency-or-shedding",
+      "severity": "warning",
+      "owner": "rpc-operations",
+      "signals": [
+        "result-class-rate",
+        "latency-by-method-group",
+        "rejections"
+      ],
+      "condition": "RPC error, timeout, latency, or shedding exceeds the ratified envelope",
+      "threshold": null,
+      "thresholdStatus": "HOLD-slo-and-capacity-not-measured",
+      "activated": false,
+      "runtimeEvidenceComplete": false,
+      "runbook": "docs/operations/torium-chain-observability-runbook.md#rpc-errors"
+    },
+    {
+      "id": "disk-headroom-or-growth-risk",
+      "severity": "critical",
+      "owner": "storage-operations",
+      "signals": [
+        "disk-used-and-free",
+        "disk-growth",
+        "iops-and-io-latency"
+      ],
+      "condition": "disk headroom or time-to-exhaustion violates the ratified role envelope",
+      "threshold": null,
+      "thresholdStatus": "HOLD-thresholds-not-measured",
+      "activated": false,
+      "runtimeEvidenceComplete": false,
+      "runbook": "docs/operations/torium-chain-observability-runbook.md#disk-pressure"
+    },
+    {
+      "id": "archive-gateway-policy-or-bypass-failure",
+      "severity": "critical",
+      "owner": "archive-rpc-gateway",
+      "signals": [
+        "policy-version",
+        "denied-request-rate",
+        "raw-rpc-bypass-probe"
+      ],
+      "condition": "gateway policy differs from the candidate contract or a consumer reaches raw archive RPC",
+      "threshold": null,
+      "thresholdStatus": "semantic-no-numeric-threshold",
+      "activated": false,
+      "runtimeEvidenceComplete": false,
+      "runbook": "docs/operations/torium-chain-observability-runbook.md#rpc-errors"
+    },
+    {
+      "id": "explorer-lag-or-canonical-mismatch",
+      "severity": "critical",
+      "owner": "explorer-operations",
+      "signals": [
+        "index-lag",
+        "canonical-hash-mismatch",
+        "missing-receipts-or-logs"
+      ],
+      "condition": "explorer is beyond the ratified lag or disagrees with canonical chain data",
+      "threshold": null,
+      "thresholdStatus": "HOLD-lag-threshold-and-runtime-not-proven",
+      "activated": false,
+      "runtimeEvidenceComplete": false,
+      "runbook": "docs/operations/torium-chain-observability-runbook.md#index-lag"
+    }
+  ],
+  "dashboards": [
+    {
+      "id": "localnet-health-overview",
+      "owner": "torium-operations",
+      "status": "artifact-defined-not-provisioned",
+      "artifactPath": "chain/observability/grafana/torium-localnet-overview-v0.json",
+      "activated": false,
+      "datasource": "local-prometheus-target",
+      "panels": [
+        "health-state",
+        "chain-ids",
+        "quorum-power",
+        "consensus-and-evm-heights",
+        "sync-state"
+      ]
+    },
+    {
+      "id": "consensus-and-p2p",
+      "owner": "consensus-operations",
+      "status": "defined-not-implemented",
+      "artifactPath": null,
+      "activated": false,
+      "datasource": "local-prometheus-target",
+      "panels": [
+        "round-and-commit-latency",
+        "votes-and-power",
+        "peer-count-and-diversity",
+        "mempool"
+      ]
+    },
+    {
+      "id": "rpc-and-websocket",
+      "owner": "rpc-operations",
+      "status": "defined-not-implemented",
+      "artifactPath": null,
+      "activated": false,
+      "datasource": "local-prometheus-target",
+      "panels": [
+        "request-rate",
+        "latency",
+        "result-classes",
+        "rejections",
+        "connections-and-websockets"
+      ]
+    },
+    {
+      "id": "role-resources-and-storage",
+      "owner": "storage-operations",
+      "status": "defined-not-implemented",
+      "artifactPath": null,
+      "activated": false,
+      "datasource": "local-prometheus-target",
+      "panels": [
+        "cpu-and-rss",
+        "disk-used-free-growth",
+        "iops-and-latency",
+        "network-io",
+        "open-files"
+      ]
+    },
+    {
+      "id": "archive-and-explorer",
+      "owner": "explorer-operations",
+      "status": "defined-not-implemented",
+      "artifactPath": null,
+      "activated": false,
+      "datasource": "local-prometheus-target",
+      "panels": [
+        "gateway-allow-deny",
+        "archive-upstream-health",
+        "index-lag",
+        "canonical-reconciliation",
+        "database-growth-and-queue"
+      ]
+    }
+  ],
+  "tracing": {
+    "distributedTracing": {
+      "enabled": false,
+      "provider": null,
+      "collectorEndpoint": null,
+      "contextPropagationEnabled": false,
+      "samplingPolicy": null,
+      "status": "explicitly-disabled-v0-no-runtime-claim"
+    },
+    "evmDebugTracing": {
+      "enabledOnAnyRole": false,
+      "requiredMethods": [],
+      "provenButDisabledMethods": [
+        "debug_traceTransaction",
+        "debug_traceCall",
+        "debug_traceBlockByNumber",
+        "debug_traceBlockByHash"
+      ],
+      "status": "proven-upstream-poc-but-not-enabled-v0"
+    },
+    "profiling": {
+      "pprofEnabledOnAnyRole": false,
+      "evmProfilingEnabled": false,
+      "readinessDependency": false,
+      "status": "disabled"
+    }
+  },
+  "holds": [
+    {
+      "id": "five-role-runtime-inactive",
+      "scope": "topology",
+      "state": "HOLD",
+      "ownerIssue": 115,
+      "evidenceIssues": [
+        113,
+        114
+      ],
+      "requirement": "The validator, sentry, query, public RPC, archive, and policy-gateway target topology is not instantiated or effectively proven."
+    },
+    {
+      "id": "collector-and-target-pins-missing",
+      "scope": "artifacts",
+      "state": "PARTIAL",
+      "ownerIssue": 115,
+      "evidenceIssues": [
+        113,
+        114
+      ],
+      "requirement": "Prometheus v3.1.0 is digest-pinned in chain/observability/compose.observability.yaml with exact scrape paths; exporters for the remaining roles (node/process resource, archive gateway, explorer indexer) are still unselected."
+    },
+    {
+      "id": "effective-scrape-conformance-missing",
+      "scope": "metrics",
+      "state": "PARTIAL",
+      "ownerIssue": 115,
+      "evidenceIssues": [
+        113,
+        114
+      ],
+      "requirement": "chain/observability/run-scrape-evidence-v0.sh proves collector-only loopback reachability, exact metric names, bounded labels, and successful scrapes for the controller, collector self-observation, CometBFT validator consensus, and EVM JSON-RPC metrics targets (2026-07-29). Gateway and explorer targets stay unproven until their sources are enabled."
+    },
+    {
+      "id": "metric-cardinality-and-slo-unmeasured",
+      "scope": "capacity",
+      "state": "HOLD",
+      "ownerIssue": 118,
+      "evidenceIssues": [
+        115
+      ],
+      "requirement": "Issue #118 must measure series cardinality, retention cost, capacity envelopes, and numeric SLO or alert thresholds."
+    },
+    {
+      "id": "logging-redaction-and-rotation-unproven",
+      "scope": "logging",
+      "state": "HOLD",
+      "ownerIssue": 115,
+      "evidenceIssues": [],
+      "requirement": "Prove configured container rotation, define raw-log rotation and retention, and prove structured logs and support bundles contain no prohibited secret or private topology fields."
+    },
+    {
+      "id": "alert-rules-and-delivery-unproven",
+      "scope": "alerting",
+      "state": "PARTIAL",
+      "ownerIssue": 115,
+      "evidenceIssues": [],
+      "requirement": "Executable alert rules exist in chain/observability/prometheus/alert-rules.yml and TelemetryTargetDown was proven to fire, track a target going down, and recover (2026-07-29). Deduplication, routing, and external delivery remain unproven and stay outside local v0."
+    },
+    {
+      "id": "failure-drills-unproven",
+      "scope": "resilience",
+      "state": "HOLD",
+      "ownerIssue": 119,
+      "evidenceIssues": [
+        115
+      ],
+      "requirement": "Issue #119 must exercise node loss, quorum loss, partitions, peer isolation, disk pressure, RPC overload, metrics loss, and dependency recovery."
+    },
+    {
+      "id": "archive-and-explorer-observability-inactive",
+      "scope": "archive-explorer",
+      "state": "HOLD",
+      "ownerIssue": 115,
+      "evidenceIssues": [
+        113,
+        114
+      ],
+      "requirement": "Activate and reconcile the #114 gateway and #113 explorer stack before claiming gateway policy, archive history, index lag, or rebuild telemetry."
+    },
+    {
+      "id": "distributed-tracing-not-selected",
+      "scope": "tracing",
+      "state": "HOLD-if-enabled",
+      "ownerIssue": 115,
+      "evidenceIssues": [],
+      "requirement": "Select a pinned provider, bounded sampling policy, propagation boundary, redaction policy, and storage retention before enabling distributed tracing."
+    },
+    {
+      "id": "public-observability-deferred",
+      "scope": "public-production",
+      "state": "HOLD",
+      "ownerIssue": 115,
+      "evidenceIssues": [
+        127
+      ],
+      "requirement": "Public ingress, authentication, encryption, high availability, durable retention, and external notification routing remain outside local v0."
+    }
+  ]
+}

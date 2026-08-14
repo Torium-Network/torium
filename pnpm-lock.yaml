@@ -72,7 +72,7 @@ importers:
   examples/torium:
     dependencies:
       '@torium-network/sdk':
-        specifier: workspace:0.1.0
+        specifier: workspace:0.1.1
         version: link:../../packages/torium-sdk
       viem:
         specifier: 2.55.2

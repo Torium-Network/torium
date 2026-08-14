@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "generatorVersion": 1,
   "package": "@torium-network/sdk",
-  "packageVersion": "0.1.0",
-  "source": "packages/torium-sdk/api/0.1.0.api.md",
+  "packageVersion": "0.1.1",
+  "source": "packages/torium-sdk/api/0.1.1.api.md",
   "packageDataExport": "./package.json",
   "subpaths": [
     {
       "subpath": ".",
-      "declarationSha256": "b94d60880294330138885af5bd38344d56d50fdd219bc88733da9285e4c38edc",
+      "declarationSha256": "3446efd388c0cbb4ec6f958b7c00d66633b601612a3b255de644387f8ff3191f",
       "runtimeExports": [
         "toriumSdkPolicyVersion",
         "toriumSdkVersion"
@@ -88,7 +88,7 @@
     },
     {
       "subpath": "./errors",
-      "declarationSha256": "f65850cc031741648d25cdb509304f534326f46508f1a315daf36bb05c9835e3",
+      "declarationSha256": "ae52113ad6c43e8fcfa70c5667270251ca571c0c1fd799565f8590e3361bf595",
       "runtimeExports": [
         "ToriumEndpointValidationError",
         "ToriumSdkError",
@@ -104,7 +104,7 @@
     },
     {
       "subpath": "./utils",
-      "declarationSha256": "7710d35c1787e280a8e26f2e5c12a1807f604f34c8473262d69597a0318479ad",
+      "declarationSha256": "5b54bbecebbcfc0ce33428fe7977977ef17b65e63f6fe302918772d141a67cc2",
       "runtimeExports": [
         "assertToriumChainId",
         "assertToriumUint256",

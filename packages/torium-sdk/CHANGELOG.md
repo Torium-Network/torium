@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1 — 2026-08-14
+
+Re-release of 0.1.0 from the public repository with a provenance attestation
+that references the published source history. No functional changes.
+
 ## 0.1.0 — 2026-08-14
 
 - Added the private package foundation, dual ESM/CommonJS output, declarations,

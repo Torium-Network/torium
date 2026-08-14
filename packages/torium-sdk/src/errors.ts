@@ -280,7 +280,7 @@ export interface ToriumReadRetryOptions {
 
 export interface ToriumDiagnosticEvent {
   readonly schemaVersion: 1;
-  readonly sdkVersion: "0.1.0";
+  readonly sdkVersion: "0.1.1";
   readonly policyVersion: "0.1.0";
   readonly phase: "start" | "retry" | "success" | "failure";
   readonly clientKind: ToriumClientKind;

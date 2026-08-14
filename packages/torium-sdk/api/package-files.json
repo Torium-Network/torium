@@ -1,12 +1,12 @@
 {
   "schemaVersion": 2,
   "package": "@torium-network/sdk",
-  "packageVersion": "0.1.0",
+  "packageVersion": "0.1.1",
   "files": [
     {
       "path": "CHANGELOG.md",
-      "bytes": 2120,
-      "sha256": "da7c9d0e852462fed7f243a4d7529f9783f6145e71688e3d379bb08e4d45a588"
+      "bytes": 2292,
+      "sha256": "ddd2cfe91f0744d7b97a947b6ce6ac930d78973a2513aceb797d6b3d68331292"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -51,7 +51,7 @@
     {
       "path": "dist/cjs/errors.js.map",
       "bytes": 34488,
-      "sha256": "2354373159dd08ddb53c8a41817df28cb65449c18a6eb97b1e6246689cd0a2c5"
+      "sha256": "82570586fd362b341ac7bfd1461f1aa98e90c371282094c262dc8592228f4ffa"
     },
     {
       "path": "dist/cjs/experimental.js",
@@ -96,22 +96,22 @@
     {
       "path": "dist/cjs/index.js",
       "bytes": 400,
-      "sha256": "8e90c7542123e8034b497d0b519d01855858aed3c5a7920c9b3f9b6de84401d8"
+      "sha256": "f93383208e606b1011453b3b530f909d92e3f6d2e9422424e712b010a3e44710"
     },
     {
       "path": "dist/cjs/index.js.map",
       "bytes": 482,
-      "sha256": "cd03036032c8568a2a835942e59c9f76742f1b8f216c7b8223d9a9e82e254a2c"
+      "sha256": "a6ac55fae8c969ceaf38714322e65238477d378d26fe3c179e0556a082c3d62f"
     },
     {
       "path": "dist/cjs/internal/execution.js",
       "bytes": 12290,
-      "sha256": "2877d97695cde6766ec80ed576c5b3462c9f9dec1b5ba0bf83c65ee2751e9d37"
+      "sha256": "4656787ac95975465a3df2879538331d5893ad031b8b488a930eee46c373bd05"
     },
     {
       "path": "dist/cjs/internal/execution.js.map",
       "bytes": 24666,
-      "sha256": "3cbc0e4c4048634381c0605ad5d728a6da908e0129295c242461118562e24d17"
+      "sha256": "c7b5ef79441940c4b5e15ae14defb25ed5c33f000d244eedd766fc952dd89fa2"
     },
     {
       "path": "dist/cjs/package.json",
@@ -121,12 +121,12 @@
     {
       "path": "dist/cjs/utils.js",
       "bytes": 14343,
-      "sha256": "c19133cf68373170f64e6b862e1e50b341e7cc1c27e98a84a2953b404059b854"
+      "sha256": "bc7e372b7bef8fdcad7623247a9b59e60878a676b1bc70cac832aafe587abcb5"
     },
     {
       "path": "dist/cjs/utils.js.map",
       "bytes": 26022,
-      "sha256": "185297a30e03ab681331e7493f6f40f9696cd79296dc748492cd694ef866dfea"
+      "sha256": "857cacd076ded551658d856aa293bebdcedaec6d0e48239704157b538f96b28e"
     },
     {
       "path": "dist/cjs/wallet.js",
@@ -176,7 +176,7 @@
     {
       "path": "dist/esm/errors.js.map",
       "bytes": 34462,
-      "sha256": "478d2b4c9d3f7f4d56d34f31fa6ecd0d5b816b4a12d887e3870ae3c51f9cf067"
+      "sha256": "90b85c4ad825cb3a9ca65ae39597cdb3fdab92538c6c40e97e00360d5e71e9f4"
     },
     {
       "path": "dist/esm/experimental.js",
@@ -221,32 +221,32 @@
     {
       "path": "dist/esm/index.js",
       "bytes": 265,
-      "sha256": "597a982df9a485850ac1877bf8e9eadd0d3981b8f0efdedcb10d5ad93d83ea26"
+      "sha256": "39760fe1092b42026e09d5987d3747ded71a05e596795c47afec5056ce470863"
     },
     {
       "path": "dist/esm/index.js.map",
       "bytes": 499,
-      "sha256": "a8f1a7b868d732f248c724160be8ce8097be9cbdbb976d8509ca5ea84f90f054"
+      "sha256": "448d1922a045137e9161dcf35311cfa916b11aa8db6793600c717669522d3dd5"
     },
     {
       "path": "dist/esm/internal/execution.js",
       "bytes": 12022,
-      "sha256": "942ebf2687578fdb3c0ab99c910f737a3a46271109f8e06a3611aeda50085ab8"
+      "sha256": "7af0ca86e16627e8ffa0eb381ae09a9b627e458ca646d2386d084032bcd6c73b"
     },
     {
       "path": "dist/esm/internal/execution.js.map",
       "bytes": 24684,
-      "sha256": "48f858c17d376a1d6e5a090897f605b884ee5bea228d33946584f0e78965c901"
+      "sha256": "f26610212d14c40e70c3ccd8d82a88d59443e46ef31b299d1dfcf7193bfaaf78"
     },
     {
       "path": "dist/esm/utils.js",
       "bytes": 12973,
-      "sha256": "7a0a592ab06570a200246ee378be398dbe0045ceb06a2a399fde4abe2675e426"
+      "sha256": "0ced16d967931ccbf1b530b0821eac4035eaa250e38e922a4bc13184d5abcdee"
     },
     {
       "path": "dist/esm/utils.js.map",
       "bytes": 25966,
-      "sha256": "dae2ea1beeabd5669f6854e18b6dc503e747832f90548bb95224493f2ee5cc0b"
+      "sha256": "a0f818cef1a89fd10bf12aded2a84b4f5369c4526e10c912db9087e7a077e820"
     },
     {
       "path": "dist/esm/wallet.js",
@@ -306,17 +306,17 @@
     {
       "path": "dist/types/errors.d.cts",
       "bytes": 5641,
-      "sha256": "f65850cc031741648d25cdb509304f534326f46508f1a315daf36bb05c9835e3"
+      "sha256": "ae52113ad6c43e8fcfa70c5667270251ca571c0c1fd799565f8590e3361bf595"
     },
     {
       "path": "dist/types/errors.d.mts",
       "bytes": 5641,
-      "sha256": "f65850cc031741648d25cdb509304f534326f46508f1a315daf36bb05c9835e3"
+      "sha256": "ae52113ad6c43e8fcfa70c5667270251ca571c0c1fd799565f8590e3361bf595"
     },
     {
       "path": "dist/types/errors.d.ts",
       "bytes": 5641,
-      "sha256": "f65850cc031741648d25cdb509304f534326f46508f1a315daf36bb05c9835e3"
+      "sha256": "ae52113ad6c43e8fcfa70c5667270251ca571c0c1fd799565f8590e3361bf595"
     },
     {
       "path": "dist/types/experimental.d.cts",
@@ -351,17 +351,17 @@
     {
       "path": "dist/types/index.d.cts",
       "bytes": 246,
-      "sha256": "b94d60880294330138885af5bd38344d56d50fdd219bc88733da9285e4c38edc"
+      "sha256": "3446efd388c0cbb4ec6f958b7c00d66633b601612a3b255de644387f8ff3191f"
     },
     {
       "path": "dist/types/index.d.mts",
       "bytes": 246,
-      "sha256": "b94d60880294330138885af5bd38344d56d50fdd219bc88733da9285e4c38edc"
+      "sha256": "3446efd388c0cbb4ec6f958b7c00d66633b601612a3b255de644387f8ff3191f"
     },
     {
       "path": "dist/types/index.d.ts",
       "bytes": 246,
-      "sha256": "b94d60880294330138885af5bd38344d56d50fdd219bc88733da9285e4c38edc"
+      "sha256": "3446efd388c0cbb4ec6f958b7c00d66633b601612a3b255de644387f8ff3191f"
     },
     {
       "path": "dist/types/internal/execution.d.ts",
@@ -371,17 +371,17 @@
     {
       "path": "dist/types/utils.d.cts",
       "bytes": 5707,
-      "sha256": "7710d35c1787e280a8e26f2e5c12a1807f604f34c8473262d69597a0318479ad"
+      "sha256": "5b54bbecebbcfc0ce33428fe7977977ef17b65e63f6fe302918772d141a67cc2"
     },
     {
       "path": "dist/types/utils.d.mts",
       "bytes": 5707,
-      "sha256": "7710d35c1787e280a8e26f2e5c12a1807f604f34c8473262d69597a0318479ad"
+      "sha256": "5b54bbecebbcfc0ce33428fe7977977ef17b65e63f6fe302918772d141a67cc2"
     },
     {
       "path": "dist/types/utils.d.ts",
       "bytes": 5707,
-      "sha256": "7710d35c1787e280a8e26f2e5c12a1807f604f34c8473262d69597a0318479ad"
+      "sha256": "5b54bbecebbcfc0ce33428fe7977977ef17b65e63f6fe302918772d141a67cc2"
     },
     {
       "path": "dist/types/wallet.d.cts",
@@ -406,7 +406,7 @@
     {
       "path": "package.json",
       "bytes": 4306,
-      "sha256": "d5ba6d4006f4142d5f00d62d904e09001b4b90b9f3a5576875e21bd80099c65d"
+      "sha256": "0854b83d0b0112d91dee58d5c1788bb634818dea0e4d324d99d1557e1c52a4e4"
     },
     {
       "path": "README.md",

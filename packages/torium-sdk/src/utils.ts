@@ -232,7 +232,7 @@ export type ToriumBlockReference = bigint | Hash | ToriumBlockTag;
 
 /**
  * Validates block-reference syntax only. Runtime support remains capability-dependent:
- * Torium `safe` state is unsupported and `pending` state is partial in SDK 0.1.0.
+ * Torium `safe` state is unsupported and `pending` state is partial in SDK 0.1.x.
  */
 export function normalizeToriumBlockReference(
   value: bigint | string

@@ -1,4 +1,4 @@
-# Public API report: @torium-network/sdk@0.1.0
+# Public API report: @torium-network/sdk@0.1.1
 
 Policy version: `0.1.0`
 
@@ -8,12 +8,12 @@ This file is generated and byte-compared during package validation. Review decla
 
 - Import types: `./dist/types/index.d.mts`
 - Require types: `./dist/types/index.d.cts`
-- Declaration SHA-256: `b94d60880294330138885af5bd38344d56d50fdd219bc88733da9285e4c38edc`
+- Declaration SHA-256: `3446efd388c0cbb4ec6f958b7c00d66633b601612a3b255de644387f8ff3191f`
 - Runtime exports: `toriumSdkPolicyVersion`, `toriumSdkVersion`
 
 ```ts
 /** Package version for diagnostics and compatibility reports. */
-export declare const toriumSdkVersion: "0.1.0";
+export declare const toriumSdkVersion: "0.1.1";
 /** Machine-readable architecture policy implemented by this package line. */
 export declare const toriumSdkPolicyVersion: "0.1.0";
 ```
@@ -2878,7 +2878,7 @@ export declare function prepareToriumAttestationRevocation(parameters: PrepareTo
 
 - Import types: `./dist/types/errors.d.mts`
 - Require types: `./dist/types/errors.d.cts`
-- Declaration SHA-256: `f65850cc031741648d25cdb509304f534326f46508f1a315daf36bb05c9835e3`
+- Declaration SHA-256: `ae52113ad6c43e8fcfa70c5667270251ca571c0c1fd799565f8590e3361bf595`
 - Runtime exports: `ToriumEndpointValidationError`, `ToriumSdkError`, `isToriumSdkError`, `normalizeToriumError`, `toriumErrorCategories`
 
 ```ts
@@ -2969,7 +2969,7 @@ export interface ToriumReadRetryOptions {
 }
 export interface ToriumDiagnosticEvent {
     readonly schemaVersion: 1;
-    readonly sdkVersion: "0.1.0";
+    readonly sdkVersion: "0.1.1";
     readonly policyVersion: "0.1.0";
     readonly phase: "start" | "retry" | "success" | "failure";
     readonly clientKind: ToriumClientKind;
@@ -3015,7 +3015,7 @@ export {};
 
 - Import types: `./dist/types/utils.d.mts`
 - Require types: `./dist/types/utils.d.cts`
-- Declaration SHA-256: `7710d35c1787e280a8e26f2e5c12a1807f604f34c8473262d69597a0318479ad`
+- Declaration SHA-256: `5b54bbecebbcfc0ce33428fe7977977ef17b65e63f6fe302918772d141a67cc2`
 - Runtime exports: `assertToriumChainId`, `assertToriumUint256`, `atoriumPerDisplayUnit`, `formatToriumAmount`, `formatToriumBaseUnits`, `getToriumChainById`, `getToriumNativeCurrency`, `isToriumAccountAddress`, `isToriumChainId`, `isToriumEvmAddress`, `isToriumHash`, `isToriumHexData`, `normalizeToriumBlockReference`, `normalizeToriumEvmAddress`, `normalizeToriumHash`, `normalizeToriumHexData`, `parseToriumAmount`, `parseToriumBaseUnits`, `parseToriumJson`, `stringifyToriumJson`, `toriumBaseDenom`, `toriumBech32AddressToEvm`, `toriumEvmAddressToBech32`, `toriumMaxUint256`, `toriumNativeCurrencies`, `toriumNativeDecimals`
 
 ```ts
@@ -3108,7 +3108,7 @@ export type ToriumBlockTag = "earliest" | "latest" | "pending" | "safe" | "final
 export type ToriumBlockReference = bigint | Hash | ToriumBlockTag;
 /**
  * Validates block-reference syntax only. Runtime support remains capability-dependent:
- * Torium `safe` state is unsupported and `pending` state is partial in SDK 0.1.0.
+ * Torium `safe` state is unsupported and `pending` state is partial in SDK 0.1.x.
  */
 export declare function normalizeToriumBlockReference(value: bigint | string): ToriumBlockReference;
 /**

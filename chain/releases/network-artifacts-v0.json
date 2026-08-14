@@ -57,8 +57,8 @@
     },
     "sdk": {
       "path": "packages/torium-sdk/package.json",
-      "version": "0.1.0",
-      "sha256": "d5ba6d4006f4142d5f00d62d904e09001b4b90b9f3a5576875e21bd80099c65d"
+      "version": "0.1.1",
+      "sha256": "0854b83d0b0112d91dee58d5c1788bb634818dea0e4d324d99d1557e1c52a4e4"
     },
     "contracts": {
       "path": "contracts/deployments/localnet.json",
@@ -312,7 +312,7 @@
     "minimumNodeVersionStatus": "HOLD-not-ratified",
     "protocolVersion": "1.0.0-local.5",
     "sdk": {
-      "version": "0.1.0",
+      "version": "0.1.1",
       "status": "local-package-not-published"
     },
     "contracts": {

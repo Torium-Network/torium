@@ -18,7 +18,7 @@ test("ESM and CommonJS expose the same stable root", () => {
     "toriumSdkVersion",
   ]);
   assert.deepEqual(Object.keys(cjs).sort(), Object.keys(esm).sort());
-  assert.equal(esm.toriumSdkVersion, "0.1.0");
+  assert.equal(esm.toriumSdkVersion, "0.1.1");
   assert.equal(cjs.toriumSdkPolicyVersion, "0.1.0");
 });
 

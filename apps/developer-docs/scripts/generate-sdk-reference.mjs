@@ -18,9 +18,9 @@ const pagePath = path.join(appRoot, "content/docs/v0/sdk/api-reference.mdx");
 const check = process.argv.includes("--check");
 
 const packageJson = JSON.parse(await readFile(packageJsonPath, "utf8"));
-if (packageJson.version !== "0.1.0") {
+if (packageJson.version !== "0.1.1") {
   throw new Error(
-    `Docs v0 is pinned to SDK 0.1.0, received ${packageJson.version}; create or update the version tuple before generating`
+    `Docs v0 is pinned to SDK 0.1.1, received ${packageJson.version}; create or update the version tuple before generating`
   );
 }
 const reportRelative = `packages/torium-sdk/api/${packageJson.version}.api.md`;

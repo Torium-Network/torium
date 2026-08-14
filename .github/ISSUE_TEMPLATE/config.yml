@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/Torium-Network/torium/security/advisories/new
+    about: Report vulnerabilities privately — never in a public issue.
+  - name: Developer documentation
+    url: https://torium.network/docs
+    about: Guides for the testnet, SDK, and EVM tooling.

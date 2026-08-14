@@ -1,0 +1,53 @@
+name: Bug report
+description: Report a problem with the chain, SDK, contracts, or docs
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - SDK (@torium-network/sdk)
+        - Chain / node (toriumd)
+        - Testnet (torium-testnet-1)
+        - Contracts
+        - Examples
+        - Developer docs
+        - CI / tooling
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug, with the exact error output if there is one.
+      placeholder: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps or a code snippet that reproduces the problem.
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: SDK version, chain ID, or commit hash.
+      placeholder: "@torium-network/sdk@0.1.1, torium-testnet-1, ..."
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Node.js version, package manager, wallet/tooling if relevant.
+      placeholder: "macOS 15, Node 22.23.1, pnpm 10, viem 2.55.2"
+  - type: checkboxes
+    id: security
+    attributes:
+      label: Security check
+      options:
+        - label: This report contains no private keys, mnemonics, or other secrets, and it is not a security vulnerability (those go to the private security advisory form).
+          required: true

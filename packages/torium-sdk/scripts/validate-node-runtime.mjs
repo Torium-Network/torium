@@ -20,8 +20,8 @@ const require = createRequire(import.meta.url);
 const cjs = require("../dist/cjs/index.js");
 const cjsChains = require("../dist/cjs/chains.js");
 
-assert.equal(esm.toriumSdkVersion, "0.1.0");
-assert.equal(cjs.toriumSdkVersion, "0.1.0");
+assert.equal(esm.toriumSdkVersion, "0.1.1");
+assert.equal(cjs.toriumSdkVersion, "0.1.1");
 assert.equal(esmChains.toriumLocalnet.id, 1414484556);
 assert.equal(cjsChains.toriumLocalnet.id, 1414484556);
 console.log(

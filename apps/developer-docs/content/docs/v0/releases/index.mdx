@@ -13,6 +13,15 @@ Documentation versions pin a compatible chain manifest, SDK release and contract
 current v0 tuple targets the public Torium Testnet. A new tuple requires a new manifest entry and
 explicit migration notes; `/docs/latest` is never a canonical link target.
 
+## Network history
+
+| Date | Event | Genesis SHA-256 |
+| --- | --- | --- |
+| 2026-08-18 | `torium-testnet-1` genesis — public testnet launch | `2d1c52e544f9e611d2d8817d7971eec6580f6dd12ce63131794287c8c91e93be` |
+
+Verify a genesis file you were handed against the hash above before trusting it:
+`sha256sum genesis.json`.
+
 ## Testnet resets
 
 The testnet may be halted, rolled back to a recent snapshot, or fully reset with a new genesis.

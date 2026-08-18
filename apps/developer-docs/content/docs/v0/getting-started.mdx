@@ -22,8 +22,9 @@ rolled back to a recent snapshot, or fully reset with a new genesis; resets are 
 | Faucet | `https://faucet.testnet.torium.network` |
 | Explorer | `https://explorer.testnet.torium.network` |
 
-Endpoints are rate-limited. For sustained or bursty workloads, run your own node against the
-public P2P layer instead of hammering the shared RPC.
+Endpoints are rate-limited and shared; keep request patterns conservative. Public P2P peering
+is not open yet, so running your own testnet node is not possible at this stage — if your
+workload outgrows the shared RPC, develop against the [localnet](/v0/localnet) instead.
 
 ## First call
 

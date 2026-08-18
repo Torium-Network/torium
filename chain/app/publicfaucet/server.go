@@ -33,6 +33,10 @@ type Service struct {
 	metrics  *Metrics
 	logger   *slog.Logger
 	now      func() time.Time
+	// trustedProxies lists the reverse-proxy source ranges whose
+	// X-Forwarded-For header identifies the real client. Empty means the
+	// direct peer address is the client (the default, fail-closed posture).
+	trustedProxies []netip.Prefix
 }
 
 // NewService wires one service instance from prepared components.
@@ -52,6 +56,34 @@ func NewService(profile Profile, store *Store, breakers *Breakers, worker *Worke
 		logger:   logger,
 		now:      time.Now,
 	}
+}
+
+// SetTrustedProxies configures the reverse-proxy ranges allowed to assert
+// the client address via X-Forwarded-For. Call before serving traffic.
+func (service *Service) SetTrustedProxies(prefixes []netip.Prefix) {
+	service.trustedProxies = append([]netip.Prefix(nil), prefixes...)
+}
+
+// ParseTrustedProxies parses a comma-separated list of CIDR ranges (a bare
+// IP is accepted as a single-address range).
+func ParseTrustedProxies(list string) ([]netip.Prefix, error) {
+	var prefixes []netip.Prefix
+	for _, entry := range strings.Split(list, ",") {
+		entry = strings.TrimSpace(entry)
+		if entry == "" {
+			continue
+		}
+		if prefix, err := netip.ParsePrefix(entry); err == nil {
+			prefixes = append(prefixes, prefix.Masked())
+			continue
+		}
+		address, err := netip.ParseAddr(entry)
+		if err != nil {
+			return nil, fmt.Errorf("trusted proxy %q is neither a CIDR nor an IP address", entry)
+		}
+		prefixes = append(prefixes, netip.PrefixFrom(address, address.BitLen()))
+	}
+	return prefixes, nil
 }
 
 // PublicHandler serves the internet-facing API surface.
@@ -126,7 +158,7 @@ func (service *Service) handleFund(writer http.ResponseWriter, request *http.Req
 		service.deny(writer, http.StatusBadRequest, err.Error())
 		return
 	}
-	source, err := clientAddress(request)
+	source, err := service.clientAddress(request)
 	if err != nil {
 		service.deny(writer, http.StatusBadRequest, "client address is unreadable")
 		return
@@ -509,15 +541,43 @@ func validateIdempotencyKey(key string) error {
 	return nil
 }
 
-func clientAddress(request *http.Request) (netip.Addr, error) {
-	// Only the direct peer address is trusted. Forwarded-For handling is a
-	// deployment concern that #127 must configure with the edge provider.
-	hostPort := request.RemoteAddr
-	addrPort, err := netip.ParseAddrPort(hostPort)
+func (service *Service) clientAddress(request *http.Request) (netip.Addr, error) {
+	addrPort, err := netip.ParseAddrPort(request.RemoteAddr)
 	if err != nil {
 		return netip.Addr{}, err
 	}
-	return addrPort.Addr(), nil
+	peer := addrPort.Addr().Unmap()
+	trusted := false
+	for _, prefix := range service.trustedProxies {
+		if prefix.Contains(peer) {
+			trusted = true
+			break
+		}
+	}
+	if !trusted {
+		// Only the direct peer address is trusted by default; a client
+		// cannot spoof it and any X-Forwarded-For it sends is ignored.
+		return peer, nil
+	}
+	// The peer is one of the operator-declared reverse proxies. The proxy
+	// APPENDS the address it observed, so the RIGHTMOST X-Forwarded-For
+	// entry is proxy-written and client-forgery-proof; earlier entries are
+	// untrusted client input and are ignored. A trusted proxy that sends no
+	// header is a misconfiguration and fails closed.
+	header := request.Header.Get("X-Forwarded-For")
+	entries := strings.Split(header, ",")
+	last := strings.TrimSpace(entries[len(entries)-1])
+	if last == "" {
+		return netip.Addr{}, fmt.Errorf("trusted proxy %s sent no X-Forwarded-For entry", peer)
+	}
+	if address, err := netip.ParseAddr(last); err == nil {
+		return address.Unmap(), nil
+	}
+	forwarded, err := netip.ParseAddrPort(last)
+	if err != nil {
+		return netip.Addr{}, fmt.Errorf("trusted proxy %s sent an unparseable client address", peer)
+	}
+	return forwarded.Addr().Unmap(), nil
 }
 
 func newRequestID() (string, error) {

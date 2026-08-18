@@ -72,6 +72,7 @@ func run(args []string) error {
 	adminListenAddress := flags.String("admin-listen-address", "127.0.0.1:8091", "operator API listen address")
 	rpcURL := flags.String("rpc-url", "http://127.0.0.1:8545", "EVM JSON-RPC endpoint")
 	allowContainerBind := flags.Bool("allow-container-bind", false, "allow 0.0.0.0 binds inside the isolated localnet Compose network")
+	trustedProxyCIDRs := flags.String("trusted-proxy-cidrs", "", "comma-separated CIDRs of reverse proxies whose rightmost X-Forwarded-For entry identifies the client; empty trusts only the direct peer")
 	if err := flags.Parse(args); err != nil {
 		return err
 	}
@@ -146,6 +147,13 @@ func run(args []string) error {
 	metrics := publicfaucet.NewMetrics()
 	worker := publicfaucet.NewWorker(backend, store, breakers, signer, profile, metrics, logger)
 	service := publicfaucet.NewService(profile, store, breakers, worker, publicfaucet.NewRateLimiter(profile, nil), verifier, signer, metrics, logger)
+	if *trustedProxyCIDRs != "" {
+		trustedProxies, err := publicfaucet.ParseTrustedProxies(*trustedProxyCIDRs)
+		if err != nil {
+			return err
+		}
+		service.SetTrustedProxies(trustedProxies)
+	}
 
 	runContext, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()

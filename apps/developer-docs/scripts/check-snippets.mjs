@@ -26,9 +26,16 @@ const repositoryRoot = path.resolve(appRoot, "../..");
 const docsRoot = path.join(appRoot, "content/docs");
 const ts = createRequire(path.join(appRoot, "package.json"))("typescript");
 
+const versionManifest = JSON.parse(
+  await readFile(path.join(appRoot, "content/versions.json"), "utf8")
+);
+const currentDocsVersion = versionManifest.versions.find(
+  ({ id }) => id === versionManifest.current
+);
+const sdkVersion = currentDocsVersion.compatibility.sdk.version;
 const manifest = JSON.parse(
   await readFile(
-    path.join(appRoot, "content/generated/sdk-0.1.0.manifest.json"),
+    path.join(appRoot, `content/generated/sdk-${sdkVersion}.manifest.json`),
     "utf8"
   )
 );
@@ -48,7 +55,9 @@ for (const file of await walk(docsRoot)) {
   stats.files += 1;
 
   for (const match of contents.matchAll(/(?<!\w)[Tt]oryum/g)) {
-    problems.push(`${relative}: misspelled brand near "${context(contents, match.index)}"`);
+    problems.push(
+      `${relative}: misspelled brand near "${context(contents, match.index)}"`
+    );
   }
 
   if (/^sourceStatus:\s*generated$/m.test(contents.slice(0, 400))) continue;

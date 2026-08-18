@@ -16,6 +16,8 @@ const withMDX = createMDX();
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   basePath: "/docs",
+  // Self-hosted deployments package the server output into a container.
+  output: process.env.DOCKER_BUILD === "1" ? "standalone" : undefined,
   reactStrictMode: true,
   outputFileTracingRoot: monorepoRoot,
   turbopack: {

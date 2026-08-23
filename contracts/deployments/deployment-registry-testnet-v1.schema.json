@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://torium.network/schemas/contracts/deployment-registry-testnet-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "environment",
+    "generatedBy",
+    "registryVersion",
+    "releaseStatus",
+    "configPath",
+    "chain",
+    "authority",
+    "entries"
+  ],
+  "properties": {
+    "$schema": { "const": "./deployment-registry-testnet-v1.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "environment": { "const": "testnet" },
+    "generatedBy": { "type": "string", "minLength": 16 },
+    "registryVersion": { "const": "0.1.0" },
+    "releaseStatus": { "const": "deployed-valueless-public-testnet" },
+    "configPath": { "const": "contracts/config/testnet-deployment-v1.json" },
+    "chain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cosmosChainId", "evmChainId", "genesisSha256"],
+      "properties": {
+        "cosmosChainId": { "const": "torium-testnet-1" },
+        "evmChainId": { "const": 1414484564 },
+        "genesisSha256": {
+          "const": "2d1c52e544f9e611d2d8817d7971eec6580f6dd12ce63131794287c8c91e93be"
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["deployerAddress", "provenance", "note"],
+      "properties": {
+        "deployerAddress": { "$ref": "#/$defs/address" },
+        "provenance": { "type": "string", "minLength": 32 },
+        "note": { "type": "string", "minLength": 16 }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 4,
+      "items": { "$ref": "#/$defs/entry" }
+    }
+  },
+  "$defs": {
+    "address": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" },
+    "hash32": { "type": "string", "pattern": "^0x[0-9a-f]{64}$" },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "contractName",
+        "classification",
+        "address",
+        "implementationVersion",
+        "codeIdentity",
+        "deployment",
+        "verification"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 4 },
+        "contractName": { "type": "string", "minLength": 4 },
+        "classification": {
+          "enum": [
+            "protocol-precompile",
+            "post-genesis-create",
+            "post-genesis-deterministic"
+          ]
+        },
+        "address": { "$ref": "#/$defs/address" },
+        "implementationVersion": { "type": "string", "minLength": 3 },
+        "codeIdentity": {
+          "oneOf": [
+            { "const": "protocol-precompile-no-evm-bytecode" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "artifactPath",
+                "creationCodeKeccak256",
+                "runtimeCodeKeccak256"
+              ],
+              "properties": {
+                "artifactPath": {
+                  "type": "string",
+                  "pattern": "^contracts/generated/abi/[A-Za-z0-9]+\\.json$"
+                },
+                "creationCodeKeccak256": { "$ref": "#/$defs/hash32" },
+                "runtimeCodeKeccak256": { "$ref": "#/$defs/hash32" }
+              }
+            }
+          ]
+        },
+        "deployment": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "strategy",
+                "deployerAddress",
+                "deployerNonce",
+                "transactionHash",
+                "blockNumber"
+              ],
+              "properties": {
+                "strategy": { "const": "deployer-create-nonce-0" },
+                "deployerAddress": { "$ref": "#/$defs/address" },
+                "deployerNonce": { "const": "0" },
+                "transactionHash": { "$ref": "#/$defs/hash32" },
+                "blockNumber": { "type": "integer", "minimum": 1 }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "strategy",
+                "factoryAddress",
+                "salt",
+                "saltPreimage",
+                "initCodeHash",
+                "constructorArguments",
+                "transactionHash",
+                "blockNumber"
+              ],
+              "properties": {
+                "strategy": { "const": "factory-create2" },
+                "factoryAddress": { "$ref": "#/$defs/address" },
+                "salt": { "$ref": "#/$defs/hash32" },
+                "saltPreimage": {
+                  "type": "string",
+                  "pattern": "^torium\\.[a-z0-9.-]+\\.v[0-9]+$"
+                },
+                "initCodeHash": { "$ref": "#/$defs/hash32" },
+                "constructorArguments": {
+                  "oneOf": [
+                    { "type": "array", "maxItems": 0 },
+                    {
+                      "type": "object",
+                      "minProperties": 1,
+                      "additionalProperties": {
+                        "oneOf": [
+                          { "type": "integer", "minimum": 1 },
+                          { "$ref": "#/$defs/address" }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "transactionHash": { "$ref": "#/$defs/hash32" },
+                "blockNumber": { "type": "integer", "minimum": 1 }
+              }
+            }
+          ]
+        },
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["role", "assignment", "authority"],
+            "properties": {
+              "role": { "type": "string", "pattern": "^[A-Z_]+$" },
+              "assignment": { "$ref": "#/$defs/address" },
+              "authority": {
+                "enum": ["delayed-admin-transfer", "default-admin-managed"]
+              }
+            }
+          }
+        },
+        "verification": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "genesisStatePath", "observedInGenesis"],
+              "properties": {
+                "kind": { "const": "genesis-registration" },
+                "genesisStatePath": {
+                  "const": "app_state.erc20.native_precompiles"
+                },
+                "observedInGenesis": { "const": true }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "observedOnChain", "explorerUrl"],
+              "properties": {
+                "kind": { "const": "broadcast-and-runtime-code-hash" },
+                "observedOnChain": { "const": true },
+                "explorerUrl": {
+                  "type": "string",
+                  "pattern": "^https://explorer\\.testnet\\.torium\\.network/address/0x[0-9a-fA-F]{40}$"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

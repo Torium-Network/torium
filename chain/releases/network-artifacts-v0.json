@@ -1,7 +1,7 @@
 {
   "$schema": "./network-artifacts-v0.schema.json",
   "schemaVersion": 1,
-  "bundleVersion": "0.2.0-testnet.1",
+  "bundleVersion": "0.2.0-testnet.2",
   "status": "generated-localnet-bundle-and-live-testnet-record",
   "ownerIssue": 123,
   "generatedBy": "node chain/releases/generate-network-artifacts-v0.mjs --write",
@@ -44,6 +44,11 @@
       "path": "chain/genesis/testnet/manifest.json",
       "version": "schema-1",
       "sha256": "4ea80b28b3f70c1ed2f4a4a0cd03b9785fd159bee013897803bc8e43aa347851"
+    },
+    "testnetContracts": {
+      "path": "contracts/deployments/testnet.json",
+      "version": "0.1.0",
+      "sha256": "5f153b67c0ea633b7a58426b9df60176129401aeed020ecb7b14815e747523bc"
     },
     "recovery": {
       "path": "chain/recovery/recovery-v0.json",
@@ -283,6 +288,14 @@
         "iconAsset": "https://faucet.testnet.torium.network/logo.png",
         "iconStatus": "published-faucet-hosted-registry-submissions-pending"
       },
+      "contracts": {
+        "registryPath": "contracts/deployments/testnet.json",
+        "releaseStatus": "deployed-valueless-public-testnet",
+        "toriumNative": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "create2Factory": "0x2334774dFdE49c611C3a270B0F391a7cf581AfF7",
+        "attestationRegistry": "0x17e64A025e33865005B2cC793b093Dc2DB57bdc4",
+        "rewardDistributor": "0x4027605E944b961Bdbba9f97db85F0530B0a6652"
+      },
       "peerDiscovery": {
         "status": "HOLD-unpublished",
         "seeds": [],
@@ -429,7 +442,7 @@
     "Seed, persistent-peer and trusted state-sync values are unpublished for every environment; testnet public P2P peering is closed.",
     "The testnet genesis file is withheld from the repository while P2P peering is closed because its genesis transactions embed validator node IDs; chain/genesis/testnet/manifest.json carries the authoritative sha256.",
     "Chain registry submissions (ethereum-lists/chains, wallet asset registries) are not filed; EVM chain IDs remain collision-checked but unreserved.",
-    "System contracts are not deployed to the public testnet; contracts/deployments records localnet only.",
+    "Testnet system contracts are deployed but unexercised beyond deployment verification; no reward epoch has been published and no third-party integration exists.",
     "Localnet chain-start consumption is rehearsed by chain/releases/rehearse-chain-start-v0.sh (2026-07-29); devnet and mainnet consumption stays unexercised.",
     "Explorer runtime compatibility contracts remain local-conditional while the live testnet explorer runs Blockscout.",
     "Identifier availability must be rechecked immediately before any new environment publication."

@@ -21,7 +21,7 @@
   "properties": {
     "$schema": { "const": "./network-artifacts-v0.schema.json" },
     "schemaVersion": { "const": 1 },
-    "bundleVersion": { "const": "0.2.0-testnet.1" },
+    "bundleVersion": { "const": "0.2.0-testnet.2" },
     "status": { "const": "generated-localnet-bundle-and-live-testnet-record" },
     "ownerIssue": { "const": 123 },
     "generatedBy": {
@@ -310,7 +310,7 @@
     "testnetEnvironment": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["status", "public", "identifiers", "nativeCurrency", "genesis", "endpoints", "wallet", "peerDiscovery", "stateSync", "snapshot"],
+      "required": ["status", "public", "identifiers", "nativeCurrency", "genesis", "endpoints", "wallet", "contracts", "peerDiscovery", "stateSync", "snapshot"],
       "properties": {
         "status": { "const": "active-valueless-public-testnet" },
         "public": { "const": true },
@@ -319,9 +319,30 @@
         "genesis": { "$ref": "#/$defs/testnetGenesis" },
         "endpoints": { "$ref": "#/$defs/testnetEndpoints" },
         "wallet": { "$ref": "#/$defs/testnetWallet" },
+        "contracts": { "$ref": "#/$defs/testnetContracts" },
         "peerDiscovery": { "$ref": "#/$defs/peerDiscovery" },
         "stateSync": { "$ref": "#/$defs/stateSync" },
         "snapshot": { "type": "null" }
+      }
+    },
+    "testnetContracts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registryPath",
+        "releaseStatus",
+        "toriumNative",
+        "create2Factory",
+        "attestationRegistry",
+        "rewardDistributor"
+      ],
+      "properties": {
+        "registryPath": { "const": "contracts/deployments/testnet.json" },
+        "releaseStatus": { "const": "deployed-valueless-public-testnet" },
+        "toriumNative": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" },
+        "create2Factory": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" },
+        "attestationRegistry": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" },
+        "rewardDistributor": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" }
       }
     },
     "reservedEnvironment": {

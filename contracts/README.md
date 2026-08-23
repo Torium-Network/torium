@@ -11,12 +11,12 @@ configuration so a build cannot silently select a different toolchain.
 
 ## Current boundary
 
-| Component                  | Classification                                              | Current status                                                                                                     |
-| -------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Native TOR Solidity facade | Protocol precompile backed by the canonical `x/bank` ledger | Active in the local chain; `IToriumNative` is only its Solidity interface, not deployable Torium bytecode          |
-| `ToriumCreate2Factory`     | Application-level deterministic post-genesis contract       | Source and local tests exist; deployment remains planned                                                           |
-| Reward distributor         | Application-level deterministic post-genesis contract       | Merkle-sum implementation and offline fixtures exist; address, authority assignments and deployment remain planned |
-| Attestation registry       | Application-level deterministic post-genesis contract       | Hash-only implementation, canonical vectors and gas snapshot exist; deployment remains planned                     |
+| Component                  | Classification                                              | Current status                                                                                                                |
+| -------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Native TOR Solidity facade | Protocol precompile backed by the canonical `x/bank` ledger | Active in the local chain and on `torium-testnet-1`; `IToriumNative` is only its Solidity interface, not deployable bytecode  |
+| `ToriumCreate2Factory`     | Application-level deterministic post-genesis contract       | Deployed to the valueless public testnet (`deployments/testnet.json`); the localnet plan remains unbroadcast                  |
+| Reward distributor         | Application-level deterministic post-genesis contract       | Deployed to the valueless public testnet with a single operations authority; no epoch has been published                      |
+| Attestation registry       | Application-level deterministic post-genesis contract       | Deployed to the valueless public testnet; permissionless and self-issued                                                      |
 
 Torium currently has no Torium-authored Solidity contract allocated into
 genesis. The native facade is protocol-owned precompile behavior assembled by
@@ -49,6 +49,15 @@ and any other code or nonce requires a clean localnet reset or a new reviewed
 deployment plan. Public environments must define a separate authority and
 provenance before any broadcast.
 
+The valueless public testnet deployment satisfies that rule with a dedicated
+operator-held authority and the reviewed configuration in
+[`config/testnet-deployment-v1.json`](config/testnet-deployment-v1.json). The
+broadcast record lives in [`deployments/testnet.json`](deployments/testnet.json)
+(validated offline by `scripts/validate-testnet-registry.mjs`), and the
+automation is documented in [`script/README.md`](script/README.md). Testnet
+addresses, roles and delays are valueless-testnet choices, never a template
+for a value-bearing network.
+
 ## Layout
 
 - `src/interfaces/` contains stable Solidity integration interfaces.
@@ -67,8 +76,8 @@ provenance before any broadcast.
 - `config/` classifies protocol and post-genesis components.
 - `deployments/` defines the versioned deployment-registry contract.
 - `generated/` is generator-owned ABI and registry output; never hand-edit it.
-- `script/` is reserved for reviewed post-genesis deployment automation. It
-  must consume caller-provided RPC/signing configuration and must never contain
+- `script/` contains the reviewed post-genesis deployment automation. It
+  consumes caller-provided RPC/signing configuration and must never contain
   keys.
 
 Foundry `out/`, cache, broadcast data and local work directories are disposable

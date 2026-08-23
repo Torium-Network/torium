@@ -1,0 +1,45 @@
+{
+  "configVersion": "1.0.0",
+  "environment": "testnet",
+  "reviewStatus": "reviewed-operator-input-valueless-testnet",
+  "chain": {
+    "cosmosChainId": "torium-testnet-1",
+    "evmChainId": 1414484564,
+    "genesisSha256": "2d1c52e544f9e611d2d8817d7971eec6580f6dd12ce63131794287c8c91e93be"
+  },
+  "authority": {
+    "deployerAddress": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
+    "provenance": "operator-held ethsecp256k1 key created 2026-08-23 in the torium-testnet-1 operations keyring; the private key lives only in the operations secrets store and never enters this repository",
+    "note": "single operations authority for the valueless public testnet; not a production authority model"
+  },
+  "deployments": {
+    "torium-create2-factory": {
+      "strategy": "deployer-create-nonce-0",
+      "constructorArguments": []
+    },
+    "attestation-registry": {
+      "strategy": "factory-create2",
+      "saltPreimage": "torium.attestation-registry.v1",
+      "constructorArguments": []
+    },
+    "reward-distributor": {
+      "strategy": "factory-create2",
+      "saltPreimage": "torium.reward-distributor.v1",
+      "constructorArguments": {
+        "defaultAdminDelay_": 86400,
+        "initialAdmin_": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
+        "initialPublisher_": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
+        "initialPauser_": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
+        "initialClawbackOperator_": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
+        "treasury_": "0x0951cD0095e7Ac0d9C4c44b6Eb7B7337665537Ee",
+        "publicationDelay_": 3600,
+        "clawbackDelay_": 86400
+      },
+      "constructorNotes": {
+        "roles": "admin, publisher, pauser and clawback operator are the single testnet operations authority",
+        "treasury_": "testnet faucet cold reserve account; clawed-back rewards return to the faucet pool",
+        "delays": "testnet-friendly seconds values; a value-bearing network requires a fresh reviewed configuration"
+      }
+    }
+  }
+}

@@ -8,7 +8,7 @@
   },
   "scripts": {
     "lint": "solhint --max-warnings 0 'src/**/*.sol'",
-    "validate:registry": "node scripts/validate-registry.mjs",
+    "validate:registry": "node scripts/validate-registry.mjs && node scripts/validate-testnet-registry.mjs",
     "generate": "node scripts/generate-artifacts.mjs",
     "generate:check": "node scripts/generate-artifacts.mjs --check"
   },

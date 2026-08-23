@@ -9,12 +9,30 @@ sourceOfTruth: apps/developer-docs/content/generated/contracts-localnet-foundati
 sourceStatus: generated
 ---
 
-The v0 workspace can build and test Torium-authored Solidity locally, but it does not represent a
-public contract release or live deployment.
+The v0 workspace builds and tests Torium-authored Solidity locally, and the same pinned artifacts
+are now deployed to the valueless public testnet. The localnet foundation manifest that anchors
+this page still marks `publicDeployment: false`: it describes the local workspace, while the
+testnet deployment has its own reviewed registry record.
 
-This page is anchored to the checked generated foundation manifest. Its active native-precompile
-record and planned factory prediction are regenerated from the canonical contract artifacts; the
-manifest explicitly marks `publicDeployment: false`.
+## Live on the public testnet
+
+The system contracts are deployed on `torium-testnet-1` from the exact pinned bytecode, with
+runtime code hashes enforced on chain at deployment time:
+
+| Contract                    | Address                                      |
+| --------------------------- | -------------------------------------------- |
+| Native TOR facade           | `0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE` |
+| `ToriumCreate2Factory`      | `0x2334774dFdE49c611C3a270B0F391a7cf581AfF7` |
+| `ToriumAttestationRegistry` | `0x17e64A025e33865005B2cC793b093Dc2DB57bdc4` |
+| `ToriumRewardDistributor`   | `0x4027605E944b961Bdbba9f97db85F0530B0a6652` |
+
+Deployment provenance — strategies, salts, init-code hashes, transactions, constructor values and
+role assignments — is recorded in
+[`contracts/deployments/testnet.json`](https://github.com/Torium-Network/torium/blob/main/contracts/deployments/testnet.json)
+and verifiable on the [testnet explorer](https://explorer.testnet.torium.network). The reward
+distributor currently uses a single operator-held authority and testnet-friendly delays; these are
+valueless-testnet choices, not a production authority model, and no reward epoch has been
+published yet. tTOR carries no value.
 
 ## What exists
 
@@ -29,12 +47,12 @@ manifest explicitly marks `publicDeployment: false`.
 - A versioned component decision and deployment-registry schema separate protocol state, planned
   contracts and deployment provenance.
 
-## What remains planned
+## What remains planned locally
 
-The reward distributor authority/deployment, attestation registry deployment and deterministic
-factory deployment are post-genesis plans. Torium v0 contains no Torium-authored Solidity genesis
-predeploy. No public application-contract address, deployment transaction, signer or key is
-published here.
+In the localnet foundation manifest the factory, reward distributor and attestation registry stay
+`planned` with `null` addresses: the local workspace never broadcasts. Torium v0 contains no
+Torium-authored Solidity genesis predeploy, and no signer or key is published anywhere; the
+testnet record above publishes addresses and transactions only.
 
 Generated ABI and registry references are documented in the
 [deployment registry](/v0/contracts/registry) page, the

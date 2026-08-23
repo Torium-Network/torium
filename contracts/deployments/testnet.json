@@ -1,0 +1,144 @@
+{
+  "$schema": "./deployment-registry-testnet-v1.schema.json",
+  "schemaVersion": 1,
+  "environment": "testnet",
+  "generatedBy": "contracts/script/deploy-testnet.mjs broadcast on 2026-08-23, promoted by review",
+  "registryVersion": "0.1.0",
+  "releaseStatus": "deployed-valueless-public-testnet",
+  "configPath": "contracts/config/testnet-deployment-v1.json",
+  "chain": {
+    "cosmosChainId": "torium-testnet-1",
+    "evmChainId": 1414484564,
+    "genesisSha256": "2d1c52e544f9e611d2d8817d7971eec6580f6dd12ce63131794287c8c91e93be"
+  },
+  "authority": {
+    "deployerAddress": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
+    "provenance": "operator-held ethsecp256k1 key created 2026-08-23 in the torium-testnet-1 operations keyring; the private key lives only in the operations secrets store and never enters this repository",
+    "note": "single operations authority for the valueless public testnet; not a production authority model"
+  },
+  "entries": [
+    {
+      "id": "torium-native",
+      "contractName": "IToriumNative",
+      "classification": "protocol-precompile",
+      "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      "implementationVersion": "protocol-v1",
+      "codeIdentity": "protocol-precompile-no-evm-bytecode",
+      "deployment": null,
+      "verification": {
+        "kind": "genesis-registration",
+        "genesisStatePath": "app_state.erc20.native_precompiles",
+        "observedInGenesis": true
+      }
+    },
+    {
+      "id": "torium-create2-factory",
+      "contractName": "ToriumCreate2Factory",
+      "classification": "post-genesis-create",
+      "address": "0x2334774dFdE49c611C3a270B0F391a7cf581AfF7",
+      "implementationVersion": "1.0.0",
+      "codeIdentity": {
+        "artifactPath": "contracts/generated/abi/ToriumCreate2Factory.json",
+        "creationCodeKeccak256": "0xee161de04cad95593df8b92ae29766ea677b84e9a6533a4f523b45e7ede8104d",
+        "runtimeCodeKeccak256": "0x1c8443d4510a3e5ab30fadbca17e932276bf09c93a6c6cbce40081cbf0273e55"
+      },
+      "deployment": {
+        "strategy": "deployer-create-nonce-0",
+        "deployerAddress": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
+        "deployerNonce": "0",
+        "transactionHash": "0xee4deb08bb3f65943beaf46f5a9f3b3e781d20b8a65ee5658783bd8c85a4e196",
+        "blockNumber": 202336
+      },
+      "verification": {
+        "kind": "broadcast-and-runtime-code-hash",
+        "observedOnChain": true,
+        "explorerUrl": "https://explorer.testnet.torium.network/address/0x2334774dFdE49c611C3a270B0F391a7cf581AfF7"
+      }
+    },
+    {
+      "id": "attestation-registry",
+      "contractName": "ToriumAttestationRegistry",
+      "classification": "post-genesis-deterministic",
+      "address": "0x17e64A025e33865005B2cC793b093Dc2DB57bdc4",
+      "implementationVersion": "1.0.0",
+      "codeIdentity": {
+        "artifactPath": "contracts/generated/abi/ToriumAttestationRegistry.json",
+        "creationCodeKeccak256": "0x63764414c6540d9a26f0a83049d8d2bf06a6906334d9454024dfb5f76ef5b8ee",
+        "runtimeCodeKeccak256": "0x5b116d7520ab2a3f5129d62096841e0def2df8d82ad5c9bfb82ec189bca10705"
+      },
+      "deployment": {
+        "strategy": "factory-create2",
+        "factoryAddress": "0x2334774dFdE49c611C3a270B0F391a7cf581AfF7",
+        "salt": "0x5a6ff4e921dc1ca6098dc22652b8da9399b8a69c2ab7f5715dad5ea751128220",
+        "saltPreimage": "torium.attestation-registry.v1",
+        "initCodeHash": "0x63764414c6540d9a26f0a83049d8d2bf06a6906334d9454024dfb5f76ef5b8ee",
+        "constructorArguments": [],
+        "transactionHash": "0xa31c71df63da325b3e08776b706a6ce6351f0734507c721f87462d7f1ed9acab",
+        "blockNumber": 202337
+      },
+      "verification": {
+        "kind": "broadcast-and-runtime-code-hash",
+        "observedOnChain": true,
+        "explorerUrl": "https://explorer.testnet.torium.network/address/0x17e64A025e33865005B2cC793b093Dc2DB57bdc4"
+      }
+    },
+    {
+      "id": "reward-distributor",
+      "contractName": "ToriumRewardDistributor",
+      "classification": "post-genesis-deterministic",
+      "address": "0x4027605E944b961Bdbba9f97db85F0530B0a6652",
+      "implementationVersion": "1.0.0",
+      "codeIdentity": {
+        "artifactPath": "contracts/generated/abi/ToriumRewardDistributor.json",
+        "creationCodeKeccak256": "0x9bbe4570571fd415bf06261d8a7b03df86028bf10643552c9bbf45e8daf2c839",
+        "runtimeCodeKeccak256": "0xb62ef55f634464915f38d47b62b694265eb18c1e91c3b95adc045f0ab805968a"
+      },
+      "deployment": {
+        "strategy": "factory-create2",
+        "factoryAddress": "0x2334774dFdE49c611C3a270B0F391a7cf581AfF7",
+        "salt": "0x586e61b27cc0a9f754c6c41b103502d937ce1081019795a2d7704dc9655a1e03",
+        "saltPreimage": "torium.reward-distributor.v1",
+        "initCodeHash": "0x6fd177f3913af6d1f6374abb8f6b845ea46e430b0dda2b0de52421fd9c8420d6",
+        "constructorArguments": {
+          "defaultAdminDelay_": 86400,
+          "initialAdmin_": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
+          "initialPublisher_": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
+          "initialPauser_": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
+          "initialClawbackOperator_": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
+          "treasury_": "0x0951cD0095e7Ac0d9C4c44b6Eb7B7337665537Ee",
+          "publicationDelay_": 3600,
+          "clawbackDelay_": 86400
+        },
+        "transactionHash": "0xadbbc80f0a28c7a69c85e0b9b3700617948c5c81739aa57098e4b34987188176",
+        "blockNumber": 202338
+      },
+      "roles": [
+        {
+          "role": "DEFAULT_ADMIN_ROLE",
+          "assignment": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
+          "authority": "delayed-admin-transfer"
+        },
+        {
+          "role": "EPOCH_PUBLISHER_ROLE",
+          "assignment": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
+          "authority": "default-admin-managed"
+        },
+        {
+          "role": "PAUSER_ROLE",
+          "assignment": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
+          "authority": "default-admin-managed"
+        },
+        {
+          "role": "CLAWBACK_ROLE",
+          "assignment": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
+          "authority": "default-admin-managed"
+        }
+      ],
+      "verification": {
+        "kind": "broadcast-and-runtime-code-hash",
+        "observedOnChain": true,
+        "explorerUrl": "https://explorer.testnet.torium.network/address/0x4027605E944b961Bdbba9f97db85F0530B0a6652"
+      }
+    }
+  ]
+}

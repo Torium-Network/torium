@@ -24,3 +24,5 @@ chain/**/bin/
 # Foundry
 contracts/cache/
 contracts/out/
+contracts/.artifacts/
+contracts/.work/

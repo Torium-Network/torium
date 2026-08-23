@@ -12,6 +12,7 @@ on:
       - "chain/genesis/localnet/genesis.json"
       - "chain/genesis/localnet/manifest.json"
       - "chain/genesis/testnet/manifest.json"
+      - "contracts/deployments/testnet.json"
       - "chain/recovery/recovery-v0.json"
       - "chain/profiles/node-roles-v0.json"
       - "chain/explorer/selection-v1.json"

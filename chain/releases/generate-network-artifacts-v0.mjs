@@ -24,6 +24,7 @@ const sourcePaths = {
   genesis: "chain/genesis/localnet/genesis.json",
   genesisManifest: "chain/genesis/localnet/manifest.json",
   testnetGenesisManifest: "chain/genesis/testnet/manifest.json",
+  testnetContracts: "contracts/deployments/testnet.json",
   recovery: "chain/recovery/recovery-v0.json",
   governance: "chain/config/governance-v1.json",
   nodeRoles: "chain/profiles/node-roles-v0.json",
@@ -91,17 +92,23 @@ function buildArtifact() {
   const protocol = entries.protocol.value;
   const localnet = network("localnet");
   const testnetManifest = entries.testnetGenesisManifest.value;
+  const testnetContracts = entries.testnetContracts.value;
   const testnet = network("testnet");
 
   assert.equal(sha256(entries.genesis.bytes), genesisManifest.genesis_sha256);
   assert.equal(contracts.chain.genesisSha256, genesisManifest.genesis_sha256);
   assert.equal(testnetManifest.cosmos_chain_id, testnet.cosmos.chainId);
   assert.equal(testnetManifest.evm_chain_id, testnet.evm.chainId);
+  assert.equal(testnetContracts.chain.evmChainId, testnet.evm.chainId);
+  assert.equal(
+    testnetContracts.chain.genesisSha256,
+    testnetManifest.genesis_sha256
+  );
 
   return {
     $schema: "./network-artifacts-v0.schema.json",
     schemaVersion: 1,
-    bundleVersion: "0.2.0-testnet.1",
+    bundleVersion: "0.2.0-testnet.2",
     status: "generated-localnet-bundle-and-live-testnet-record",
     ownerIssue: 123,
     generatedBy:
@@ -187,7 +194,7 @@ function buildArtifact() {
         },
       },
       devnet: reservedEnvironment(network("devnet")),
-      testnet: liveTestnetEnvironment(testnet, testnetManifest),
+      testnet: liveTestnetEnvironment(testnet, testnetManifest, testnetContracts),
       mainnet: reservedEnvironment(network("mainnet")),
     },
     compatibility: {
@@ -267,7 +274,7 @@ function buildArtifact() {
       "Seed, persistent-peer and trusted state-sync values are unpublished for every environment; testnet public P2P peering is closed.",
       "The testnet genesis file is withheld from the repository while P2P peering is closed because its genesis transactions embed validator node IDs; chain/genesis/testnet/manifest.json carries the authoritative sha256.",
       "Chain registry submissions (ethereum-lists/chains, wallet asset registries) are not filed; EVM chain IDs remain collision-checked but unreserved.",
-      "System contracts are not deployed to the public testnet; contracts/deployments records localnet only.",
+      "Testnet system contracts are deployed but unexercised beyond deployment verification; no reward epoch has been published and no third-party integration exists.",
       "Localnet chain-start consumption is rehearsed by chain/releases/rehearse-chain-start-v0.sh (2026-07-29); devnet and mainnet consumption stays unexercised.",
       "Explorer runtime compatibility contracts remain local-conditional while the live testnet explorer runs Blockscout.",
       "Identifier availability must be rechecked immediately before any new environment publication.",
@@ -297,8 +304,15 @@ function networkIdentifiers(value) {
   };
 }
 
-function liveTestnetEnvironment(value, manifest) {
+function liveTestnetEnvironment(value, manifest, contractsRegistry) {
   const identifiers = entries.identifiers.value;
+  const contractAddress = (id) => {
+    const entry = contractsRegistry.entries.find(
+      (candidate) => candidate.id === id
+    );
+    assert.ok(entry, `testnet contracts registry entry ${id} is missing`);
+    return entry.address;
+  };
   return {
     status: "active-valueless-public-testnet",
     public: true,
@@ -338,6 +352,14 @@ function liveTestnetEnvironment(value, manifest) {
       },
       iconAsset: `${manifest.public_endpoints.faucet}/logo.png`,
       iconStatus: "published-faucet-hosted-registry-submissions-pending",
+    },
+    contracts: {
+      registryPath: sourcePaths.testnetContracts,
+      releaseStatus: contractsRegistry.releaseStatus,
+      toriumNative: contractAddress("torium-native"),
+      create2Factory: contractAddress("torium-create2-factory"),
+      attestationRegistry: contractAddress("attestation-registry"),
+      rewardDistributor: contractAddress("reward-distributor"),
     },
     peerDiscovery: emptyPeerDiscovery(),
     stateSync: emptyStateSync(),
@@ -413,6 +435,7 @@ function sourceVersion(id, value) {
     genesis: "sha256",
     genesisManifest: `schema-${value.schema_version}`,
     testnetGenesisManifest: `schema-${value.schema_version}`,
+    testnetContracts: value.registryVersion,
     recovery: value.recoveryVersion,
     governance: value.contractVersion,
     nodeRoles: value.profileVersion,

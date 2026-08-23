@@ -20,8 +20,9 @@ not a public genesis signature.
 
 The testnet entry records the live `torium-testnet-1` network: its frozen
 genesis sha256 (anchored by `chain/genesis/testnet/manifest.json` and pinned as
-a schema constant), public HTTPS/WSS endpoints, faucet, explorer and EIP-3085
-wallet-add metadata. The testnet genesis file itself is withheld from the
+a schema constant), public HTTPS/WSS endpoints, faucet, explorer, EIP-3085
+wallet-add metadata, and the deployed system-contract addresses from
+`contracts/deployments/testnet.json`. The testnet genesis file itself is withheld from the
 repository while public P2P peering is closed, because its genesis transactions
 embed validator node IDs; the sha256 anchor is authoritative. Devnet and
 mainnet entries remain identifier reservations only. Before any future

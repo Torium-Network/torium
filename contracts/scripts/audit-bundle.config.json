@@ -56,6 +56,10 @@
       "extensions": [".json"]
     },
     {
+      "path": "contracts/script",
+      "extensions": [".md", ".mjs"]
+    },
+    {
       "path": "contracts/scripts",
       "extensions": [".json", ".mjs", ".sh"]
     },
@@ -103,10 +107,6 @@
     {
       "path": "contracts/out/**",
       "reason": "Compiler output is derived and may be reproduced from pinned inputs."
-    },
-    {
-      "path": "contracts/script/**",
-      "reason": "No Foundry broadcast script is currently part of the audited deployable source."
     }
   ]
 }

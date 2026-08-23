@@ -1,0 +1,56 @@
+{
+  "generated_by": "torium-testnet-1 genesis ceremony (toriumd init, gentx, collect-gentxs)",
+  "source": "hand-authored anchor recording the frozen public testnet genesis",
+  "do_not_edit": true,
+  "schema_version": 1,
+  "warning": "VALUELESS PUBLIC TESTNET — tTOR carries no value and no value claim",
+  "genesis_distribution_policy": "The genesis file is withheld from this repository while public P2P peering is closed, because its genesis transactions embed validator node IDs. This sha256 anchor is authoritative; any future distribution of the file must hash to it exactly.",
+  "genesis_sha256": "2d1c52e544f9e611d2d8817d7971eec6580f6dd12ce63131794287c8c91e93be",
+  "genesis_time": "2026-08-18T14:03:48.799584488Z",
+  "cosmos_chain_id": "torium-testnet-1",
+  "evm_chain_id": 1414484564,
+  "native_asset": {
+    "base_denom": "atorium",
+    "display_denom": "tTOR",
+    "decimals": 18,
+    "total_supply_base_units": "108001000000000000000000000",
+    "power_reduction": "1000000000000000000",
+    "canonical_ledger": "Cosmos bank balance exposed directly to the EVM",
+    "issuance_model": "genesis-capped-non-inflationary",
+    "post_genesis_native_mint_allowed": false,
+    "value_status": "valueless-public-testnet"
+  },
+  "consensus": {
+    "max_block_bytes": 5242880,
+    "max_block_gas": 30000000,
+    "validator_count": 4
+  },
+  "validator_policy": {
+    "power_reduction": "1000000000000000000",
+    "self_delegation_base_units_each": "1000000000000000000000000",
+    "unbonding_time_seconds": 1814400
+  },
+  "genesis_allocations": [
+    {
+      "name": "faucet-reserve",
+      "bech32_address": "torium1p9gu6qy4u7kqm8zvgjmwk7mnxan92dlw84y0jl",
+      "allocation_base_units": "100000000000000000000000000"
+    },
+    {
+      "name": "validator-operators",
+      "count": 4,
+      "allocation_base_units_each": "2000000000000000000000000"
+    },
+    {
+      "name": "faucet-signer",
+      "bech32_address": "torium1dsel03f9jlq4dwhrnnmvw2cm3q0e77rmea8xmn",
+      "allocation_base_units": "1000000000000000000000"
+    }
+  ],
+  "public_endpoints": {
+    "evmJsonRpc": "https://rpc.testnet.torium.network",
+    "evmWebSocket": "wss://ws.testnet.torium.network",
+    "blockExplorer": "https://explorer.testnet.torium.network",
+    "faucet": "https://faucet.testnet.torium.network"
+  }
+}

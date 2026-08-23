@@ -21,8 +21,8 @@
   "properties": {
     "$schema": { "const": "./network-artifacts-v0.schema.json" },
     "schemaVersion": { "const": 1 },
-    "bundleVersion": { "const": "0.1.0-local.1" },
-    "status": { "const": "generated-localnet-only-public-artifacts-hold" },
+    "bundleVersion": { "const": "0.2.0-testnet.1" },
+    "status": { "const": "generated-localnet-bundle-and-live-testnet-record" },
     "ownerIssue": { "const": 123 },
     "generatedBy": {
       "const": "node chain/releases/generate-network-artifacts-v0.mjs --write"
@@ -40,7 +40,7 @@
       "properties": {
         "localnet": { "$ref": "#/$defs/localEnvironment" },
         "devnet": { "$ref": "#/$defs/reservedEnvironment" },
-        "testnet": { "$ref": "#/$defs/reservedEnvironment" },
+        "testnet": { "$ref": "#/$defs/testnetEnvironment" },
         "mainnet": { "$ref": "#/$defs/reservedEnvironment" }
       }
     },
@@ -69,10 +69,10 @@
         "l2InScope"
       ],
       "properties": {
-        "environment": { "const": "local-development-only" },
+        "environment": { "const": "local-development-and-valueless-public-testnet" },
         "valueStatus": { "const": "valueless" },
-        "publicPublicationAllowed": { "const": false },
-        "liveDeploymentAllowed": { "const": false },
+        "publicPublicationAllowed": { "const": true },
+        "liveDeploymentAllowed": { "const": true },
         "backendIntegrationInScope": { "const": false },
         "bridgeInScope": { "const": false },
         "l2InScope": { "const": false }
@@ -242,6 +242,88 @@
         "snapshot": { "$ref": "#/$defs/snapshot" }
       }
     },
+    "testnetGenesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifestPath", "sha256", "canonicalHashAlgorithm", "fileDistribution", "signature"],
+      "properties": {
+        "manifestPath": { "const": "chain/genesis/testnet/manifest.json" },
+        "sha256": { "const": "2d1c52e544f9e611d2d8817d7971eec6580f6dd12ce63131794287c8c91e93be" },
+        "canonicalHashAlgorithm": { "const": "sha256" },
+        "fileDistribution": { "const": "withheld-while-public-p2p-peering-is-closed" },
+        "signature": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "algorithm", "keyId", "value", "requiredForPublicArtifact"],
+          "properties": {
+            "status": { "const": "HOLD-unsigned-hash-anchored-in-git-history" },
+            "algorithm": { "type": "null" },
+            "keyId": { "type": "null" },
+            "value": { "type": "null" },
+            "requiredForPublicArtifact": { "const": true }
+          }
+        }
+      }
+    },
+    "testnetEndpoints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rpcUrls", "webSocketUrls", "blockExplorerUrls", "faucetUrls", "publishable"],
+      "properties": {
+        "rpcUrls": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^https://" } },
+        "webSocketUrls": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^wss://" } },
+        "blockExplorerUrls": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^https://" } },
+        "faucetUrls": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^https://" } },
+        "publishable": { "const": true }
+      }
+    },
+    "testnetWallet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eip3085", "iconAsset", "iconStatus"],
+      "properties": {
+        "eip3085": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["chainId", "chainName", "nativeCurrency", "rpcUrls", "blockExplorerUrls"],
+          "properties": {
+            "chainId": { "type": "string", "pattern": "^0x[0-9a-fA-F]+$" },
+            "chainName": { "type": "string", "minLength": 1 },
+            "nativeCurrency": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["name", "symbol", "decimals"],
+              "properties": {
+                "name": { "const": "Torium Test Token" },
+                "symbol": { "const": "tTOR" },
+                "decimals": { "const": 18 }
+              }
+            },
+            "rpcUrls": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^https://" } },
+            "blockExplorerUrls": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^https://" } }
+          }
+        },
+        "iconAsset": { "type": "string", "pattern": "^https://" },
+        "iconStatus": { "const": "published-faucet-hosted-registry-submissions-pending" }
+      }
+    },
+    "testnetEnvironment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "public", "identifiers", "nativeCurrency", "genesis", "endpoints", "wallet", "peerDiscovery", "stateSync", "snapshot"],
+      "properties": {
+        "status": { "const": "active-valueless-public-testnet" },
+        "public": { "const": true },
+        "identifiers": { "$ref": "#/$defs/identifiers" },
+        "nativeCurrency": { "$ref": "#/$defs/nativeCurrency" },
+        "genesis": { "$ref": "#/$defs/testnetGenesis" },
+        "endpoints": { "$ref": "#/$defs/testnetEndpoints" },
+        "wallet": { "$ref": "#/$defs/testnetWallet" },
+        "peerDiscovery": { "$ref": "#/$defs/peerDiscovery" },
+        "stateSync": { "$ref": "#/$defs/stateSync" },
+        "snapshot": { "type": "null" }
+      }
+    },
     "reservedEnvironment": {
       "type": "object",
       "additionalProperties": false,
@@ -333,7 +415,7 @@
             "requiresRestart": { "const": false },
             "requiresMigration": { "const": false },
             "networkDiscontinuity": { "const": false },
-            "note": { "const": "metadata packaging only; canonical localnet inputs are unchanged" }
+            "note": { "const": "records the live torium-testnet-1 identity and endpoints; canonical localnet inputs are unchanged" }
           }
         },
         "publicGenesisReplacement": {
@@ -376,10 +458,10 @@
       "required": ["ready", "status", "checksumsComplete", "signatureComplete", "publicMetadataComplete", "localnetChainStartRehearsalComplete"],
       "properties": {
         "ready": { "const": false },
-        "status": { "const": "HOLD-local-bundle-only" },
+        "status": { "const": "testnet-published-mainnet-hold" },
         "checksumsComplete": { "const": true },
         "signatureComplete": { "const": false },
-        "publicMetadataComplete": { "const": false },
+        "publicMetadataComplete": { "const": true },
         "localnetChainStartRehearsalComplete": { "const": false }
       }
     }

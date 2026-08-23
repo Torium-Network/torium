@@ -11,6 +11,7 @@ on:
       - "chain/config/governance-v1.json"
       - "chain/genesis/localnet/genesis.json"
       - "chain/genesis/localnet/manifest.json"
+      - "chain/genesis/testnet/manifest.json"
       - "chain/recovery/recovery-v0.json"
       - "chain/profiles/node-roles-v0.json"
       - "chain/explorer/selection-v1.json"

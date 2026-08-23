@@ -23,6 +23,7 @@ const sourcePaths = {
   protocol: "chain/config/protocol-v1.json",
   genesis: "chain/genesis/localnet/genesis.json",
   genesisManifest: "chain/genesis/localnet/manifest.json",
+  testnetGenesisManifest: "chain/genesis/testnet/manifest.json",
   recovery: "chain/recovery/recovery-v0.json",
   governance: "chain/config/governance-v1.json",
   nodeRoles: "chain/profiles/node-roles-v0.json",
@@ -89,23 +90,27 @@ function buildArtifact() {
   const explorerStack = entries.explorerStack.value;
   const protocol = entries.protocol.value;
   const localnet = network("localnet");
+  const testnetManifest = entries.testnetGenesisManifest.value;
+  const testnet = network("testnet");
 
   assert.equal(sha256(entries.genesis.bytes), genesisManifest.genesis_sha256);
   assert.equal(contracts.chain.genesisSha256, genesisManifest.genesis_sha256);
+  assert.equal(testnetManifest.cosmos_chain_id, testnet.cosmos.chainId);
+  assert.equal(testnetManifest.evm_chain_id, testnet.evm.chainId);
 
   return {
     $schema: "./network-artifacts-v0.schema.json",
     schemaVersion: 1,
-    bundleVersion: "0.1.0-local.1",
-    status: "generated-localnet-only-public-artifacts-hold",
+    bundleVersion: "0.2.0-testnet.1",
+    status: "generated-localnet-bundle-and-live-testnet-record",
     ownerIssue: 123,
     generatedBy:
       "node chain/releases/generate-network-artifacts-v0.mjs --write",
     scope: {
-      environment: "local-development-only",
+      environment: "local-development-and-valueless-public-testnet",
       valueStatus: "valueless",
-      publicPublicationAllowed: false,
-      liveDeploymentAllowed: false,
+      publicPublicationAllowed: true,
+      liveDeploymentAllowed: true,
       backendIntegrationInScope: false,
       bridgeInScope: false,
       l2InScope: false,
@@ -182,14 +187,14 @@ function buildArtifact() {
         },
       },
       devnet: reservedEnvironment(network("devnet")),
-      testnet: reservedEnvironment(network("testnet")),
+      testnet: liveTestnetEnvironment(testnet, testnetManifest),
       mainnet: reservedEnvironment(network("mainnet")),
     },
     compatibility: {
       minimumNodeVersion: null,
       minimumNodeVersionStatus: "HOLD-not-ratified",
       protocolVersion: protocol.protocolVersion,
-      sdk: { version: sdk.version, status: "local-package-not-published" },
+      sdk: { version: sdk.version, status: "published-to-npm-with-provenance" },
       contracts: {
         version: contracts.registryVersion,
         status: contracts.releaseStatus,
@@ -227,7 +232,7 @@ function buildArtifact() {
         requiresRestart: false,
         requiresMigration: false,
         networkDiscontinuity: false,
-        note: "metadata packaging only; canonical localnet inputs are unchanged",
+        note: "records the live torium-testnet-1 identity and endpoints; canonical localnet inputs are unchanged",
       },
       publicGenesisReplacement: {
         requiresNewCosmosChainId: true,
@@ -249,22 +254,23 @@ function buildArtifact() {
     },
     releaseReadiness: {
       ready: false,
-      status: "HOLD-local-bundle-only",
+      status: "testnet-published-mainnet-hold",
       checksumsComplete: true,
       signatureComplete: false,
-      publicMetadataComplete: false,
+      publicMetadataComplete: true,
       localnetChainStartRehearsalComplete: false,
     },
     holds: [
-      "Public genesis signature algorithm and custody are not selected.",
-      "Devnet, testnet and mainnet genesis artifacts do not exist.",
-      "Public RPC, WebSocket and explorer endpoints are unpublished.",
-      "Seed, persistent-peer and trusted state-sync values are unpublished.",
-      "Wallet and registry icon assets are not selected.",
-      "Localnet chain-start consumption is rehearsed by chain/releases/rehearse-chain-start-v0.sh (2026-07-29); public-environment consumption stays unexercised.",
-      "Explorer runtime compatibility remains inactive and conditional.",
-      "SDK and registry packages are local and unpublished.",
-      "Identifier availability must be rechecked immediately before publication.",
+      "Public genesis signature algorithm and custody are not selected; the testnet genesis is hash-anchored in git history, unsigned.",
+      "Devnet and mainnet genesis artifacts do not exist.",
+      "Devnet and mainnet RPC, WebSocket and explorer endpoints are unpublished.",
+      "Seed, persistent-peer and trusted state-sync values are unpublished for every environment; testnet public P2P peering is closed.",
+      "The testnet genesis file is withheld from the repository while P2P peering is closed because its genesis transactions embed validator node IDs; chain/genesis/testnet/manifest.json carries the authoritative sha256.",
+      "Chain registry submissions (ethereum-lists/chains, wallet asset registries) are not filed; EVM chain IDs remain collision-checked but unreserved.",
+      "System contracts are not deployed to the public testnet; contracts/deployments records localnet only.",
+      "Localnet chain-start consumption is rehearsed by chain/releases/rehearse-chain-start-v0.sh (2026-07-29); devnet and mainnet consumption stays unexercised.",
+      "Explorer runtime compatibility contracts remain local-conditional while the live testnet explorer runs Blockscout.",
+      "Identifier availability must be rechecked immediately before any new environment publication.",
     ],
   };
 
@@ -288,6 +294,54 @@ function networkIdentifiers(value) {
     shortName: value.evm.shortName,
     nativeCurrencySymbol: value.nativeCurrencySymbol,
     registryStatus: value.evm.registryStatus,
+  };
+}
+
+function liveTestnetEnvironment(value, manifest) {
+  const identifiers = entries.identifiers.value;
+  return {
+    status: "active-valueless-public-testnet",
+    public: true,
+    identifiers: networkIdentifiers(value),
+    nativeCurrency: nativeCurrency(value),
+    genesis: {
+      manifestPath: sourcePaths.testnetGenesisManifest,
+      sha256: manifest.genesis_sha256,
+      canonicalHashAlgorithm: "sha256",
+      fileDistribution: "withheld-while-public-p2p-peering-is-closed",
+      signature: {
+        status: "HOLD-unsigned-hash-anchored-in-git-history",
+        algorithm: null,
+        keyId: null,
+        value: null,
+        requiredForPublicArtifact: true,
+      },
+    },
+    endpoints: {
+      rpcUrls: [manifest.public_endpoints.evmJsonRpc],
+      webSocketUrls: [manifest.public_endpoints.evmWebSocket],
+      blockExplorerUrls: [manifest.public_endpoints.blockExplorer],
+      faucetUrls: [manifest.public_endpoints.faucet],
+      publishable: true,
+    },
+    wallet: {
+      eip3085: {
+        chainId: value.evm.chainIdHex,
+        chainName: value.displayName,
+        nativeCurrency: {
+          name: identifiers.currency.nonValueNetworks.name,
+          symbol: value.nativeCurrencySymbol,
+          decimals: identifiers.currency.decimals,
+        },
+        rpcUrls: [manifest.public_endpoints.evmJsonRpc],
+        blockExplorerUrls: [manifest.public_endpoints.blockExplorer],
+      },
+      iconAsset: `${manifest.public_endpoints.faucet}/logo.png`,
+      iconStatus: "published-faucet-hosted-registry-submissions-pending",
+    },
+    peerDiscovery: emptyPeerDiscovery(),
+    stateSync: emptyStateSync(),
+    snapshot: null,
   };
 }
 
@@ -358,6 +412,7 @@ function sourceVersion(id, value) {
     protocol: value.protocolVersion,
     genesis: "sha256",
     genesisManifest: `schema-${value.schema_version}`,
+    testnetGenesisManifest: `schema-${value.schema_version}`,
     recovery: value.recoveryVersion,
     governance: value.contractVersion,
     nodeRoles: value.profileVersion,
@@ -376,20 +431,34 @@ function assertSemantics(artifact) {
     assert.equal(item.identifiers.networkId, item.identifiers.evmChainId);
     assert.equal(item.identifiers.evmChainIdHex, `0x${item.identifiers.evmChainId.toString(16)}`);
     assert.equal(item.identifiers.caip2, `eip155:${item.identifiers.evmChainId}`);
-    assert.equal(item.endpoints.publishable, false);
     assert.deepEqual(item.peerDiscovery.seeds, []);
     assert.deepEqual(item.peerDiscovery.persistentPeers, []);
   }
-  for (const name of ["devnet", "testnet", "mainnet"]) {
+  for (const name of ["devnet", "mainnet"]) {
     const item = artifact.environments[name];
     assert.equal(item.genesis, null);
+    assert.equal(item.endpoints.publishable, false);
     assert.deepEqual(item.endpoints.rpcUrls, []);
     assert.deepEqual(item.endpoints.webSocketUrls, []);
     assert.deepEqual(item.endpoints.blockExplorerUrls, []);
   }
   assert.equal(artifact.environments.localnet.public, false);
+  assert.equal(artifact.environments.localnet.endpoints.publishable, false);
   assert.match(artifact.environments.localnet.endpoints.rpcUrls[0], /^http:\/\/127\.0\.0\.1:/u);
   assert.equal(artifact.environments.localnet.genesis.signature.value, null);
+  const testnet = artifact.environments.testnet;
+  assert.equal(testnet.public, true);
+  assert.match(testnet.genesis.sha256, /^[0-9a-f]{64}$/u);
+  assert.equal(testnet.genesis.signature.value, null);
+  for (const url of [...testnet.endpoints.rpcUrls, ...testnet.endpoints.blockExplorerUrls, ...testnet.endpoints.faucetUrls]) {
+    assert.match(url, /^https:\/\/[a-z.]+torium\.network$/u);
+  }
+  for (const url of testnet.endpoints.webSocketUrls) {
+    assert.match(url, /^wss:\/\/[a-z.]+torium\.network$/u);
+  }
+  assert.equal(testnet.wallet.eip3085.chainId, testnet.identifiers.evmChainIdHex);
+  assert.deepEqual(testnet.wallet.eip3085.rpcUrls, testnet.endpoints.rpcUrls);
+  assert.deepEqual(testnet.wallet.eip3085.blockExplorerUrls, testnet.endpoints.blockExplorerUrls);
   assert.equal(artifact.releaseReadiness.ready, false);
 }
 

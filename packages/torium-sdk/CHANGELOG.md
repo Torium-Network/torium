@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.2 — 2026-08-23
+
+- Added the generated `toriumTestnetContractRegistry` to the `./contracts`
+  surface: the live `torium-testnet-1` system-contract addresses
+  (`ToriumCreate2Factory`, `ToriumRewardDistributor`,
+  `ToriumAttestationRegistry`, native precompile) with broadcast transaction
+  hashes and the same pinned runtime code hashes as the localnet artifacts.
+  The generator fail-closes if the broadcast registry's code identity drifts
+  from the canonical artifacts.
+- No runtime behavior changes; the localnet registry export is unchanged.
+- Compatibility: chain manifest `0.2.0`, contracts registry `0.1.0`
+  (localnet plans plus the deployed testnet registry at
+  `contracts/deployments/testnet.json`), viem `>=2.55.2 <3` (`2.55.2`
+  tested), developer docs `v0`.
+
 ## 0.1.1 — 2026-08-14
 
 Re-release of 0.1.0 from the public repository with a provenance attestation

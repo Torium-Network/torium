@@ -18,9 +18,15 @@ const pagePath = path.join(appRoot, "content/docs/v0/sdk/api-reference.mdx");
 const check = process.argv.includes("--check");
 
 const packageJson = JSON.parse(await readFile(packageJsonPath, "utf8"));
-if (packageJson.version !== "0.1.1") {
+const docsVersions = JSON.parse(
+  await readFile(path.join(appRoot, "content/versions.json"), "utf8")
+);
+const currentTuple = docsVersions.versions.find(
+  (candidate) => candidate.id === docsVersions.current
+);
+if (packageJson.version !== currentTuple?.compatibility?.sdk?.version) {
   throw new Error(
-    `Docs v0 is pinned to SDK 0.1.1, received ${packageJson.version}; create or update the version tuple before generating`
+    `Docs ${docsVersions.current} is pinned to SDK ${currentTuple?.compatibility?.sdk?.version}, received ${packageJson.version}; update the version tuple before generating`
   );
 }
 const reportRelative = `packages/torium-sdk/api/${packageJson.version}.api.md`;

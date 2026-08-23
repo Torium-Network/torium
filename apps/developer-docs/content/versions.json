@@ -18,13 +18,13 @@
         "sdk": {
           "source": "packages/torium-sdk/package.json",
           "package": "@torium-network/sdk",
-          "version": "0.1.1",
+          "version": "0.1.2",
           "status": "published"
         },
         "contracts": {
-          "source": "contracts/deployments/localnet.json",
+          "source": "contracts/deployments/testnet.json",
           "release": "0.1.0",
-          "status": "pre-deployment"
+          "status": "deployed-valueless-public-testnet"
         }
       }
     }

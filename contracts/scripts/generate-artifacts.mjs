@@ -37,6 +37,7 @@ const paths = {
   rewardArtifact: "contracts/generated/abi/ToriumRewardDistributor.json",
   attestationArtifact: "contracts/generated/abi/ToriumAttestationRegistry.json",
   registry: "contracts/deployments/localnet.json",
+  testnetRegistry: "contracts/deployments/testnet.json",
   checksums: "contracts/deployments/SHA256SUMS",
   sdkAbis: "packages/torium-sdk/src/generated/contracts/abis.ts",
   sdkDeployments: "packages/torium-sdk/src/generated/contracts/deployments.ts",
@@ -90,6 +91,7 @@ const [
   attestationFixture,
   attestationFixtureBytes,
   attestationGasSnapshotBytes,
+  testnetRegistry,
 ] = await Promise.all([
   readJson(paths.toolchain),
   readJson(paths.identifiers),
@@ -108,6 +110,7 @@ const [
   readJson(paths.attestationFixture),
   readBytes(paths.attestationFixture),
   readBytes(paths.attestationGasSnapshot),
+  readJson(paths.testnetRegistry),
 ]);
 
 const localnet = identifiers.networks?.find(
@@ -431,7 +434,7 @@ const sdkAbisText = await formatTypeScript(
   toolchain
 );
 const sdkDeploymentsText = await formatTypeScript(
-  renderSdkDeployments(registry),
+  renderSdkDeployments(registry, testnetRegistry),
   toolchain
 );
 const sdkIndexText = await formatTypeScript(
@@ -777,7 +780,7 @@ function renderSdkAbis(nativeAbi, factoryAbi, rewardAbi, attestationAbi) {
   return `${generatedHeader("contracts/scripts/generate-artifacts.mjs")}import type { Abi } from "viem";\n\nexport const toriumNativeAbi = ${JSON.stringify(stableValue(nativeAbi), null, 2)} as const satisfies Abi;\n\nexport const toriumCreate2FactoryAbi = ${JSON.stringify(stableValue(factoryAbi), null, 2)} as const satisfies Abi;\n\nexport const toriumRewardDistributorAbi = ${JSON.stringify(stableValue(rewardAbi), null, 2)} as const satisfies Abi;\n\nexport const toriumAttestationRegistryAbi = ${JSON.stringify(stableValue(attestationAbi), null, 2)} as const satisfies Abi;\n`;
 }
 
-function renderSdkDeployments(registryValue) {
+function renderSdkDeployments(registryValue, testnetRegistryValue) {
   const native = registryValue.entries.find(
     (entry) => entry.id === "torium-native"
   );
@@ -790,6 +793,35 @@ function renderSdkDeployments(registryValue) {
   const attestation = registryValue.entries.find(
     (entry) => entry.id === "attestation-registry"
   );
+  const testnetEntry = (id) => {
+    const value = testnetRegistryValue.entries.find(
+      (candidate) => candidate.id === id
+    );
+    if (!value) throw new Error(`missing testnet registry entry: ${id}`);
+    return value;
+  };
+  for (const [id, localnetEntry] of [
+    ["torium-create2-factory", factory],
+    ["reward-distributor", reward],
+    ["attestation-registry", attestation],
+  ]) {
+    const deployed = testnetEntry(id);
+    if (
+      deployed.codeIdentity.runtimeCodeKeccak256 !==
+      localnetEntry.code.runtimeCodeKeccak256
+    ) {
+      throw new Error(
+        `testnet registry ${id} runtime code hash differs from the canonical artifact`
+      );
+    }
+  }
+  if (testnetEntry("torium-native").address !== native.address) {
+    throw new Error("testnet native precompile address differs from canonical");
+  }
+  const testnetNative = testnetEntry("torium-native");
+  const testnetFactory = testnetEntry("torium-create2-factory");
+  const testnetReward = testnetEntry("reward-distributor");
+  const testnetAttestation = testnetEntry("attestation-registry");
   const value = stableValue({
     schemaVersion: registryValue.schemaVersion,
     registryVersion: registryValue.registryVersion,
@@ -835,7 +867,53 @@ function renderSdkDeployments(registryValue) {
       },
     },
   });
-  return `${generatedHeader("contracts/scripts/generate-artifacts.mjs")}export const toriumLocalnetContractRegistry = ${JSON.stringify(value, null, 2)} as const;\n\nexport type ToriumLocalnetContractRegistry = typeof toriumLocalnetContractRegistry;\n`;
+  const testnetValue = stableValue({
+    schemaVersion: testnetRegistryValue.schemaVersion,
+    registryVersion: testnetRegistryValue.registryVersion,
+    environment: testnetRegistryValue.environment,
+    releaseStatus: testnetRegistryValue.releaseStatus,
+    chain: testnetRegistryValue.chain,
+    contracts: {
+      toriumNative: {
+        address: testnetNative.address,
+        status: "active",
+        implementationVersion: testnetNative.implementationVersion,
+        abiSha256: native.abiSha256,
+      },
+      toriumCreate2Factory: {
+        address: testnetFactory.address,
+        status: "deployed",
+        implementationVersion: testnetFactory.implementationVersion,
+        abiSha256: factory.abiSha256,
+        runtimeCodeKeccak256: testnetFactory.codeIdentity.runtimeCodeKeccak256,
+        broadcast: true,
+        transactionHash: testnetFactory.deployment.transactionHash,
+      },
+      toriumRewardDistributor: {
+        address: testnetReward.address,
+        status: "deployed",
+        implementationVersion: testnetReward.implementationVersion,
+        abiSha256: reward.abiSha256,
+        runtimeCodeKeccak256: testnetReward.codeIdentity.runtimeCodeKeccak256,
+        broadcast: true,
+        transactionHash: testnetReward.deployment.transactionHash,
+        roleAssignments: "single-operations-authority",
+      },
+      toriumAttestationRegistry: {
+        address: testnetAttestation.address,
+        status: "deployed",
+        implementationVersion: testnetAttestation.implementationVersion,
+        abiSha256: attestation.abiSha256,
+        runtimeCodeKeccak256:
+          testnetAttestation.codeIdentity.runtimeCodeKeccak256,
+        broadcast: true,
+        transactionHash: testnetAttestation.deployment.transactionHash,
+        roleAssignments: "none",
+        issuerAuthorization: attestation.configuration.issuerAuthorization,
+      },
+    },
+  });
+  return `${generatedHeader("contracts/scripts/generate-artifacts.mjs")}export const toriumLocalnetContractRegistry = ${JSON.stringify(value, null, 2)} as const;\n\nexport type ToriumLocalnetContractRegistry = typeof toriumLocalnetContractRegistry;\n\nexport const toriumTestnetContractRegistry = ${JSON.stringify(testnetValue, null, 2)} as const;\n\nexport type ToriumTestnetContractRegistry = typeof toriumTestnetContractRegistry;\n`;
 }
 
 function generatedHeader(generator) {

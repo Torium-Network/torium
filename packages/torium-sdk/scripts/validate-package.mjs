@@ -162,7 +162,10 @@ try {
     ),
   };
 
-  await textSnapshot("api/0.1.1.api.md", renderApiReport(apiReport));
+  await textSnapshot(
+    `api/${manifest.version}.api.md`,
+    renderApiReport(apiReport)
+  );
   await jsonSnapshot("api/package-files.json", packageFiles);
 
   const fixture = join(temporaryDirectory, "fixture");
@@ -190,7 +193,7 @@ try {
     [
       'import { toriumSdkPolicyVersion, toriumSdkVersion } from "@torium-network/sdk";',
       'import { toriumLocalnet, toriumTestnet } from "@torium-network/sdk/chains";',
-      'if (toriumSdkVersion !== "0.1.1" || toriumSdkPolicyVersion !== "0.1.0") process.exit(1);',
+      'if (toriumSdkVersion !== "0.1.2" || toriumSdkPolicyVersion !== "0.1.0") process.exit(1);',
       "if (toriumLocalnet.id !== 1414484556 || toriumTestnet.rpcUrls.default.http.length !== 0) process.exit(1);",
       ...policyExports
         .filter((entry) => entry !== ".")
@@ -205,7 +208,7 @@ try {
     [
       'const sdk = require("@torium-network/sdk");',
       'const chains = require("@torium-network/sdk/chains");',
-      'if (sdk.toriumSdkVersion !== "0.1.1" || sdk.toriumSdkPolicyVersion !== "0.1.0") process.exit(1);',
+      'if (sdk.toriumSdkVersion !== "0.1.2" || sdk.toriumSdkPolicyVersion !== "0.1.0") process.exit(1);',
       "if (chains.toriumLocalnet.id !== 1414484556 || chains.toriumMainnet.rpcUrls.default.http.length !== 0) process.exit(1);",
       ...policyExports
         .filter((entry) => entry !== ".")
@@ -226,7 +229,7 @@ try {
       ...policyExports
         .filter((entry) => entry !== ".")
         .map((entry) => `import "@torium-network/sdk/${entry.slice(2)}";`),
-      'const versions: readonly ["0.1.1", "0.1.0"] = [toriumSdkVersion, toriumSdkPolicyVersion];',
+      'const versions: readonly ["0.1.2", "0.1.0"] = [toriumSdkVersion, toriumSdkPolicyVersion];',
       'const callerChain = withToriumRpcUrls(toriumTestnet, { http: ["https://rpc.caller.example"] });',
       'const callerUrl: "https://rpc.caller.example" = callerChain.rpcUrls.default.http[0];',
       "const chainId: 1414484556 = toriumLocalnet.id;",
@@ -298,7 +301,7 @@ try {
       'import clients = require("@torium-network/sdk/clients");',
       'import utils = require("@torium-network/sdk/utils");',
       'import viem = require("viem");',
-      'const versions: readonly ["0.1.1", "0.1.0"] = [sdk.toriumSdkVersion, sdk.toriumSdkPolicyVersion];',
+      'const versions: readonly ["0.1.2", "0.1.0"] = [sdk.toriumSdkVersion, sdk.toriumSdkPolicyVersion];',
       "const chainId: 1414484556 = chains.toriumLocalnet.id;",
       'const parsedAmount: bigint = utils.parseToriumAmount("1.25");',
       'const bech32Account: `torium1${string}` = utils.toriumEvmAddressToBech32("0x0000000000000000000000000000000000000001");',

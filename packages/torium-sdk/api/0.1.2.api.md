@@ -1,22 +1,4 @@
----
-title: SDK API reference
-description: Generated public declarations and runtime exports for @torium-network/sdk@0.1.2.
-docId: sdk-api-reference
-version: v0
-status: foundation
-ownerIssue: 141
-sourceOfTruth: apps/developer-docs/content/generated/sdk-0.1.2.api.md
-sourceStatus: generated
----
-
-> Generated from the package declaration report. Do not edit this page or its generated source by hand.
-> Run `pnpm --filter developer-docs generate:sdk-reference` after an approved SDK API change.
-
-The `./package.json` path is an intentional data export. The `./experimental` section is a
-public reserved subpath with no members in SDK 0.1.0.
-There are no deprecated or experimental runtime APIs in this release.
-
-## Public API report: @torium-network/sdk@0.1.2
+# Public API report: @torium-network/sdk@0.1.2
 
 Policy version: `0.1.0`
 

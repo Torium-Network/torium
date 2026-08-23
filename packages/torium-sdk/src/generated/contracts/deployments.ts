@@ -59,3 +59,67 @@ export const toriumLocalnetContractRegistry = {
 
 export type ToriumLocalnetContractRegistry =
   typeof toriumLocalnetContractRegistry;
+
+export const toriumTestnetContractRegistry = {
+  chain: {
+    cosmosChainId: "torium-testnet-1",
+    evmChainId: 1414484564,
+    genesisSha256:
+      "2d1c52e544f9e611d2d8817d7971eec6580f6dd12ce63131794287c8c91e93be",
+  },
+  contracts: {
+    toriumAttestationRegistry: {
+      abiSha256:
+        "8c584a0731ba994e5ceaa131d6558f4f521ef7d77b6bd57b2813999c0ad64f48",
+      address: "0x17e64A025e33865005B2cC793b093Dc2DB57bdc4",
+      broadcast: true,
+      implementationVersion: "1.0.0",
+      issuerAuthorization: "permissionless-msg-sender",
+      roleAssignments: "none",
+      runtimeCodeKeccak256:
+        "0x5b116d7520ab2a3f5129d62096841e0def2df8d82ad5c9bfb82ec189bca10705",
+      status: "deployed",
+      transactionHash:
+        "0xa31c71df63da325b3e08776b706a6ce6351f0734507c721f87462d7f1ed9acab",
+    },
+    toriumCreate2Factory: {
+      abiSha256:
+        "8225006d05f2e5c4ec786bb692ce653a6da63c77457dccc2f9fadc11ba560d67",
+      address: "0x2334774dFdE49c611C3a270B0F391a7cf581AfF7",
+      broadcast: true,
+      implementationVersion: "1.0.0",
+      runtimeCodeKeccak256:
+        "0x1c8443d4510a3e5ab30fadbca17e932276bf09c93a6c6cbce40081cbf0273e55",
+      status: "deployed",
+      transactionHash:
+        "0xee4deb08bb3f65943beaf46f5a9f3b3e781d20b8a65ee5658783bd8c85a4e196",
+    },
+    toriumNative: {
+      abiSha256:
+        "c2945c7c124f352233c6f8b1cccd1ae6094be40205bd7dc423f1fbdf7533ad04",
+      address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      implementationVersion: "protocol-v1",
+      status: "active",
+    },
+    toriumRewardDistributor: {
+      abiSha256:
+        "5d3a2b5febf5121f51a25eb193b4916c96a60cf90bcec23195064490f8c8d55e",
+      address: "0x4027605E944b961Bdbba9f97db85F0530B0a6652",
+      broadcast: true,
+      implementationVersion: "1.0.0",
+      roleAssignments: "single-operations-authority",
+      runtimeCodeKeccak256:
+        "0xb62ef55f634464915f38d47b62b694265eb18c1e91c3b95adc045f0ab805968a",
+      status: "deployed",
+      transactionHash:
+        "0xadbbc80f0a28c7a69c85e0b9b3700617948c5c81739aa57098e4b34987188176",
+    },
+  },
+  environment: "testnet",
+  registryVersion: "0.1.0",
+  releaseStatus: "deployed-valueless-public-testnet",
+  schemaVersion: 1,
+} as const;
+
+export type ToriumTestnetContractRegistry =
+  typeof toriumTestnetContractRegistry;

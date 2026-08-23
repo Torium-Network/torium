@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "policyId": "torium-sdk-release-policy-v0",
   "ownerIssue": 138,
-  "status": "publish-authorized-sdk-v0.1.1",
+  "status": "publish-authorized-sdk-v0.1.2",
   "publishAllowed": true,
   "releaseReady": true,
   "package": {
     "name": "@torium-network/sdk",
     "fallbackName": "torium-evm-sdk",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },

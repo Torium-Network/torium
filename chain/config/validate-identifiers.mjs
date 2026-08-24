@@ -76,6 +76,10 @@ for (const network of manifest.networks) {
   if (network.environment === "localnet" || network.environment === "devnet") {
     assert.equal(network.public, false);
     assert.equal(evm.registryStatus, "local-only-not-registered");
+  } else if (network.environment === "testnet") {
+    assert.equal(network.public, true);
+    assert.equal(evm.registryStatus, "registered-ethereum-lists-chains");
+    assert.match(evm.collisionFallback, /never reuse/u);
   } else {
     assert.equal(network.public, true);
     assert.equal(evm.registryStatus, "collision-checked-unreserved");

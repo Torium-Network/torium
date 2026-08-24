@@ -273,7 +273,7 @@ function buildArtifact() {
       "Devnet and mainnet RPC, WebSocket and explorer endpoints are unpublished.",
       "Seed, persistent-peer and trusted state-sync values are unpublished for every environment; testnet public P2P peering is closed.",
       "The testnet genesis file is withheld from the repository while P2P peering is closed because its genesis transactions embed validator node IDs; chain/genesis/testnet/manifest.json carries the authoritative sha256.",
-      "Chain registry submissions (ethereum-lists/chains, wallet asset registries) are not filed; EVM chain IDs remain collision-checked but unreserved.",
+      "The testnet chain ID is registered in ethereum-lists/chains (PR 8633, merged 2026-08-24); the registry icon, wallet asset registries and the mainnet chain ID remain unfiled.",
       "Testnet system contracts are deployed but unexercised beyond deployment verification; no reward epoch has been published and no third-party integration exists.",
       "Localnet chain-start consumption is rehearsed by chain/releases/rehearse-chain-start-v0.sh (2026-07-29); devnet and mainnet consumption stays unexercised.",
       "Explorer runtime compatibility contracts remain local-conditional while the live testnet explorer runs Blockscout.",

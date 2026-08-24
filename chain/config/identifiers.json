@@ -146,7 +146,7 @@
         "networkId": 1414484564,
         "caip2": "eip155:1414484564",
         "shortName": "torium-testnet",
-        "registryStatus": "collision-checked-unreserved",
+        "registryStatus": "registered-ethereum-lists-chains",
         "collisionFallback": "If this ID is claimed before registration, select a new registry-clear ID, increment the manifest version, and rerun replay/wallet/genesis tests before any genesis is frozen; never reuse the conflicting ID."
       },
       "cosmos": {

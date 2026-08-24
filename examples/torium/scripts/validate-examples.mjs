@@ -44,7 +44,7 @@ const sdkPolicy = await readJson(
 
 assert.equal(
   packageJson.dependencies["@torium-network/sdk"],
-  "workspace:0.1.1"
+  `workspace:${sdkPackage.version}`
 );
 assert.equal(sdkPackage.version, compatibility.sdk.version);
 assert.equal(packageJson.version, compatibility.sdk.version);

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "sdk": {
     "package": "@torium-network/sdk",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "policyVersion": "0.1.0"
   },
   "chain": {

@@ -43,12 +43,12 @@
     "testnetGenesisManifest": {
       "path": "chain/genesis/testnet/manifest.json",
       "version": "schema-1",
-      "sha256": "4ea80b28b3f70c1ed2f4a4a0cd03b9785fd159bee013897803bc8e43aa347851"
+      "sha256": "be59c70a74134246fb69604ab4ef70d6c07ef3ee18ac60d8dc6086fc3904cc3e"
     },
     "testnetContracts": {
       "path": "contracts/deployments/testnet.json",
       "version": "0.1.0",
-      "sha256": "5f153b67c0ea633b7a58426b9df60176129401aeed020ecb7b14815e747523bc"
+      "sha256": "597e7a20973277f5c92d90e9e54135e489b2c9ee20a8fd18f2d16d6e85d40f49"
     },
     "recovery": {
       "path": "chain/recovery/recovery-v0.json",
@@ -67,8 +67,8 @@
     },
     "sdk": {
       "path": "packages/torium-sdk/package.json",
-      "version": "0.1.2",
-      "sha256": "bd2b97c1882315ca1e8450a1b7509f96738413d17829e9036ef6491b9ae75036"
+      "version": "0.1.3",
+      "sha256": "7d1cdb9ad271ce5b8c0640abad73eb758ffb645dc1970f79d07f5b4fc49dc160"
     },
     "contracts": {
       "path": "contracts/deployments/localnet.json",
@@ -243,7 +243,7 @@
       },
       "genesis": {
         "manifestPath": "chain/genesis/testnet/manifest.json",
-        "sha256": "2d1c52e544f9e611d2d8817d7971eec6580f6dd12ce63131794287c8c91e93be",
+        "sha256": "7eb5e332d6a697a1621fedce6b4a378616d3fd6675331a914a1de4492f609dcd",
         "canonicalHashAlgorithm": "sha256",
         "fileDistribution": "withheld-while-public-p2p-peering-is-closed",
         "signature": {
@@ -294,7 +294,7 @@
         "toriumNative": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "create2Factory": "0x2334774dFdE49c611C3a270B0F391a7cf581AfF7",
         "attestationRegistry": "0x17e64A025e33865005B2cC793b093Dc2DB57bdc4",
-        "rewardDistributor": "0x4027605E944b961Bdbba9f97db85F0530B0a6652"
+        "rewardDistributor": "0xA836D3Dc1339B69313bf23dBAe67501Ea730Fe34"
       },
       "peerDiscovery": {
         "status": "HOLD-unpublished",
@@ -369,7 +369,7 @@
     "minimumNodeVersionStatus": "HOLD-not-ratified",
     "protocolVersion": "1.0.0-local.5",
     "sdk": {
-      "version": "0.1.2",
+      "version": "0.1.3",
       "status": "published-to-npm-with-provenance"
     },
     "contracts": {

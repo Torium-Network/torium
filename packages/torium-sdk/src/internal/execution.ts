@@ -407,7 +407,7 @@ function event(
   const clientKind = context.clientKind ?? "public";
   return removeUndefined({
     schemaVersion: 1,
-    sdkVersion: "0.1.2",
+    sdkVersion: "0.1.3",
     policyVersion: "0.1.0",
     phase,
     clientKind,

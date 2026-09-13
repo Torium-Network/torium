@@ -2,14 +2,14 @@
   "$schema": "./deployment-registry-testnet-v1.schema.json",
   "schemaVersion": 1,
   "environment": "testnet",
-  "generatedBy": "contracts/script/deploy-testnet.mjs broadcast on 2026-08-23, promoted by review",
+  "generatedBy": "contracts/script/deploy-testnet.mjs broadcast on 2026-09-13 (genesis 2 redeploy), promoted by review",
   "registryVersion": "0.1.0",
   "releaseStatus": "deployed-valueless-public-testnet",
   "configPath": "contracts/config/testnet-deployment-v1.json",
   "chain": {
     "cosmosChainId": "torium-testnet-1",
     "evmChainId": 1414484564,
-    "genesisSha256": "2d1c52e544f9e611d2d8817d7971eec6580f6dd12ce63131794287c8c91e93be"
+    "genesisSha256": "7eb5e332d6a697a1621fedce6b4a378616d3fd6675331a914a1de4492f609dcd"
   },
   "authority": {
     "deployerAddress": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
@@ -47,7 +47,7 @@
         "deployerAddress": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
         "deployerNonce": "0",
         "transactionHash": "0xee4deb08bb3f65943beaf46f5a9f3b3e781d20b8a65ee5658783bd8c85a4e196",
-        "blockNumber": 202336
+        "blockNumber": 264
       },
       "verification": {
         "kind": "broadcast-and-runtime-code-hash",
@@ -74,7 +74,7 @@
         "initCodeHash": "0x63764414c6540d9a26f0a83049d8d2bf06a6906334d9454024dfb5f76ef5b8ee",
         "constructorArguments": [],
         "transactionHash": "0xa31c71df63da325b3e08776b706a6ce6351f0734507c721f87462d7f1ed9acab",
-        "blockNumber": 202337
+        "blockNumber": 266
       },
       "verification": {
         "kind": "broadcast-and-runtime-code-hash",
@@ -86,7 +86,7 @@
       "id": "reward-distributor",
       "contractName": "ToriumRewardDistributor",
       "classification": "post-genesis-deterministic",
-      "address": "0x4027605E944b961Bdbba9f97db85F0530B0a6652",
+      "address": "0xA836D3Dc1339B69313bf23dBAe67501Ea730Fe34",
       "implementationVersion": "1.0.0",
       "codeIdentity": {
         "artifactPath": "contracts/generated/abi/ToriumRewardDistributor.json",
@@ -98,19 +98,19 @@
         "factoryAddress": "0x2334774dFdE49c611C3a270B0F391a7cf581AfF7",
         "salt": "0x586e61b27cc0a9f754c6c41b103502d937ce1081019795a2d7704dc9655a1e03",
         "saltPreimage": "torium.reward-distributor.v1",
-        "initCodeHash": "0x6fd177f3913af6d1f6374abb8f6b845ea46e430b0dda2b0de52421fd9c8420d6",
+        "initCodeHash": "0x380b8376660ab8fc6764175962a6a742d84e87f02e9f69bb07a91cbe1e829734",
         "constructorArguments": {
           "defaultAdminDelay_": 86400,
           "initialAdmin_": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
           "initialPublisher_": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
           "initialPauser_": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
           "initialClawbackOperator_": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
-          "treasury_": "0x0951cD0095e7Ac0d9C4c44b6Eb7B7337665537Ee",
+          "treasury_": "0x496268fB738890d2075018878f010E6581F9Ab47",
           "publicationDelay_": 3600,
           "clawbackDelay_": 86400
         },
-        "transactionHash": "0xadbbc80f0a28c7a69c85e0b9b3700617948c5c81739aa57098e4b34987188176",
-        "blockNumber": 202338
+        "transactionHash": "0x5dad404451aefec47d394c017566761fbceee98d8f5321947ec7f8ebbd1a536e",
+        "blockNumber": 267
       },
       "roles": [
         {
@@ -137,7 +137,7 @@
       "verification": {
         "kind": "broadcast-and-runtime-code-hash",
         "observedOnChain": true,
-        "explorerUrl": "https://explorer.testnet.torium.network/address/0x4027605E944b961Bdbba9f97db85F0530B0a6652"
+        "explorerUrl": "https://explorer.testnet.torium.network/address/0xA836D3Dc1339B69313bf23dBAe67501Ea730Fe34"
       }
     }
   ]

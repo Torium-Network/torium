@@ -1,12 +1,12 @@
 {
   "schemaVersion": 2,
   "package": "@torium-network/sdk",
-  "packageVersion": "0.1.2",
+  "packageVersion": "0.1.3",
   "files": [
     {
       "path": "CHANGELOG.md",
-      "bytes": 3074,
-      "sha256": "899c724ac0edc5e66efd1a0d1f937c78482e9f7ff94ac4d2674946abd9b064d9"
+      "bytes": 3904,
+      "sha256": "8617f61d656acac9056436bdd4e956bb99dafd032a2dae2404a8854a023cd9f0"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -51,7 +51,7 @@
     {
       "path": "dist/cjs/errors.js.map",
       "bytes": 34488,
-      "sha256": "897b10fa8aafdc9c0c50d3d6c96bafc11a197250a256ca641e8a3eb14c35cbe0"
+      "sha256": "24fd228af7516e4bcd422059456c3fdf9a11c98abbb358aa01fff3c4841ca3d7"
     },
     {
       "path": "dist/cjs/experimental.js",
@@ -76,12 +76,12 @@
     {
       "path": "dist/cjs/generated/contracts/deployments.js",
       "bytes": 4697,
-      "sha256": "eb7c548508b5bc4c865e50ecbd26abd0947474a479e9fbe923aa9eef770f6d66"
+      "sha256": "dfd7caed8c39ba85dc5bb7d018077d458f338992a3c53b109ae33ec5404800d7"
     },
     {
       "path": "dist/cjs/generated/contracts/deployments.js.map",
       "bytes": 6689,
-      "sha256": "110cecb3f43db87be1f978bec88b441ea0ef17b779d1279c13a27ba8a566106d"
+      "sha256": "2c5005d441152d03418e67c88f1bdea4d3a9ad6a3ab30734bc8df7fa8ee71dac"
     },
     {
       "path": "dist/cjs/generated/contracts/index.js",
@@ -96,22 +96,22 @@
     {
       "path": "dist/cjs/index.js",
       "bytes": 400,
-      "sha256": "5f3eaa9a1a235230fa150c603428b39fdc868c61891afcd659b83ac6c1d2fed2"
+      "sha256": "5cc7c4680a14d5b3c86452648d2d9ab58edbada2e19a7c8cfd3c569a11725a82"
     },
     {
       "path": "dist/cjs/index.js.map",
       "bytes": 482,
-      "sha256": "4052e613e1559019c55f6a997c3738e7cbaa46bbbf86657cfa0644ae480445e8"
+      "sha256": "1fdfb698feed628ded99bb8056bef796a12c98e6d27161e0d37f9ec7e569c7dc"
     },
     {
       "path": "dist/cjs/internal/execution.js",
       "bytes": 12290,
-      "sha256": "668cd9bebdcb35202b23d0e209d7f1c30ecad83486202b3866da2cf8f9965fa1"
+      "sha256": "9861507ad5bf7d6b52d4b4305c98dcfbbd4a663de832ff419dd971fb0187c4ff"
     },
     {
       "path": "dist/cjs/internal/execution.js.map",
       "bytes": 24666,
-      "sha256": "74e052b2b6002dcd17a7530e26f5ad801c96c8ee6d94d8ea3bfb4754cff65161"
+      "sha256": "54cf1a62ea1c7c57fa20e3c553934ec7962f9382242340a797dd3b0e5c86f6d3"
     },
     {
       "path": "dist/cjs/package.json",
@@ -176,7 +176,7 @@
     {
       "path": "dist/esm/errors.js.map",
       "bytes": 34462,
-      "sha256": "c1415e35bf479c1848922a6b1e13674a537d23e1f84256380fcd34f3d917fc91"
+      "sha256": "f1ea87b324f77a24c30576f77b634ab95a846f043664e2ba61593fc17a91e96d"
     },
     {
       "path": "dist/esm/experimental.js",
@@ -201,12 +201,12 @@
     {
       "path": "dist/esm/generated/contracts/deployments.js",
       "bytes": 4541,
-      "sha256": "2ed4efe55b3adbcf597f752aaa4acc72585c64666ed3e52ca783a9c6a09ae3b3"
+      "sha256": "853bba139103b3923e00df32d792224f5be58f1ec395b9be03ee9f29a421d99f"
     },
     {
       "path": "dist/esm/generated/contracts/deployments.js.map",
       "bytes": 6706,
-      "sha256": "577dfeef33729b889d76776171db2d7d03f5ef8a3d2a0632f490d0f30c1398ac"
+      "sha256": "9272e0fea252357b6add2d1e2c24c1f13309f17325f21ab1b8b83a3a66e29001"
     },
     {
       "path": "dist/esm/generated/contracts/index.js",
@@ -221,22 +221,22 @@
     {
       "path": "dist/esm/index.js",
       "bytes": 265,
-      "sha256": "da03c1c6606cc4fd9a9e6144fb3ac4b84d756797ed9b30652422bf5926a6c0c6"
+      "sha256": "4084ec9a7e0735596dde52be84aac7d398b222d288f0237d8aa844822e092bc7"
     },
     {
       "path": "dist/esm/index.js.map",
       "bytes": 499,
-      "sha256": "3d9ec974947dc89ec280ef9407e866b58056029f54e4d84156569cd32bb5fb57"
+      "sha256": "2c670695fca1b98eabc67defbb7258dc586742260ca99b0949136856eeee9337"
     },
     {
       "path": "dist/esm/internal/execution.js",
       "bytes": 12022,
-      "sha256": "f13bd50b3aa844cc09d7c52d20e8ae72535ce94184c00681d6814717acf0e0cb"
+      "sha256": "aaac07e0a21b29fd9ac7d227773d5b002fbb18d07284b4b4816478c8b51205b2"
     },
     {
       "path": "dist/esm/internal/execution.js.map",
       "bytes": 24684,
-      "sha256": "ca5ad0ff2e7166b7f0b6cae2c1cbf5f5424ff3ddc305e33ba12dcec3fabae1aa"
+      "sha256": "b66cb947848bef2f376e69d713ef2c208a5e9f36647f64307301cbd65d3e78aa"
     },
     {
       "path": "dist/esm/utils.js",
@@ -306,17 +306,17 @@
     {
       "path": "dist/types/errors.d.cts",
       "bytes": 5641,
-      "sha256": "3bef9b651635e372b12efa0295e5ed286a5039841c4637cb1a61504d9e705c77"
+      "sha256": "470a9e6424869a729b4404f2e1082053a257c1e39c87953dca8706f663fd18ee"
     },
     {
       "path": "dist/types/errors.d.mts",
       "bytes": 5641,
-      "sha256": "3bef9b651635e372b12efa0295e5ed286a5039841c4637cb1a61504d9e705c77"
+      "sha256": "470a9e6424869a729b4404f2e1082053a257c1e39c87953dca8706f663fd18ee"
     },
     {
       "path": "dist/types/errors.d.ts",
       "bytes": 5641,
-      "sha256": "3bef9b651635e372b12efa0295e5ed286a5039841c4637cb1a61504d9e705c77"
+      "sha256": "470a9e6424869a729b4404f2e1082053a257c1e39c87953dca8706f663fd18ee"
     },
     {
       "path": "dist/types/experimental.d.cts",
@@ -341,7 +341,7 @@
     {
       "path": "dist/types/generated/contracts/deployments.d.ts",
       "bytes": 5420,
-      "sha256": "a4449053027eda5ec2c2fe4be779686176a8a00e946bd5a5c25cabcee4b9fed2"
+      "sha256": "39ba09ff9abbca3d0b84b12466fa028998c8d01d11b16b86e6d402f268140cb0"
     },
     {
       "path": "dist/types/generated/contracts/index.d.ts",
@@ -351,17 +351,17 @@
     {
       "path": "dist/types/index.d.cts",
       "bytes": 246,
-      "sha256": "c96d42d60fcba7d5500199f6dbb067057e4255fd3ddb1088ab77c86687bf7e64"
+      "sha256": "dde62d3ae62effbff55307200b1026197a73c5ece7712eb7bd8d3a6382a14847"
     },
     {
       "path": "dist/types/index.d.mts",
       "bytes": 246,
-      "sha256": "c96d42d60fcba7d5500199f6dbb067057e4255fd3ddb1088ab77c86687bf7e64"
+      "sha256": "dde62d3ae62effbff55307200b1026197a73c5ece7712eb7bd8d3a6382a14847"
     },
     {
       "path": "dist/types/index.d.ts",
       "bytes": 246,
-      "sha256": "c96d42d60fcba7d5500199f6dbb067057e4255fd3ddb1088ab77c86687bf7e64"
+      "sha256": "dde62d3ae62effbff55307200b1026197a73c5ece7712eb7bd8d3a6382a14847"
     },
     {
       "path": "dist/types/internal/execution.d.ts",
@@ -406,7 +406,7 @@
     {
       "path": "package.json",
       "bytes": 4306,
-      "sha256": "bd2b97c1882315ca1e8450a1b7509f96738413d17829e9036ef6491b9ae75036"
+      "sha256": "7d1cdb9ad271ce5b8c0640abad73eb758ffb645dc1970f79d07f5b4fc49dc160"
     },
     {
       "path": "README.md",

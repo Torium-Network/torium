@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.1.3 — 2026-09-13
+
+- `toriumTestnetContractRegistry` follows the 2026-09-13 announced reset of
+  the public testnet (genesis 2 of `torium-testnet-1`, sha256
+  `7eb5e332d6a697a1621fedce6b4a378616d3fd6675331a914a1de4492f609dcd`; both
+  chain IDs unchanged). `ToriumCreate2Factory` and
+  `ToriumAttestationRegistry` keep their addresses; `ToriumRewardDistributor`
+  moved to `0xA836D3Dc1339B69313bf23dBAe67501Ea730Fe34` because its treasury
+  constructor argument now points at the genesis 2 faucet reserve. Broadcast
+  transaction hashes and block numbers are updated; runtime code hashes are
+  unchanged.
+- No runtime behavior changes.
+- Compatibility: chain manifest `0.2.0`, contracts registry `0.1.0`
+  (`contracts/deployments/testnet.json` genesis 2 record), viem
+  `>=2.55.2 <3` (`2.55.2` tested), developer docs `v0`.
+
 ## 0.1.2 — 2026-08-23
 
 - Added the generated `toriumTestnetContractRegistry` to the `./contracts`

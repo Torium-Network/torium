@@ -31,7 +31,7 @@
         "cosmosChainId": { "const": "torium-testnet-1" },
         "evmChainId": { "const": 1414484564 },
         "genesisSha256": {
-          "const": "2d1c52e544f9e611d2d8817d7971eec6580f6dd12ce63131794287c8c91e93be"
+          "const": "7eb5e332d6a697a1621fedce6b4a378616d3fd6675331a914a1de4492f609dcd"
         }
       }
     },

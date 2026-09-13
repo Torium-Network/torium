@@ -1,6 +1,6 @@
 {
   "name": "@torium-network/sdk",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": false,
   "description": "Local-first TypeScript SDK foundation for the Torium sovereign EVM L1",
   "keywords": [

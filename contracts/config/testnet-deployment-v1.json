@@ -5,7 +5,7 @@
   "chain": {
     "cosmosChainId": "torium-testnet-1",
     "evmChainId": 1414484564,
-    "genesisSha256": "2d1c52e544f9e611d2d8817d7971eec6580f6dd12ce63131794287c8c91e93be"
+    "genesisSha256": "7eb5e332d6a697a1621fedce6b4a378616d3fd6675331a914a1de4492f609dcd"
   },
   "authority": {
     "deployerAddress": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
@@ -31,7 +31,7 @@
         "initialPublisher_": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
         "initialPauser_": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
         "initialClawbackOperator_": "0x4af1a912c5260E7D8c6f24fca492569eC71c6FDd",
-        "treasury_": "0x0951cD0095e7Ac0d9C4c44b6Eb7B7337665537Ee",
+        "treasury_": "0x496268fB738890d2075018878f010E6581F9Ab47",
         "publicationDelay_": 3600,
         "clawbackDelay_": 86400
       },

@@ -65,7 +65,7 @@ export const toriumTestnetContractRegistry = {
     cosmosChainId: "torium-testnet-1",
     evmChainId: 1414484564,
     genesisSha256:
-      "2d1c52e544f9e611d2d8817d7971eec6580f6dd12ce63131794287c8c91e93be",
+      "7eb5e332d6a697a1621fedce6b4a378616d3fd6675331a914a1de4492f609dcd",
   },
   contracts: {
     toriumAttestationRegistry: {
@@ -104,7 +104,7 @@ export const toriumTestnetContractRegistry = {
     toriumRewardDistributor: {
       abiSha256:
         "5d3a2b5febf5121f51a25eb193b4916c96a60cf90bcec23195064490f8c8d55e",
-      address: "0x4027605E944b961Bdbba9f97db85F0530B0a6652",
+      address: "0xA836D3Dc1339B69313bf23dBAe67501Ea730Fe34",
       broadcast: true,
       implementationVersion: "1.0.0",
       roleAssignments: "single-operations-authority",
@@ -112,7 +112,7 @@ export const toriumTestnetContractRegistry = {
         "0xb62ef55f634464915f38d47b62b694265eb18c1e91c3b95adc045f0ab805968a",
       status: "deployed",
       transactionHash:
-        "0xadbbc80f0a28c7a69c85e0b9b3700617948c5c81739aa57098e4b34987188176",
+        "0x5dad404451aefec47d394c017566761fbceee98d8f5321947ec7f8ebbd1a536e",
     },
   },
   environment: "testnet",

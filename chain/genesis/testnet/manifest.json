@@ -1,19 +1,19 @@
 {
-  "generated_by": "torium-testnet-1 genesis ceremony (toriumd init, gentx, collect-gentxs)",
+  "generated_by": "torium-testnet-1 genesis 2 ceremony on 2026-09-13 (toriumd init, gentx, collect-gentxs); genesis 1 (2026-08-18, sha256 2d1c52e544f9e611d2d8817d7971eec6580f6dd12ce63131794287c8c91e93be) was retired by an announced reset that keeps both chain IDs",
   "source": "hand-authored anchor recording the frozen public testnet genesis",
   "do_not_edit": true,
   "schema_version": 1,
-  "warning": "VALUELESS PUBLIC TESTNET — tTOR carries no value and no value claim",
+  "warning": "VALUELESS PUBLIC TESTNET \u2014 tTOR carries no value and no value claim",
   "genesis_distribution_policy": "The genesis file is withheld from this repository while public P2P peering is closed, because its genesis transactions embed validator node IDs. This sha256 anchor is authoritative; any future distribution of the file must hash to it exactly.",
-  "genesis_sha256": "2d1c52e544f9e611d2d8817d7971eec6580f6dd12ce63131794287c8c91e93be",
-  "genesis_time": "2026-08-18T14:03:48.799584488Z",
+  "genesis_sha256": "7eb5e332d6a697a1621fedce6b4a378616d3fd6675331a914a1de4492f609dcd",
+  "genesis_time": "2026-09-13T11:55:56.740143373Z",
   "cosmos_chain_id": "torium-testnet-1",
   "evm_chain_id": 1414484564,
   "native_asset": {
     "base_denom": "atorium",
     "display_denom": "tTOR",
     "decimals": 18,
-    "total_supply_base_units": "108001000000000000000000000",
+    "total_supply_base_units": "11528001000000000000000000000",
     "power_reduction": "1000000000000000000",
     "canonical_ledger": "Cosmos bank balance exposed directly to the EVM",
     "issuance_model": "genesis-capped-non-inflationary",
@@ -33,8 +33,9 @@
   "genesis_allocations": [
     {
       "name": "faucet-reserve",
-      "bech32_address": "torium1p9gu6qy4u7kqm8zvgjmwk7mnxan92dlw84y0jl",
-      "allocation_base_units": "100000000000000000000000000"
+      "bech32_address": "torium1f93x37mn3zgdyp6srzrc7qgwvkqln268795ppj",
+      "evm_address": "0x496268fB738890d2075018878f010E6581F9Ab47",
+      "allocation_base_units": "1000000000000000000000000000"
     },
     {
       "name": "validator-operators",
@@ -43,8 +44,30 @@
     },
     {
       "name": "faucet-signer",
-      "bech32_address": "torium1dsel03f9jlq4dwhrnnmvw2cm3q0e77rmea8xmn",
+      "bech32_address": "torium1uj98x8gdcact4z8g7rkmhxw9uy68jxzlsutn3z",
+      "evm_address": "0xe48a731D0dc770bA88e8f0EDbb99C5E13479185F",
       "allocation_base_units": "1000000000000000000000"
+    },
+    {
+      "name": "migration-reserve",
+      "bech32_address": "torium1rvfz0lp7296decwyzep53mnam8crmexg042xlk",
+      "evm_address": "0x1B1227Fc3e5174DcE1C4164348ee7Dd9f03DE4C8",
+      "allocation_base_units": "10000000000000000000000000000",
+      "purpose": "cold reserve funding the Torium app's legacy-balance migration and in-app faucet signers"
+    },
+    {
+      "name": "migration-signer",
+      "bech32_address": "torium1j5tr4rxmtvu8vgupc7ed58247urj4kksplpyy9",
+      "evm_address": "0x95163A8cdb5B38762381C7B2DA1d55F7072aDad0",
+      "allocation_base_units": "500000000000000000000000000",
+      "purpose": "hot signer held by the Torium app backend for legacy-balance migrations"
+    },
+    {
+      "name": "app-faucet-signer",
+      "bech32_address": "torium1r6hdpq49exwedqvencv4aw0d65kph683zmr9dj",
+      "evm_address": "0x1EAed082a5c99D9681999E195eB9edd52C1be8f1",
+      "allocation_base_units": "20000000000000000000000000",
+      "purpose": "hot signer held by the Torium app backend for in-app faucet claims"
     }
   ],
   "public_endpoints": {
